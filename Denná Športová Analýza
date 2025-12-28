@@ -1,0 +1,30 @@
+name: Denná Športová Analýza
+
+on:
+  schedule:
+    # Spustí sa každý deň o 08:00 ráno stredoeurópskeho času
+    - cron: '0 7 * * *'
+  workflow_dispatch: # Umožní ti spustiť analýzu kedykoľvek manuálne
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stiahnutie kódu
+        uses: actions/checkout@v3
+
+      - name: Inštalácia Pythonu
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Inštalácia knižníc
+        run: pip install -r requirements.txt
+
+      - name: Spustenie analýzy
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+        run: python main.py
