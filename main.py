@@ -33,7 +33,7 @@ LIGY_CONFIG = {
     '🇺🇸 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl'}
 }
 
-MIN_VALUE_EDGE = 0.05 
+MIN_VALUE_EDGE = 0.01
 KELLY_FRACTION = 0.2
 MAX_BANK_PCT = 0.02
 
