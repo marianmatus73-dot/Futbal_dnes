@@ -17,16 +17,23 @@ GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 
+# Rozšírený zoznam líg pre viac príležitostí
 LIGY_CONFIG = {
     '🇬🇧 Premier League':   {'csv': 'E0',  'api': 'soccer_epl'},
+    '🇬🇧 Championship':       {'csv': 'E1',  'api': 'soccer_efl_champ'},
     '🇪🇸 La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga'},
     '🇩🇪 Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga'},
     '🇮🇹 Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a'},
     '🇫🇷 Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one'},
+    '🇳🇱 Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie'},
+    '🇵🇹 Primeira Liga':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga'},
+    '🇧🇪 Pro League':       {'csv': 'B1',  'api': 'soccer_belgium_first_division'},
+    '🇹🇷 Super Lig':        {'csv': 'T1',  'api': 'soccer_turkey_super_lig'},
+    '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Premiership':      {'csv': 'SC0', 'api': 'soccer_scotland_premiership'},
     '🇺🇸 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl'}
 }
 
-MIN_VALUE_EDGE = 0.05  # Minimálna výhoda 5%
+MIN_VALUE_EDGE = 0.05 
 KELLY_FRACTION = 0.2
 MAX_BANK_PCT = 0.02
 
@@ -77,41 +84,7 @@ def predikuj_poisson(home, away, stats, avg_h, avg_a, sport='futbal'):
             if (x + y) > limit: p_over += p
     return p_win, p_over
 
-# --- 4. HLAVNÝ PROCES ---
-def spustit_analyzu():
-    report_data = []
-    for nazov_ligy, cfg in LIGY_CONFIG.items():
-        print(f"🌍 Analyzujem: {nazov_ligy}")
-        df = stiahni_csv_data(cfg['csv'])
-        stats, avg_h, avg_a = vypocitaj_silu_timov(df)
-        if stats is None: continue
-        
-        matches = ziskaj_kurzy(cfg['api'])
-        for m in matches:
-            csv_h = process.extractOne(m['home_team'], stats.index.tolist())[0]
-            csv_a = process.extractOne(m['away_team'], stats.index.tolist())[0]
-            sport_type = 'nhl' if 'NHL' in nazov_ligy else 'futbal'
-            ph, po = predikuj_poisson(csv_h, csv_a, stats, avg_h, avg_a, sport_type)
-            
-            for bookie in m['bookmakers']:
-                # Kontrola výhry domáceho tímu
-                h2h = next((mk for mk in bookie['markets'] if mk['key'] == 'h2h'), None)
-                if h2h:
-                    out = next((o for o in h2h['outcomes'] if o['name'] == m['home_team']), None)
-                    if out and (out['price'] * ph - 1) > MIN_VALUE_EDGE:
-                        report_data.append({'Liga': nazov_ligy, 'Zápas': f"{m['home_team']}-{m['away_team']}", 'Tip': f"🏠 {m['home_team']}", 'Model': f"{ph:.1%}", 'Kurz': out['price'], 'Edge': f"{(out['price']*ph-1):.1%}", 'Vklad': f"<b>{vypocitaj_kelly(ph, out['price'])}%</b>", 'Sort': out['price']*ph-1})
-
-                # Kontrola Over gólov (2.5 futbal / 5.5 NHL)
-                totals = next((mk for mk in bookie['markets'] if mk['key'] == 'totals'), None)
-                if totals:
-                    line = 5.5 if sport_type == 'nhl' else 2.5
-                    out = next((o for o in totals['outcomes'] if o['name'] == 'Over' and o['point'] == line), None)
-                    if out and (out['price'] * po - 1) > MIN_VALUE_EDGE:
-                        report_data.append({'Liga': nazov_ligy, 'Zápas': f"{m['home_team']}-{m['away_team']}", 'Tip': f"🔥 Over {line}", 'Model': f"{po:.1%}", 'Kurz': out['price'], 'Edge': f"{(out['price']*po-1):.1%}", 'Vklad': f"<b>{vypocitaj_kelly(po, out['price'])}%</b>", 'Sort': out['price']*po-1})
-
-    if report_data: odosli_email(report_data)
-    else: print("😞 Žiadne value tipy.")
-
+# --- 4. DATA A API ---
 def stiahni_csv_data(liga_kod):
     url = f"https://www.football-data.co.uk/mmz4281/{AKTUALNA_SEZONA_FUTBAL}/{liga_kod}.csv" if liga_kod != 'NHL' else \
           f"https://raw.githubusercontent.com/lbenz730/NHL_Draft_Analysis/master/data/nhl_scores_{AKTUALNA_SEZONA_NHL}.csv"
@@ -129,6 +102,44 @@ def ziskaj_kurzy(sport_key):
         r = requests.get(url, params=params)
         return r.json() if r.status_code == 200 else []
     except: return []
+
+# --- 5. ANALÝZA ---
+def spustit_analyzu():
+    report_data = []
+    for nazov_ligy, cfg in LIGY_CONFIG.items():
+        print(f"🌍 Analyzujem: {nazov_ligy}")
+        df = stiahni_csv_data(cfg['csv'])
+        stats, avg_h, avg_a = vypocitaj_silu_timov(df)
+        if stats is None: continue
+        
+        matches = ziskaj_kurzy(cfg['api'])
+        for m in matches:
+            csv_teams = stats.index.tolist()
+            match_h = process.extractOne(m['home_team'], csv_teams)
+            match_a = process.extractOne(m['away_team'], csv_teams)
+            
+            if match_h[1] < 75 or match_a[1] < 75: continue
+            csv_h, csv_a = match_h[0], match_a[0]
+            
+            sport_type = 'nhl' if 'NHL' in nazov_ligy else 'futbal'
+            ph, po = predikuj_poisson(csv_h, csv_a, stats, avg_h, avg_a, sport_type)
+            
+            for bookie in m['bookmakers']:
+                h2h = next((mk for mk in bookie['markets'] if mk['key'] == 'h2h'), None)
+                if h2h:
+                    out = next((o for o in h2h['outcomes'] if o['name'] == m['home_team']), None)
+                    if out and (out['price'] * ph - 1) > MIN_VALUE_EDGE:
+                        report_data.append({'Liga': nazov_ligy, 'Zápas': f"{m['home_team']}-{m['away_team']}", 'Tip': f"🏠 {m['home_team']}", 'Model': f"{ph:.1%}", 'Kurz': out['price'], 'Edge': f"{(out['price']*ph-1):.1%}", 'Vklad': f"<b>{vypocitaj_kelly(ph, out['price'])}%</b>", 'Sort': out['price']*ph-1})
+
+                totals = next((mk for mk in bookie['markets'] if mk['key'] == 'totals'), None)
+                if totals:
+                    line = 5.5 if sport_type == 'nhl' else 2.5
+                    out = next((o for o in totals['outcomes'] if o['name'] == 'Over' and o['point'] == line), None)
+                    if out and (out['price'] * po - 1) > MIN_VALUE_EDGE:
+                        report_data.append({'Liga': nazov_ligy, 'Zápas': f"{m['home_team']}-{m['away_team']}", 'Tip': f"🔥 Over {line}", 'Model': f"{po:.1%}", 'Kurz': out['price'], 'Edge': f"{(out['price']*po-1):.1%}", 'Vklad': f"<b>{vypocitaj_kelly(po, out['price'])}%</b>", 'Sort': out['price']*po-1})
+
+    if report_data: odosli_email(report_data)
+    else: print("😞 Žiadne value tipy.")
 
 def odosli_email(data):
     df = pd.DataFrame(data).sort_values(by='Sort', ascending=False).drop(columns=['Sort'])
