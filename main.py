@@ -60,8 +60,17 @@ async def fetch_csv(session, liga, cfg):
             url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_2025.csv"
         
         async with session.get(url, timeout=15) as r:
-            return liga, await r.read() if r.status == 200 else None
-    except: return liga, None
+            status = r.status
+            content = await r.read()
+            if status == 200:
+                print(f"✅ CSV načítané pre: {liga}")
+                return liga, content
+            else:
+                print(f"❌ Chyba CSV pre {liga}: Status {status}")
+                return liga, None
+    except Exception as e:
+        print(f"🔥 Kritická chyba sťahovania {liga}: {e}")
+        return liga, None
 
 def update_history_results(raw_content, liga_name, sport):
     if not os.path.isfile(HISTORY_FILE): return ""
@@ -104,7 +113,6 @@ def update_history_results(raw_content, liga_name, sport):
 def spracuj_stats(content, cfg):
     try:
         df = pd.read_csv(io.StringIO(content.decode('utf-8', errors='ignore')))
-        # Oprava dátumu - pridanie dayfirst=True pre odstránenie varovaní
         df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, errors='coerce')
         
         if cfg['sport'] == 'tenis':
@@ -124,13 +132,13 @@ def spracuj_stats(content, cfg):
         h = df.groupby('HomeTeam').apply(lambda x: pd.Series({'AH': x['FTHG'].mean()/avg_h, 'DH': x['FTAG'].mean()/avg_a, 'Last': x['Date'].max()}), include_groups=False)
         a = df.groupby('AwayTeam').apply(lambda x: pd.Series({'AA': x['FTAG'].mean()/avg_a, 'DA': x['FTHG'].mean()/avg_h, 'Last': x['Date'].max()}), include_groups=False)
         
-        # Oprava overlapu stĺpcov pridaním suffixov
         return h.join(a, how='outer', lsuffix='_h', rsuffix='_a').fillna(1.0), avg_h, avg_a
     except Exception as e:
-        logger.error(f"Chyba stats: {e}")
+        print(f"⚠️ Chyba pri spracovaní stats: {e}")
         return None, 0, 0
 
 async def analyzuj():
+    print(f"🚀 ŠTART ANALÝZY: {datetime.now()}")
     async with aiohttp.ClientSession() as session:
         csv_results = await asyncio.gather(*(fetch_csv(session, l, c) for l, c in LIGY_CONFIG.items()))
         all_bets, summary_html = [], ""
@@ -145,13 +153,14 @@ async def analyzuj():
             if stats_data[0] is None: continue
             stats, avg_h, avg_a = stats_data
             
-            params = {'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h',
-                      'commenceTimeFrom': now_utc.isoformat() + 'Z',
-                      'commenceTimeTo': (now_utc + timedelta(hours=24)).isoformat() + 'Z'}
-
+            params = {'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}
+            
             async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params=params) as r:
-                if r.status != 200: continue
+                if r.status != 200:
+                    print(f"❌ API Chyba pre {liga}: {r.status}")
+                    continue
                 matches = await r.json()
+                print(f"📡 API: {liga} - načítaných {len(matches)} zápasov")
 
             for m in matches:
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
@@ -164,7 +173,6 @@ async def analyzuj():
                     lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
                     if cfg['sport'] == 'futbal': lh += cfg['ha']
                     
-                    # Únava B2B s opravenými názvami stĺpcov
                     if cfg['sport'] in ['hokej', 'basketbal']:
                         last_h = pd.to_datetime(stats.at[c1, 'Last_h'])
                         last_a = pd.to_datetime(stats.at[c2, 'Last_a'])
@@ -186,7 +194,8 @@ async def analyzuj():
                             prob, price = p.get(lbl, 0), out['price']
                             edge = (prob * price) - 1
                             
-                            if -0.1 <= edge <= 1.0:
+                            # TESTOVACÍ FILTER: akceptuje skoro všetko pre overenie funkčnosti
+                            if edge >= -0.1:
                                 kelly = ((price - 1) * prob - (1 - prob)) / (price - 1)
                                 vklad = min(max(0, kelly * 0.05 * (1 / price**0.5)), 0.02)
                                 all_bets.append({
@@ -197,18 +206,28 @@ async def analyzuj():
                                     'Vysledok': None
                                 })
 
+        print(f"📊 CELKOVÝ POČET TIPOV NA ZÁPIS: {len(all_bets)}")
+
         if all_bets:
             pd.DataFrame(all_bets).to_csv(HISTORY_FILE, mode='a', header=not os.path.exists(HISTORY_FILE), index=False)
+            print("💾 CSV súbor bol aktualizovaný.")
+            
             html = f"<h3>📈 Bilancia výsledkov:</h3><ul>{summary_html}</ul>"
             html += "<h3>✅ Najlepšie AI Tipy:</h3><table border='1' style='width:100%; border-collapse:collapse;'>"
             html += "<tr style='background:#eee;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
             for b in sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:10]:
                 html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green; font-weight:bold;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
             
-            msg = MIMEMultipart(); msg['Subject'] = f"📊 AI REPORT V5 - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
-            msg.attach(MIMEText(html + "</table>", 'html'))
-            with smtplib.SMTP('smtp.gmail.com', 587) as s:
-                s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+            try:
+                msg = MIMEMultipart(); msg['Subject'] = f"📊 AI REPORT DEBUG - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
+                msg.attach(MIMEText(html + "</table>", 'html'))
+                with smtplib.SMTP('smtp.gmail.com', 587) as s:
+                    s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+                print("📧 Email bol úspešne odoslaný.")
+            except Exception as e:
+                print(f"📧🔥 Chyba pri odosielaní emailu: {e}")
+        else:
+            print("ℹ️ Žiadne tipy s hodnotou sa nenašli.")
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
