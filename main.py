@@ -14,7 +14,7 @@ from email.mime.text import MIMEText
 from dotenv import load_dotenv
 from fuzzywuzzy import process
 
-# --- 1. KONFIGURÁCIA ---
+# --- 1. KONFIGURÁCIA A LOGOVANIE ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,6 @@ LIGY_CONFIG = {
 
 KELLY_FRACTION = 0.15
 MAX_BANK_PCT = 0.02
-MIN_VALUE_EDGE = 0.02
 
 # --- 2. POMOCNÉ FUNKCIE ---
 
@@ -56,7 +55,6 @@ def vypocitaj_kelly(pravd, kurz):
 
 def fuzzy_match_team(name, choices):
     if choices is None or len(choices) == 0: return None
-    # Znížená hranica na 65 pre lepšiu úspešnosť hľadania tímov
     m, s = process.extractOne(name, choices)
     return m if s >= 65 else None
 
@@ -80,7 +78,7 @@ async def fetch_csv(session, liga, cfg):
                 content = await resp.read()
                 return liga, content
     except Exception as e:
-        logger.error(f"Chyba pri sťahovaní {liga}: {e}")
+        logger.error(f"Chyba pri sťahovaní CSV pre {liga}: {e}")
     return liga, None
 
 def spracuj_stats(content, sport):
@@ -105,7 +103,7 @@ def spracuj_stats(content, sport):
         avg_h = (df['FTHG'] * df['Weight']).sum() / df['Weight'].sum()
         avg_a = (df['FTAG'] * df['Weight']).sum() / df['Weight'].sum()
         
-        # OPRAVA WARNINGU: Pridané include_groups=False
+        # Oprava DeprecationWarning: include_groups=False
         h_stats = df.groupby('HomeTeam').apply(lambda x: pd.Series({'Att_H': (x['FTHG']*x['Weight']).mean()/avg_h, 'Def_H': (x['FTAG']*x['Weight']).mean()/avg_a}), include_groups=False)
         a_stats = df.groupby('AwayTeam').apply(lambda x: pd.Series({'Att_A': (x['FTAG']*x['Weight']).mean()/avg_a, 'Def_A': (x['FTHG']*x['Weight']).mean()/avg_h}), include_groups=False)
         return h_stats.join(a_stats, how='outer').fillna(1.0), avg_h, avg_a
@@ -129,13 +127,13 @@ def odosli_email_html(data):
     else:
         html += "<table><tr><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
         for d in data:
-            edge_class = "edge-plus" if float(d['EdgeRaw']) > 0 else "edge-minus"
+            edge_class = "edge-plus" if d['EdgeRaw'] > 0 else "edge-minus"
             html += f"<tr><td>{d['Liga']}</td><td>{d['Zápas']}</td><td>{d['Tip']}</td><td>{d['Kurz']}</td>"
             html += f"<td class='{edge_class}'>{round(d['EdgeRaw']*100, 2)}%</td><td>{d['Vklad']}</td></tr>"
-        html += "</table></body></html>"
+        html += "</table><p><i>Poznámka: Zobrazené sú 3 najlepšie dostupné príležitosti.</i></p></body></html>"
 
     msg = MIMEMultipart()
-    msg['Subject'] = f"🎯 AI Tipy - {now_str}"
+    msg['Subject'] = f"🎯 AI Betting - {now_str}"
     msg['From'] = GMAIL_USER
     msg['To'] = GMAIL_RECEIVER
     msg.attach(MIMEText(html, 'html'))
@@ -145,14 +143,15 @@ def odosli_email_html(data):
             s.starttls()
             s.login(GMAIL_USER, GMAIL_PASSWORD)
             s.send_message(msg)
-        logger.info("Email odoslaný.")
+        logger.info("✅ Email úspešne odoslaný.")
     except Exception as e:
-        logger.error(f"Email zlyhal: {e}")
+        logger.error(f"❌ Email zlyhal: {e}")
 
-# --- 6. HLAVNÝ PROCES ---
+# --- 3. HLAVNÝ PROCES ANALÝZY ---
 
 async def analyzuj():
     async with aiohttp.ClientSession() as session:
+        logger.info("🚀 Štartujem sťahovanie dát...")
         csv_tasks = [fetch_csv(session, liga, cfg) for liga, cfg in LIGY_CONFIG.items()]
         csv_results = await asyncio.gather(*csv_tasks)
         
@@ -164,18 +163,25 @@ async def analyzuj():
             stats, avg_h, avg_a = spracuj_stats(content, cfg['sport'])
             if stats is None: continue
 
+            # DIAGNOSTIKA API VOLANIA
             odds_url = f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/'
-            async with session.get(odds_url, params={'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}) as resp:
-                matches = await resp.json() if resp.status == 200 else []
+            params = {'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}
+            
+            async with session.get(odds_url, params=params) as resp:
+                if resp.status != 200:
+                    err = await resp.text()
+                    logger.error(f"❌ API Chyba pre {liga} ({resp.status}): {err}")
+                    continue
+                matches = await resp.json()
 
-            logger.info(f"{liga}: Spracovávam {len(matches)} zápasov")
+            logger.info(f"📡 {liga}: API vrátilo {len(matches)} zápasov.")
 
             for m in matches:
                 t1, t2 = m['home_team'], m['away_team']
                 c1, c2 = fuzzy_match_team(t1, stats.index), fuzzy_match_team(t2, stats.index)
                 if not c1 or not c2: continue
 
-                # Výpočet pravdepodobností (zjednodušený)
+                # Predikčné modely
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1, 'WinRate'], stats.at[c2, 'WinRate']
                     p = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
@@ -184,7 +190,7 @@ async def analyzuj():
                     la = stats.at[c2, 'Att_A'] * stats.at[c1, 'Def_H'] * avg_a
                     prob_h = 1 - norm.cdf(0, loc=(lh - la), scale=12)
                     p = {'1': prob_h, '2': 1-prob_h}
-                else:
+                else: # Futbal + Hokej
                     lh = stats.at[c1, 'Att_H'] * stats.at[c2, 'Def_A'] * avg_h
                     la = stats.at[c2, 'Att_A'] * stats.at[c1, 'Def_H'] * avg_a
                     p = {'1': 0, 'X': 0, '2': 0}
@@ -205,17 +211,17 @@ async def analyzuj():
                             pct, suma = vypocitaj_kelly(prob, out['price'])
                             
                             all_potential_bets.append({
-                                'Liga': liga, 'Zápas': f"{t1}-{t2}", 'Tip': out['name'],
+                                'Liga': liga, 'Zápas': f"{t1} - {t2}", 'Tip': out['name'],
                                 'Kurz': out['price'], 'EdgeRaw': edge, 'Vklad': f"{pct}% ({suma}€)"
                             })
 
-        # ZORADENIE: Zoberieme 3 najlepšie, aj keby mali záporný Edge
         if all_potential_bets:
+            # Vždy pošleme 3 najlepšie, aj keby mali záporný Edge
             final_selection = sorted(all_potential_bets, key=lambda x: x['EdgeRaw'], reverse=True)[:3]
             odosli_email_html(final_selection)
-            logger.info(f"Odoslané {len(final_selection)} najlepších tipov.")
         else:
-            logger.warning("Nenašli sa žiadne zápasy na analýzu.")
+            logger.warning("⚠️ Nenašli sa žiadne zhody medzi API a štatistikami.")
+            odosli_email_html([])
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
