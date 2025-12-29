@@ -19,7 +19,6 @@ GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 
-# Rozšírený zoznam líg pre maximálny počet tipov
 LIGY_CONFIG = {
     '🇬🇧 Premier League':   {'csv': 'E0',  'api': 'soccer_epl'},
     '🇬🇧 Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ'},
@@ -53,7 +52,7 @@ def ziskaj_futbal_sezonu():
 AKTUALNA_SEZONA_FUTBAL = ziskaj_futbal_sezonu()
 AKTUALNA_SEZONA_NHL = ziskaj_nhl_rok()
 
-# --- 3. JADRO MODELU (POISSON) ---
+# --- 3. JADRO MODELU ---
 
 def vypocitaj_kelly(pravdepodobnost, kurz):
     if kurz <= 1 or pravdepodobnost <= 0: return 0
@@ -66,15 +65,12 @@ def vypocitaj_silu_timov(df):
     avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
     h_stats = df.groupby('HomeTeam')[['FTHG', 'FTAG']].mean()
     a_stats = df.groupby('AwayTeam')[['FTAG', 'FTHG']].mean()
-    
     teams = pd.DataFrame(index=h_stats.index)
     teams['Att_H'] = h_stats['FTHG'] / avg_h
     teams['Def_H'] = h_stats['FTAG'] / avg_a
-    
     teams_away = pd.DataFrame(index=a_stats.index)
     teams_away['Att_A'] = a_stats['FTAG'] / avg_a
     teams_away['Def_A'] = a_stats['FTHG'] / avg_h
-    
     return teams.join(teams_away, how='outer').fillna(1.0), avg_h, avg_a
 
 def predikuj_vsetko(home, away, stats, avg_h, avg_a, sport='futbal'):
@@ -122,7 +118,7 @@ def fuzzy_match_team(api_name, csv_teams):
     match, score = process.extractOne(api_name, csv_teams)
     return match if score >= 75 else None
 
-# --- 5. ANALÝZA A E-MAIL ---
+# --- 5. HLAVNÝ PROCES ---
 
 def spustit_analyzu():
     all_potential_bets = []
@@ -147,7 +143,6 @@ def spustit_analyzu():
             if not probs: continue
 
             for bookie in m['bookmakers']:
-                # 1X2 Trh
                 h2h = next((mk for mk in bookie['markets'] if mk['key'] == 'h2h'), None)
                 if h2h:
                     for out in h2h['outcomes']:
@@ -160,7 +155,6 @@ def spustit_analyzu():
                                 'Edge': edge, 'Pravd': p
                             })
 
-                # Góly Trh
                 totals = next((mk for mk in bookie['markets'] if mk['key'] == 'totals'), None)
                 if totals:
                     for out in totals['outcomes']:
@@ -170,14 +164,14 @@ def spustit_analyzu():
                             if edge > 0:
                                 all_potential_bets.append({
                                     'Čas': start_time, 'Liga': liga, 'Zápas': f"{api_h} vs {api_a}", 
-                                    'Typ': '⚽ Góly', 'Tip': f"{out['name']} {goly_limit}", 'Kurz': out['price'], 
+                                    'Tip': f"{out['name']} {goly_limit}", 'Typ': '⚽ Góly', 'Kurz': out['price'], 
                                     'Edge': edge, 'Pravd': p
                                 })
 
     if all_potential_bets:
         df_all = pd.DataFrame(all_potential_bets).sort_values(by='Edge', ascending=False)
         top_bets = df_all[df_all['Edge'] >= MIN_VALUE_EDGE]
-        # Vždy aspoň 3 tipy
+        # Garancia aspoň 3 tipov
         if len(top_bets) < 3: top_bets = df_all.head(3)
 
         final_data = []
@@ -188,44 +182,39 @@ def spustit_analyzu():
                 'Edge': f"{r['Edge']:.1%}", 'Vklad': f"<b>{vypocitaj_kelly(r['Pravd'], r['Kurz'])}%</b>"
             })
         odosli_email(final_data)
-        print("✅ Analýza hotová, e-mail odoslaný.")
     else:
-        print("❌ Žiadne výhodné tipy nenájdené.")
+        # Odoslať email o prázdnom dni
+        odosli_email([], ziadne_tipy=True)
 
-def odosli_email(data):
-    df = pd.DataFrame(data)
+def odosli_email(data, ziadne_tipy=False):
     style = """<style>
-        table {border-collapse: collapse; width: 100%; font-family: Segoe UI, sans-serif;}
+        table {border-collapse: collapse; width: 100%; font-family: sans-serif;}
         th {background-color: #1a237e; color: white; padding: 12px; text-align: center;}
         td {padding: 10px; border-bottom: 1px solid #ddd; text-align: center;}
         tr:nth-child(even) {background-color: #f8f9fa;}
         .type-goals {color: #e65100; font-weight: bold;}
         .type-1x2 {color: #0277bd; font-weight: bold;}
     </style>"""
-    
-    df['Typ'] = df['Typ'].apply(lambda x: f'<span class="{"type-goals" if "⚽" in x else "type-1x2"}">{x}</span>')
-    
-    html = f"""
-    <html><body>
-        <h2 style="color: #1a237e;">🎯 AI Stávkový Report</h2>
-        <p>Tu sú najlepšie matematické príležitosti na dnes:</p>
-        {style}
-        {df.to_html(index=False, escape=False)}
-        <p><small>Vklady sú počítané Kellyho kritériom (frakcia {KELLY_FRACTION}).</small></p>
-    </body></html>
-    """
+
+    if ziadne_tipy:
+        html = "<html><body><h2>🎯 AI Stávkový Report</h2><p>Dnes nie sú žiadne výhodné príležitosti.</p></body></html>"
+        subject = f"💤 AI Report: Žiadne tipy ({datetime.now().strftime('%d.%m')})"
+    else:
+        df = pd.DataFrame(data)
+        df['Typ'] = df['Typ'].apply(lambda x: f'<span class="{"type-goals" if "⚽" in x else "type-1x2"}">{x}</span>')
+        html = f"<html><body><h2 style='color: #1a237e;'>🎯 AI Stávkový Report</h2>{style}{df.to_html(index=False, escape=False)}</body></html>"
+        subject = f"🚀 TOP AI Tipy: {len(data)} šancí ({datetime.now().strftime('%d.%m')})"
     
     msg = MIMEMultipart()
-    msg['Subject'] = f"🚀 TOP AI Tipy: {len(data)} šancí ({datetime.now().strftime('%d.%m')})"
+    msg['Subject'] = subject
     msg['From'] = GMAIL_USER
     msg['To'] = GMAIL_RECEIVER
     msg.attach(MIMEText(html, 'html'))
     
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as s:
-            s.starttls()
-            s.login(GMAIL_USER, GMAIL_PASSWORD)
-            s.send_message(msg)
+            s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+        print("📧 Email odoslaný!")
     except Exception as e: print(f"Chyba: {e}")
 
 if __name__ == "__main__":
