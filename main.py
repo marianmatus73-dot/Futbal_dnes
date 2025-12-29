@@ -45,9 +45,9 @@ MAX_BANK_PCT = 0.02
 
 def fuzzy_match_team(name, choices):
     if choices is None or len(choices) == 0: return None
-    # Zvýšená hranica na 80 pre vyššiu presnosť mien
+    # Zvýšená presnosť (85) aby sme sa vyhli zámene tímov (napr. PSG vs Paris FC)
     match, score = process.extractOne(name, choices)
-    return match if score >= 80 else None
+    return match if score >= 85 else None
 
 async def fetch_csv(session, liga, cfg):
     try:
@@ -59,9 +59,9 @@ async def fetch_csv(session, liga, cfg):
         elif cfg['sport'] == 'basketbal':
             url = "https://raw.githubusercontent.com/alexno62/NBA-Data/master/nba_games_stats.csv"
         elif cfg['sport'] == 'tenis':
-            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2025.csv"
+            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_{datetime.now().year}.csv"
         elif cfg['csv'] == 'NHL':
-            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_2025.csv"
+            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_{datetime.now().year}.csv"
         
         async with session.get(url, timeout=12) as r:
             return liga, await r.read() if r.status == 200 else None
@@ -110,7 +110,7 @@ async def analyzuj():
     async with aiohttp.ClientSession() as session:
         csv_results = await asyncio.gather(*(fetch_csv(session, l, c) for l, c in LIGY_CONFIG.items()))
         all_bets = []
-        processed_matches = set() # Proti duplicitám
+        processed_matches = set()
 
         for liga, content in csv_results:
             if not content: continue
@@ -122,7 +122,8 @@ async def analyzuj():
                 matches = await r.json()
 
             for m in matches:
-                match_id = f"{m['home_team']}_{m['away_team']}"
+                # Unikátny kľúč pre zápas, aby sme nemali duplicity
+                match_id = f"{m['home_team']}_{m['away_team']}_{liga}"
                 if match_id in processed_matches: continue
                 
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
@@ -134,11 +135,15 @@ async def analyzuj():
                         lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
                         p_h = 1 - norm.cdf(0, loc=(lh - la), scale=12)
                         p = {'1': p_h, '2': 1-p_h}
-                    else: # Futbal / Hokej
+                    else:
                         lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
                         p = {'1': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(10) for y in range(x)),
                              'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(10)),
                              '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(10) for x in range(y))}
+                    
+                    # Výber najlepšieho kurzu od rôznych stávkoviek pre tento konkrétny zápas
+                    best_edge_for_match = -100
+                    best_bet_data = None
                     
                     for bk in m.get('bookmakers', []):
                         for mk in bk.get('markets', []):
@@ -148,24 +153,30 @@ async def analyzuj():
                                     prob = p.get(label, 0)
                                     edge = (prob * out['price']) - 1
                                     
-                                    f_star = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
-                                    vklad_pct = min(max(0, f_star * KELLY_FRACTION), MAX_BANK_PCT)
-                                    
-                                    all_bets.append({
-                                        'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 
-                                        'Tip': out['name'], 'Kurz': out['price'], 'Edge': edge,
-                                        'Vklad': f"{round(vklad_pct*100,2)}% ({round(vklad_pct * AKTUALNY_BANK, 2)}€)"
-                                    })
-                                processed_matches.add(match_id)
+                                    if edge > best_edge_for_match:
+                                        best_edge_for_match = edge
+                                        f_star = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
+                                        vklad_pct = min(max(0, f_star * KELLY_FRACTION), MAX_BANK_PCT)
+                                        best_bet_data = {
+                                            'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 
+                                            'Tip': out['name'], 'Kurz': out['price'], 'Edge': edge,
+                                            'Vklad': f"{round(vklad_pct*100,2)}% ({round(vklad_pct * AKTUALNY_BANK, 2)}€)"
+                                        }
+                    
+                    if best_bet_data:
+                        all_bets.append(best_bet_data)
+                        processed_matches.add(match_id)
 
         if all_bets:
             top = sorted(all_bets, key=lambda x: x['Edge'], reverse=True)[:3]
             html = "<h2>Top 3 AI Príležitosti</h2><table border='1' style='border-collapse:collapse; width:100%; text-align:center;'>"
             html += "<tr style='background:#2c3e50; color:white;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
             for b in top:
-                color = "green" if b['Edge'] > 0 else "red"
+                # Edge nad 100% je podozrivý (často chyba v dátach), označíme ho
+                edge_val = round(b['Edge']*100,1)
+                color = "orange" if edge_val > 50 else ("green" if edge_val > 0 else "red")
                 html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td>"
-                html += f"<td style='color:{color}; font-weight:bold;'>{round(b['Edge']*100,1)}%</td><td>{b['Vklad']}</td></tr>"
+                html += f"<td style='color:{color}; font-weight:bold;'>{edge_val}%</td><td>{b['Vklad']}</td></tr>"
             odosli_email(html + "</table>")
 
 if __name__ == "__main__":
