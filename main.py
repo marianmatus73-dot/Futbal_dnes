@@ -19,6 +19,7 @@ GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 
+# Rozšírený zoznam 11 líg pre maximálny výber
 LIGY_CONFIG = {
     '🇬🇧 Premier League':   {'csv': 'E0',  'api': 'soccer_epl'},
     '🇬🇧 Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ'},
@@ -100,11 +101,15 @@ def stiahni_csv_data(liga_kod):
     try:
         r = requests.get(url, timeout=10)
         if r.status_code != 200: return pd.DataFrame()
-        df = pd.read_csv(io.StringIO(r.content.decode('utf-8', errors='ignore')))
+        # Oprava chyby str/bytes: .decode() presunutý pred spracovanie
+        raw_data = r.content.decode('utf-8', errors='ignore')
+        df = pd.read_csv(io.StringIO(raw_data))
         if liga_kod == 'NHL':
             df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG'})
         return df[['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']].dropna()
-    except: return pd.DataFrame()
+    except Exception as e:
+        print(f"Chyba pri sťahovaní {liga_kod}: {e}")
+        return pd.DataFrame()
 
 def ziskaj_kurzy(sport_key):
     url = f'https://api.the-odds-api.com/v4/sports/{sport_key}/odds/'
@@ -115,6 +120,7 @@ def ziskaj_kurzy(sport_key):
     except: return []
 
 def fuzzy_match_team(api_name, csv_teams):
+    if not csv_teams.any(): return None
     match, score = process.extractOne(api_name, csv_teams)
     return match if score >= 75 else None
 
@@ -143,6 +149,7 @@ def spustit_analyzu():
             if not probs: continue
 
             for bookie in m['bookmakers']:
+                # 1X2 Trh
                 h2h = next((mk for mk in bookie['markets'] if mk['key'] == 'h2h'), None)
                 if h2h:
                     for out in h2h['outcomes']:
@@ -155,6 +162,7 @@ def spustit_analyzu():
                                 'Edge': edge, 'Pravd': p
                             })
 
+                # Góly Trh
                 totals = next((mk for mk in bookie['markets'] if mk['key'] == 'totals'), None)
                 if totals:
                     for out in totals['outcomes']:
@@ -171,7 +179,7 @@ def spustit_analyzu():
     if all_potential_bets:
         df_all = pd.DataFrame(all_potential_bets).sort_values(by='Edge', ascending=False)
         top_bets = df_all[df_all['Edge'] >= MIN_VALUE_EDGE]
-        # Garancia aspoň 3 tipov
+        # Vždy vyber aspoň top 3 najlepšie dostupné
         if len(top_bets) < 3: top_bets = df_all.head(3)
 
         final_data = []
@@ -182,9 +190,10 @@ def spustit_analyzu():
                 'Edge': f"{r['Edge']:.1%}", 'Vklad': f"<b>{vypocitaj_kelly(r['Pravd'], r['Kurz'])}%</b>"
             })
         odosli_email(final_data)
+        print("✅ E-mail s tipmi odoslaný.")
     else:
-        # Odoslať email o prázdnom dni
         odosli_email([], ziadne_tipy=True)
+        print("ℹ️ Dnes bez tipov, odoslaný info e-mail.")
 
 def odosli_email(data, ziadne_tipy=False):
     style = """<style>
@@ -197,7 +206,7 @@ def odosli_email(data, ziadne_tipy=False):
     </style>"""
 
     if ziadne_tipy:
-        html = "<html><body><h2>🎯 AI Stávkový Report</h2><p>Dnes nie sú žiadne výhodné príležitosti.</p></body></html>"
+        html = "<html><body><h2>🎯 AI Stávkový Report</h2><p>Dnes neboli nájdené žiadne ziskové príležitosti.</p></body></html>"
         subject = f"💤 AI Report: Žiadne tipy ({datetime.now().strftime('%d.%m')})"
     else:
         df = pd.DataFrame(data)
@@ -214,8 +223,7 @@ def odosli_email(data, ziadne_tipy=False):
     try:
         with smtplib.SMTP('smtp.gmail.com', 587) as s:
             s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
-        print("📧 Email odoslaný!")
-    except Exception as e: print(f"Chyba: {e}")
+    except Exception as e: print(f"Chyba emailu: {e}")
 
 if __name__ == "__main__":
     spustit_analyzu()
