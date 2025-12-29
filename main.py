@@ -5,7 +5,7 @@ import os
 import io
 import pytz
 from scipy.stats import poisson
-from datetime import datetime, timedelta
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
@@ -26,12 +26,18 @@ GMAIL_USER = env['GMAIL_USER']
 GMAIL_PASSWORD = env['GMAIL_PASSWORD']
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 
+# VRÁTENÉ VŠETKY TVOJE LIGY
 LIGY_CONFIG = {
     '🇬🇧 Premier League':   {'csv': 'E0',  'api': 'soccer_epl'},
+    '🇬🇧 Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ'},
     '🇪🇸 La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga'},
     '🇩🇪 Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga'},
     '🇮🇹 Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a'},
     '🇫🇷 Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one'},
+    '🇳🇱 Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie'},
+    '🇵🇹 Liga Portugal':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga'},
+    '🇧🇪 Jupiler League':   {'csv': 'B1',  'api': 'soccer_belgium_first_division'},
+    '🇹🇷 Süper Lig':        {'csv': 'T1',  'api': 'soccer_turkey_super_league'},
     '🇺🇸 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl'}
 }
 
@@ -39,11 +45,11 @@ MIN_VALUE_EDGE = 0.05
 KELLY_FRACTION = 0.2
 MAX_BANK_PCT = 0.02
 
-# --- 2. POMOCNÉ FUNKCIE ---
+# --- 2. POMOCNÉ FUNKCIE (ČAS A MATEMATIKA) ---
 
 def get_local_time(utc_str):
-    """Konvertuje UTC čas z API na Europe/Bratislava."""
     try:
+        # Konverzia z UTC (API) na slovenský čas
         utc_dt = datetime.fromisoformat(utc_str.replace('Z', '')).replace(tzinfo=pytz.utc)
         local_tz = pytz.timezone('Europe/Bratislava')
         return utc_dt.astimezone(local_tz).strftime('%H:%M')
@@ -57,45 +63,58 @@ def vypocitaj_kelly(pravdepodobnost, kurz):
     frac = min(max(0, f_star * KELLY_FRACTION), MAX_BANK_PCT)
     return round(frac * 100, 2)
 
-# --- 3. JADRO MODELU (MATEMATIKA + VÁŽENÁ FORMA) ---
+# --- 3. DÁTA A MODEL ---
+
+def stiahni_csv_data(liga_kod):
+    now = datetime.now()
+    if liga_kod == 'NHL':
+        sezona = str(now.year) if now.month < 9 else str(now.year + 1)
+        url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_{sezona}.csv"
+        try:
+            r = requests.get(url, timeout=10)
+            if r.status_code != 200: return pd.DataFrame()
+            df = pd.read_csv(io.StringIO(r.content.decode('utf-8')))
+            df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG'})
+            return df[['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']].dropna()
+        except: return pd.DataFrame()
+    else:
+        sez_str = f"{now.strftime('%y')}{(now.year + 1) % 100:02d}" if now.month >= 8 else f"{(now.year - 1) % 100:02d}{now.strftime('%y')}"
+        url = f"https://www.football-data.co.uk/mmz4281/{sez_str}/{liga_kod}.csv"
+        try:
+            r = requests.get(url, timeout=10)
+            df = pd.read_csv(io.StringIO(r.content.decode('utf-8', errors='ignore')))
+            return df[['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG']].dropna()
+        except: return pd.DataFrame()
 
 def vypocitaj_silu_timov(df):
     if df.empty or len(df) < 10: return None, 0, 0
     
-    # Pridanie váhy podľa čerstvosti zápasu (novšie zápasy majú vyššiu váhu)
+    # VÁŽENIE FORMY: Posledných 25% zápasov má o 30% vyššiu váhu
     df = df.copy()
+    split_point = int(len(df) * 0.75)
     df['Weight'] = 1.0
-    if len(df) > 50:
-        # Posledných 20 zápasov každého tímu dostane 1.5x vyššiu váhu
-        df.iloc[-30:, df.columns.get_loc('Weight')] = 1.5
+    df.iloc[split_point:, df.columns.get_loc('Weight')] = 1.3
 
     avg_h = (df['FTHG'] * df['Weight']).sum() / df['Weight'].sum()
     avg_a = (df['FTAG'] * df['Weight']).sum() / df['Weight'].sum()
 
-    def get_weighted_stats(group, col):
-        return (group[col] * group['Weight']).sum() / group['Weight'].sum()
-
     h_stats = df.groupby('HomeTeam').apply(lambda x: pd.Series({
-        'Att_H': get_weighted_stats(x, 'FTHG') / avg_h,
-        'Def_H': get_weighted_stats(x, 'FTAG') / avg_a
+        'Att_H': ((x['FTHG'] * x['Weight']).sum() / x['Weight'].sum()) / avg_h,
+        'Def_H': ((x['FTAG'] * x['Weight']).sum() / x['Weight'].sum()) / avg_a
     }))
-    
     a_stats = df.groupby('AwayTeam').apply(lambda x: pd.Series({
-        'Att_A': get_weighted_stats(x, 'FTAG') / avg_a,
-        'Def_A': get_weighted_stats(x, 'FTHG') / avg_h
+        'Att_A': ((x['FTAG'] * x['Weight']).sum() / x['Weight'].sum()) / avg_a,
+        'Def_A': ((x['FTHG'] * x['Weight']).sum() / x['Weight'].sum()) / avg_h
     }))
-
     return h_stats.join(a_stats, how='outer').fillna(1.0), avg_h, avg_a
 
 def predikuj_vsetko(home, away, stats, avg_h, avg_a, sport='futbal'):
     if home not in stats.index or away not in stats.index: return None
-
     lamb_h = stats.at[home, 'Att_H'] * stats.at[away, 'Def_A'] * avg_h
     lamb_a = stats.at[away, 'Att_A'] * stats.at[home, 'Def_H'] * avg_a
 
     res = {'1': 0, 'X': 0, '2': 0, 'over': 0, 'under': 0}
     limit = 2.5 if sport == 'futbal' else 5.5
-    
     for x in range(12):
         for y in range(12):
             p = poisson.pmf(x, lamb_h) * poisson.pmf(y, lamb_a)
@@ -105,39 +124,70 @@ def predikuj_vsetko(home, away, stats, avg_h, avg_a, sport='futbal'):
             if (x + y) > limit: res['over'] += p
             else: res['under'] += p
 
-    # Normalizácia (aby bol súčet presne 100%)
-    total_1x2 = res['1'] + res['X'] + res['2']
-    res['1'] /= total_1x2; res['X'] /= total_1x2; res['2'] /= total_1x2
-    
-    total_ou = res['over'] + res['under']
-    res['over'] /= total_ou; res['under'] /= total_ou
+    # NORMALIZÁCIA
+    sum_1x2 = res['1'] + res['X'] + res['2']
+    res['1'] /= sum_1x2; res['X'] /= sum_1x2; res['2'] /= sum_1x2
+    sum_ou = res['over'] + res['under']
+    res['over'] /= sum_ou; res['under'] /= sum_ou
 
     if sport == 'nhl':
         res['ML1'] = res['1'] + (res['X'] * 0.51)
         res['ML2'] = res['2'] + (res['X'] * 0.49)
     return res
 
-# --- 4. ANALÝZA A SPRACOVANIE ---
+def ziskaj_kurzy(sport_key):
+    url = f'https://api.the-odds-api.com/v4/sports/{sport_key}/odds/'
+    params = {'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h,totals', 'oddsFormat': 'decimal'}
+    try:
+        r = requests.get(url, params=params, timeout=15)
+        return r.json() if r.status_code == 200 else []
+    except: return []
+
+def fuzzy_match_team(api_name, csv_teams):
+    if csv_teams is None or len(csv_teams) == 0: return None
+    match, score = process.extractOne(api_name, csv_teams)
+    return match if score >= 75 else None
+
+# --- 4. EMAIL A SPÚŠŤAČ ---
+
+def odosli_email(data, ziadne_tipy=False):
+    style = """<style>
+        table {border-collapse: collapse; width: 100%; font-family: sans-serif; font-size: 13px;}
+        th {background-color: #1a237e; color: white; padding: 10px;}
+        td {padding: 8px; border-bottom: 1px solid #ddd; text-align: center;}
+        .vklad {color: #d32f2f; font-weight: bold;}
+    </style>"""
+    
+    if ziadne_tipy:
+        html = "<html><body><p>Dnes žiadne hodnotné príležitosti.</p></body></html>"
+        subject = f"💤 AI Report: {datetime.now().strftime('%d.%m')}"
+    else:
+        df = pd.DataFrame(data)
+        html = f"<html><body><h2 style='color: #1a237e;'>🎯 TOP AI Tipy</h2>{style}{df.to_html(index=False, escape=False)}</body></html>"
+        subject = f"🚀 AI Tipy ({len(data)} šancí) - {datetime.now().strftime('%d.%m')}"
+
+    msg = MIMEMultipart(); msg['Subject'] = subject; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
+    msg.attach(MIMEText(html, 'html'))
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as s:
+            s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+    except Exception as e: print(f"Email error: {e}")
 
 def spustit_analyzu():
     all_potential_bets = []
-    print(f"🚀 Štart: {datetime.now().strftime('%d.%m %H:%M')}")
+    print(f"🚀 Štart analýzy: {datetime.now().strftime('%H:%M')}")
 
     for liga, cfg in LIGY_CONFIG.items():
-        print(f"🔍 Analyzujem: {liga}")
+        print(f"🔍 {liga}...")
         df = stiahni_csv_data(cfg['csv'])
-        if df.empty: continue
-
         stats, avg_h, avg_a = vypocitaj_silu_timov(df)
         matches = ziskaj_kurzy(cfg['api'])
+        
         if not matches or stats is None: continue
-
         sport_type = 'nhl' if 'NHL' in liga else 'futbal'
 
         for m in matches:
             api_h, api_a = m['home_team'], m['away_team']
-            start_time = get_local_time(m['commence_time'])
-            
             csv_h = fuzzy_match_team(api_h, stats.index)
             csv_a = fuzzy_match_team(api_a, stats.index)
             if not csv_h or not csv_a: continue
@@ -146,11 +196,46 @@ def spustit_analyzu():
             if not probs: continue
 
             for bookie in m.get('bookmakers', []):
-                # Výpočet Value pre H2H a Totals (podobne ako v tvojom pôvodnom kóde)
-                # ... (tu ostáva tvoja pôvodná logika prechádzania outcomes) ...
-                # Poznámka: v r['Model'] už budú normalizované pravdepodobnosti.
-                pass
+                # H2H / Moneyline
+                h2h = next((mk for mk in bookie.get('markets', []) if mk['key'] == 'h2h'), None)
+                if h2h:
+                    for out in h2h['outcomes']:
+                        if sport_type == 'nhl':
+                            p = probs['ML1'] if out['name'] == api_h else probs['ML2']
+                            typ = '🏒 ML'
+                        else:
+                            p = probs['1'] if out['name'] == api_h else (probs['2'] if out['name'] == api_a else probs['X'])
+                            typ = '⚖️ 1X2'
+                        
+                        edge = (p * out['price']) - 1
+                        if edge >= MIN_VALUE_EDGE:
+                            all_potential_bets.append({
+                                'Čas': get_local_time(m['commence_time']), 'Liga': liga, 'Zápas': f"{api_h}-{api_a}",
+                                'Tip': out['name'], 'Kurz': out['price'], 'Edge': f"{edge:.1%}", 
+                                'Pravd': f"{p:.1%}", 'Vklad': f"<span class='vklad'>{vypocitaj_kelly(p, out['price'])}%</span>"
+                            })
 
-    # ... (tu nasleduje tvoja pôvodná logika odosielania emailu) ...
+                # Over/Under
+                totals = next((mk for mk in bookie.get('markets', []) if mk['key'] == 'totals'), None)
+                if totals:
+                    limit = 5.5 if sport_type == 'nhl' else 2.5
+                    for out in totals['outcomes']:
+                        if out.get('point') == limit:
+                            p = probs['over'] if out['name'].lower() == 'over' else probs['under']
+                            edge = (p * out['price']) - 1
+                            if edge >= MIN_VALUE_EDGE:
+                                all_potential_bets.append({
+                                    'Čas': get_local_time(m['commence_time']), 'Liga': liga, 'Zápas': f"{api_h}-{api_a}",
+                                    'Tip': f"{out['name']} {limit}", 'Kurz': out['price'], 'Edge': f"{edge:.1%}", 
+                                    'Pravd': f"{p:.1%}", 'Vklad': f"<span class='vklad'>{vypocitaj_kelly(p, out['price'])}%</span>"
+                                })
 
-# Pomocné funkcie stiahni_csv_data, ziskaj_kurzy a fuzzy_match_team ostávajú nezmenené z tvojho pôvodného kódu.
+    if all_potential_bets:
+        final_top = sorted(all_potential_bets, key=lambda x: x['Edge'], reverse=True)[:15]
+        odosli_email(final_top)
+    else:
+        odosli_email([], ziadne_tipy=True)
+    print("✅ Hotovo.")
+
+if __name__ == "__main__":
+    spustit_analyzu()
