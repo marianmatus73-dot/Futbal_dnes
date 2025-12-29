@@ -3,7 +3,6 @@ import pandas as pd
 import smtplib
 import os
 import io
-import time
 from scipy.stats import poisson
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
@@ -98,9 +97,9 @@ def predikuj_vsetko(home, away, stats, avg_h, avg_a, sport='futbal'):
 def stiahni_csv_data(liga_kod):
     url = f"https://raw.githubusercontent.com/lbenz730/NHL_Draft_Analysis/master/data/nhl_scores_{AKTUALNA_SEZONA_NHL}.csv" if liga_kod == 'NHL' else f"https://www.football-data.co.uk/mmz4281/{AKTUALNA_SEZONA_FUTBAL}/{liga_kod}.csv"
     try:
-        r = requests.get(url, timeout=10)
+        r = requests.get(url, timeout=15)
         if r.status_code != 200: return pd.DataFrame()
-        # OPRAVENÉ: Dekódovanie prebieha pred akoukoľvek manipuláciou
+        # DÔLEŽITÁ OPRAVA: Dekódovanie tu
         content = r.content.decode('utf-8', errors='ignore')
         df = pd.read_csv(io.StringIO(content))
         if liga_kod == 'NHL':
@@ -166,6 +165,7 @@ def spustit_analyzu():
     if all_potential_bets:
         df_all = pd.DataFrame(all_potential_bets).sort_values(by='Edge', ascending=False)
         top_bets = df_all[df_all['Edge'] >= MIN_VALUE_EDGE]
+        # Ak nie sú super tipy, zober aspoň 3 najlepšie možné
         if len(top_bets) < 3: top_bets = df_all.head(3)
 
         final_data = []
@@ -176,8 +176,10 @@ def spustit_analyzu():
                 'Edge': f"{r['Edge']:.1%}", 'Vklad': f"<b>{vypocitaj_kelly(r['Pravd'], r['Kurz'])}%</b>"
             })
         odosli_email(final_data)
+        print("✅ E-mail odoslaný!")
     else:
         odosli_email([], ziadne_tipy=True)
+        print("ℹ️ Žiadne tipy, odoslaný informačný e-mail.")
 
 def odosli_email(data, ziadne_tipy=False):
     style = """<style>
@@ -190,7 +192,7 @@ def odosli_email(data, ziadne_tipy=False):
     </style>"""
 
     if ziadne_tipy:
-        html = "<html><body><h2>🎯 AI Stávkový Report</h2><p>Dnes neboli nájdené žiadne ziskové príležitosti nad 0% Edge.</p></body></html>"
+        html = "<html><body><h2>🎯 AI Stávkový Report</h2><p>Dnes nie sú žiadne výhodné príležitosti.</p></body></html>"
         subject = f"💤 AI Report: Žiadne tipy ({datetime.now().strftime('%d.%m')})"
     else:
         df = pd.DataFrame(data)
@@ -209,9 +211,9 @@ def odosli_email(data, ziadne_tipy=False):
             s.starttls()
             s.login(GMAIL_USER, GMAIL_PASSWORD)
             s.send_message(msg)
-        print("📧 E-mail bol úspešne odoslaný!")
     except Exception as e:
-        print(f"❌ Chyba pri odosielaní e-mailu: {str(e)}")
+        # BEZPEČNÝ VÝPIS CHYBY (toto rieši tvoj problém na obrázku)
+        print(f"❌ Chyba emailu: {repr(e)}")
 
 if __name__ == "__main__":
     spustit_analyzu()
