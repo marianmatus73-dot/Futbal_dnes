@@ -7,7 +7,7 @@ import os
 import smtplib
 import logging
 from scipy.stats import poisson, norm
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
@@ -38,8 +38,7 @@ LIGY_CONFIG = {
     '🎾 ATP Tenis':        {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis'}
 }
 
-# --- 2. POMOCNÉ FUNKCIE ---
-
+# --- 2. POMOCNÉ FUNKCIE (Ostávajú nezmenené) ---
 def fuzzy_match_team(name, choices):
     if choices is None or len(choices) == 0: return None
     match, score = process.extractOne(name, choices)
@@ -71,7 +70,6 @@ def spracuj_stats(content, sport):
             losses = df['loser_name'].value_counts()
             players = set(df['winner_name']) | set(df['loser_name'])
             stats = pd.DataFrame(index=list(players))
-            # Laplace smoothing proti extrémnym 100% WinRate
             stats['WinRate'] = [(wins.get(p, 0) + 1) / (wins.get(p, 0) + losses.get(p, 0) + 2) for p in players]
             return stats, 0, 0
         
@@ -83,7 +81,6 @@ def spracuj_stats(content, sport):
         df['W'] = np.linspace(0.85, 1.15, len(df))
         avg_h, avg_a = (df['FTHG']*df['W']).sum()/df['W'].sum(), (df['FTAG']*df['W']).sum()/df['W'].sum()
         
-        # Pridaný Shrinkage (0.8 faktor) - tlmí extrémne rozdiely medzi tímami
         h = df.groupby('HomeTeam').apply(lambda x: pd.Series({
             'AH': 0.8 * ((x['FTHG']*x['W']).mean()/avg_h) + 0.2, 
             'DH': 0.8 * ((x['FTAG']*x['W']).mean()/avg_a) + 0.2
@@ -108,7 +105,7 @@ def odosli_email(text):
             s.send_message(msg)
     except Exception as e: logger.error(f"❌ Chyba: {e}")
 
-# --- 3. HLAVNÝ PROCES ---
+# --- 3. HLAVNÝ PROCES S ČASOVÝM FILTROM ---
 
 async def analyzuj():
     async with aiohttp.ClientSession() as session:
@@ -116,12 +113,26 @@ async def analyzuj():
         all_bets = []
         processed_ids = set()
 
+        # Nastavenie okna na 24 hodín (zachytí NHL/NBA v noci)
+        now_utc = datetime.utcnow()
+        start_time = now_utc.isoformat() + 'Z'
+        end_time = (now_utc + timedelta(hours=24)).isoformat() + 'Z'
+
         for liga, content in csv_results:
             if not content: continue
             cfg = LIGY_CONFIG[liga]
             stats, avg_h, avg_a = spracuj_stats(content, cfg['sport'])
             
-            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params={'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}) as r:
+            # Parametre pre filter na najbližších 24h
+            params = {
+                'apiKey': API_ODDS_KEY,
+                'regions': 'eu',
+                'markets': 'h2h',
+                'commenceTimeFrom': start_time,
+                'commenceTimeTo': end_time
+            }
+
+            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params=params) as r:
                 if r.status != 200: continue
                 matches = await r.json()
 
@@ -136,13 +147,14 @@ async def analyzuj():
                         p = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
                     elif cfg['sport'] == 'basketbal':
                         lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
-                        p_h = 1 - norm.cdf(0, loc=(lh - la), scale=14) # Väčšia variancia pre basket
+                        # Výpočet pravdepodobnosti pre basketbal (normálne rozdelenie)
+                        p_h = 1 - norm.cdf(0, loc=(lh - la), scale=12) 
                         p = {'1': p_h, '2': 1-p_h}
                     else: # Futbal / Hokej
                         lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
-                        p = {'1': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(8) for y in range(x)),
-                             'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(8)),
-                             '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(8) for x in range(y))}
+                        p = {'1': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(10) for y in range(x)),
+                             'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(10)),
+                             '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(10) for x in range(y))}
                     
                     for bk in m.get('bookmakers', []):
                         for mk in bk.get('markets', []):
@@ -152,22 +164,27 @@ async def analyzuj():
                                     prob = p.get(label, 0)
                                     edge = (prob * out['price']) - 1
                                     
-                                    # Kelly a bezpečnostný filter (Edge 3% až 30%)
                                     if 0.03 <= edge <= 0.30:
                                         f_star = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
                                         vklad_pct = min(max(0, f_star * 0.1), 0.02)
                                         all_bets.append({
-                                            'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 
-                                            'Tip': out['name'], 'Kurz': out['price'], 'Edge': f"{round(edge*100,1)}%",
+                                            'Liga': liga, 
+                                            'Zápas': f"{m['home_team']} vs {m['away_team']}", 
+                                            'Tip': out['name'], 
+                                            'Kurz': out['price'], 
+                                            'Edge': f"{round(edge*100,1)}%",
                                             'Vklad': f"{round(vklad_pct*100,2)}% ({round(vklad_pct * AKTUALNY_BANK, 2)}€)"
                                         })
                                         processed_ids.add(m_id)
 
+        # Finálny výpis
         if all_bets:
             top = sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:5]
-            html = "<h3>✅ Realistické AI Tipy (Edge 3-30%)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+            html = f"<h3>✅ Realistické AI Tipy na najbližších 24h (Edge 3-30%)</h3>"
+            html += "<table border='1' style='border-collapse:collapse; width:100%;'>"
             html += "<tr style='background:#eee;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
-            for b in top: html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green; font-weight:bold;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
+            for b in top: 
+                html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green; font-weight:bold;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
             odosli_email(html + "</table>")
         else:
             odosli_email("Dnes nenašiel AI model žiadne tipy s bezpečnou matematickou výhodou.")
