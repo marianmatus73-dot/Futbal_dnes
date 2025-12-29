@@ -2,12 +2,15 @@ name: Denná Analýza Tipov
 
 on:
   schedule:
-    - cron: '0 8 * * *' # Spustí sa každý deň o 08:00 UTC (9:00 nášho času)
-  workflow_dispatch:      # Umožní spustiť skript manuálne tlačidlom
+    # 06:00 UTC (07:00 nášho času) - Ideálne po skončení NHL/NBA
+    - cron: '0 6 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Umožňuje skriptu ukladať zmeny do historia_tipov.csv
     steps:
       - name: Checkout kódu
         uses: actions/checkout@v3
@@ -18,7 +21,9 @@ jobs:
           python-version: '3.9'
 
       - name: Inštalácia knižníc
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install fuzzywuzzy python-Levenshtein  # Pre istotu, ak nie sú v requirements
 
       - name: Spustenie skriptu
         env:
@@ -26,4 +31,13 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+          AKTUALNY_BANK: 1000
         run: python main.py
+
+      - name: Uloženie zmien v histórii
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add historia_tipov.csv
+          git commit -m "Automatická aktualizácia histórie tipov [skip ci]" || echo "Žiadne zmeny na uloženie"
+          git push
