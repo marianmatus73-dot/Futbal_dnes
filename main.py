@@ -186,7 +186,7 @@ async def analyzuj():
                             prob, price = p.get(lbl, 0), out['price']
                             edge = (prob * price) - 1
                             
-                            if 0.03 <= edge <= 0.30:
+                            if -0.1 <= edge <= 1.0:
                                 kelly = ((price - 1) * prob - (1 - prob)) / (price - 1)
                                 vklad = min(max(0, kelly * 0.05 * (1 / price**0.5)), 0.02)
                                 all_bets.append({
