@@ -1,35 +1,9 @@
-name: AI Betting Bot
-
-on:
-  # Umožní manuálne spustenie tlačidlom "Run workflow"
-  workflow_dispatch:
-  # Automatické spustenie každý deň o 08:00 UTC (cca 09:00 nášho času)
-  schedule:
-    - cron: '0 8 * * *'
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install requests pandas scipy python-dotenv pytz fuzzywuzzy python-Levenshtein
-
       - name: Run analysis script
+        shell: bash
         env:
-          # Tu prepojíme tvoje Secrets s premennými v skripte
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
-        run: python main.py
+        run: |
+          python main.py
