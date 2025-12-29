@@ -25,7 +25,6 @@ GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
 HISTORY_FILE = "historia_tipov.csv"
 
-# Kompletná konfigurácia líg
 LIGY_CONFIG = {
     '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25},
     '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28},
@@ -75,7 +74,10 @@ def update_history_results(raw_content, liga_name, sport):
         wins, losses = 0, 0
 
         for idx, row in historia[mask].iterrows():
-            p1, p2 = row['Zápas'].split(' vs ')
+            z_parts = row['Zápas'].split(' vs ')
+            if len(z_parts) < 2: continue
+            p1, p2 = z_parts[0], z_parts[1]
+            
             if sport == 'tenis':
                 res = df[(df['winner_name'].str.contains(p1, case=False, na=False) & df['loser_name'].str.contains(p2, case=False, na=False)) |
                          (df['winner_name'].str.contains(p2, case=False, na=False) & df['loser_name'].str.contains(p1, case=False, na=False))].iloc[-1:]
@@ -102,27 +104,31 @@ def update_history_results(raw_content, liga_name, sport):
 def spracuj_stats(content, cfg):
     try:
         df = pd.read_csv(io.StringIO(content.decode('utf-8', errors='ignore')))
+        # Oprava dátumu - pridanie dayfirst=True pre odstránenie varovaní
+        df['Date'] = pd.to_datetime(df['Date'], dayfirst=True, errors='coerce')
+        
         if cfg['sport'] == 'tenis':
             wins = df['winner_name'].value_counts()
             losses = df['loser_name'].value_counts()
-            players = set(df['winner_name']) | set(df['loser_name'])
+            players = set(df['winner_name'].dropna()) | set(df['loser_name'].dropna())
             stats = pd.DataFrame(index=list(players))
             stats['WinRate'] = [(wins.get(p, 0) + 1) / (wins.get(p, 0) + losses.get(p, 0) + 2) for p in players]
             return stats, 0, 0
         
         if cfg['sport'] == 'basketbal':
-            df = df.rename(columns={'Team': 'HomeTeam', 'Opponent': 'AwayTeam', 'TeamPoints': 'FTHG', 'OpponentPoints': 'FTAG', 'Date': 'Date'})
+            df = df.rename(columns={'Team': 'HomeTeam', 'Opponent': 'AwayTeam', 'TeamPoints': 'FTHG', 'OpponentPoints': 'FTAG'})
         elif cfg['sport'] == 'hokej':
-            df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG', 'date': 'Date'})
+            df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG'})
         
-        df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
         h = df.groupby('HomeTeam').apply(lambda x: pd.Series({'AH': x['FTHG'].mean()/avg_h, 'DH': x['FTAG'].mean()/avg_a, 'Last': x['Date'].max()}), include_groups=False)
         a = df.groupby('AwayTeam').apply(lambda x: pd.Series({'AA': x['FTAG'].mean()/avg_a, 'DA': x['FTHG'].mean()/avg_h, 'Last': x['Date'].max()}), include_groups=False)
+        
+        # Oprava overlapu stĺpcov pridaním suffixov
         return h.join(a, how='outer', lsuffix='_h', rsuffix='_a').fillna(1.0), avg_h, avg_a
-    except: return None, 0, 0
-
-# --- 3. HLAVNÝ ANALYTICKÝ PROCES ---
+    except Exception as e:
+        logger.error(f"Chyba stats: {e}")
+        return None, 0, 0
 
 async def analyzuj():
     async with aiohttp.ClientSession() as session:
@@ -151,7 +157,6 @@ async def analyzuj():
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
                 if not (c1 and c2): continue
                 
-                # Výpočet pravdepodobností
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1, 'WinRate'], stats.at[c2, 'WinRate']
                     p = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
@@ -159,15 +164,17 @@ async def analyzuj():
                     lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
                     if cfg['sport'] == 'futbal': lh += cfg['ha']
                     
-                    # Únava B2B
+                    # Únava B2B s opravenými názvami stĺpcov
                     if cfg['sport'] in ['hokej', 'basketbal']:
-                        if (now_utc - pd.to_datetime(stats.at[c1, 'Last_h'])).days < 2: lh *= 0.94
-                        if (now_utc - pd.to_datetime(stats.at[c2, 'Last_a'])).days < 2: la *= 0.94
+                        last_h = pd.to_datetime(stats.at[c1, 'Last_h'])
+                        last_a = pd.to_datetime(stats.at[c2, 'Last_a'])
+                        if (now_utc - last_h).days < 2: lh *= 0.94
+                        if (now_utc - last_a).days < 2: la *= 0.94
 
                     if cfg['sport'] == 'basketbal':
                         p_h = 1 - norm.cdf(0, loc=(lh - la + cfg['ha']), scale=12)
                         p = {'1': p_h, '2': 1-p_h}
-                    else: # Futbal / Hokej (Poisson)
+                    else:
                         p = {'1': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(10) for y in range(x)),
                              'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(10)),
                              '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(10) for x in range(y))}
@@ -179,12 +186,9 @@ async def analyzuj():
                             prob, price = p.get(lbl, 0), out['price']
                             edge = (prob * price) - 1
                             
-                            # BEZPEČNOSTNÝ FILTER: Edge + Market Steam (kurz nesmie stúpnuť o viac ako 15%)
                             if 0.03 <= edge <= 0.30:
-                                # Poznámka: opening_price tu simulujeme ako price, kým API neposkytne historické dáta
                                 kelly = ((price - 1) * prob - (1 - prob)) / (price - 1)
                                 vklad = min(max(0, kelly * 0.05 * (1 / price**0.5)), 0.02)
-                                
                                 all_bets.append({
                                     'Datum': now_utc.strftime('%Y-%m-%d'), 'Liga': liga, 
                                     'Zápas': f"{m['home_team']} vs {m['away_team']}", 'Tip': out['name'], 
@@ -193,26 +197,15 @@ async def analyzuj():
                                     'Vysledok': None
                                 })
 
-        # 4. EMAIL A LOGOVANIE
         if all_bets:
             pd.DataFrame(all_bets).to_csv(HISTORY_FILE, mode='a', header=not os.path.exists(HISTORY_FILE), index=False)
-            
-            # Celkové ROI štatistiky zo súboru
-            stats_text = ""
-            if os.path.exists(HISTORY_FILE):
-                h_df = pd.read_csv(HISTORY_FILE)
-                if 'Vysledok' in h_df.columns:
-                    w = len(h_df[h_df['Vysledok'] == 'WIN'])
-                    t = len(h_df[h_df['Vysledok'].isin(['WIN', 'LOSS'])])
-                    stats_text = f"<li><b>Celková úspešnosť:</b> {round((w/t)*100,1) if t>0 else 0}% ({w}/{t})</li>"
-
-            html = f"<h3>📈 Bilancia výsledkov:</h3><ul>{summary_html}{stats_text}</ul>"
-            html += "<h3>✅ Najlepšie AI Tipy na 24 hodín:</h3><table border='1' style='width:100%; border-collapse:collapse;'>"
+            html = f"<h3>📈 Bilancia výsledkov:</h3><ul>{summary_html}</ul>"
+            html += "<h3>✅ Najlepšie AI Tipy:</h3><table border='1' style='width:100%; border-collapse:collapse;'>"
             html += "<tr style='background:#eee;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
             for b in sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:10]:
                 html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green; font-weight:bold;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
             
-            msg = MIMEMultipart(); msg['Subject'] = f"📊 AI PRO REPORT - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
+            msg = MIMEMultipart(); msg['Subject'] = f"📊 AI REPORT V5 - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
             msg.attach(MIMEText(html + "</table>", 'html'))
             with smtplib.SMTP('smtp.gmail.com', 587) as s:
                 s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
