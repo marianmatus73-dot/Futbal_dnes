@@ -45,8 +45,9 @@ MAX_BANK_PCT = 0.02
 
 def fuzzy_match_team(name, choices):
     if choices is None or len(choices) == 0: return None
+    # Zvýšená hranica na 80 pre vyššiu presnosť mien
     match, score = process.extractOne(name, choices)
-    return match if score >= 65 else None
+    return match if score >= 80 else None
 
 async def fetch_csv(session, liga, cfg):
     try:
@@ -58,11 +59,11 @@ async def fetch_csv(session, liga, cfg):
         elif cfg['sport'] == 'basketbal':
             url = "https://raw.githubusercontent.com/alexno62/NBA-Data/master/nba_games_stats.csv"
         elif cfg['sport'] == 'tenis':
-            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_{datetime.now().year}.csv"
+            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2025.csv"
         elif cfg['csv'] == 'NHL':
-            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_{datetime.now().year}.csv"
+            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_2025.csv"
         
-        async with session.get(url, timeout=10) as r:
+        async with session.get(url, timeout=12) as r:
             return liga, await r.read() if r.status == 200 else None
     except: return liga, None
 
@@ -109,20 +110,21 @@ async def analyzuj():
     async with aiohttp.ClientSession() as session:
         csv_results = await asyncio.gather(*(fetch_csv(session, l, c) for l, c in LIGY_CONFIG.items()))
         all_bets = []
+        processed_matches = set() # Proti duplicitám
 
         for liga, content in csv_results:
             if not content: continue
             cfg = LIGY_CONFIG[liga]
             stats, avg_h, avg_a = spracuj_stats(content, cfg['sport'])
             
-            odds_url = f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/'
-            async with session.get(odds_url, params={'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}) as r:
+            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params={'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}) as r:
                 if r.status != 200: continue
                 matches = await r.json()
 
-            logger.info(f"📡 {liga}: API vrátilo {len(matches)} zápasov.")
-
             for m in matches:
+                match_id = f"{m['home_team']}_{m['away_team']}"
+                if match_id in processed_matches: continue
+                
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
                 if c1 and c2:
                     if cfg['sport'] == 'tenis':
@@ -146,19 +148,15 @@ async def analyzuj():
                                     prob = p.get(label, 0)
                                     edge = (prob * out['price']) - 1
                                     
-                                    # Money Management
                                     f_star = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
                                     vklad_pct = min(max(0, f_star * KELLY_FRACTION), MAX_BANK_PCT)
-                                    suma = round(vklad_pct * AKTUALNY_BANK, 2)
                                     
                                     all_bets.append({
-                                        'Liga': liga, 
-                                        'Zápas': f"{m['home_team']} vs {m['away_team']}", 
-                                        'Tip': out['name'], 
-                                        'Kurz': out['price'], 
-                                        'Edge': edge,
-                                        'Vklad': f"{round(vklad_pct*100,2)}% ({suma}€)"
+                                        'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 
+                                        'Tip': out['name'], 'Kurz': out['price'], 'Edge': edge,
+                                        'Vklad': f"{round(vklad_pct*100,2)}% ({round(vklad_pct * AKTUALNY_BANK, 2)}€)"
                                     })
+                                processed_matches.add(match_id)
 
         if all_bets:
             top = sorted(all_bets, key=lambda x: x['Edge'], reverse=True)[:3]
@@ -169,8 +167,6 @@ async def analyzuj():
                 html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td>"
                 html += f"<td style='color:{color}; font-weight:bold;'>{round(b['Edge']*100,1)}%</td><td>{b['Vklad']}</td></tr>"
             odosli_email(html + "</table>")
-        else:
-            odosli_email("Dnes žiadne tipy (skontroluj logy).")
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
