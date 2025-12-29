@@ -13,7 +13,7 @@ from email.mime.text import MIMEText
 from dotenv import load_dotenv
 from fuzzywuzzy import process
 
-# --- 1. KONFIGURÁCIA ---
+# --- 1. KONFIGURÁCIA A LOGOVANIE ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
 load_dotenv()
@@ -38,30 +38,30 @@ LIGY_CONFIG = {
     '🎾 ATP Tenis':        {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis'}
 }
 
-KELLY_FRACTION = 0.15
+KELLY_FRACTION = 0.1
 MAX_BANK_PCT = 0.02
 
 # --- 2. POMOCNÉ FUNKCIE ---
 
 def fuzzy_match_team(name, choices):
     if choices is None or len(choices) == 0: return None
-    # Zvýšená presnosť (85) aby sme sa vyhli zámene tímov (napr. PSG vs Paris FC)
+    # Zvýšená hranica na 85, aby sa nepomiešali tímy (napr. Paris FC vs PSG)
     match, score = process.extractOne(name, choices)
     return match if score >= 85 else None
 
 async def fetch_csv(session, liga, cfg):
     try:
         url = ""
+        now = datetime.now()
         if cfg['sport'] == 'futbal':
-            now = datetime.now()
             sez = f"{now.strftime('%y')}{(now.year + 1) % 100:02d}" if now.month >= 8 else f"{(now.year - 1) % 100:02d}{now.strftime('%y')}"
             url = f"https://www.football-data.co.uk/mmz4281/{sez}/{cfg['csv']}.csv"
         elif cfg['sport'] == 'basketbal':
             url = "https://raw.githubusercontent.com/alexno62/NBA-Data/master/nba_games_stats.csv"
         elif cfg['sport'] == 'tenis':
-            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_{datetime.now().year}.csv"
+            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_{now.year}.csv"
         elif cfg['csv'] == 'NHL':
-            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_{datetime.now().year}.csv"
+            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_{now.year}.csv"
         
         async with session.get(url, timeout=12) as r:
             return liga, await r.read() if r.status == 200 else None
@@ -110,7 +110,7 @@ async def analyzuj():
     async with aiohttp.ClientSession() as session:
         csv_results = await asyncio.gather(*(fetch_csv(session, l, c) for l, c in LIGY_CONFIG.items()))
         all_bets = []
-        processed_matches = set()
+        processed_match_ids = set()
 
         for liga, content in csv_results:
             if not content: continue
@@ -122,9 +122,9 @@ async def analyzuj():
                 matches = await r.json()
 
             for m in matches:
-                # Unikátny kľúč pre zápas, aby sme nemali duplicity
-                match_id = f"{m['home_team']}_{m['away_team']}_{liga}"
-                if match_id in processed_matches: continue
+                # Unikátny identifikátor zápasu pre elimináciu duplicít
+                m_id = f"{m['home_team']}_{m['away_team']}_{liga}"
+                if m_id in processed_match_ids: continue
                 
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
                 if c1 and c2:
@@ -141,10 +141,8 @@ async def analyzuj():
                              'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(10)),
                              '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(10) for x in range(y))}
                     
-                    # Výber najlepšieho kurzu od rôznych stávkoviek pre tento konkrétny zápas
-                    best_edge_for_match = -100
-                    best_bet_data = None
-                    
+                    # Najlepšia príležitosť v rámci zápasu
+                    match_bets = []
                     for bk in m.get('bookmakers', []):
                         for mk in bk.get('markets', []):
                             if mk['key'] == 'h2h':
@@ -153,31 +151,35 @@ async def analyzuj():
                                     prob = p.get(label, 0)
                                     edge = (prob * out['price']) - 1
                                     
-                                    if edge > best_edge_for_match:
-                                        best_edge_for_match = edge
-                                        f_star = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
-                                        vklad_pct = min(max(0, f_star * KELLY_FRACTION), MAX_BANK_PCT)
-                                        best_bet_data = {
+                                    # Kelly Criterion pre vklad
+                                    f_star = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
+                                    vklad_pct = min(max(0, f_star * KELLY_FRACTION), MAX_BANK_PCT)
+                                    
+                                    # Filter proti nereálnym Edge (nad 100%)
+                                    if 0.02 < edge < 1.0:
+                                        match_bets.append({
                                             'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 
                                             'Tip': out['name'], 'Kurz': out['price'], 'Edge': edge,
                                             'Vklad': f"{round(vklad_pct*100,2)}% ({round(vklad_pct * AKTUALNY_BANK, 2)}€)"
-                                        }
+                                        })
                     
-                    if best_bet_data:
-                        all_bets.append(best_bet_data)
-                        processed_matches.add(match_id)
+                    if match_bets:
+                        # Pridaj len ten úplne najlepší tip z tohto zápasu
+                        all_bets.append(max(match_bets, key=lambda x: x['Edge']))
+                        processed_match_ids.add(m_id)
 
         if all_bets:
             top = sorted(all_bets, key=lambda x: x['Edge'], reverse=True)[:3]
             html = "<h2>Top 3 AI Príležitosti</h2><table border='1' style='border-collapse:collapse; width:100%; text-align:center;'>"
             html += "<tr style='background:#2c3e50; color:white;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
             for b in top:
-                # Edge nad 100% je podozrivý (často chyba v dátach), označíme ho
                 edge_val = round(b['Edge']*100,1)
-                color = "orange" if edge_val > 50 else ("green" if edge_val > 0 else "red")
+                color = "green" if edge_val < 40 else "orange"
                 html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td>"
                 html += f"<td style='color:{color}; font-weight:bold;'>{edge_val}%</td><td>{b['Vklad']}</td></tr>"
             odosli_email(html + "</table>")
+        else:
+            logger.warning("Nenašli sa žiadne bezpečné tipy.")
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
