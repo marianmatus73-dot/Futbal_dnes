@@ -53,20 +53,18 @@ async def fetch_csv(session, liga, cfg):
             sez = f"{now.strftime('%y')}{(now.year + 1) % 100:02d}" if now.month >= 8 else f"{(now.year - 1) % 100:02d}{now.strftime('%y')}"
             url = f"https://www.football-data.co.uk/mmz4281/{sez}/{cfg['csv']}.csv"
         elif cfg['sport'] == 'basketbal':
-            url = "https://raw.githubusercontent.com/alexno62/NBA-Data/master/nba_games_stats.csv"
+            url = "https://raw.githubusercontent.com/abresler/nba-data/master/data/nba_games_all.csv"
         elif cfg['sport'] == 'tenis':
-            url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2025.csv"
+            url = "https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_2024.csv"
         elif cfg['csv'] == 'NHL':
-            url = f"https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_2025.csv"
+            url = "https://raw.githubusercontent.com/martineon/nhl-historical-data/master/data/nhl_results_2025.csv"
         
         async with session.get(url, timeout=15) as r:
-            status = r.status
-            content = await r.read()
-            if status == 200:
+            if r.status == 200:
                 print(f"✅ CSV načítané pre: {liga}")
-                return liga, content
+                return liga, await r.read()
             else:
-                print(f"❌ Chyba CSV pre {liga}: Status {status}")
+                print(f"❌ Chyba CSV pre {liga}: Status {r.status}")
                 return liga, None
     except Exception as e:
         print(f"🔥 Kritická chyba sťahovania {liga}: {e}")
@@ -134,7 +132,7 @@ def spracuj_stats(content, cfg):
         
         return h.join(a, how='outer', lsuffix='_h', rsuffix='_a').fillna(1.0), avg_h, avg_a
     except Exception as e:
-        print(f"⚠️ Chyba pri spracovaní stats: {e}")
+        print(f"⚠️ Chyba stats: {e}")
         return None, 0, 0
 
 async def analyzuj():
@@ -154,17 +152,14 @@ async def analyzuj():
             stats, avg_h, avg_a = stats_data
             
             params = {'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h'}
-            
             async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params=params) as r:
-                if r.status != 200:
-                    print(f"❌ API Chyba pre {liga}: {r.status}")
-                    continue
+                if r.status != 200: continue
                 matches = await r.json()
-                print(f"📡 API: {liga} - načítaných {len(matches)} zápasov")
+                print(f"📡 API: {liga} - {len(matches)} zápasov")
 
             for m in matches:
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
-                if not (c1 and c2): continue
+                if not (c1 and c2) or c1 not in stats.index or c2 not in stats.index: continue
                 
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1, 'WinRate'], stats.at[c2, 'WinRate']
@@ -194,8 +189,7 @@ async def analyzuj():
                             prob, price = p.get(lbl, 0), out['price']
                             edge = (prob * price) - 1
                             
-                            # TESTOVACÍ FILTER: akceptuje skoro všetko pre overenie funkčnosti
-                            if edge >= -0.1:
+                            if 0.03 <= edge <= 0.30: # Bezpečný filter pre reálne tipovanie
                                 kelly = ((price - 1) * prob - (1 - prob)) / (price - 1)
                                 vklad = min(max(0, kelly * 0.05 * (1 / price**0.5)), 0.02)
                                 all_bets.append({
@@ -206,28 +200,23 @@ async def analyzuj():
                                     'Vysledok': None
                                 })
 
-        print(f"📊 CELKOVÝ POČET TIPOV NA ZÁPIS: {len(all_bets)}")
-
         if all_bets:
             pd.DataFrame(all_bets).to_csv(HISTORY_FILE, mode='a', header=not os.path.exists(HISTORY_FILE), index=False)
-            print("💾 CSV súbor bol aktualizovaný.")
+            print(f"💾 CSV aktualizované. Počet tipov: {len(all_bets)}")
             
             html = f"<h3>📈 Bilancia výsledkov:</h3><ul>{summary_html}</ul>"
             html += "<h3>✅ Najlepšie AI Tipy:</h3><table border='1' style='width:100%; border-collapse:collapse;'>"
             html += "<tr style='background:#eee;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
-            for b in sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:10]:
+            for b in sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:15]:
                 html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green; font-weight:bold;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
             
-            try:
-                msg = MIMEMultipart(); msg['Subject'] = f"📊 AI REPORT DEBUG - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
-                msg.attach(MIMEText(html + "</table>", 'html'))
-                with smtplib.SMTP('smtp.gmail.com', 587) as s:
-                    s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
-                print("📧 Email bol úspešne odoslaný.")
-            except Exception as e:
-                print(f"📧🔥 Chyba pri odosielaní emailu: {e}")
+            msg = MIMEMultipart(); msg['Subject'] = f"📊 AI REPORT - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
+            msg.attach(MIMEText(html + "</table>", 'html'))
+            with smtplib.SMTP('smtp.gmail.com', 587) as s:
+                s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+            print("📧 Email úspešne odoslaný.")
         else:
-            print("ℹ️ Žiadne tipy s hodnotou sa nenašli.")
+            print("ℹ️ Dnes sa nenašli žiadne tipy s hodnotou.")
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
