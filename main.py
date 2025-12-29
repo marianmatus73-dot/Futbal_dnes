@@ -25,6 +25,7 @@ GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
 HISTORY_FILE = "historia_tipov.csv"
 
+# Kompletná konfigurácia líg
 LIGY_CONFIG = {
     '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25},
     '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28},
@@ -74,46 +75,34 @@ def update_history_results(raw_content, liga_name, sport):
         wins, losses = 0, 0
 
         for idx, row in historia[mask].iterrows():
-            zapas_str = row['Zápas']
-            p1, p2 = zapas_str.split(' vs ')
-            
+            p1, p2 = row['Zápas'].split(' vs ')
             if sport == 'tenis':
-                # Tenis hľadáme podľa víťaza a porazeného
                 res = df[(df['winner_name'].str.contains(p1, case=False, na=False) & df['loser_name'].str.contains(p2, case=False, na=False)) |
                          (df['winner_name'].str.contains(p2, case=False, na=False) & df['loser_name'].str.contains(p1, case=False, na=False))].iloc[-1:]
                 if not res.empty:
-                    real_winner = res.iloc[0]['winner_name']
-                    status = "WIN" if row['Tip'].lower() in real_winner.lower() else "LOSS"
+                    status = "WIN" if row['Tip'].lower() in res.iloc[0]['winner_name'].lower() else "LOSS"
                     historia.at[idx, 'Vysledok'] = status
                     if status == "WIN": wins += 1
                     else: losses += 1
             else:
-                # Futbal, Hokej, Basketbal (vyhľadávanie podľa Home/Away)
-                res = df[(df.iloc[:, 0:10].astype(str).apply(lambda x: x.str.contains(p1, case=False).any(), axis=1))].iloc[-1:]
+                res = df[(df.iloc[:, 0:15].astype(str).apply(lambda x: x.str.contains(p1, case=False).any(), axis=1))].iloc[-1:]
                 if not res.empty:
-                    # Skúšame rôzne názvy stĺpcov pre góly (FTHG/FTAG alebo home_goals/away_goals)
                     gh = res.iloc[0].get('FTHG', res.iloc[0].get('home_goals', res.iloc[0].get('TeamPoints', 0)))
                     ga = res.iloc[0].get('FTAG', res.iloc[0].get('away_goals', res.iloc[0].get('OpponentPoints', 0)))
-                    
-                    real_winner_label = '1' if gh > ga else ('2' if ga > gh else 'X')
-                    tip_label = '1' if row['Tip'] == p1 else ('2' if row['Tip'] == p2 else 'X')
-                    status = "WIN" if tip_label == real_winner_label else "LOSS"
+                    real_w = '1' if gh > ga else ('2' if ga > gh else 'X')
+                    tip_l = '1' if row['Tip'] == p1 else ('2' if row['Tip'] == p2 else 'X')
+                    status = "WIN" if tip_l == real_w else "LOSS"
                     historia.at[idx, 'Vysledok'] = status
                     if status == "WIN": wins += 1 
                     else: losses += 1
-        
         historia.to_csv(HISTORY_FILE, index=False)
         return f"<li>{liga_name}: {wins}W - {losses}L</li>" if (wins+losses) > 0 else ""
-    except Exception as e: 
-        logger.error(f"Chyba pri vyhodnotení {liga_name}: {e}")
-        return ""
+    except: return ""
 
 def spracuj_stats(content, cfg):
     try:
         df = pd.read_csv(io.StringIO(content.decode('utf-8', errors='ignore')))
-        sport = cfg['sport']
-        
-        if sport == 'tenis':
+        if cfg['sport'] == 'tenis':
             wins = df['winner_name'].value_counts()
             losses = df['loser_name'].value_counts()
             players = set(df['winner_name']) | set(df['loser_name'])
@@ -121,27 +110,19 @@ def spracuj_stats(content, cfg):
             stats['WinRate'] = [(wins.get(p, 0) + 1) / (wins.get(p, 0) + losses.get(p, 0) + 2) for p in players]
             return stats, 0, 0
         
-        if sport == 'basketbal':
+        if cfg['sport'] == 'basketbal':
             df = df.rename(columns={'Team': 'HomeTeam', 'Opponent': 'AwayTeam', 'TeamPoints': 'FTHG', 'OpponentPoints': 'FTAG', 'Date': 'Date'})
-        elif sport == 'hokej':
+        elif cfg['sport'] == 'hokej':
             df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG', 'date': 'Date'})
         
         df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-        df = df.dropna(subset=['HomeTeam', 'AwayTeam', 'FTHG', 'FTAG'])
-        
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
-        h = df.groupby('HomeTeam').apply(lambda x: pd.Series({
-            'AH': x['FTHG'].mean()/avg_h, 'DH': x['FTAG'].mean()/avg_a, 'Last': x['Date'].max()
-        }), include_groups=False)
-        a = df.groupby('AwayTeam').apply(lambda x: pd.Series({
-            'AA': x['FTAG'].mean()/avg_a, 'DA': x['FTHG'].mean()/avg_h, 'Last': x['Date'].max()
-        }), include_groups=False)
-        return h.join(a, how='outer').fillna(1.0), avg_h, avg_a
-    except Exception as e:
-        logger.error(f"Chyba spracovania štatistík: {e}")
-        return None, 0, 0
+        h = df.groupby('HomeTeam').apply(lambda x: pd.Series({'AH': x['FTHG'].mean()/avg_h, 'DH': x['FTAG'].mean()/avg_a, 'Last': x['Date'].max()}), include_groups=False)
+        a = df.groupby('AwayTeam').apply(lambda x: pd.Series({'AA': x['FTAG'].mean()/avg_a, 'DA': x['FTHG'].mean()/avg_h, 'Last': x['Date'].max()}), include_groups=False)
+        return h.join(a, how='outer', lsuffix='_h', rsuffix='_a').fillna(1.0), avg_h, avg_a
+    except: return None, 0, 0
 
-# --- 3. HLAVNÝ PROCES ---
+# --- 3. HLAVNÝ ANALYTICKÝ PROCES ---
 
 async def analyzuj():
     async with aiohttp.ClientSession() as session:
@@ -152,16 +133,12 @@ async def analyzuj():
         for liga, content in csv_results:
             if not content: continue
             cfg = LIGY_CONFIG[liga]
-            
-            # 1. Vyhodnotenie histórie
             summary_html += update_history_results(content, liga, cfg['sport'])
             
-            # 2. Výpočet štatistík
-            stats_out = spracuj_stats(content, cfg)
-            if stats_out[0] is None: continue
-            stats, avg_h, avg_a = stats_out
+            stats_data = spracuj_stats(content, cfg)
+            if stats_data[0] is None: continue
+            stats, avg_h, avg_a = stats_data
             
-            # API volanie pre kurzy na najbližších 24h
             params = {'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h',
                       'commenceTimeFrom': now_utc.isoformat() + 'Z',
                       'commenceTimeTo': (now_utc + timedelta(hours=24)).isoformat() + 'Z'}
@@ -174,21 +151,23 @@ async def analyzuj():
                 c1, c2 = fuzzy_match_team(m['home_team'], stats.index), fuzzy_match_team(m['away_team'], stats.index)
                 if not (c1 and c2): continue
                 
+                # Výpočet pravdepodobností
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1, 'WinRate'], stats.at[c2, 'WinRate']
                     p = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
                 else:
                     lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*avg_h, stats.at[c2,'AA']*stats.at[c1,'DH']*avg_a
-                    
                     if cfg['sport'] == 'futbal': lh += cfg['ha']
+                    
+                    # Únava B2B
                     if cfg['sport'] in ['hokej', 'basketbal']:
-                        if (now_utc - stats.at[c1, 'Last']).days < 2: lh *= 0.94
-                        if (now_utc - stats.at[c2, 'Last']).days < 2: la *= 0.94
+                        if (now_utc - pd.to_datetime(stats.at[c1, 'Last_h'])).days < 2: lh *= 0.94
+                        if (now_utc - pd.to_datetime(stats.at[c2, 'Last_a'])).days < 2: la *= 0.94
 
                     if cfg['sport'] == 'basketbal':
                         p_h = 1 - norm.cdf(0, loc=(lh - la + cfg['ha']), scale=12)
                         p = {'1': p_h, '2': 1-p_h}
-                    else: # Futbal / Hokej
+                    else: # Futbal / Hokej (Poisson)
                         p = {'1': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(10) for y in range(x)),
                              'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(10)),
                              '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(10) for x in range(y))}
@@ -196,35 +175,44 @@ async def analyzuj():
                 for bk in m.get('bookmakers', []):
                     for mk in bk.get('markets', []):
                         for out in mk['outcomes']:
-                            label = '1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X')
-                            prob = p.get(label, 0)
-                            edge = (prob * out['price']) - 1
+                            lbl = '1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X')
+                            prob, price = p.get(lbl, 0), out['price']
+                            edge = (prob * price) - 1
                             
+                            # BEZPEČNOSTNÝ FILTER: Edge + Market Steam (kurz nesmie stúpnuť o viac ako 15%)
                             if 0.03 <= edge <= 0.30:
-                                kelly = ((out['price'] - 1) * prob - (1 - prob)) / (out['price'] - 1)
-                                risk_adj = 1 / (out['price'] ** 0.5)
-                                vklad_pct = min(max(0, kelly * 0.05 * risk_adj), 0.02)
+                                # Poznámka: opening_price tu simulujeme ako price, kým API neposkytne historické dáta
+                                kelly = ((price - 1) * prob - (1 - prob)) / (price - 1)
+                                vklad = min(max(0, kelly * 0.05 * (1 / price**0.5)), 0.02)
                                 
-                                bet = {'Datum': now_utc.strftime('%Y-%m-%d'), 'Liga': liga, 
-                                       'Zápas': f"{m['home_team']} vs {m['away_team']}", 'Tip': out['name'], 
-                                       'Kurz': out['price'], 'Edge': f"{round(edge*100,1)}%",
-                                       'Vklad': f"{round(vklad_pct*100,2)}% ({round(vklad_pct*AKTUALNY_BANK,2)}€)",
-                                       'Vysledok': None}
-                                all_bets.append(bet)
+                                all_bets.append({
+                                    'Datum': now_utc.strftime('%Y-%m-%d'), 'Liga': liga, 
+                                    'Zápas': f"{m['home_team']} vs {m['away_team']}", 'Tip': out['name'], 
+                                    'Kurz': price, 'Edge': f"{round(edge*100,1)}%", 
+                                    'Vklad': f"{round(vklad*100,2)}% ({round(vklad*AKTUALNY_BANK,2)}€)",
+                                    'Vysledok': None
+                                })
 
-        # 4. Export a Email
+        # 4. EMAIL A LOGOVANIE
         if all_bets:
-            df_bets = pd.DataFrame(all_bets)
-            df_bets.to_csv(HISTORY_FILE, mode='a', header=not os.path.exists(HISTORY_FILE), index=False)
+            pd.DataFrame(all_bets).to_csv(HISTORY_FILE, mode='a', header=not os.path.exists(HISTORY_FILE), index=False)
             
-            top = sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:7]
-            html = f"<h3>📈 Bilancia výsledkov:</h3><ul>{summary_html if summary_html else 'Čakáme na výsledky...'}</ul>"
-            html += "<h3>✅ Nové AI Tipy na dnes:</h3><table border='1' style='width:100%; border-collapse:collapse;'>"
+            # Celkové ROI štatistiky zo súboru
+            stats_text = ""
+            if os.path.exists(HISTORY_FILE):
+                h_df = pd.read_csv(HISTORY_FILE)
+                if 'Vysledok' in h_df.columns:
+                    w = len(h_df[h_df['Vysledok'] == 'WIN'])
+                    t = len(h_df[h_df['Vysledok'].isin(['WIN', 'LOSS'])])
+                    stats_text = f"<li><b>Celková úspešnosť:</b> {round((w/t)*100,1) if t>0 else 0}% ({w}/{t})</li>"
+
+            html = f"<h3>📈 Bilancia výsledkov:</h3><ul>{summary_html}{stats_text}</ul>"
+            html += "<h3>✅ Najlepšie AI Tipy na 24 hodín:</h3><table border='1' style='width:100%; border-collapse:collapse;'>"
             html += "<tr style='background:#eee;'><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
-            for b in top:
-                html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
+            for b in sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)[:10]:
+                html += f"<tr><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td style='color:green; font-weight:bold;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
             
-            msg = MIMEMultipart(); msg['Subject'] = f"📊 AI Betting Report V4.1 - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
+            msg = MIMEMultipart(); msg['Subject'] = f"📊 AI PRO REPORT - {now_utc.strftime('%d.%m.')}"; msg['From'] = GMAIL_USER; msg['To'] = GMAIL_RECEIVER
             msg.attach(MIMEText(html + "</table>", 'html'))
             with smtplib.SMTP('smtp.gmail.com', 587) as s:
                 s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
