@@ -68,9 +68,10 @@ def spracuj_stats(content, cfg):
             stats['WinRate'] = [(wins.get(p, 0) + 1) / (wins.get(p, 0) + losses.get(p, 0) + 2) for p in players]
             return stats, 0, 0
         
-        # Ostatné športy - zjednodušený výpočet
-        if 'team1' in df.columns: df = df.rename(columns={'team1': 'HomeTeam', 'team2': 'AwayTeam', 'score1': 'FTHG', 'score2': 'FTAG'})
-        elif 'home_team' in df.columns: df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG'})
+        if cfg['sport'] == 'basketbal':
+            df = df.rename(columns={'team1': 'HomeTeam', 'team2': 'AwayTeam', 'score1': 'FTHG', 'score2': 'FTAG'})
+        elif 'home_team' in df.columns:
+            df = df.rename(columns={'home_team': 'HomeTeam', 'away_team': 'AwayTeam', 'home_goals': 'FTHG', 'away_goals': 'FTAG'})
         
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
         h = df.groupby('HomeTeam').apply(lambda x: pd.Series({'AH': x['FTHG'].mean()/avg_h, 'DH': x['FTAG'].mean()/avg_a}), include_groups=False)
@@ -84,7 +85,7 @@ async def analyzuj():
         csv_results = await asyncio.gather(*(fetch_csv(session, l, c) for l, c in LIGY_CONFIG.items()))
         all_bets = []
         now_utc = datetime.utcnow()
-        limit_utc = now_utc + timedelta(hours=24) # Pozeráme 24 hodín dopredu
+        limit_utc = now_utc + timedelta(hours=24)
 
         for liga, content in csv_results:
             if not content: continue
@@ -99,19 +100,24 @@ async def analyzuj():
 
             for m in matches:
                 m_time = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
-                if not (now_utc <= m_time <= limit_utc): continue # Iba najbližších 24h
+                if not (now_utc <= m_time <= limit_utc): continue
 
-                c1, c2 = process.extractOne(m['home_team'], stats.index)[0], process.extractOne(m['away_team'], stats.index)[0]
+                c1_match = process.extractOne(m['home_team'], stats.index)
+                c2_match = process.extractOne(m['away_team'], stats.index)
+                if not c1_match or not c2_match: continue
+                c1, c2 = c1_match[0], c2_match[0]
                 
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1, 'WinRate'], stats.at[c2, 'WinRate']
                     p = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
                 else:
-                    lh, la = stats.at[c1,'AH']*stats.at[c2,'DA_h']*avg_h, stats.at[c2,'AA_a']*stats.at[c1,'DH_h']*avg_a
+                    # OPRAVA NÁZVOV STĹPCOV (AH_h, DH_h, AA_a, DA_a)
+                    lh = stats.at[c1,'AH_h'] * stats.at[c2,'DA_a'] * avg_h
+                    la = stats.at[c2,'AA_a'] * stats.at[c1,'DH_h'] * avg_a
                     if cfg['sport'] == 'futbal': lh += cfg['ha']
                     p = {'1': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(12) for y in range(x)),
                          'X': sum(poisson.pmf(x,lh)*poisson.pmf(x,la) for x in range(12)),
-                         '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for y in range(12) for x in range(y))}
+                         '2': sum(poisson.pmf(x,lh)*poisson.pmf(y,la) for x in range(12) for x in range(y))}
 
                 match_best = {}
                 for bk in m.get('bookmakers', []):
@@ -121,19 +127,19 @@ async def analyzuj():
                             lbl = '1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X')
                             prob, price = p.get(lbl, 0), out['price']
                             edge = (prob * price) - 1
-                            if 0.03 <= edge <= 0.40:
+                            if 0.03 <= edge <= 0.45:
                                 if lbl not in match_best or price > match_best[lbl]['Kurz']:
-                                    vklad = min(max(0, (((price-1)*prob-(1-prob))/(price-1)) * 0.05), 0.02)
+                                    vklad_val = (((price-1)*prob-(1-prob))/(price-1)) * 0.05
+                                    vklad = min(max(0, vklad_val), 0.02)
                                     match_best[lbl] = {'Čas': m_time.strftime('%H:%M'), 'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 'Tip': out['name'], 'Kurz': price, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{round(vklad*AKTUALNY_BANK,2)}€", 'Sport': cfg['sport']}
                 all_bets.extend(match_best.values())
 
         # ODOSIELANIE
         msg = MIMEMultipart()
         msg['From'], msg['To'] = GMAIL_USER, GMAIL_RECEIVER
-        
         if all_bets:
             all_bets = sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)
-            html = "<h2>🔥 TOP AI TIPY (Najbližších 24h)</h2><table border='1' style='border-collapse:collapse; width:100%; text-align:center;'>"
+            html = "<h2>🔥 TOP AI TIPY (24h)</h2><table border='1' style='border-collapse:collapse; width:100%; text-align:center;'>"
             html += "<tr style='background:#f2f2f2;'><th>Čas</th><th>Šport</th><th>Liga</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
             for b in all_bets[:25]:
                 ikona = "⚽" if b['Sport'] == 'futbal' else ("🎾" if b['Sport'] == 'tenis' else ("🏒" if b['Sport'] == 'hokej' else "🏀"))
@@ -141,9 +147,8 @@ async def analyzuj():
             html += "</table>"
             msg['Subject'] = f"📊 AI REPORT - {len(all_bets)} tipov"
         else:
-            html = "<p>Analýza prebehla úspešne, ale nenašli sa žiadne tipy s Edge nad 3%.</p>"
+            html = "<p>Analýza prebehla, ale žiadne tipy nespĺňajú Edge podmienku.</p>"
             msg['Subject'] = "📊 AI REPORT - Žiadne tipy"
-            print("ℹ️ Žiadne tipy s hodnotou.")
 
         msg.attach(MIMEText(html, 'html'))
         try:
