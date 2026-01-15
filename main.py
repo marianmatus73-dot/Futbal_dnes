@@ -5,6 +5,7 @@ import numpy as np
 import io
 import os
 import smtplib
+import csv
 import logging
 from scipy.stats import poisson
 from datetime import datetime, timedelta
@@ -22,6 +23,7 @@ GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
+HISTORY_FILE = "historia_tipov.csv"
 
 LIGY_CONFIG = {
     '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25},
@@ -30,14 +32,27 @@ LIGY_CONFIG = {
     '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.22},
     '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.25},
     '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.35},
-    '⚽ Liga Portugal':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga', 'sport': 'futbal', 'ha': 0.30},
-    '⚽ Süper Lig':        {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.32},
     '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.15},
     '🏀 NBA':              {'csv': 'NBA', 'api': 'basketball_nba', 'sport': 'basketbal', 'ha': 3.1},
     '🎾 ATP Tenis':        {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis', 'ha': 0}
 }
 
 # --- 2. POMOCNÉ FUNKCIE ---
+
+def uloz_do_historie(bets):
+    file_exists = os.path.isfile(HISTORY_FILE)
+    try:
+        with open(HISTORY_FILE, mode='a', newline='', encoding='utf-8') as f:
+            fieldnames = ['Datum_Zapisu', 'Čas', 'Sport', 'Liga', 'Zápas', 'Tip', 'Kurz', 'Edge', 'Vklad', 'Skóre', 'Vysledok']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            if not file_exists: writer.writeheader()
+            for b in bets:
+                row = b.copy()
+                row['Datum_Zapisu'] = datetime.now().strftime('%d.%m.%Y')
+                row['Vysledok'] = ""
+                writer.writerow(row)
+        print(f"✅ {len(bets)} tipov uložených do {HISTORY_FILE}")
+    except Exception as e: print(f"❌ Chyba ukladania: {e}")
 
 async def fetch_csv(session, liga, cfg):
     try:
@@ -79,13 +94,11 @@ def spracuj_stats(content, cfg):
         h_stats = df.groupby('HomeTeam').agg({'FTHG': 'mean', 'FTAG': 'mean'})
         a_stats = df.groupby('AwayTeam').agg({'FTAG': 'mean', 'FTHG': 'mean'})
         
-        all_teams = list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique()))
-        stats = pd.DataFrame(index=all_teams)
+        stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
         stats['AH'] = h_stats['FTHG'] / avg_h
         stats['DH'] = h_stats['FTAG'] / avg_a
         stats['AA'] = a_stats['FTAG'] / avg_a
         stats['DA'] = a_stats['FTHG'] / avg_h
-        
         return stats.fillna(1.0), avg_h, avg_a
     except: return None, 0, 0
 
@@ -103,7 +116,9 @@ async def analyzuj():
             stats, avg_h, avg_a = spracuj_stats(content, cfg)
             if stats is None: continue
             
-            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params={'apiKey': API_ODDS_KEY, 'regions': 'eu'}) as r:
+            # Žiadame H2H aj Totals (Góly)
+            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', 
+                                   params={'apiKey': API_ODDS_KEY, 'regions': 'eu', 'markets': 'h2h,totals'}) as r:
                 if r.status != 200: continue
                 matches = await r.json()
 
@@ -111,12 +126,12 @@ async def analyzuj():
                 m_time = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
                 if not (now_utc <= m_time <= limit_utc): continue
 
-                c1_match = process.extractOne(m['home_team'], stats.index)
-                c2_match = process.extractOne(m['away_team'], stats.index)
-                if not c1_match or not c2_match or c1_match[1] < 70: continue
-                c1, c2 = c1_match[0], c2_match[0]
+                c1_m = process.extractOne(m['home_team'], stats.index)
+                c2_m = process.extractOne(m['away_team'], stats.index)
+                if not c1_m or not c2_m or c1_m[1] < 70: continue
+                c1, c2 = c1_m[0], c2_m[0]
                 
-                exp_score = ""
+                p, exp_score = {}, ""
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1, 'WinRate'], stats.at[c2, 'WinRate']
                     p = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
@@ -129,27 +144,27 @@ async def analyzuj():
                     p1 = sum(poisson.pmf(i, lh) * poisson.pmf(j, la) for i in range(15) for j in range(i))
                     px = sum(poisson.pmf(i, lh) * poisson.pmf(i, la) for i in range(15))
                     p2 = sum(poisson.pmf(i, lh) * poisson.pmf(j, la) for i in range(15) for j in range(i+1, 15))
-                    p = {'1': p1, 'X': px, '2': p2}
+                    
+                    # Over/Under 2.5
+                    p_u25 = sum(poisson.pmf(i, lh) * poisson.pmf(j, la) for i in range(4) for j in range(4) if i+j < 2.5)
+                    p.update({'1': p1, 'X': px, '2': p2, 'Over 2.5': 1-p_u25, 'Under 2.5': p_u25})
 
                 match_best = {}
                 for bk in m.get('bookmakers', []):
                     for mk in bk.get('markets', []):
-                        if mk['key'] != 'h2h': continue
                         for out in mk['outcomes']:
-                            lbl = '1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X')
+                            if mk['key'] == 'totals':
+                                if out.get('point') != 2.5: continue
+                                lbl = f"{out['name']} 2.5"
+                            else:
+                                lbl = '1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X')
+                            
                             prob, price = p.get(lbl, 0), out['price']
                             edge = (prob * price) - 1
-                            if 0.03 <= edge <= 0.45:
+                            if 0.04 <= edge <= 0.45:
                                 if lbl not in match_best or price > match_best[lbl]['Kurz']:
-                                    vklad_val = (((price-1)*prob-(1-prob))/(price-1)) * 0.05
-                                    vklad = min(max(0, vklad_val), 0.02)
-                                    match_best[lbl] = {
-                                        'Čas': m_time.strftime('%H:%M'), 'Liga': liga, 
-                                        'Zápas': f"{m['home_team']} vs {m['away_team']}", 'Tip': out['name'], 
-                                        'Kurz': price, 'Edge': f"{round(edge*100,1)}%", 
-                                        'Vklad': f"{round(vklad*AKTUALNY_BANK,2)}€", 'Sport': cfg['sport'],
-                                        'Skóre': exp_score
-                                    }
+                                    v_val = (((price-1)*prob-(1-prob))/(price-1)) * 0.05
+                                    match_best[lbl] = {'Čas': m_time.strftime('%H:%M'), 'Liga': liga, 'Zápas': f"{m['home_team']} vs {m['away_team']}", 'Tip': lbl, 'Kurz': price, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{round(min(max(0, v_val), 0.02)*AKTUALNY_BANK,2)}€", 'Sport': cfg['sport'], 'Skóre': exp_score}
                 all_bets.extend(match_best.values())
 
         # ODOSIELANIE
@@ -157,22 +172,23 @@ async def analyzuj():
         msg['From'], msg['To'] = GMAIL_USER, GMAIL_RECEIVER
         if all_bets:
             all_bets = sorted(all_bets, key=lambda x: float(x['Edge'].replace('%','')), reverse=True)
-            html = f"<h2>🔥 TOP AI TIPY ({datetime.now().strftime('%d.%m.')})</h2><table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family: sans-serif;'>"
-            html += "<tr style='background:#f2f2f2;'><th>Čas</th><th>Šport</th><th>Liga</th><th>Zápas</th><th>Exp. Skóre</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
+            uloz_do_historie(all_bets)
+            html = f"<h2>📊 AI ANALÝZA ({datetime.now().strftime('%d.%m.')})</h2><table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family:sans-serif;'>"
+            html += "<tr style='background:#eee;'><th>Čas</th><th>S</th><th>Liga</th><th>Zápas</th><th>Exp. Skóre</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
             for b in all_bets[:30]:
-                ikona = "⚽" if b['Sport'] == 'futbal' else ("🎾" if b['Sport'] == 'tenis' else ("🏒" if b['Sport'] == 'hokej' else "🏀"))
-                html += f"<tr><td>{b['Čas']}</td><td>{ikona}</td><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Skóre']}</td><td><b>{b['Tip']}</b></td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
+                ik = "⚽" if b['Sport']=='futbal' else ("🎾" if b['Sport']=='tenis' else ("🏒" if b['Sport']=='hokej' else "🏀"))
+                html += f"<tr><td>{b['Čas']}</td><td>{ik}</td><td>{b['Liga']}</td><td>{b['Zápas']}</td><td>{b['Skóre']}</td><td><b>{b['Tip']}</b></td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
             html += "</table>"
             msg['Subject'] = f"📊 AI REPORT - {len(all_bets)} tipov"
         else:
-            html = "<p>Žiadne tipy s Edge > 3% na najbližších 24h.</p>"
+            html = "<p>Žiadne výhodné tipy (Edge > 4%) sa nenašli.</p>"
             msg['Subject'] = "📊 AI REPORT - Žiadne tipy"
 
         msg.attach(MIMEText(html, 'html'))
         try:
             with smtplib.SMTP('smtp.gmail.com', 587) as s:
                 s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
-            print(f"✅ Email odoslaný ({len(all_bets)} tipov).")
+            print(f"✅ Email odoslaný.")
         except Exception as e: print(f"❌ Chyba emailu: {e}")
 
 if __name__ == "__main__":
