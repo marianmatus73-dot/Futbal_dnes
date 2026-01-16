@@ -81,7 +81,7 @@ async def ziskaj_futbal_tipy():
                                         if key and key in probs:
                                             edge = (probs[key] * out['price']) - 1
                                             # Filter: Edge musí byť medzi 5% a 45%
-                                            if 0.05 < edge < 0.45:
+                                            if 0.01 < edge < 0.45:
                                                 v = round(((edge/(out['price']-1))*0.1)*bank, 2)
                                                 nase_tipy.append({
                                                     'Šport': '⚽ Futbal',
