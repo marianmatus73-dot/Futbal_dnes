@@ -68,7 +68,7 @@ async def ziskaj_hokej_tipy():
 
                                         if key in probs:
                                             edge = (probs[key] * out['price']) - 1
-                                            if 0.05 < edge < 0.45:
+                                            if 0.01 < edge < 0.45:
                                                 v = round(((edge/(out['price']-1))*0.1)*bank, 2)
                                                 nase_tipy.append({
                                                     'Šport': '🏒 Hokej',
