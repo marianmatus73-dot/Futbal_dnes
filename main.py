@@ -1,5 +1,12 @@
-import asyncio, aiohttp, pandas as pd, numpy as np, io, os, smtplib, csv, logging
-from scipy.stats import poisson
+import asyncio
+import aiohttp
+import pandas as pd
+import numpy as np
+import io
+import os
+import smtplib
+import logging
+from scipy.stats import poisson, norm
 from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -16,54 +23,63 @@ GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
 HISTORY_FILE = "historia_tipov.csv"
-KELLY_FRAC = 0.25 
+KELLY_FRAC = 0.20 
 
 LIGY_CONFIG = {
-    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25},
-    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28},
-    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.30},
-    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.22},
-    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.25},
-    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.35},
-    '⚽ Liga Portugal':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga', 'sport': 'futbal', 'ha': 0.30},
-    '⚽ Süper Lig':        {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.32},
-    '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.15},
-    '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.30},
-    '🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.28},
-    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.25},
-    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.22},
-    '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.35},
-    '🏀 NBA':              {'csv': 'NBA', 'api': 'basketball_nba', 'sport': 'basketbal', 'ha': 3.1},
-    '🎾 ATP Tenis':        {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis', 'ha': 0}
+    '⚽ Premier League':    {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25},
+    '⚽ La Liga':           {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28},
+    '⚽ Bundesliga':        {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.30},
+    '⚽ Serie A':           {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.22},
+    '⚽ Ligue 1':           {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.25},
+    '⚽ Eredivisie':        {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.35},
+    '⚽ Liga Portugal':     {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga', 'sport': 'futbal', 'ha': 0.30},
+    '⚽ Süper Lig':         {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.32},
+    '🏒 NHL':               {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.15},
+    '🏒 Česko Extraliga':   {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.30},
+    '🏒 Nemecko DEL':       {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.28},
+    '🏒 Švédsko SHL':       {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.25},
+    '🏒 Fínsko Liiga':      {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.22},
+    '🏒 Slovensko':         {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.35},
+    '🏀 NBA':               {'csv': 'NBA', 'api': 'basketball_nba', 'sport': 'basketbal', 'ha': 3.1},
+    '🎾 ATP Tenis':         {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis', 'ha': 0}
 }
 
-# --- 2. FUNKCIE ---
+# --- 2. JADRO A MATEMATIKA ---
+
+def vypocitaj_pravdepodobnosti_poisson(lh, la, limit=2.5):
+    k = np.arange(15)
+    p_h = poisson.pmf(k, lh); p_a = poisson.pmf(k, la)
+    matrix = np.outer(p_h, p_a)
+    prob_1 = np.sum(np.tril(matrix, -1))
+    prob_X = np.sum(np.diag(matrix))
+    prob_2 = np.sum(np.triu(matrix, 1))
+    rows, cols = np.indices(matrix.shape)
+    prob_under = np.sum(matrix[rows + cols < limit])
+    return {'1': prob_1, 'X': prob_X, '2': prob_2, f'Under {limit}': prob_under, f'Over {limit}': 1 - prob_under}
 
 def uloz_a_clv(new_bets):
     clv_alerts = []
     headers = ['Datum', 'Zápas', 'Tip', 'Kurz_Start', 'CLV', 'Edge', 'Vklad', 'Sport', 'Vysledok']
+    today = datetime.now().strftime('%d.%m.%Y')
     if os.path.exists(HISTORY_FILE):
-        try:
-            df = pd.read_csv(HISTORY_FILE)
-            if len(df.columns) != len(headers): df = pd.DataFrame(columns=headers)
-        except: df = pd.DataFrame(columns=headers)
-    else: df = pd.DataFrame(columns=headers)
+        df = pd.read_csv(HISTORY_FILE)
+    else:
+        df = pd.DataFrame(columns=headers)
 
     for b in new_bets:
-        mask = (df['Zápas'] == b['Zápas']) & (df['Tip'] == b['Tip'])
+        mask = (df['Zápas'] == b['Zápas']) & (df['Tip'] == b['Tip']) & (df['Datum'] == today)
         if df[mask].empty:
-            new_row = {'Datum': datetime.now().strftime('%d.%m.%Y'), 'Zápas': b['Zápas'], 'Tip': b['Tip'], 'Kurz_Start': b['Kurz'], 'CLV': 100.0, 'Edge': b['Edge'], 'Vklad': b['Vklad'], 'Sport': b['Sport'], 'Vysledok': ''}
+            new_row = {'Datum': today, 'Zápas': b['Zápas'], 'Tip': b['Tip'], 'Kurz_Start': b['Kurz'], 'CLV': 100.0, 'Edge': b['Edge'], 'Vklad': b['Vklad'], 'Sport': b['Sport'], 'Vysledok': ''}
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
         else:
             idx = df[mask].index[0]
-            try:
-                start_p = float(df.at[idx, 'Kurz_Start'])
-                clv_val = (start_p / b['Kurz']) * 100
-                df.at[idx, 'CLV'] = round(clv_val, 1)
-                if clv_val > 102.5: clv_alerts.append({'Z': b['Zápas'], 'T': b['Tip'], 'P': f"{round(clv_val-100,1)}%"})
-            except: pass
+            clv_val = round((float(df.at[idx, 'Kurz_Start']) / b['Kurz']) * 100, 1)
+            df.at[idx, 'CLV'] = clv_val
+            if clv_val > 102.5: clv_alerts.append({'Z': b['Zápas'], 'T': b['Tip'], 'P': f"{round(clv_val-100,1)}%"})
     df.to_csv(HISTORY_FILE, index=False)
     return clv_alerts
+
+# --- 3. DÁTA A ANALÝZA ---
 
 async def fetch_csv(session, liga, cfg):
     try:
@@ -77,6 +93,7 @@ async def fetch_csv(session, liga, cfg):
         elif cfg['sport'] == 'tenis':
             url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_{now.year}.csv"
         else: url = "https://raw.githubusercontent.com/fivethirtyeight/nba-model/master/nba_elo.csv"
+        
         async with session.get(url, timeout=10) as r:
             if r.status == 200: return liga, await r.read()
         return liga, None
@@ -91,10 +108,10 @@ def spracuj_stats(content, cfg):
             stats = pd.DataFrame(index=players)
             stats['WinRate'] = [(w.get(p,0)+1)/(w.get(p,0)+l.get(p,0)+2) for p in players]
             return stats, 0, 0
+            
         df = df.rename(columns={'home_team':'HomeTeam','away_team':'AwayTeam','home_goals':'FTHG','away_goals':'FTAG','team1':'HomeTeam','team2':'AwayTeam','score1':'FTHG','score2':'FTAG'})
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
-        all_teams = list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique()))
-        stats = pd.DataFrame(index=all_teams)
+        stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
         h_stats = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'})
         a_stats = df.groupby('AwayTeam').agg({'FTAG':'mean', 'FTHG':'mean'})
         stats['AH'] = h_stats['FTHG'] / avg_h; stats['DH'] = h_stats['FTAG'] / avg_a
@@ -112,6 +129,7 @@ async def analyzuj():
             if not content: continue
             cfg = LIGY_CONFIG[liga]; stats, ah, aa = spracuj_stats(content, cfg)
             if stats is None: continue
+            
             async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params={'apiKey':API_ODDS_KEY,'regions':'eu','markets':'h2h,totals'}) as r:
                 if r.status != 200: continue
                 matches = await r.json()
@@ -122,15 +140,18 @@ async def analyzuj():
                 c1_m, c2_m = process.extractOne(m['home_team'], stats.index), process.extractOne(m['away_team'], stats.index)
                 if not c1_m or not c2_m or c1_m[1] < 70: continue
                 c1, c2 = c1_m[0], c2_m[0]
-                
-                probs, lim = {}, (5.5 if cfg['sport']=='hokej' else 2.5)
+
                 if cfg['sport'] == 'tenis':
                     w1, w2 = stats.at[c1,'WinRate'], stats.at[c2,'WinRate']
                     probs = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
+                elif cfg['sport'] == 'basketbal':
+                    mu = (stats.at[c1,'AH']*ah) - (stats.at[c2,'AA']*aa)
+                    p1 = 1 - norm.cdf(0, loc=mu, scale=13.5)
+                    probs = {'1': p1, '2': 1-p1}
                 else:
+                    lim = 5.5 if cfg['sport']=='hokej' else 2.5
                     lh, la = (stats.at[c1,'AH']*stats.at[c2,'DA']*ah + cfg['ha']), (stats.at[c2,'AA']*stats.at[c1,'DH']*aa)
-                    pu = sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(12) if i+j < lim)
-                    probs = {'1':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i)), 'X':sum(poisson.pmf(i,lh)*poisson.pmf(i,la) for i in range(12)), '2':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i+1,12)), f'Over {lim}':1-pu, f'Under {lim}':pu}
+                    probs = vypocitaj_pravdepodobnosti_poisson(lh, la, lim)
 
                 match_best_odds = {}
                 for bk in m.get('bookmakers', []):
@@ -141,9 +162,9 @@ async def analyzuj():
                                 prob, price = probs[lbl], out['price']
                                 edge = (prob * price) - 1
                                 if 0.05 <= edge <= 0.45:
+                                    v = round(min(max(0, (((price-1)*prob-(1-prob))/(price-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
                                     if lbl not in match_best_odds or price > match_best_odds[lbl]['Kurz']:
-                                        v = round(min(max(0, (((price-1)*prob-(1-prob))/(price-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
-                                        match_best_odds[lbl] = {'Zápas':f"{c1} vs {c2}", 'Tip':lbl, 'Kurz':price, 'Edge':f"{round(edge*100,1)}%", 'Vklad':f"{v}€", 'Sport':cfg['sport'], 'Skóre':f"{round(lh,1)}:{round(la,1)}" if cfg['sport']!='tenis' else ""}
+                                        match_best_odds[lbl] = {'Zápas':f"{c1} vs {c2}", 'Tip':lbl, 'Kurz':price, 'Edge':f"{round(edge*100,1)}%", 'Vklad':f"{v}€", 'Sport':cfg['sport'], 'Exp':f"{round(lh,1)}:{round(la,1)}" if cfg['sport'] not in ['tenis','basketbal'] else ""}
                 all_bets.extend(match_best_odds.values())
 
         if all_bets:
@@ -153,17 +174,20 @@ async def analyzuj():
 
 def posli_email(bets, alerts):
     msg = MIMEMultipart(); msg['Subject'] = f"🚀 AI PREHĽADNÝ REPORT ({len(bets)} tipov)"; msg['From'], msg['To'] = GMAIL_USER, GMAIL_RECEIVER
-    html = "<h2>🎯 AI VALUE BETS (Prečistené)</h2>"
+    html = "<h2>🎯 AI VALUE BETS</h2>"
     if alerts:
-        html += "<div style='background:#e3f2fd; padding:15px; border-left:5px solid #2196f3;'><h3>🔥 SMART MONEY (CLV)</h3>"
-        for a in alerts[:5]: html += f"• <b>{a['Z']}</b>: {a['T']} (Kurz klesol o {a['P']})<br>"
+        html += "<div style='background:#e3f2fd; padding:15px; border-left:5px solid #2196f3;'><h3>🔥 CLV ALERTY (Kurzy klesajú)</h3>"
+        for a in alerts[:5]: html += f"• <b>{a['Z']}</b>: {a['T']} (Pokles o {a['P']})<br>"
         html += "</div><br>"
-    html += "<table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family:sans-serif;'><tr style='background:#eeeeee;'><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Exp.</th></tr>"
+    html += "<table border='1' style='border-collapse:collapse; width:100%; text-align:center; font-family:sans-serif;'><tr style='background:#eeeeee;'><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Očak.</th></tr>"
     for b in sorted(bets, key=lambda x: x['Edge'], reverse=True)[:35]:
-        html += f"<tr><td>{b['Zápas']}</td><td><b>{b['Tip']}</b></td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td><td>{b['Skóre']}</td></tr>"
+        html += f"<tr><td>{b['Zápas']}</td><td><b>{b['Tip']}</b></td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td><td>{b['Exp']}</td></tr>"
     msg.attach(MIMEText(html + "</table>", 'html'))
-    with smtplib.SMTP('smtp.gmail.com', 587) as s:
-        s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as s:
+            s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+            logging.info("Email úspešne odoslaný.")
+    except Exception as e: logging.error(f"Chyba emailu: {e}")
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
