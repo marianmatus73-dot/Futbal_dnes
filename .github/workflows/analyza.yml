@@ -10,7 +10,7 @@ jobs:
   run-analysis:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # DÔLEŽITÉ: Povolenie na zápis do súborov
+      contents: write # Povolenie na zápis do repozitára pre ukladanie histórie
     
     steps:
       - name: Checkout kódu
@@ -23,22 +23,30 @@ jobs:
 
       - name: Inštalácia knižníc
         run: |
-          pip install pandas numpy scipy aiohttp python-dotenv fuzzywuzzy python-Levenshtein
+          pip install pandas numpy scipy aiohttp python-dotenv fuzzywuzzy python-Levenshtein requests pytz
 
-      - name: Spustenie AI Analýzy
+      - name: Spustenie AI Analýz
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
           AKTUALNY_BANK: 1000
-        run: python main.py
+        run: |
+          # Spustí všetky tri športové moduly jeden po druhom
+          # Ak máš futbal v main.py, nechaj ho tak, alebo premenuj na futbal_ai.py
+          python main.py
+          python hokej_ai.py
+          python tenis_ai.py
 
       - name: Uloženie zmien v histórii (CSV)
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "actions@github.com"
-          git add historia_tipov.csv
-          # Skontroluje, či sú zmeny, ak áno, urobí commit a push
+          
+          # Pridá všetky CSV súbory, ktoré skripty vytvorili alebo aktualizovali
+          git add *.csv
+          
+          # Commitne zmeny, ak nejaké vznikli
           git commit -m "Automatická aktualizácia histórie tipov [skip ci]" || echo "Žiadne zmeny na uloženie"
           git push
