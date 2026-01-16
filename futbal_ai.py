@@ -36,27 +36,23 @@ async def ziskaj_futbal_tipy():
             
             async with session.get(url) as r:
                 if r.status != 200: continue
-                raw_data = await r.read()
-                df = pd.read_csv(io.StringIO(raw_data.decode('utf-8')))
+                df = pd.read_csv(io.StringIO((await r.read()).decode('utf-8')))
             
             avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
-            teams = list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique()))
-            stats = pd.DataFrame(index=teams)
+            stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
             h_s = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'})
             a_s = df.groupby('AwayTeam').agg({'FTAG':'mean', 'FTHG':'mean'})
             stats['AH'] = h_s['FTHG']/avg_h; stats['DH'] = h_s['FTAG']/avg_a
             stats['AA'] = a_s['FTAG']/avg_a; stats['DA'] = a_s['FTHG']/avg_h
             stats = stats.fillna(1.0)
 
-            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', 
-                                  params={'apiKey':api_key,'regions':'eu','markets':'h2h'}) as r:
+            async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params={'apiKey':api_key,'regions':'eu','markets':'h2h'}) as r:
                 if r.status == 200:
-                    matches = await r.json()
-                    for m in matches:
+                    for m in await r.json():
                         c1 = process.extractOne(m['home_team'], stats.index)
                         c2 = process.extractOne(m['away_team'], stats.index)
                         if c1 and c2 and c1[1] > 70:
-                            lh = (stats.at[c1[0],'AH']*stats.at[c2[0],'DA']*avg_h) + cfg['ha']
+                            lh = (stats.at[c1[0],'AH']*stats.at[c2[0],'DA']*avg_h)+cfg['ha']
                             la = (stats.at[c2[0],'AA']*stats.at[c1[0],'DH']*avg_a)
                             p1 = poisson.pmf(np.arange(10), lh); p2 = poisson.pmf(np.arange(10), la)
                             prob1 = np.sum(np.tril(np.outer(p1, p2), -1))
@@ -66,13 +62,5 @@ async def ziskaj_futbal_tipy():
                                         edge = (prob1 * out['price']) - 1
                                         if 0.05 < edge < 0.4:
                                             v = round(((edge/(out['price']-1))*0.2)*bank, 2)
-                                            nase_tipy.append({
-                                                'Šport': '⚽ Futbal',
-                                                'Liga': liga,
-                                                'Zápas': f"{c1[0]} - {c2[0]}",
-                                                'Tip': '1 (Domáci)',
-                                                'Kurz': out['price'],
-                                                'Edge': f"{round(edge*100,1)}%",
-                                                'Vklad': f"{v}€"
-                                            })
+                                            nase_tipy.append({'Šport': '⚽ Futbal', 'Liga': liga, 'Zápas': f"{c1[0]}-{c2[0]}", 'Tip': '1', 'Kurz': out['price'], 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{v}€"})
     return nase_tipy
