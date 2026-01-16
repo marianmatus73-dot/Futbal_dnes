@@ -30,6 +30,9 @@ LIGY_CONFIG = {
     '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.15},
     '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.30},
     '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.35},
+    '🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.28},
+    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.25},
+    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.22},
     '🎾 ATP Tenis':        {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis', 'ha': 0}
 }
 
@@ -84,6 +87,15 @@ async def fetch_csv(session, liga, cfg):
 def spracuj_stats(content, cfg):
     try:
         df = pd.read_csv(io.StringIO(content.decode('utf-8', errors='ignore')))
+        
+        if cfg['sport'] == 'hokej':
+            rename_map = {
+                'home_team':'HomeTeam','away_team':'AwayTeam','team1':'HomeTeam','team2':'AwayTeam',
+                'home_goals':'FTHG','away_goals':'FTAG','score1':'FTHG','score2':'FTAG',
+                'HG':'FTHG', 'AG':'FTAG', 'HT':'HomeTeam', 'AT':'AwayTeam'
+            }
+            df = df.rename(columns=rename_map)
+
         if cfg['sport'] == 'tenis':
             w, l = df['winner_name'].value_counts(), df['loser_name'].value_counts()
             players = list(set(df['winner_name'].dropna()) | set(df['loser_name'].dropna()))
@@ -91,12 +103,13 @@ def spracuj_stats(content, cfg):
             stats['WinRate'] = [(w.get(p,0)+1)/(w.get(p,0)+l.get(p,0)+2) for p in players]
             return stats, 0, 0
 
-        df = df.rename(columns={'home_team':'HomeTeam','away_team':'AwayTeam','home_goals':'FTHG','away_goals':'FTAG',
-                                'team1':'HomeTeam','team2':'AwayTeam','score1':'FTHG','score2':'FTAG'})
+        df = df.dropna(subset=['FTHG', 'FTAG'])
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
-        stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
+        all_teams = list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique()))
+        stats = pd.DataFrame(index=all_teams)
         h_s = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'})
         a_s = df.groupby('AwayTeam').agg({'FTAG':'mean', 'FTHG':'mean'})
+        
         stats['AH'] = h_s['FTHG'] / avg_h; stats['DH'] = h_s['FTAG'] / avg_a
         stats['AA'] = a_s['FTAG'] / avg_a; stats['DA'] = a_s['FTHG'] / avg_h
         return stats.fillna(1.0), avg_h, avg_a
@@ -135,16 +148,22 @@ async def analyzuj():
                             w1, w2 = stats.at[c1,'WinRate'], stats.at[c2,'WinRate']
                             probs = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
                         else:
-                            lh = (stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'])
+                            lh = (stats.at[c1,'AH'] * stats.at[c2,'DA'] * ah_avg + cfg['ha'])
                             col_target = 'DH' if 'DH' in stats.columns else 'AH'
-                            la = (stats.at[c2,'AA']*stats.at[c1, col_target]*aa_avg)
+                            la = (stats.at[c2,'AA'] * stats.at[c1, col_target] * aa_avg)
                             lh, la = max(0.1, lh), max(0.1, la)
                             
-                            pu = sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(12) if i+j < lim)
-                            probs = {'1':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i)),
-                                     'X':sum(poisson.pmf(i,lh)*poisson.pmf(i,la) for i in range(12)),
-                                     '2':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i+1,12)),
-                                     f'Over {lim}':1-pu, f'Under {lim}':pu}
+                            max_g = 15 if cfg['sport']=='hokej' else 12
+                            matrix = np.outer(poisson.pmf(np.arange(max_g), lh), poisson.pmf(np.arange(max_g), la))
+                            
+                            pu = np.sum([matrix[i,j] for i in range(max_g) for j in range(max_g) if i+j < lim])
+                            probs = {
+                                '1': np.sum(np.tril(matrix, -1)),
+                                'X': np.sum(np.diag(matrix)),
+                                '2': np.sum(np.triu(matrix, 1)),
+                                f'Over {lim}': 1 - pu,
+                                f'Under {lim}': pu
+                            }
 
                         match_best_odds = {}
                         for bk in m.get('bookmakers', []):
@@ -181,11 +200,12 @@ def posli_email(bets, alerts):
         html += "</div><br>"
 
     html += "<table border='1' style='border-collapse:collapse; width:100%; font-family:sans-serif; font-size:14px;'>"
-    html += "<tr style='background:#333; color:white;'><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Exp.</th></tr>"
+    html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Exp.</th></tr>"
     for b in bets[:35]:
         edge_val = float(b['Edge'].replace('%',''))
         color = "#27ae60" if edge_val > 15 else "#2c3e50"
-        html += f"<tr><td style='padding:8px;'>{b['Zápas']}</td><td style='padding:8px;'><b>{b['Tip']}</b></td><td style='padding:8px;'>{b['Kurz']}</td><td style='padding:8px; color:{color}; font-weight:bold;'>{b['Edge']}</td><td style='padding:8px;'>{b['Vklad']}</td><td style='padding:8px;'>{b['Skóre']}</td></tr>"
+        sport_icon = "🏒" if b['Sport'] == 'hokej' else ("🎾" if b['Sport'] == 'tenis' else "⚽")
+        html += f"<tr><td style='padding:8px;'>{sport_icon}</td><td style='padding:8px;'>{b['Zápas']}</td><td style='padding:8px;'><b>{b['Tip']}</b></td><td style='padding:8px;'>{b['Kurz']}</td><td style='padding:8px; color:{color}; font-weight:bold;'>{b['Edge']}</td><td style='padding:8px;'>{b['Vklad']}</td><td style='padding:8px;'>{b['Skóre']}</td></tr>"
     
     msg.attach(MIMEText(html + "</table><p><small>Analyzované pomocou Poissonovej distribúcie.</small></p>", 'html'))
     try:
