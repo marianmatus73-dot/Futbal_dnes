@@ -36,8 +36,6 @@ LIGY_CONFIG = {
     '🎾 ATP Tenis':        {'csv': 'ATP', 'api': 'tennis_atp', 'sport': 'tenis', 'ha': 0}
 }
 
-# --- 2. POMOCNÉ FUNKCIE ---
-
 def uloz_a_clv(new_bets):
     headers = ['Datum', 'Zápas', 'Tip', 'Kurz_Start', 'CLV', 'Edge', 'Vklad', 'Sport', 'Vysledok']
     if os.path.exists(HISTORY_FILE):
@@ -62,7 +60,6 @@ def uloz_a_clv(new_bets):
                 df.at[idx, 'CLV'] = round(clv_val, 1)
                 if clv_val > 102.5: clv_alerts.append({'Z': b['Zápas'], 'T': b['Tip'], 'P': f"{round(clv_val-100,1)}%"})
             except: pass
-    
     df.to_csv(HISTORY_FILE, index=False)
     return clv_alerts
 
@@ -78,7 +75,6 @@ async def fetch_csv(session, liga, cfg):
         elif cfg['sport'] == 'tenis':
             url = f"https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_{now.year}.csv"
         else: return liga, None
-        
         async with session.get(url, timeout=10) as r:
             if r.status == 200: return liga, await r.read()
             return liga, None
@@ -87,29 +83,19 @@ async def fetch_csv(session, liga, cfg):
 def spracuj_stats(content, cfg):
     try:
         df = pd.read_csv(io.StringIO(content.decode('utf-8', errors='ignore')))
-        
         if cfg['sport'] == 'hokej':
-            rename_map = {
-                'home_team':'HomeTeam','away_team':'AwayTeam','team1':'HomeTeam','team2':'AwayTeam',
-                'home_goals':'FTHG','away_goals':'FTAG','score1':'FTHG','score2':'FTAG',
-                'HG':'FTHG', 'AG':'FTAG', 'HT':'HomeTeam', 'AT':'AwayTeam'
-            }
-            df = df.rename(columns=rename_map)
-
+            df = df.rename(columns={'home_team':'HomeTeam','away_team':'AwayTeam','team1':'HomeTeam','team2':'AwayTeam','home_goals':'FTHG','away_goals':'FTAG','HG':'FTHG', 'AG':'FTAG', 'HT':'HomeTeam', 'AT':'AwayTeam'})
         if cfg['sport'] == 'tenis':
             w, l = df['winner_name'].value_counts(), df['loser_name'].value_counts()
             players = list(set(df['winner_name'].dropna()) | set(df['loser_name'].dropna()))
             stats = pd.DataFrame(index=players)
             stats['WinRate'] = [(w.get(p,0)+1)/(w.get(p,0)+l.get(p,0)+2) for p in players]
             return stats, 0, 0
-
         df = df.dropna(subset=['FTHG', 'FTAG'])
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
-        all_teams = list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique()))
-        stats = pd.DataFrame(index=all_teams)
+        stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
         h_s = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'})
         a_s = df.groupby('AwayTeam').agg({'FTAG':'mean', 'FTHG':'mean'})
-        
         stats['AH'] = h_s['FTHG'] / avg_h; stats['DH'] = h_s['FTAG'] / avg_a
         stats['AA'] = a_s['FTAG'] / avg_a; stats['DA'] = a_s['FTHG'] / avg_h
         return stats.fillna(1.0), avg_h, avg_a
@@ -119,52 +105,45 @@ async def analyzuj():
     async with aiohttp.ClientSession() as session:
         csv_results = await asyncio.gather(*(fetch_csv(session, l, c) for l, c in LIGY_CONFIG.items()))
         all_bets = []
-        now_utc, limit_utc = datetime.utcnow(), datetime.utcnow() + timedelta(hours=24)
-
+        now_utc = datetime.utcnow()
         for liga, content in csv_results:
             if not content: continue
             cfg = LIGY_CONFIG[liga]
             stats, ah_avg, aa_avg = spracuj_stats(content, cfg)
             if stats is None: continue
+            
+            # Hokejové okno 36 hodín, ostatné 24
+            limit_utc = now_utc + timedelta(hours=36 if cfg['sport'] == 'hokej' else 24)
 
             async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', 
                                   params={'apiKey':API_ODDS_KEY,'regions':'eu','markets':'h2h,totals'}) as r:
                 if r.status != 200: continue
                 matches = await r.json()
-
                 for m in matches:
                     try:
                         m_time = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
                         if not (now_utc <= m_time <= limit_utc): continue
-                        
-                        c1_m = process.extractOne(m['home_team'], stats.index)
-                        c2_m = process.extractOne(m['away_team'], stats.index)
+                        c1_m, c2_m = process.extractOne(m['home_team'], stats.index), process.extractOne(m['away_team'], stats.index)
                         if not c1_m or not c2_m or c1_m[1] < 70: continue
                         c1, c2 = c1_m[0], c2_m[0]
-
                         probs, lim = {}, (5.5 if cfg['sport']=='hokej' else 2.5)
                         lh, la = 0, 0
                         if cfg['sport'] == 'tenis':
                             w1, w2 = stats.at[c1,'WinRate'], stats.at[c2,'WinRate']
                             probs = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
                         else:
-                            lh = (stats.at[c1,'AH'] * stats.at[c2,'DA'] * ah_avg + cfg['ha'])
+                            lh = (stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'])
                             col_target = 'DH' if 'DH' in stats.columns else 'AH'
-                            la = (stats.at[c2,'AA'] * stats.at[c1, col_target] * aa_avg)
+                            la = (stats.at[c2,'AA']*stats.at[c1, col_target]*aa_avg)
                             lh, la = max(0.1, lh), max(0.1, la)
-                            
                             max_g = 15 if cfg['sport']=='hokej' else 12
                             matrix = np.outer(poisson.pmf(np.arange(max_g), lh), poisson.pmf(np.arange(max_g), la))
-                            
                             pu = np.sum([matrix[i,j] for i in range(max_g) for j in range(max_g) if i+j < lim])
-                            probs = {
-                                '1': np.sum(np.tril(matrix, -1)),
-                                'X': np.sum(np.diag(matrix)),
-                                '2': np.sum(np.triu(matrix, 1)),
-                                f'Over {lim}': 1 - pu,
-                                f'Under {lim}': pu
-                            }
+                            probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), f'Over {lim}': 1 - pu, f'Under {lim}': pu}
 
+                        # NASTAVENIE HRANICE (Edge)
+                        min_edge = 0.01 if cfg['sport'] == 'hokej' else 0.05
+                        
                         match_best_odds = {}
                         for bk in m.get('bookmakers', []):
                             for mk in bk.get('markets', []):
@@ -173,11 +152,10 @@ async def analyzuj():
                                     if lbl in probs:
                                         prob, price = probs[lbl], out['price']
                                         edge = (prob * price) - 1
-                                        if 0.05 <= edge <= 0.45:
+                                        if min_edge <= edge <= 0.45:
                                             if lbl not in match_best_odds or price > match_best_odds[lbl]['Kurz']:
                                                 v = round(min(max(0, (((price-1)*prob-(1-prob))/(price-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
                                                 match_best_odds[lbl] = {'Zápas':f"{c1} vs {c2}", 'Tip':lbl, 'Kurz':price, 'Edge':f"{round(edge*100,1)}%", 'Vklad':f"{v}€", 'Sport':cfg['sport'], 'Skóre':f"{round(lh,1)}:{round(la,1)}" if cfg['sport']!='tenis' else ""}
-                        
                         all_bets.extend(match_best_odds.values())
                     except: continue
 
@@ -185,37 +163,24 @@ async def analyzuj():
             final_bets = pd.DataFrame(all_bets).sort_values('Edge', ascending=False).drop_duplicates(subset=['Zápas', 'Tip']).to_dict('records')
             alerts = uloz_a_clv(final_bets)
             posli_email(final_bets, alerts)
-        else:
-            print("📭 Žiadne výhodné tipy.")
 
 def posli_email(bets, alerts):
     msg = MIMEMultipart()
     msg['Subject'] = f"🚀 AI REPORT ({len(bets)} tipov) - {datetime.now().strftime('%d.%m')}"
     msg['From'], msg['To'] = GMAIL_USER, GMAIL_RECEIVER
-    
     html = "<h2>🎯 AI VALUE BETS</h2>"
     if alerts:
-        html += "<div style='background:#e3f2fd; padding:10px; border-radius:5px;'><h3>🔥 SMART MONEY (CLV)</h3>"
+        html += "<div style='background:#e3f2fd; padding:10px;'><h3>🔥 SMART MONEY (CLV)</h3>"
         for a in alerts[:5]: html += f"• <b>{a['Z']}</b>: {a['T']} (Kurz klesol o {a['P']})<br>"
         html += "</div><br>"
-
     html += "<table border='1' style='border-collapse:collapse; width:100%; font-family:sans-serif; font-size:14px;'>"
     html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Exp.</th></tr>"
     for b in bets[:35]:
-        edge_val = float(b['Edge'].replace('%',''))
-        color = "#27ae60" if edge_val > 15 else "#2c3e50"
-        sport_icon = "🏒" if b['Sport'] == 'hokej' else ("🎾" if b['Sport'] == 'tenis' else "⚽")
-        html += f"<tr><td style='padding:8px;'>{sport_icon}</td><td style='padding:8px;'>{b['Zápas']}</td><td style='padding:8px;'><b>{b['Tip']}</b></td><td style='padding:8px;'>{b['Kurz']}</td><td style='padding:8px; color:{color}; font-weight:bold;'>{b['Edge']}</td><td style='padding:8px;'>{b['Vklad']}</td><td style='padding:8px;'>{b['Skóre']}</td></tr>"
-    
-    msg.attach(MIMEText(html + "</table><p><small>Analyzované pomocou Poissonovej distribúcie.</small></p>", 'html'))
-    try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as s:
-            s.starttls()
-            s.login(GMAIL_USER, GMAIL_PASSWORD)
-            s.send_message(msg)
-        print("📧 Report úspešne odoslaný!")
-    except Exception as e:
-        print(f"❌ Chyba pri odosielaní emailu: {e}")
+        icon = "🏒" if b['Sport'] == 'hokej' else ("🎾" if b['Sport'] == 'tenis' else "⚽")
+        html += f"<tr><td>{icon}</td><td>{b['Zápas']}</td><td><b>{b['Tip']}</b></td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td><td>{b['Skóre']}</td></tr>"
+    msg.attach(MIMEText(html + "</table>", 'html'))
+    with smtplib.SMTP('smtp.gmail.com', 587) as s:
+        s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
