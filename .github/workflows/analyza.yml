@@ -1,52 +1,42 @@
-name: Denná AI Analýza a História
+name: AI Betting Bot Run
 
 on:
   schedule:
-    # Spúšťa sa každý deň o 07:00 UTC (u nás 08:00 ráno)
-    - cron: '0 7 * * *'
-  workflow_dispatch: # Umožňuje spustiť skript ručne cez tlačidlo na GitHube
+    # Spúšťa sa každý deň o 09:00 a 11:00 UTC
+    - cron: '0 9,11 * * *'
+  workflow_dispatch: # Umožňuje spustiť bot manuálne tlačidlom
 
 jobs:
-  run-analysis:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # Povolenie na zápis do repozitára pre ukladanie histórie
-    
+
     steps:
-      - name: Checkout kódu
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Nastavenie Pythonu
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: Inštalácia knižníc
+      - name: Install dependencies
         run: |
-          pip install pandas numpy scipy aiohttp python-dotenv fuzzywuzzy python-Levenshtein requests pytz
+          python -m pip install --upgrade pip
+          pip install aiohttp pandas numpy scipy python-dotenv fuzzywuzzy python-Levenshtein
 
-      - name: Spustenie AI Analýz
+      - name: Run AI Analysis
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
           AKTUALNY_BANK: 1000
-        run: |
-          # Spustí všetky tri športové moduly jeden po druhom
-          # Ak máš futbal v main.py, nechaj ho tak, alebo premenuj na futbal_ai.py
-          python main.py
-          python hokej_ai.py
-          python tenis_ai.py
+        run: python main.py
 
-      - name: Uloženie zmien v histórii (CSV)
+      - name: Commit history update
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "actions@github.com"
-          
-          # Pridá všetky CSV súbory, ktoré skripty vytvorili alebo aktualizovali
-          git add *.csv
-          
-          # Commitne zmeny, ak nejaké vznikli
-          git commit -m "Automatická aktualizácia histórie tipov [skip ci]" || echo "Žiadne zmeny na uloženie"
-          git push
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add historia_tipov.csv || true
+          git commit -m "Aktualizácia histórie tipov [skip ci]" || true
+          git push || true
