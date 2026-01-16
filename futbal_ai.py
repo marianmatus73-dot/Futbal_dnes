@@ -20,7 +20,6 @@ LIGY_FUTBAL = {
     '⚽ Pro League (BEL)':     {'csv': 'B1', 'api': 'soccer_belgium_first_division', 'ha': 0.28},
     '⚽ Premiership (SCO)':    {'csv': 'SC0', 'api': 'soccer_scotland_premier_league', 'ha': 0.35},
     '⚽ Süper Lig (TUR)':      {'csv': 'T1', 'api': 'soccer_turkey_super_league', 'ha': 0.32}
-    '⚽ Portugal (POR)':       {'csv': 'P1', 'api': 'soccer_portugal_primeira_liga', 'ha': 0.30}
 }
 
 async def ziskaj_futbal_tipy():
