@@ -26,18 +26,15 @@ async def ziskaj_futbal_tipy():
     api_key = os.getenv('ODDS_API_KEY')
     bank = float(os.getenv('AKTUALNY_BANK', 1000))
     nase_tipy = []
-    
     async with aiohttp.ClientSession() as session:
         for liga, cfg in LIGY_FUTBAL.items():
             rok = datetime.now().strftime('%y')
             sezona = f"{rok}{str(int(rok)+1)}"
             url = f"https://www.football-data.co.uk/mmz4281/{sezona}/{cfg['csv']}.csv"
-            
             async with session.get(url) as r:
                 if r.status != 200: continue
                 df = pd.read_csv(io.StringIO((await r.read()).decode('utf-8')))
             
-            # Základné štatistiky
             avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
             stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
             h_s = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'})
@@ -46,50 +43,32 @@ async def ziskaj_futbal_tipy():
             stats['AA'] = a_s['FTAG']/avg_a; stats['DA'] = a_s['FTHG']/avg_h
             stats = stats.fillna(1.0)
 
-            # Volanie API pre h2h aj totals (góly)
             async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', 
                                   params={'apiKey':api_key,'regions':'eu','markets':'h2h,totals'}) as r:
                 if r.status == 200:
-                    for m in await r.json():
+                    matches = await r.json()
+                    for m in matches:
                         c1 = process.extractOne(m['home_team'], stats.index)
                         c2 = process.extractOne(m['away_team'], stats.index)
                         if c1 and c2 and c1[1] > 75:
-                            lh = (stats.at[c1[0],'AH']*stats.at[c2[0],'DA']*avg_h)+cfg['ha']
-                            la = (stats.at[c2[0],'AA']*stats.at[c1[0],'DH']*avg_a)
-                            
-                            # Poissonova distribúcia pravdepodobností
-                            p_h = poisson.pmf(np.arange(10), lh); p_a = poisson.pmf(np.arange(10), la)
-                            matrix = np.outer(p_h, p_a)
-                            
-                            probs = {
-                                '1': np.sum(np.tril(matrix, -1)),
-                                'X': np.sum(np.diag(matrix)),
-                                '2': np.sum(np.triu(matrix, 1)),
-                                'Over 2.5': 1 - np.sum(matrix[np.indices((10,10))[0] + np.indices((10,10))[1] < 2.5]),
-                                'Under 2.5': np.sum(matrix[np.indices((10,10))[0] + np.indices((10,10))[1] < 2.5])
-                            }
-
+                            lh, la = (stats.at[c1[0],'AH']*stats.at[c2[0],'DA']*avg_h)+cfg['ha'], (stats.at[c2[0],'AA']*stats.at[c1[0],'DH']*avg_a)
+                            matrix = np.outer(poisson.pmf(np.arange(10), lh), poisson.pmf(np.arange(10), la))
                             for bk in m['bookmakers']:
                                 for mk in bk['markets']:
                                     for out in mk['outcomes']:
-                                        key = None
+                                        prob, label = 0, ""
                                         if mk['key'] == 'h2h':
-                                            key = '1' if out['name'] == m['home_team'] else ('2' if out['name'] == m['away_team'] else 'X')
-                                        elif mk['key'] == 'totals' and out.get('point') == 2.5:
-                                            key = f"{out['name']} 2.5"
-
-                                        if key and key in probs:
-                                            edge = (probs[key] * out['price']) - 1
-                                            # Filter: Edge musí byť medzi 5% a 45%
-                                            if 0.01 < edge < 0.45:
-                                                v = round(((edge/(out['price']-1))*0.1)*bank, 2)
-                                                nase_tipy.append({
-                                                    'Šport': '⚽ Futbal',
-                                                    'Zápas': f"{c1[0]} vs {c2[0]}",
-                                                    'Tip': key,
-                                                    'Kurz': out['price'],
-                                                    'Edge': f"{round(edge*100,1)}%",
-                                                    'Vklad': f"{v}€",
-                                                    'Očak. skóre': f"{round(lh,1)}:{round(la,1)}"
-                                                })
+                                            if out['name'] == m['home_team']: prob, label = np.sum(np.tril(matrix, -1)), "1"
+                                            elif out['name'] == m['away_team']: prob, label = np.sum(np.triu(matrix, 1)), "2"
+                                            else: prob, label = np.sum(np.diag(matrix)), "X"
+                                        elif mk['key'] == 'totals':
+                                            limit = out.get('point', 2.5)
+                                            p_under = np.sum(matrix[np.indices((10,10))[0] + np.indices((10,10))[1] < limit])
+                                            prob = (1 - p_under) if out['name'].lower() == 'over' else p_under
+                                            label = f"{out['name']} {limit}"
+                                        
+                                        edge = (prob * out['price']) - 1
+                                        if 0.05 < edge < 0.45:
+                                            v = round(((edge/(out['price']-1))*0.1)*bank, 2)
+                                            nase_tipy.append({'Šport': '⚽ Futbal', 'Zápas': f"{c1[0]} vs {c2[0]}", 'Tip': label, 'Kurz': out['price'], 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{v}€", 'Očak. skóre': f"{round(lh,1)}:{round(la,1)}"})
     return nase_tipy
