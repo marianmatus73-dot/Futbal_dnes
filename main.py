@@ -53,10 +53,12 @@ def uloz_a_clv(new_bets):
             df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
         else:
             idx = df[mask].index[0]
-            start_p = float(df.at[idx, 'Kurz_Start'])
-            clv_val = (start_p / b['Kurz']) * 100
-            df.at[idx, 'CLV'] = round(clv_val, 1)
-            if clv_val > 102.5: clv_alerts.append({'Z': b['Zápas'], 'T': b['Tip'], 'P': f"{round(clv_val-100,1)}%"})
+            try:
+                start_p = float(df.at[idx, 'Kurz_Start'])
+                clv_val = (start_p / b['Kurz']) * 100
+                df.at[idx, 'CLV'] = round(clv_val, 1)
+                if clv_val > 102.5: clv_alerts.append({'Z': b['Zápas'], 'T': b['Tip'], 'P': f"{round(clv_val-100,1)}%"})
+            except: pass
     
     df.to_csv(HISTORY_FILE, index=False)
     return clv_alerts
@@ -118,50 +120,54 @@ async def analyzuj():
                 matches = await r.json()
 
                 for m in matches:
-                    m_time = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
-                    if not (now_utc <= m_time <= limit_utc): continue
-                    
-                    c1_m = process.extractOne(m['home_team'], stats.index)
-                    c2_m = process.extractOne(m['away_team'], stats.index)
-                    if not c1_m or not c2_m or c1_m[1] < 70: continue
-                    c1, c2 = c1_m[0], c2_m[0]
-
-                    probs, lim = {}, (5.5 if cfg['sport']=='hokej' else 2.5)
-                    if cfg['sport'] == 'tenis':
-                        w1, w2 = stats.at[c1,'WinRate'], stats.at[c2,'WinRate']
-                        probs = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
-                    else:
-                        lh = (stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'])
-                        la = (stats.at[c2,'AA']*stats.at[c1['DH'] if 'DH' in stats.columns else 'AH']*aa_avg) # Fix pre hokej/tenis
-                        lh, la = max(0.1, lh), max(0.1, la)
+                    try:
+                        m_time = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
+                        if not (now_utc <= m_time <= limit_utc): continue
                         
-                        pu = sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(12) if i+j < lim)
-                        probs = {'1':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i)),
-                                 'X':sum(poisson.pmf(i,lh)*poisson.pmf(i,la) for i in range(12)),
-                                 '2':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i+1,12)),
-                                 f'Over {lim}':1-pu, f'Under {lim}':pu}
+                        c1_m = process.extractOne(m['home_team'], stats.index)
+                        c2_m = process.extractOne(m['away_team'], stats.index)
+                        if not c1_m or not c2_m or c1_m[1] < 70: continue
+                        c1, c2 = c1_m[0], c2_m[0]
 
-                    match_best_odds = {}
-                    for bk in m.get('bookmakers', []):
-                        for mk in bk.get('markets', []):
-                            for out in mk['outcomes']:
-                                lbl = f"{out['name']} {lim}" if mk['key']=='totals' and out.get('point')==lim else ('1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X'))
-                                if lbl in probs:
-                                    prob, price = probs[lbl], out['price']
-                                    edge = (prob * price) - 1
-                                    if 0.05 <= edge <= 0.45:
-                                        if lbl not in match_best_odds or price > match_best_odds[lbl]['Kurz']:
-                                            v = round(min(max(0, (((price-1)*prob-(1-prob))/(price-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
-                                            match_best_odds[lbl] = {'Zápas':f"{c1} vs {c2}", 'Tip':lbl, 'Kurz':price, 'Edge':f"{round(edge*100,1)}%", 'Vklad':f"{v}€", 'Sport':cfg['sport'], 'Skóre':f"{round(lh,1)}:{round(la,1)}" if cfg['sport']!='tenis' else ""}
-                    
-                    all_bets.extend(match_best_odds.values())
+                        probs, lim = {}, (5.5 if cfg['sport']=='hokej' else 2.5)
+                        lh, la = 0, 0
+                        if cfg['sport'] == 'tenis':
+                            w1, w2 = stats.at[c1,'WinRate'], stats.at[c2,'WinRate']
+                            probs = {'1': w1/(w1+w2), '2': w2/(w1+w2)}
+                        else:
+                            lh = (stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'])
+                            col_target = 'DH' if 'DH' in stats.columns else 'AH'
+                            la = (stats.at[c2,'AA']*stats.at[c1, col_target]*aa_avg)
+                            lh, la = max(0.1, lh), max(0.1, la)
+                            
+                            pu = sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(12) if i+j < lim)
+                            probs = {'1':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i)),
+                                     'X':sum(poisson.pmf(i,lh)*poisson.pmf(i,la) for i in range(12)),
+                                     '2':sum(poisson.pmf(i,lh)*poisson.pmf(j,la) for i in range(12) for j in range(i+1,12)),
+                                     f'Over {lim}':1-pu, f'Under {lim}':pu}
+
+                        match_best_odds = {}
+                        for bk in m.get('bookmakers', []):
+                            for mk in bk.get('markets', []):
+                                for out in mk['outcomes']:
+                                    lbl = f"{out['name']} {lim}" if mk['key']=='totals' and out.get('point')==lim else ('1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else 'X'))
+                                    if lbl in probs:
+                                        prob, price = probs[lbl], out['price']
+                                        edge = (prob * price) - 1
+                                        if 0.05 <= edge <= 0.45:
+                                            if lbl not in match_best_odds or price > match_best_odds[lbl]['Kurz']:
+                                                v = round(min(max(0, (((price-1)*prob-(1-prob))/(price-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
+                                                match_best_odds[lbl] = {'Zápas':f"{c1} vs {c2}", 'Tip':lbl, 'Kurz':price, 'Edge':f"{round(edge*100,1)}%", 'Vklad':f"{v}€", 'Sport':cfg['sport'], 'Skóre':f"{round(lh,1)}:{round(la,1)}" if cfg['sport']!='tenis' else ""}
+                        
+                        all_bets.extend(match_best_odds.values())
+                    except: continue
 
         if all_bets:
             final_bets = pd.DataFrame(all_bets).sort_values('Edge', ascending=False).drop_duplicates(subset=['Zápas', 'Tip']).to_dict('records')
             alerts = uloz_a_clv(final_bets)
             posli_email(final_bets, alerts)
         else:
-            print("📭 Žiadne výhodné tipy za posledných 24h.")
+            print("📭 Žiadne výhodné tipy.")
 
 def posli_email(bets, alerts):
     msg = MIMEMultipart()
@@ -170,20 +176,26 @@ def posli_email(bets, alerts):
     
     html = "<h2>🎯 AI VALUE BETS</h2>"
     if alerts:
-        html += "<div style='background:#e3f2fd; padding:10px;'><h3>🔥 SMART MONEY (CLV)</h3>"
+        html += "<div style='background:#e3f2fd; padding:10px; border-radius:5px;'><h3>🔥 SMART MONEY (CLV)</h3>"
         for a in alerts[:5]: html += f"• <b>{a['Z']}</b>: {a['T']} (Kurz klesol o {a['P']})<br>"
         html += "</div><br>"
 
-    html += "<table border='1' style='border-collapse:collapse; width:100%; font-family:sans-serif;'><tr style='background:#f2f2f2;'><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Exp.</th></tr>"
+    html += "<table border='1' style='border-collapse:collapse; width:100%; font-family:sans-serif; font-size:14px;'>"
+    html += "<tr style='background:#333; color:white;'><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th><th>Exp.</th></tr>"
     for b in bets[:35]:
-        html += f"<tr><td>{b['Zápas']}</td><td><b>{b['Tip']}</b></td><td>{b['Kurz']}</td><td style='color:green;'>{b['Edge']}</td><td>{b['Vklad']}</td><td>{b['Skóre']}</td></tr>"
+        edge_val = float(b['Edge'].replace('%',''))
+        color = "#27ae60" if edge_val > 15 else "#2c3e50"
+        html += f"<tr><td style='padding:8px;'>{b['Zápas']}</td><td style='padding:8px;'><b>{b['Tip']}</b></td><td style='padding:8px;'>{b['Kurz']}</td><td style='padding:8px; color:{color}; font-weight:bold;'>{b['Edge']}</td><td style='padding:8px;'>{b['Vklad']}</td><td style='padding:8px;'>{b['Skóre']}</td></tr>"
     
-    msg.attach(MIMEText(html + "</table>", 'html'))
-    with smtplib.SMTP('smtp.gmail.com', 587) as s:
-        s.starttls()
-        s.login(GMAIL_USER, GMAIL_PASSWORD)
-        s.send_message(msg)
-    print("📧 Report úspešne odoslaný!")
+    msg.attach(MIMEText(html + "</table><p><small>Analyzované pomocou Poissonovej distribúcie.</small></p>", 'html'))
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as s:
+            s.starttls()
+            s.login(GMAIL_USER, GMAIL_PASSWORD)
+            s.send_message(msg)
+        print("📧 Report úspešne odoslaný!")
+    except Exception as e:
+        print(f"❌ Chyba pri odosielaní emailu: {e}")
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
