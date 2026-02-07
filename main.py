@@ -49,11 +49,10 @@ async def vyhodnot_vysledky(session):
         df = pd.read_csv(HISTORY_FILE)
         if df.empty: return ""
         if 'Vysledok' not in df.columns: df['Vysledok'] = None
-        
-        # OPRAVA: Pretypovanie stĺpca aby Pandas nehlásil chybu pri vkladaní 'V' alebo 'P'
         df['Vysledok'] = df['Vysledok'].astype(object)
         
         updates = 0
+        # Vyhodnocovanie funguje pre futbal z football-data.co.uk (sezóna 25/26)
         async with session.get("https://www.football-data.co.uk/mmz4281/2526/E0.csv") as r:
             if r.status == 200:
                 res_data = pd.read_csv(io.StringIO((await r.read()).decode('utf-8')))
@@ -72,11 +71,34 @@ async def vyhodnot_vysledky(session):
                             updates += 1
         if updates > 0:
             df.to_csv(HISTORY_FILE, index=False)
-            return f"<p style='color:green;'>✅ Vyhodnotených {updates} zápasov.</p>"
+            return f"<p style='color:green;'>✅ Vyhodnotených {updates} starších zápasov.</p>"
     except Exception as e: logging.error(f"Chyba vyhodnotenia: {e}")
     return ""
 
-# --- 3. ANALÝZA ---
+# --- 3. TÝŽDENNÝ SUMÁR ---
+def posli_tyzdenny_sumar():
+    if datetime.now().weekday() != 6: return # Len v nedeľu
+    if not os.path.exists(HISTORY_FILE): return
+    try:
+        df = pd.read_csv(HISTORY_FILE)
+        df_eval = df[df['Vysledok'].isin(['V', 'P'])].copy()
+        if df_eval.empty: return
+        
+        df_eval['Vklad_num'] = df_eval['Vklad'].str.replace('€', '').astype(float)
+        df_eval['Zisk'] = df_eval.apply(lambda x: (x['Vklad_num']*x['Kurz']-x['Vklad_num']) if x['Vysledok']=='V' else -x['Vklad_num'], axis=1)
+        
+        celkovy = round(df_eval['Zisk'].sum(), 2)
+        html = f"<h2>📊 Týždenný Sumár</h2><p>Zisk/Strata: <b>{celkovy}€</b></p><p>Tipov: {len(df_eval)}</p>"
+        
+        msg = MIMEMultipart()
+        msg['Subject'] = f"📊 SUMÁR: {celkovy}€"
+        msg['To'] = GMAIL_RECEIVER if GMAIL_RECEIVER else GMAIL_USER
+        msg.attach(MIMEText(html, 'html'))
+        with smtplib.SMTP('smtp.gmail.com', 587) as s:
+            s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+    except Exception as e: logging.error(f"Sumar error: {e}")
+
+# --- 4. HLAVNÁ ANALÝZA ---
 async def fetch_csv(session, liga, cfg):
     try:
         now = datetime.now()
@@ -97,10 +119,9 @@ def spracuj_stats(content, cfg):
         df = df.dropna(subset=['FTHG', 'FTAG'])
         avg_h, avg_a = df['FTHG'].mean(), df['FTAG'].mean()
         stats = pd.DataFrame(index=list(set(df['HomeTeam'].unique()) | set(df['AwayTeam'].unique())))
-        h_s = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'})
-        a_s = df.groupby('AwayTeam').agg({'FTAG':'mean', 'FTHG':'mean'})
-        stats['AH'] = h_s['FTHG'] / avg_h; stats['DH'] = h_s['FTAG'] / avg_a
-        stats['AA'] = a_s['FTAG'] / avg_a; stats['DA'] = a_s['FTHG'] / avg_h
+        h_s, a_s = df.groupby('HomeTeam').agg({'FTHG':'mean', 'FTAG':'mean'}), df.groupby('AwayTeam').agg({'FTAG':'mean', 'FTHG':'mean'})
+        stats['AH'], stats['DH'] = h_s['FTHG']/avg_h, h_s['FTAG']/avg_a
+        stats['AA'], stats['DA'] = a_s['FTAG']/avg_a, a_s['FTHG']/avg_h
         return stats.fillna(1.0), avg_h, avg_a
     except: return None, 0, 0
 
@@ -125,10 +146,9 @@ async def analyzuj():
                         m_t = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
                         if not (now_utc <= m_t <= now_utc + timedelta(hours=lim_h)): continue
                         c1_m, c2_m = process.extractOne(m['home_team'], stats.index), process.extractOne(m['away_team'], stats.index)
-                        if c1_m[1] < 75 or c2_m[1] < 75: continue
+                        if c1_m[1] < 70 or c2_m[1] < 70: continue
                         c1, c2 = c1_m[0], c2_m[0]
-                        lh = stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha']
-                        la = stats.at[c2,'AA']*stats.at[c1,'DH']*aa_avg
+                        lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'], stats.at[c2,'AA']*stats.at[c1,'DH']*aa_avg
                         matrix = np.outer(poisson.pmf(np.arange(12), max(0.1, lh)), poisson.pmf(np.arange(12), max(0.1, la)))
                         lim = 5.5 if cfg['sport'] == 'hokej' else 2.5
                         probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)),
@@ -158,13 +178,11 @@ def uloz_a_posli(bets, log_v):
         df_new = pd.concat([df_old, df_new]).drop_duplicates(subset=['Zápas', 'Tip', 'Datum'])
     df_new.to_csv(HISTORY_FILE, index=False)
     
-    # OPRAVA EMAILU: Poistka proti prázdnemu príjemcovi
     prijemca = GMAIL_RECEIVER if GMAIL_RECEIVER else GMAIL_USER
     if not prijemca: return
     
     msg = MIMEMultipart()
     msg['Subject'] = f"🚀 AI REPORT - {len(bets)} tipov"
-    msg['From'] = GMAIL_USER
     msg['To'] = prijemca
     html = f"{log_v}<h3>🎯 Nové Value Bets</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
     html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
@@ -179,3 +197,4 @@ def uloz_a_posli(bets, log_v):
 
 if __name__ == "__main__":
     asyncio.run(analyzuj())
+    posli_tyzdenny_sumar()
