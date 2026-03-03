@@ -2,9 +2,9 @@ name: AI Betting Bot Run
 
 on:
   schedule:
-    # Spúšťa sa každý deň o 09:00 UTC
+    # Automatický beh 1x denne o 09:00 UTC (cca 10:00/11:00 nášho času)
     - cron: '0 9 * * *'
-  workflow_dispatch: # Umožňuje spustiť bot manuálne tlačidlom
+  workflow_dispatch: # Umožňuje manuálne spustenie tlačidlom
 
 jobs:
   build:
@@ -31,7 +31,13 @@ jobs:
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
           AKTUALNY_BANK: 1000
-        run: python main.py
+        run: |
+          # Ak je workflow spustený manuálne cez tlačidlo, pridáme argument 'manual'
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            python main.py manual
+          else
+            python main.py
+          fi
 
       - name: Commit history update
         run: |
