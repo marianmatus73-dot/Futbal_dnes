@@ -2,7 +2,7 @@ name: AI Betting Bot Run
 
 on:
   schedule:
-    # Spúšťa sa každý deň o 09:00 a 11:00 UTC
+    # Spúšťa sa každý deň o 09:00 UTC
     - cron: '0 9,11 * * *'
   workflow_dispatch: # Umožňuje spustiť bot manuálne tlačidlom
 
