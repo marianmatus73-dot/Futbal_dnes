@@ -724,39 +724,47 @@ Datum,Zápas,Tip,Kurz_Start,CLV,Edge,Vklad,Sport,Vysledok,Kurz
 07.03.2026,Heidenheim vs Hoffenheim,2,,,18.3%,20.0€,futbal,P,1.62
 07.03.2026,Heidenheim vs Hoffenheim,Over 2.5,,,11.7%,20.0€,futbal,V,1.44
 07.03.2026,Blackburn vs Portsmouth,Over 2.5,,,11.4%,7.96€,futbal,V,2.72
-08.03.2026,Nice vs Rennes,Over 2.5,,,9.8%,18.08€,futbal,,1.65
-08.03.2026,Frosinone vs Sampdoria,Over 2.5,,,9.7%,13.08€,futbal,,1.89
-08.03.2026,Bologna vs Verona,1,,,9.7%,17.85€,futbal,,1.65
-08.03.2026,Lyon vs Paris FC,1,,,9.7%,18.75€,futbal,,1.62
-08.03.2026,Catanzaro vs Empoli,Over 2.5,,,9.5%,13.28€,futbal,,1.86
-08.03.2026,Andorra vs Sp Gijon,2,,,9.4%,4.7€,futbal,,3.4
-08.03.2026,Las Palmas vs Ceuta,1,,,9.4%,17.6€,futbal,,1.64
-08.03.2026,Milan vs Milan,2,,,9.3%,8.04€,futbal,,2.38
-08.03.2026,Lecce vs Cremonese,2,,,9.3%,3.97€,futbal,,3.8
-08.03.2026,Santander vs Cordoba,1,,,9.2%,12.86€,futbal,,1.86
-08.03.2026,Almeria vs Cultural Leonesa,2,,,9.1%,2.33€,futbal,,5.7
-08.03.2026,Mantova vs Juve Stabia,2,,,8.7%,5.65€,futbal,,2.85
-08.03.2026,Lille vs Lorient,2,,,8.7%,1.64€,futbal,,7.4
-08.03.2026,Union Berlin vs Werder Bremen,Over 2.5,,,8.7%,9.69€,futbal,,2.08
-08.03.2026,Pescara vs Bari,1,,,8.6%,8.94€,futbal,,2.15
-08.03.2026,Fiorentina vs Parma,X,,,8.0%,3.44€,futbal,,3.8
-08.03.2026,Pescara vs Bari,Over 2.5,,,7.9%,9.08€,futbal,,2.04
-08.03.2026,Mantova vs Juve Stabia,1,,,6.5%,4.41€,futbal,,2.76
-08.03.2026,Carrarese vs Palermo,1,,,6.4%,3.95€,futbal,,2.95
-08.03.2026,La Coruna vs Granada,1,,,6.3%,8.07€,futbal,,1.93
-08.03.2026,Almeria vs Cultural Leonesa,1,,,5.9%,11.65€,futbal,,1.61
-08.03.2026,Andorra vs Sp Gijon,1,,,5.3%,4.2€,futbal,,2.5
-08.03.2026,Nice vs Rennes,1,,,24.5%,18.12€,futbal,,2.62
-08.03.2026,Lazio vs Sassuolo,Over 2.5,,,24.5%,20.0€,futbal,,2.2
-08.03.2026,Villarreal vs Elche,1,,,24.5%,20.0€,futbal,,1.48
-08.03.2026,Genoa vs Roma,1,,,24.4%,8.25€,futbal,,4.55
-08.03.2026,Lazio vs Sassuolo,2,,,24.2%,11.16€,futbal,,3.6
-08.03.2026,Fiorentina vs Parma,2,,,23.9%,7.35€,futbal,,4.9
-08.03.2026,Sevilla vs Vallecano,Over 2.5,,,23.6%,20.0€,futbal,,2.22
-08.03.2026,Villarreal vs Elche,Over 2.5,,,23.6%,20.0€,futbal,,1.64
-08.03.2026,Santander vs Cordoba,Over 2.5,,,22.8%,20.0€,futbal,,1.74
-08.03.2026,St Pauli vs Ein Frankfurt,2,,,22.6%,18.1€,futbal,,2.5
-08.03.2026,Dunkerque vs Reims,Over 2.5,,,21.7%,20.0€,futbal,,2.04
-08.03.2026,Espanol vs Oviedo,1,,,20.6%,20.0€,futbal,,1.98
-08.03.2026,Lens vs Metz,1,,,18.5%,20.0€,futbal,,1.31
-08.03.2026,Lens vs Metz,Over 2.5,,,17.6%,20.0€,futbal,,1.5
+08.03.2026,Nice vs Rennes,Over 2.5,,,9.8%,18.08€,futbal,V,1.65
+08.03.2026,Frosinone vs Sampdoria,Over 2.5,,,9.7%,13.08€,futbal,V,1.89
+08.03.2026,Bologna vs Verona,1,,,9.7%,17.85€,futbal,V,1.65
+08.03.2026,Lyon vs Paris FC,1,,,9.7%,18.75€,futbal,V,1.62
+08.03.2026,Catanzaro vs Empoli,Over 2.5,,,9.5%,13.28€,futbal,V,1.86
+08.03.2026,Andorra vs Sp Gijon,2,,,9.4%,4.7€,futbal,P,3.4
+08.03.2026,Las Palmas vs Ceuta,1,,,9.4%,17.6€,futbal,P,1.64
+08.03.2026,Milan vs Milan,2,,,9.3%,8.04€,futbal,V,2.38
+08.03.2026,Lecce vs Cremonese,2,,,9.3%,3.97€,futbal,V,3.8
+08.03.2026,Santander vs Cordoba,1,,,9.2%,12.86€,futbal,V,1.86
+08.03.2026,Almeria vs Cultural Leonesa,2,,,9.1%,2.33€,futbal,P,5.7
+08.03.2026,Mantova vs Juve Stabia,2,,,8.7%,5.65€,futbal,P,2.85
+08.03.2026,Lille vs Lorient,2,,,8.7%,1.64€,futbal,P,7.4
+08.03.2026,Union Berlin vs Werder Bremen,Over 2.5,,,8.7%,9.69€,futbal,P,2.08
+08.03.2026,Pescara vs Bari,1,,,8.6%,8.94€,futbal,V,2.15
+08.03.2026,Fiorentina vs Parma,X,,,8.0%,3.44€,futbal,P,3.8
+08.03.2026,Pescara vs Bari,Over 2.5,,,7.9%,9.08€,futbal,V,2.04
+08.03.2026,Mantova vs Juve Stabia,1,,,6.5%,4.41€,futbal,P,2.76
+08.03.2026,Carrarese vs Palermo,1,,,6.4%,3.95€,futbal,P,2.95
+08.03.2026,La Coruna vs Granada,1,,,6.3%,8.07€,futbal,V,1.93
+08.03.2026,Almeria vs Cultural Leonesa,1,,,5.9%,11.65€,futbal,V,1.61
+08.03.2026,Andorra vs Sp Gijon,1,,,5.3%,4.2€,futbal,V,2.5
+08.03.2026,Nice vs Rennes,1,,,24.5%,18.12€,futbal,P,2.62
+08.03.2026,Lazio vs Sassuolo,Over 2.5,,,24.5%,20.0€,futbal,P,2.2
+08.03.2026,Villarreal vs Elche,1,,,24.5%,20.0€,futbal,V,1.48
+08.03.2026,Genoa vs Roma,1,,,24.4%,8.25€,futbal,V,4.55
+08.03.2026,Lazio vs Sassuolo,2,,,24.2%,11.16€,futbal,V,3.6
+08.03.2026,Fiorentina vs Parma,2,,,23.9%,7.35€,futbal,P,4.9
+08.03.2026,Sevilla vs Vallecano,Over 2.5,,,23.6%,20.0€,futbal,P,2.22
+08.03.2026,Villarreal vs Elche,Over 2.5,,,23.6%,20.0€,futbal,V,1.64
+08.03.2026,Santander vs Cordoba,Over 2.5,,,22.8%,20.0€,futbal,P,1.74
+08.03.2026,St Pauli vs Ein Frankfurt,2,,,22.6%,18.1€,futbal,P,2.5
+08.03.2026,Dunkerque vs Reims,Over 2.5,,,21.7%,20.0€,futbal,P,2.04
+08.03.2026,Espanol vs Oviedo,1,,,20.6%,20.0€,futbal,P,1.98
+08.03.2026,Lens vs Metz,1,,,18.5%,20.0€,futbal,P,1.31
+08.03.2026,Lens vs Metz,Over 2.5,,,17.6%,20.0€,futbal,V,1.5
+09.03.2026,Espanol vs Oviedo,1,,,9.6%,14.46€,futbal,,1.8
+09.03.2026,Alanyaspor vs Genclerbirligi,1,,,9.5%,12.69€,futbal,,1.9
+09.03.2026,Almeria vs Cultural Leonesa,2,,,9.1%,2.33€,futbal,,5.7
+09.03.2026,Portsmouth vs Swansea,1,,,8.9%,9.24€,futbal,,2.15
+09.03.2026,Stoke vs Ipswich,Over 2.5,,,8.6%,10.63€,futbal,,1.97
+09.03.2026,Leicester vs Bristol City,2,,,6.6%,4.65€,futbal,,2.7
+09.03.2026,Portsmouth vs Swansea,X,,,5.7%,2.63€,futbal,,3.6
+09.03.2026,Millwall vs Derby,Over 2.5,,,24.6%,20.0€,futbal,,2.05
