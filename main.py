@@ -16,29 +16,29 @@ GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
 HISTORY_FILE = "historia_tipov.csv"
-KELLY_FRAC = 0.12  # Konzervatívny risk management
+KELLY_FRAC = 0.12 
 
 LIGY_CONFIG = {
-    # --- FUTBAL ---
-    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25},
-    '⚽ Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ', 'sport': 'futbal', 'ha': 0.20},
-    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28},
-    '⚽ La Liga 2':        {'csv': 'SP2', 'api': 'soccer_spain_segunda_division', 'sport': 'futbal', 'ha': 0.22},
-    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.30},
-    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.22},
-    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.25},
-    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.35},
-    '⚽ Liga Portugal':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga', 'sport': 'futbal', 'ha': 0.30},
-    '⚽ Süper Lig (TR)':   {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.32},
-    '⚽ Belgicko Jupiler': {'csv': 'B1',  'api': 'soccer_belgium_first_division', 'sport': 'futbal', 'ha': 0.28},
+    # --- FUTBAL (Min Edge 5%) ---
+    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25, 'min_edge': 0.05},
+    '⚽ Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ', 'sport': 'futbal', 'ha': 0.20, 'min_edge': 0.05},
+    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28, 'min_edge': 0.05},
+    '⚽ La Liga 2':        {'csv': 'SP2', 'api': 'soccer_spain_segunda_division', 'sport': 'futbal', 'ha': 0.22, 'min_edge': 0.05},
+    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
+    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.22, 'min_edge': 0.05},
+    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.25, 'min_edge': 0.05},
+    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.35, 'min_edge': 0.05},
+    '⚽ Liga Portugal':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
+    '⚽ Süper Lig (TR)':   {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.32, 'min_edge': 0.05},
+    '⚽ Belgicko Jupiler': {'csv': 'B1',  'api': 'soccer_belgium_first_division', 'sport': 'futbal', 'ha': 0.28, 'min_edge': 0.05},
     
-    # --- HOKEJ (Znížený Home Advantage na 0.05 pre viac tipov) ---
-    '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.05},
-    '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.05},
-    '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.05},
-    '🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.05},
-    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.05},
-    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05}
+    # --- HOKEJ (Min Edge 2% pre viac tipov) ---
+    '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
+    '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
+    '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
+    '🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
+    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
+    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02}
 }
 
 # --- 2. VYHODNOCOVANIE ---
@@ -120,9 +120,7 @@ async def analyzuj():
                         lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'], stats.at[c2,'AA']*stats.at[c1,'DH']*aa_avg
                         matrix = np.outer(poisson.pmf(np.arange(10), max(0.1, lh)), poisson.pmf(np.arange(10), max(0.1, la)))
                         
-                        # VÝPOČET PRAVDEPODOBNOSTÍ
                         p_over = 1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5])
-                        # Penalizácia Over 2.5 pre futbal (ochrana pred preceňovaním gólov)
                         if cfg['sport'] == 'futbal': p_over *= 0.92
                         
                         probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), 'Over 2.5': p_over}
@@ -135,15 +133,22 @@ async def analyzuj():
                                         edge = (probs[lbl] * out['price']) - 1
                                         if out['price'] > 5.0 or edge > 0.45: continue
                                         
-                                        effective_edge = min(edge, 0.25)
-                                        if effective_edge >= 0.05:
-                                            vklad = round(min(max(0, (((out['price']-1)*probs[lbl]-(1-probs[lbl]))/(out['price']-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
+                                        # --- NOVINKA: DYNAMICKÝ STROP (v2.2) ---
+                                        # Ak je Edge podozrivo vysoký (>30%), berieme ho s rezervou (max 15%) pre výpočet vkladu
+                                        effective_edge = min(edge, 0.15) if edge > 0.30 else edge
+                                        
+                                        if edge >= cfg['min_edge']:
+                                            # Výpočet vkladu na základe effective_edge
+                                            vklad_perc = (((out['price']-1)*probs[lbl]-(1-probs[lbl]))/(out['price']-1)) * KELLY_FRAC
+                                            # Ak sme orezali edge, musíme prepočítať aj vklad percentuálne
+                                            if edge > 0.30: vklad_perc = vklad_perc * (0.15 / edge)
+
+                                            vklad = round(min(max(0, vklad_perc), 0.02)*AKTUALNY_BANK, 2)
                                             all_bets.append({'Zápas': f"{c1} vs {c2}", 'Tip': lbl, 'Kurz': out['price'], 'Edge': edge, 'Vklad': f"{vklad}€", 'Sport': cfg['sport']})
                     except: continue
 
         if all_bets:
             df_bets = pd.DataFrame(all_bets)
-            # PRAVIDLO 1 ZÁPAS = 1 TIP (vyberáme ten s najvyšším Edge)
             df_bets = df_bets.sort_values('Edge', ascending=False).drop_duplicates(subset=['Zápas'])
             df_bets['Edge'] = df_bets['Edge'].apply(lambda x: f"{round(x*100,1)}%")
             uloz_a_posli(df_bets.to_dict('records'), log_vys)
@@ -152,11 +157,12 @@ def uloz_a_posli(bets, log_v):
     df_new = pd.DataFrame(bets)
     df_new['Datum'] = datetime.now().strftime('%d.%m.%Y')
     if os.path.exists(HISTORY_FILE):
-        df_new = pd.concat([pd.read_csv(HISTORY_FILE), df_new]).drop_duplicates(subset=['Zápas', 'Tip', 'Datum'])
+        df_old = pd.read_csv(HISTORY_FILE)
+        df_new = pd.concat([df_old, df_new]).drop_duplicates(subset=['Zápas', 'Tip', 'Datum'])
     df_new.to_csv(HISTORY_FILE, index=False)
     
-    msg = MIMEMultipart(); msg['Subject'] = f"🚀 AI REPORT v2.1 - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
-    html = f"{log_v}<h3>🎯 Optimalizované tipy (Max 1 na zápas)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+    msg = MIMEMultipart(); msg['Subject'] = f"🚀 AI REPORT v2.2 - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
+    html = f"{log_v}<h3>🎯 Safe Mode (Edge Cap 15%, Hockey Unlock)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
     html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
     for b in bets:
         html += f"<tr><td>{'🏒' if b['Sport'] == 'hokej' else '⚽'}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
