@@ -2,7 +2,7 @@ name: AI Betting Bot Run
 
 on:
   schedule:
-    # Automatický beh 1x denne o 09:00 UTC
+    # Automatický beh 1x denne o 09:00 UTC (cca 10:00/11:00 nášho času)
     - cron: '0 9 * * *'
   workflow_dispatch: # Umožňuje manuálne spustenie tlačidlom v záložke Actions
 
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install aiohttp pandas numpy scipy python-dotenv fuzzywuzzy python-Levenshtein xgboost joblib
+          pip install aiohttp pandas numpy scipy python-dotenv fuzzywuzzy python-Levenshtein xgboost joblib scikit-learn
 
       - name: Run AI Analysis
         env:
@@ -32,17 +32,14 @@ jobs:
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
           AKTUALNY_BANK: 100
         run: |
-          # Ak je workflow spustený manuálne cez tlačidlo, pridáme argument 'manual'
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            python main.py manual
-          else
-            python main.py
-          fi
+          # Spustenie hlavného skriptu
+          python main.py
 
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          # Pridáme históriu aj natrénovaný model spät do repozitára
           git add historia_tipov.csv ai_model.pkl || true
           git commit -m "Update history and AI model [skip ci]" || true
           git push
