@@ -21,13 +21,22 @@ MODEL_FILE = "ai_model.pkl"
 KELLY_FRAC = 0.10
 
 LIGY_CONFIG = {
-    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'ha': 0.35},
-    '⚽ Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ', 'ha': 0.30},
-    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'ha': 0.38},
-    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'ha': 0.40},
-    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'ha': 0.30},
-    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'ha': 0.35},
-    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'ha': 0.40}
+    # --- FUTBAL ---
+    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.35},
+    '⚽ Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ', 'sport': 'futbal', 'ha': 0.30},
+    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.38},
+    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.40},
+    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.30},
+    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.35},
+    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.40},
+    
+    # --- HOKEJ ---
+    '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.05},
+    '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.05},
+    '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.05},
+    '🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.05},
+    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.05},
+    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05}
 }
 
 # --- 2. AI MOZOG (XGBOOST) ---
@@ -36,7 +45,9 @@ def train_ai_model():
     try:
         df = pd.read_csv(HISTORY_FILE)
         df = df[df['Vysledok'].isin(['V', 'P'])].copy()
-        if len(df) < 100: return None # Minimálny počet dát pre štart
+        if len(df) < 100: 
+            logging.info(f"AI: Málo dát pre tréning ({len(df)}/100). Bežím v klasickom režime.")
+            return None
 
         df['win'] = (df['Vysledok'] == 'V').astype(int)
         df['EdgeNum'] = df['Edge'].str.replace('%','').astype(float)
@@ -49,6 +60,7 @@ def train_ai_model():
         model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.05)
         model.fit(X, y)
         joblib.dump(model, MODEL_FILE)
+        logging.info("AI: Model úspešne natrénovaný.")
         return model
     except Exception as e:
         logging.error(f"AI Training Error: {e}")
@@ -72,12 +84,22 @@ async def analyzuj():
         all_bets, now_utc = [], datetime.utcnow()
 
         for liga, cfg in LIGY_CONFIG.items():
-            url_csv = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv"
+            # Dynamická cesta k dátam podľa športu
+            if cfg['sport'] == 'futbal':
+                url_csv = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv"
+            else:
+                url_csv = f"https://raw.githubusercontent.com/pavel-jara/hockey-data/master/data/{cfg['csv']}_2025.csv"
+
             async with session.get(url_csv) as r_csv:
                 if r_csv.status != 200: continue
                 raw_data = await r_csv.read()
-                df_stats = pd.read_csv(io.StringIO(raw_data.decode('utf-8')))
-            
+                df_stats = pd.read_csv(io.StringIO(raw_data.decode('utf-8', errors='ignore')))
+                
+                # Unifikácia názvov stĺpcov pre hokej
+                if cfg['sport'] == 'hokej':
+                    df_stats = df_stats.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
+
+            df_stats = df_stats.dropna(subset=['FTHG', 'FTAG'])
             elo = get_elo(df_stats)
             avg_h, avg_a = df_stats['FTHG'].mean(), df_stats['FTAG'].mean()
             
@@ -91,15 +113,17 @@ async def analyzuj():
                         m_t = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
                         if not (now_utc <= m_t <= now_utc + timedelta(hours=36)): continue
 
-                        # Poisson + ELO adjustment
+                        # Priradenie ELO a Poisson
                         elo_diff = (elo.get(home, 1500) - elo.get(away, 1500)) / 1000
                         lh = (df_stats[df_stats['HomeTeam']==home]['FTHG'].mean() or avg_h) + cfg['ha'] + elo_diff
                         la = (df_stats[df_stats['AwayTeam']==away]['FTAG'].mean() or avg_a) - elo_diff
                         
                         matrix = np.outer(poisson.pmf(np.arange(10), max(0.1, lh)), poisson.pmf(np.arange(10), max(0.1, la)))
                         
-                        # Over 2.5 s 20% penalizáciou
-                        p_over = (1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5])) * 0.80
+                        # Penalizácia Over 2.5 (20%) len pre futbal
+                        p_over = 1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5])
+                        if cfg['sport'] == 'futbal': p_over *= 0.80
+                        
                         probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), 'Over 2.5': p_over}
 
                         for bk in m['bookmakers']:
@@ -110,31 +134,14 @@ async def analyzuj():
                                         kurz = out['price']
                                         edge = (probs[lbl] * kurz) - 1
                                         
-                                        if 0.05 <= edge <= 0.40 and kurz <= 5.0:
-                                            # --- AI FILTER ---
+                                        # Filtre (Min Edge 5% pre futbal, 3% pre hokej)
+                                        min_edge_val = 0.05 if cfg['sport'] == 'futbal' else 0.03
+                                        
+                                        if min_edge_val <= edge <= 0.45 and kurz <= 5.0:
+                                            # --- AI FILTER (XGBOOST) ---
                                             if model is not None:
                                                 prediction = model.predict(pd.DataFrame([[edge*100, kurz]], columns=['EdgeNum', 'KurzNum']))[0]
                                                 if prediction == 0: continue # AI zamietlo tip
 
-                                            vklad = round(min(max(0, (((kurz-1)*probs[lbl]-(1-probs[lbl]))/(kurz-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
-                                            if kurz > 2.5: vklad = min(vklad, 12.0)
-                                            
-                                            all_bets.append({'Zápas': f"{home} vs {away}", 'Tip': lbl, 'Kurz': kurz, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{vklad}€"})
-                    except: continue
-
-        if all_bets:
-            final_df = pd.DataFrame(all_bets).sort_values('Vklad', ascending=False).drop_duplicates(subset=['Zápas'])
-            posli_email(final_df.to_dict('records'))
-
-def posli_email(bets):
-    msg = MIMEMultipart(); msg['Subject'] = f"🤖 AI HYBRID REPORT - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
-    html = "<h3>🚀 Model v3.0 (Poisson + ELO + XGBoost Filter)</h3><table border='1' style='border-collapse:collapse;'>"
-    html += "<tr style='background:#eee;'><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
-    for b in bets:
-        html += f"<tr><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
-    msg.attach(MIMEText(html + "</table>", 'html'))
-    with smtplib.SMTP('smtp.gmail.com', 587) as s:
-        s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
-
-if __name__ == "__main__":
-    asyncio.run(analyzuj())
+                                            vklad_perc = (((kurz-1)*probs[lbl]-(1-probs[lbl]))/(kurz-1))*KELLY_FRAC
+                                            vklad = round(min(max
