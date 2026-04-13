@@ -2,9 +2,9 @@ name: AI Betting Bot Run
 
 on:
   schedule:
-    # Automatický beh 1x denne o 09:00 UTC (cca 10:00/11:00 nášho času)
+    # Automatický beh 1x denne o 09:00 UTC
     - cron: '0 9 * * *'
-  workflow_dispatch: # Umožňuje manuálne spustenie tlačidlom
+  workflow_dispatch: # Umožňuje manuálne spustenie tlačidlom v záložke Actions
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install aiohttp pandas numpy scipy python-dotenv fuzzywuzzy python-Levenshtein
+          pip install aiohttp pandas numpy scipy python-dotenv fuzzywuzzy python-Levenshtein xgboost joblib
 
       - name: Run AI Analysis
         env:
@@ -39,10 +39,10 @@ jobs:
             python main.py
           fi
 
-      - name: Commit history update
+      - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add historia_tipov.csv || true
-          git commit -m "Aktualizácia histórie tipov [skip ci]" || true
-          git push || true
+          git add historia_tipov.csv ai_model.pkl || true
+          git commit -m "Update history and AI model [skip ci]" || true
+          git push
