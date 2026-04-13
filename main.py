@@ -16,32 +16,29 @@ GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
 HISTORY_FILE = "historia_tipov.csv"
-KELLY_FRAC = 0.12 
+KELLY_FRAC = 0.10  # Znížené na 0.10 pre ešte vyššiu bezpečnosť
 
 LIGY_CONFIG = {
-    # --- FUTBAL (Min Edge 5%) ---
-    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.25, 'min_edge': 0.05},
-    '⚽ Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ', 'sport': 'futbal', 'ha': 0.20, 'min_edge': 0.05},
-    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.28, 'min_edge': 0.05},
-    '⚽ La Liga 2':        {'csv': 'SP2', 'api': 'soccer_spain_segunda_division', 'sport': 'futbal', 'ha': 0.22, 'min_edge': 0.05},
-    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
-    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.22, 'min_edge': 0.05},
-    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.25, 'min_edge': 0.05},
-    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.35, 'min_edge': 0.05},
-    '⚽ Liga Portugal':    {'csv': 'P1',  'api': 'soccer_portugal_primeira_liga', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
-    '⚽ Süper Lig (TR)':   {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.32, 'min_edge': 0.05},
-    '⚽ Belgicko Jupiler': {'csv': 'B1',  'api': 'soccer_belgium_first_division', 'sport': 'futbal', 'ha': 0.28, 'min_edge': 0.05},
+    # --- FUTBAL (Zvýšené HA a prísny filter) ---
+    '⚽ Premier League':   {'csv': 'E0',  'api': 'soccer_epl', 'sport': 'futbal', 'ha': 0.35, 'min_edge': 0.05},
+    '⚽ Championship':     {'csv': 'E1',  'api': 'soccer_efl_champ', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
+    '⚽ La Liga':          {'csv': 'SP1', 'api': 'soccer_spain_la_liga', 'sport': 'futbal', 'ha': 0.38, 'min_edge': 0.05},
+    '⚽ La Liga 2':        {'csv': 'SP2', 'api': 'soccer_spain_segunda_division', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
+    '⚽ Bundesliga':       {'csv': 'D1',  'api': 'soccer_germany_bundesliga', 'sport': 'futbal', 'ha': 0.40, 'min_edge': 0.05},
+    '⚽ Serie A':          {'csv': 'I1',  'api': 'soccer_italy_serie_a', 'sport': 'futbal', 'ha': 0.30, 'min_edge': 0.05},
+    '⚽ Ligue 1':          {'csv': 'F1',  'api': 'soccer_france_ligue_one', 'sport': 'futbal', 'ha': 0.35, 'min_edge': 0.05},
+    '⚽ Eredivisie':       {'csv': 'N1',  'api': 'soccer_netherlands_eredivisie', 'sport': 'futbal', 'ha': 0.40, 'min_edge': 0.05},
+    '⚽ Süper Lig (TR)':   {'csv': 'T1',  'api': 'soccer_turkey_super_league', 'sport': 'futbal', 'ha': 0.40, 'min_edge': 0.05},
     
-    # --- HOKEJ (Min Edge 2% pre viac tipov) ---
-    '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
-    '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
-    '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
-    '🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
-    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02},
-    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.02}
+    # --- HOKEJ (Stabilizované na min_edge 3%) ---
+    '🏒 NHL':              {'csv': 'NHL', 'api': 'icehockey_nhl', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.03},
+    '🏒 Česko Extraliga':  {'csv': 'CZE', 'api': 'icehockey_czech_extraliga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.03},
+    '🏒 Slovensko':        {'csv': 'SVK', 'api': 'icehockey_slovakia_extraliga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.03}'🏒 Nemecko DEL':      {'csv': 'GER', 'api': 'icehockey_germany_del', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.03},
+    '🏒 Švédsko SHL':      {'csv': 'SWE', 'api': 'icehockey_sweden_shl', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.03},
+    '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05, 'min_edge': 0.03}
 }
 
-# --- 2. VYHODNOCOVANIE ---
+# --- 2. VYHODNOCOVANIE (Automatické) ---
 async def vyhodnot_vysledky(session):
     if not os.path.exists(HISTORY_FILE): return ""
     try:
@@ -49,7 +46,7 @@ async def vyhodnot_vysledky(session):
         if df.empty: return ""
         df['Vysledok'] = df['Vysledok'].astype(object)
         updates = 0
-        league_codes = ['E0', 'E1', 'SP1', 'SP2', 'D1', 'I1', 'F1', 'N1', 'P1', 'T1', 'B1']
+        league_codes = ['E0', 'E1', 'SP1', 'SP2', 'D1', 'I1', 'F1', 'N1', 'T1']
         
         for code in league_codes:
             url = f"https://www.football-data.co.uk/mmz4281/2526/{code}.csv"
@@ -63,12 +60,9 @@ async def vyhodnot_vysledky(session):
                             if not match_res.empty:
                                 fthg, ftag = match_res.iloc[-1]['FTHG'], match_res.iloc[-1]['FTAG']
                                 tip = str(row['Tip'])
-                                vyhra = False
-                                if tip == '1' and fthg > ftag: vyhra = True
-                                elif tip == '2' and ftag > fthg: vyhra = True
-                                elif tip == 'X' and fthg == ftag: vyhra = True
-                                elif 'Over' in tip and (fthg + ftag) > 2.5: vyhra = True
-                                elif 'Under' in tip and (fthg + ftag) < 2.5: vyhra = True
+                                vyhra = (tip == '1' and fthg > ftag) or (tip == '2' and ftag > fthg) or \
+                                        (tip == 'X' and fthg == ftag) or ('Over' in tip and (fthg + ftag) > 2.5) or \
+                                        ('Under' in tip and (fthg + ftag) < 2.5)
                                 df.at[idx, 'Vysledok'] = 'V' if vyhra else 'P'
                                 updates += 1
         if updates > 0:
@@ -77,7 +71,7 @@ async def vyhodnot_vysledky(session):
     except Exception as e: logging.error(f"Chyba vyhodnotenia: {e}")
     return ""
 
-# --- 3. JADRO ANALÝZY ---
+# --- 3. ANALÝZA ---
 def spracuj_stats(content, cfg):
     try:
         df = pd.read_csv(io.StringIO(content.decode('utf-8', errors='ignore')))
@@ -120,8 +114,9 @@ async def analyzuj():
                         lh, la = stats.at[c1,'AH']*stats.at[c2,'DA']*ah_avg + cfg['ha'], stats.at[c2,'AA']*stats.at[c1,'DH']*aa_avg
                         matrix = np.outer(poisson.pmf(np.arange(10), max(0.1, lh)), poisson.pmf(np.arange(10), max(0.1, la)))
                         
+                        # --- PENALIZÁCIA OVER 2.5 (20%) ---
                         p_over = 1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5])
-                        if cfg['sport'] == 'futbal': p_over *= 0.92
+                        if cfg['sport'] == 'futbal': p_over *= 0.80
                         
                         probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), 'Over 2.5': p_over}
 
@@ -131,25 +126,23 @@ async def analyzuj():
                                     lbl = '1' if out['name']==m['home_team'] else ('2' if out['name']==m['away_team'] else ('X' if out['name']=='Draw' else 'Over 2.5'))
                                     if lbl in probs:
                                         edge = (probs[lbl] * out['price']) - 1
-                                        if out['price'] > 5.0 or edge > 0.45: continue
+                                        if out['price'] > 5.0 or edge > 0.40: continue
                                         
-                                        # --- NOVINKA: DYNAMICKÝ STROP (v2.2) ---
-                                        # Ak je Edge podozrivo vysoký (>30%), berieme ho s rezervou (max 15%) pre výpočet vkladu
-                                        effective_edge = min(edge, 0.15) if edge > 0.30 else edge
+                                        # --- DYNAMICKÝ EDGE CAP (v2.3) ---
+                                        effective_edge = min(edge, 0.12) if edge > 0.25 else edge
                                         
                                         if edge >= cfg['min_edge']:
-                                            # Výpočet vkladu na základe effective_edge
                                             vklad_perc = (((out['price']-1)*probs[lbl]-(1-probs[lbl]))/(out['price']-1)) * KELLY_FRAC
-                                            # Ak sme orezali edge, musíme prepočítať aj vklad percentuálne
-                                            if edge > 0.30: vklad_perc = vklad_perc * (0.15 / edge)
-
                                             vklad = round(min(max(0, vklad_perc), 0.02)*AKTUALNY_BANK, 2)
+                                            
+                                            # --- LOSS BRAKE: Strop pre vysoké kurzy ---
+                                            if out['price'] > 2.50: vklad = min(vklad, 12.0)
+
                                             all_bets.append({'Zápas': f"{c1} vs {c2}", 'Tip': lbl, 'Kurz': out['price'], 'Edge': edge, 'Vklad': f"{vklad}€", 'Sport': cfg['sport']})
                     except: continue
 
         if all_bets:
-            df_bets = pd.DataFrame(all_bets)
-            df_bets = df_bets.sort_values('Edge', ascending=False).drop_duplicates(subset=['Zápas'])
+            df_bets = pd.DataFrame(all_bets).sort_values('Edge', ascending=False).drop_duplicates(subset=['Zápas'])
             df_bets['Edge'] = df_bets['Edge'].apply(lambda x: f"{round(x*100,1)}%")
             uloz_a_posli(df_bets.to_dict('records'), log_vys)
 
@@ -157,12 +150,11 @@ def uloz_a_posli(bets, log_v):
     df_new = pd.DataFrame(bets)
     df_new['Datum'] = datetime.now().strftime('%d.%m.%Y')
     if os.path.exists(HISTORY_FILE):
-        df_old = pd.read_csv(HISTORY_FILE)
-        df_new = pd.concat([df_old, df_new]).drop_duplicates(subset=['Zápas', 'Tip', 'Datum'])
+        df_new = pd.concat([pd.read_csv(HISTORY_FILE), df_new]).drop_duplicates(subset=['Zápas', 'Tip', 'Datum'])
     df_new.to_csv(HISTORY_FILE, index=False)
     
-    msg = MIMEMultipart(); msg['Subject'] = f"🚀 AI REPORT v2.2 - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
-    html = f"{log_v}<h3>🎯 Safe Mode (Edge Cap 15%, Hockey Unlock)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+    msg = MIMEMultipart(); msg['Subject'] = f"🚀 AI REPORT v2.3 - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
+    html = f"{log_v}<h3>🎯 Aggressive Filtering (Over-20%, HomeBias+)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
     html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
     for b in bets:
         html += f"<tr><td>{'🏒' if b['Sport'] == 'hokej' else '⚽'}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
