@@ -14,7 +14,7 @@ API_ODDS_KEY = os.getenv('ODDS_API_KEY')
 GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
-AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
+AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 100))
 HISTORY_FILE = "historia_tipov.csv"
 KELLY_FRAC = 0.10  # Znížené na 0.10 pre ešte vyššiu bezpečnosť
 
