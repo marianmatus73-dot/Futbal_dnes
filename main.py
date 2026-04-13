@@ -15,7 +15,7 @@ API_ODDS_KEY = os.getenv('ODDS_API_KEY')
 GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
-AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 100))
+AKTUALNY_BANK = float(os.getenv('AKTUALNY_BANK', 1000))
 HISTORY_FILE = "historia_tipov.csv"
 MODEL_FILE = "ai_model.pkl"
 KELLY_FRAC = 0.10
@@ -46,7 +46,7 @@ def train_ai_model():
         df = pd.read_csv(HISTORY_FILE)
         df = df[df['Vysledok'].isin(['V', 'P'])].copy()
         if len(df) < 100: 
-            logging.info(f"AI: Málo dát pre tréning ({len(df)}/100). Bežím v klasickom režime.")
+            logging.info(f"AI: Málo dát pre tréning ({len(df)}/100).")
             return None
 
         df['win'] = (df['Vysledok'] == 'V').astype(int)
@@ -60,7 +60,6 @@ def train_ai_model():
         model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.05)
         model.fit(X, y)
         joblib.dump(model, MODEL_FILE)
-        logging.info("AI: Model úspešne natrénovaný.")
         return model
     except Exception as e:
         logging.error(f"AI Training Error: {e}")
@@ -84,7 +83,6 @@ async def analyzuj():
         all_bets, now_utc = [], datetime.utcnow()
 
         for liga, cfg in LIGY_CONFIG.items():
-            # Dynamická cesta k dátam podľa športu
             if cfg['sport'] == 'futbal':
                 url_csv = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv"
             else:
@@ -94,8 +92,6 @@ async def analyzuj():
                 if r_csv.status != 200: continue
                 raw_data = await r_csv.read()
                 df_stats = pd.read_csv(io.StringIO(raw_data.decode('utf-8', errors='ignore')))
-                
-                # Unifikácia názvov stĺpcov pre hokej
                 if cfg['sport'] == 'hokej':
                     df_stats = df_stats.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
 
@@ -113,15 +109,13 @@ async def analyzuj():
                         m_t = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
                         if not (now_utc <= m_t <= now_utc + timedelta(hours=36)): continue
 
-                        # Priradenie ELO a Poisson
                         elo_diff = (elo.get(home, 1500) - elo.get(away, 1500)) / 1000
                         lh = (df_stats[df_stats['HomeTeam']==home]['FTHG'].mean() or avg_h) + cfg['ha'] + elo_diff
                         la = (df_stats[df_stats['AwayTeam']==away]['FTAG'].mean() or avg_a) - elo_diff
                         
                         matrix = np.outer(poisson.pmf(np.arange(10), max(0.1, lh)), poisson.pmf(np.arange(10), max(0.1, la)))
                         
-                        # Penalizácia Over 2.5 (20%) len pre futbal
-                        p_over = 1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5])
+                        p_over = (1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5]))
                         if cfg['sport'] == 'futbal': p_over *= 0.80
                         
                         probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), 'Over 2.5': p_over}
@@ -131,17 +125,33 @@ async def analyzuj():
                                 for out in mk['outcomes']:
                                     lbl = '1' if out['name']==home else ('2' if out['name']==away else ('X' if out['name']=='Draw' else 'Over 2.5'))
                                     if lbl in probs:
-                                        kurz = out['price']
-                                        edge = (probs[lbl] * kurz) - 1
-                                        
-                                        # Filtre (Min Edge 5% pre futbal, 3% pre hokej)
+                                        kurz, edge = out['price'], (probs[lbl] * out['price']) - 1
                                         min_edge_val = 0.05 if cfg['sport'] == 'futbal' else 0.03
                                         
                                         if min_edge_val <= edge <= 0.45 and kurz <= 5.0:
-                                            # --- AI FILTER (XGBOOST) ---
                                             if model is not None:
                                                 prediction = model.predict(pd.DataFrame([[edge*100, kurz]], columns=['EdgeNum', 'KurzNum']))[0]
-                                                if prediction == 0: continue # AI zamietlo tip
+                                                if prediction == 0: continue
 
-                                            vklad_perc = (((kurz-1)*probs[lbl]-(1-probs[lbl]))/(kurz-1))*KELLY_FRAC
-                                            vklad = round(min(max
+                                            vklad = round(min(max(0, (((kurz-1)*probs[lbl]-(1-probs[lbl]))/(kurz-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
+                                            if kurz > 2.5: vklad = min(vklad, 12.0)
+                                            
+                                            all_bets.append({'Zápas': f"{home} vs {away}", 'Tip': lbl, 'Kurz': kurz, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{vklad}€", 'Šport': cfg['sport']})
+                    except: continue
+
+        if all_bets:
+            final_df = pd.DataFrame(all_bets).sort_values('Vklad', ascending=False).drop_duplicates(subset=['Zápas'])
+            posli_email(final_df.to_dict('records'))
+
+def posli_email(bets):
+    msg = MIMEMultipart(); msg['Subject'] = f"🤖 AI HYBRID REPORT - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
+    html = "<h3>🚀 Model v3.1</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+    html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
+    for b in bets:
+        html += f"<tr><td>{'🏒' if b['Šport'] == 'hokej' else '⚽'}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
+    msg.attach(MIMEText(html + "</table>", 'html'))
+    with smtplib.SMTP('smtp.gmail.com', 587) as s:
+        s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
+
+if __name__ == "__main__":
+    asyncio.run(analyzuj())
