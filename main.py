@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
-from fuzzywuzzy import process
 from xgboost import XGBClassifier
 
 # --- 1. KONFIGURÁCIA ---
@@ -36,31 +35,56 @@ LIGY_CONFIG = {
     '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05}
 }
 
-# --- 2. AI MOZOG ---
+# --- 2. VYHODNOCOVACÍ MODUL (AUTOMATIKA) ---
+async def vyhodnot_vysledky(session):
+    if not os.path.exists(HISTORY_FILE): return
+    df = pd.read_csv(HISTORY_FILE)
+    mask = df['Vysledok'].isna() | (df['Vysledok'] == '')
+    if not mask.any(): return
+
+    logging.info("🤖 AI: Kontrolujem výsledky pre odohrané zápasy...")
+    for liga, cfg in LIGY_CONFIG.items():
+        url = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv" if cfg['sport'] == 'futbal' else f"https://raw.githubusercontent.com/pavel-jara/hockey-data/master/data/{cfg['csv']}_2025.csv"
+        async with session.get(url) as r:
+            if r.status != 200: continue
+            raw = await r.read()
+            df_res = pd.read_csv(io.StringIO(raw.decode('utf-8', errors='ignore')))
+            if cfg['sport'] == 'hokej': df_res = df_res.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
+
+            for idx, row in df[mask].iterrows():
+                h, a = row['Zápas'].split(' vs ')
+                match_res = df_res[(df_res['HomeTeam'] == h) & (df_res['AwayTeam'] == a)]
+                if not match_res.empty:
+                    res = match_res.iloc[-1]
+                    gh, ga = res['FTHG'], res['FTAG']
+                    final_v = ''
+                    if row['Tip'] == '1': final_v = 'V' if gh > ga else 'P'
+                    elif row['Tip'] == '2': final_v = 'V' if ga > gh else 'P'
+                    elif row['Tip'] == 'X': final_v = 'V' if gh == ga else 'P'
+                    elif row['Tip'] == 'Over 2.5': final_v = 'V' if (gh + ga) > 2.5 else 'P'
+                    if final_v:
+                        df.at[idx, 'Vysledok'] = final_v
+                        logging.info(f"✅ Vyhodnotené: {row['Zápas']} -> {final_v}")
+    df.to_csv(HISTORY_FILE, index=False)
+
+# --- 3. AI TRÉNING ---
 def train_ai_model():
     if not os.path.exists(HISTORY_FILE): return None
     try:
         df = pd.read_csv(HISTORY_FILE)
-        if 'Vysledok' not in df.columns: return None
         df = df[df['Vysledok'].isin(['V', 'P'])].copy()
         if len(df) < 100: return None
-
         df['win'] = (df['Vysledok'] == 'V').astype(int)
         df['EdgeNum'] = df['Edge'].str.replace('%','').astype(float)
         df['KurzNum'] = pd.to_numeric(df['Kurz'], errors='coerce')
         df = df.dropna(subset=['EdgeNum', 'KurzNum', 'win'])
-
-        X = df[['EdgeNum', 'KurzNum']]
-        y = df['win']
         model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.05)
-        model.fit(X, y)
+        model.fit(df[['EdgeNum', 'KurzNum']], df['win'])
         joblib.dump(model, MODEL_FILE)
         return model
-    except Exception as e:
-        logging.error(f"AI Training Error: {e}")
-        return None
+    except: return None
 
-# --- 3. ELO SYSTÉM ---
+# --- 4. ELO A ANALÝZA ---
 def get_elo(df):
     ratings = {}
     for _, row in df.iterrows():
@@ -71,31 +95,27 @@ def get_elo(df):
         ratings[h] += 20*(score-exp); ratings[a] += 20*((1-score)-(1-exp))
     return ratings
 
-# --- 4. ANALÝZA S UKLADANÍM ---
 async def analyzuj():
-    model = train_ai_model()
     async with aiohttp.ClientSession() as session:
+        await vyhodnot_vysledky(session)
+        model = train_ai_model()
         all_bets, now_utc = [], datetime.utcnow()
 
         for liga, cfg in LIGY_CONFIG.items():
             url_csv = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv" if cfg['sport'] == 'futbal' else f"https://raw.githubusercontent.com/pavel-jara/hockey-data/master/data/{cfg['csv']}_2025.csv"
-
             async with session.get(url_csv) as r_csv:
                 if r_csv.status != 200: continue
                 raw_data = await r_csv.read()
                 df_stats = pd.read_csv(io.StringIO(raw_data.decode('utf-8', errors='ignore')))
-                if cfg['sport'] == 'hokej':
-                    df_stats = df_stats.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
-
+                if cfg['sport'] == 'hokej': df_stats = df_stats.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
+            
             df_stats = df_stats.dropna(subset=['FTHG', 'FTAG'])
             elo = get_elo(df_stats)
             avg_h, avg_a = df_stats['FTHG'].mean(), df_stats['FTAG'].mean()
             
             async with session.get(f'https://api.the-odds-api.com/v4/sports/{cfg["api"]}/odds/', params={'apiKey':API_ODDS_KEY,'regions':'eu','markets':'h2h,totals'}) as r_odds:
                 if r_odds.status != 200: continue
-                odds_json = await r_odds.json()
-                
-                for m in odds_json:
+                for m in await r_odds.json():
                     try:
                         home, away = m['home_team'], m['away_team']
                         m_t = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
@@ -104,7 +124,6 @@ async def analyzuj():
                         elo_diff = (elo.get(home, 1500) - elo.get(away, 1500)) / 1000
                         lh = (df_stats[df_stats['HomeTeam']==home]['FTHG'].mean() or avg_h) + cfg['ha'] + elo_diff
                         la = (df_stats[df_stats['AwayTeam']==away]['FTAG'].mean() or avg_a) - elo_diff
-                        
                         matrix = np.outer(poisson.pmf(np.arange(10), max(0.1, lh)), poisson.pmf(np.arange(10), max(0.1, la)))
                         p_over = (1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5]))
                         if cfg['sport'] == 'futbal': p_over *= 0.80
@@ -117,48 +136,25 @@ async def analyzuj():
                                     lbl = '1' if out['name']==home else ('2' if out['name']==away else ('X' if out['name']=='Draw' else 'Over 2.5'))
                                     if lbl in probs:
                                         kurz, edge = out['price'], (probs[lbl] * out['price']) - 1
-                                        min_edge_val = 0.05 if cfg['sport'] == 'futbal' else 0.03
-                                        
-                                        if min_edge_val <= edge <= 0.45 and kurz <= 5.0:
+                                        if (0.05 if cfg['sport'] == 'futbal' else 0.03) <= edge <= 0.45 and kurz <= 5.0:
                                             if model is not None:
-                                                prediction = model.predict(pd.DataFrame([[edge*100, kurz]], columns=['EdgeNum', 'KurzNum']))[0]
-                                                if prediction == 0: continue
+                                                if model.predict(pd.DataFrame([[edge*100, kurz]], columns=['EdgeNum', 'KurzNum']))[0] == 0: continue
 
                                             vklad = round(min(max(0, (((kurz-1)*probs[lbl]-(1-probs[lbl]))/(kurz-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
-                                            if kurz > 2.5: vklad = min(vklad, 12.0)
-                                            
-                                            all_bets.append({
-                                                'Datum': m_t.strftime('%d.%m.%Y'),
-                                                'Zápas': f"{home} vs {away}", 
-                                                'Tip': lbl, 
-                                                'Kurz': kurz, 
-                                                'Edge': f"{round(edge*100,1)}%", 
-                                                'Vklad': f"{vklad}€", 
-                                                'Sport': cfg['sport'],
-                                                'Vysledok': ''
-                                            })
+                                            all_bets.append({'Datum': m_t.strftime('%d.%m.%Y'), 'Zápas': f"{home} vs {away}", 'Tip': lbl, 'Kurz': kurz, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{vklad}€", 'Sport': cfg['sport'], 'Vysledok': ''})
                     except: continue
 
         if all_bets:
             new_df = pd.DataFrame(all_bets).drop_duplicates(subset=['Zápas', 'Tip'])
-            
-            # --- ZÁPIS DO SÚBORU ---
             if os.path.exists(HISTORY_FILE):
-                old_df = pd.read_csv(HISTORY_FILE)
-                # Spojíme staré s novými a vyhodíme duplicity (podľa zápasu a tipu)
-                final_df = pd.concat([old_df, new_df]).drop_duplicates(subset=['Zápas', 'Tip'], keep='first')
-            else:
-                final_df = new_df
-            
+                final_df = pd.concat([pd.read_csv(HISTORY_FILE), new_df]).drop_duplicates(subset=['Zápas', 'Tip'], keep='first')
+            else: final_df = new_df
             final_df.to_csv(HISTORY_FILE, index=False)
-            logging.info(f"História aktualizovaná. Pridaných {len(new_df)} potenciálnych tipov.")
-
-            # Odoslanie emailu (len aktuálne nájdené tipy)
             posli_email(new_df.to_dict('records'))
 
 def posli_email(bets):
     msg = MIMEMultipart(); msg['Subject'] = f"🤖 AI HYBRID REPORT - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
-    html = "<h3>🚀 Model v3.1</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+    html = "<h3>🚀 Model v3.2 (Auto-Update)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
     html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
     for b in bets:
         html += f"<tr><td>{'🏒' if b['Sport'] == 'hokej' else '⚽'}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
