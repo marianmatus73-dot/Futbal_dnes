@@ -35,36 +35,42 @@ LIGY_CONFIG = {
     '🏒 Fínsko Liiga':     {'csv': 'FIN', 'api': 'icehockey_finland_liiga', 'sport': 'hokej', 'ha': 0.05}
 }
 
-# --- 2. VYHODNOCOVACÍ MODUL (AUTOMATIKA) ---
+# --- 2. AUTOMATICKÉ VYHODNOTENIE (FUZZY MATCH) ---
 async def vyhodnot_vysledky(session):
     if not os.path.exists(HISTORY_FILE): return
     df = pd.read_csv(HISTORY_FILE)
-    mask = df['Vysledok'].isna() | (df['Vysledok'] == '')
+    mask = df['Vysledok'].isna() | (df['Vysledok'].astype(str).str.strip() == '')
     if not mask.any(): return
 
-    logging.info("🤖 AI: Kontrolujem výsledky pre odohrané zápasy...")
+    logging.info(f"🤖 AI: Kontrolujem výsledky pre {mask.sum()} zápasov...")
     for liga, cfg in LIGY_CONFIG.items():
         url = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv" if cfg['sport'] == 'futbal' else f"https://raw.githubusercontent.com/pavel-jara/hockey-data/master/data/{cfg['csv']}_2025.csv"
         async with session.get(url) as r:
             if r.status != 200: continue
             raw = await r.read()
             df_res = pd.read_csv(io.StringIO(raw.decode('utf-8', errors='ignore')))
-            if cfg['sport'] == 'hokej': df_res = df_res.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
+            if cfg['sport'] == 'hokej': df_res = df_res.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG'})
 
             for idx, row in df[mask].iterrows():
-                h, a = row['Zápas'].split(' vs ')
-                match_res = df_res[(df_res['HomeTeam'] == h) & (df_res['AwayTeam'] == a)]
-                if not match_res.empty:
-                    res = match_res.iloc[-1]
-                    gh, ga = res['FTHG'], res['FTAG']
-                    final_v = ''
-                    if row['Tip'] == '1': final_v = 'V' if gh > ga else 'P'
-                    elif row['Tip'] == '2': final_v = 'V' if ga > gh else 'P'
-                    elif row['Tip'] == 'X': final_v = 'V' if gh == ga else 'P'
-                    elif row['Tip'] == 'Over 2.5': final_v = 'V' if (gh + ga) > 2.5 else 'P'
-                    if final_v:
-                        df.at[idx, 'Vysledok'] = final_v
-                        logging.info(f"✅ Vyhodnotené: {row['Zápas']} -> {final_v}")
+                try:
+                    h_t, a_t = row['Zápas'].split(' vs ')
+                    # Inteligentné hľadanie podľa začiatku názvu (Newcastle United -> Newcastle)
+                    m_res = df_res[(df_res['HomeTeam'].str.startswith(h_t[:4], na=False)) & (df_res['AwayTeam'].str.startswith(a_t[:4], na=False))]
+                    
+                    if not m_res.empty:
+                        res = m_res.iloc[-1]
+                        gh, ga = res['FTHG'], res['FTAG']
+                        v = ''
+                        tip = str(row['Tip'])
+                        if tip == '1': v = 'V' if gh > ga else 'P'
+                        elif tip == '2': v = 'V' if ga > gh else 'P'
+                        elif tip == 'X': v = 'V' if gh == ga else 'P'
+                        elif 'Over 2.5' in tip: v = 'V' if (gh + ga) > 2.5 else 'P'
+                        
+                        if v:
+                            df.at[idx, 'Vysledok'] = v
+                            logging.info(f"✅ Vyhodnotené: {row['Zápas']} ({gh}:{ga}) -> {v}")
+                except: continue
     df.to_csv(HISTORY_FILE, index=False)
 
 # --- 3. AI TRÉNING ---
@@ -73,27 +79,28 @@ def train_ai_model():
     try:
         df = pd.read_csv(HISTORY_FILE)
         df = df[df['Vysledok'].isin(['V', 'P'])].copy()
-        if len(df) < 100: return None
+        if len(df) < 80: return None # Znížený limit pre rýchlejší štart
         df['win'] = (df['Vysledok'] == 'V').astype(int)
         df['EdgeNum'] = df['Edge'].str.replace('%','').astype(float)
         df['KurzNum'] = pd.to_numeric(df['Kurz'], errors='coerce')
-        df = df.dropna(subset=['EdgeNum', 'KurzNum', 'win'])
+        X = df.dropna(subset=['EdgeNum', 'KurzNum', 'win'])[['EdgeNum', 'KurzNum']]
+        y = df.dropna(subset=['EdgeNum', 'KurzNum', 'win'])['win']
         model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.05)
-        model.fit(df[['EdgeNum', 'KurzNum']], df['win'])
+        model.fit(X, y)
         joblib.dump(model, MODEL_FILE)
         return model
     except: return None
 
 # --- 4. ELO A ANALÝZA ---
 def get_elo(df):
-    ratings = {}
+    r = {}
     for _, row in df.iterrows():
         h, a = row['HomeTeam'], row['AwayTeam']
-        ratings.setdefault(h, 1500); ratings.setdefault(a, 1500)
-        exp = 1/(1+10**((ratings[a]-ratings[h])/400))
-        score = 1 if row['FTHG'] > row['FTAG'] else (0 if row['FTHG'] < row['FTAG'] else 0.5)
-        ratings[h] += 20*(score-exp); ratings[a] += 20*((1-score)-(1-exp))
-    return ratings
+        r.setdefault(h, 1500); r.setdefault(a, 1500)
+        exp = 1/(1+10**((r[a]-r[h])/400))
+        s = 1 if row['FTHG'] > row['FTAG'] else (0 if row['FTHG'] < row['FTAG'] else 0.5)
+        r[h] += 20*(s-exp); r[a] += 20*((1-s)-(1-exp))
+    return r
 
 async def analyzuj():
     async with aiohttp.ClientSession() as session:
@@ -102,11 +109,10 @@ async def analyzuj():
         all_bets, now_utc = [], datetime.utcnow()
 
         for liga, cfg in LIGY_CONFIG.items():
-            url_csv = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv" if cfg['sport'] == 'futbal' else f"https://raw.githubusercontent.com/pavel-jara/hockey-data/master/data/{cfg['csv']}_2025.csv"
-            async with session.get(url_csv) as r_csv:
+            url = f"https://www.football-data.co.uk/mmz4281/2526/{cfg['csv']}.csv" if cfg['sport'] == 'futbal' else f"https://raw.githubusercontent.com/pavel-jara/hockey-data/master/data/{cfg['csv']}_2025.csv"
+            async with session.get(url) as r_csv:
                 if r_csv.status != 200: continue
-                raw_data = await r_csv.read()
-                df_stats = pd.read_csv(io.StringIO(raw_data.decode('utf-8', errors='ignore')))
+                df_stats = pd.read_csv(io.StringIO((await r_csv.read()).decode('utf-8', errors='ignore')))
                 if cfg['sport'] == 'hokej': df_stats = df_stats.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG','home_team':'HomeTeam','away_team':'AwayTeam'})
             
             df_stats = df_stats.dropna(subset=['FTHG', 'FTAG'])
@@ -117,31 +123,28 @@ async def analyzuj():
                 if r_odds.status != 200: continue
                 for m in await r_odds.json():
                     try:
-                        home, away = m['home_team'], m['away_team']
+                        h, a = m['home_team'], m['away_team']
                         m_t = datetime.strptime(m['commence_time'], "%Y-%m-%dT%H:%M:%SZ")
                         if not (now_utc <= m_t <= now_utc + timedelta(hours=36)): continue
 
-                        elo_diff = (elo.get(home, 1500) - elo.get(away, 1500)) / 1000
-                        lh = (df_stats[df_stats['HomeTeam']==home]['FTHG'].mean() or avg_h) + cfg['ha'] + elo_diff
-                        la = (df_stats[df_stats['AwayTeam']==away]['FTAG'].mean() or avg_a) - elo_diff
+                        e_diff = (elo.get(h, 1500) - elo.get(a, 1500)) / 1000
+                        lh = (df_stats[df_stats['HomeTeam']==h]['FTHG'].mean() or avg_h) + cfg['ha'] + e_diff
+                        la = (df_stats[df_stats['AwayTeam']==a]['FTAG'].mean() or avg_a) - e_diff
                         matrix = np.outer(poisson.pmf(np.arange(10), max(0.1, lh)), poisson.pmf(np.arange(10), max(0.1, la)))
-                        p_over = (1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5]))
-                        if cfg['sport'] == 'futbal': p_over *= 0.80
                         
-                        probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), 'Over 2.5': p_over}
+                        p_ov = (1 - np.sum([matrix[i,j] for i in range(10) for j in range(10) if i+j < 2.5]))
+                        probs = {'1': np.sum(np.tril(matrix, -1)), 'X': np.sum(np.diag(matrix)), '2': np.sum(np.triu(matrix, 1)), 'Over 2.5': p_ov * (0.8 if cfg['sport'] == 'futbal' else 1.0)}
 
                         for bk in m['bookmakers']:
                             for mk in bk['markets']:
                                 for out in mk['outcomes']:
-                                    lbl = '1' if out['name']==home else ('2' if out['name']==away else ('X' if out['name']=='Draw' else 'Over 2.5'))
+                                    lbl = '1' if out['name']==h else ('2' if out['name']==a else ('X' if out['name']=='Draw' else 'Over 2.5'))
                                     if lbl in probs:
-                                        kurz, edge = out['price'], (probs[lbl] * out['price']) - 1
-                                        if (0.05 if cfg['sport'] == 'futbal' else 0.03) <= edge <= 0.45 and kurz <= 5.0:
-                                            if model is not None:
-                                                if model.predict(pd.DataFrame([[edge*100, kurz]], columns=['EdgeNum', 'KurzNum']))[0] == 0: continue
-
-                                            vklad = round(min(max(0, (((kurz-1)*probs[lbl]-(1-probs[lbl]))/(kurz-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
-                                            all_bets.append({'Datum': m_t.strftime('%d.%m.%Y'), 'Zápas': f"{home} vs {away}", 'Tip': lbl, 'Kurz': kurz, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{vklad}€", 'Sport': cfg['sport'], 'Vysledok': ''})
+                                        k, edge = out['price'], (probs[lbl] * out['price']) - 1
+                                        if (0.05 if cfg['sport'] == 'futbal' else 0.03) <= edge <= 0.45 and k <= 5.0:
+                                            if model is not None and model.predict(pd.DataFrame([[edge*100, k]], columns=['EdgeNum', 'KurzNum']))[0] == 0: continue
+                                            vklad = round(min(max(0, (((k-1)*probs[lbl]-(1-probs[lbl]))/(k-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
+                                            all_bets.append({'Datum': m_t.strftime('%d.%m.%Y'), 'Zápas': f"{h} vs {a}", 'Tip': lbl, 'Kurz': k, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{vklad}€", 'Sport': cfg['sport'], 'Vysledok': ''})
                     except: continue
 
         if all_bets:
@@ -153,11 +156,10 @@ async def analyzuj():
             posli_email(new_df.to_dict('records'))
 
 def posli_email(bets):
-    msg = MIMEMultipart(); msg['Subject'] = f"🤖 AI HYBRID REPORT - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
-    html = "<h3>🚀 Model v3.2 (Auto-Update)</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
-    html += "<tr style='background:#333; color:white;'><th>Šport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
-    for b in bets:
-        html += f"<tr><td>{'🏒' if b['Sport'] == 'hokej' else '⚽'}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
+    msg = MIMEMultipart(); msg['Subject'] = f"🤖 AI REPORT - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
+    html = "<h3>🚀 Model v3.3</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+    html += "<tr style='background:#333; color:white;'><th>Sport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
+    for b in bets: html += f"<tr><td>{b['Sport']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
     msg.attach(MIMEText(html + "</table>", 'html'))
     with smtplib.SMTP('smtp.gmail.com', 587) as s:
         s.starttls(); s.login(GMAIL_USER, GMAIL_PASSWORD); s.send_message(msg)
