@@ -46,13 +46,15 @@ async def vyhodnot_vysledky(session):
                 if r.status != 200: continue
                 df_res = pd.read_csv(io.StringIO((await r.read()).decode('utf-8', errors='ignore')))
                 if df_res.empty: continue
-                if cfg['sport'] == 'hokej': df_res = df_res.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG'})
+                if cfg['sport'] == 'hokej': 
+                    df_res = df_res.rename(columns={'HT':'HomeTeam','AT':'AwayTeam','HG':'FTHG','AG':'FTAG'})
 
                 for idx, row in df[mask].iterrows():
                     teams = str(row['Zápas']).split(' vs ')
                     if len(teams) < 2: continue
                     h_t, a_t = teams[0].strip(), teams[1].strip()
-                    res_row = df_res[df_res['HomeTeam'].str.contains(h_t[:4], na=False, case=False) & df_res['AwayTeam'].str.contains(a_t[:4], na=False, case=False)]
+                    res_row = df_res[df_res['HomeTeam'].str.contains(h_t[:4], na=False, case=False) & 
+                                     df_res['AwayTeam'].str.contains(a_t[:4], na=False, case=False)]
                     if not res_row.empty:
                         last = res_row.iloc[-1]
                         gh, ga = last['FTHG'], last['FTAG']
@@ -65,22 +67,34 @@ async def vyhodnot_vysledky(session):
         df.to_csv(HISTORY_FILE, index=False)
     except Exception as e: logging.error(f"Chyba vyhodnotenia: {e}")
 
-# --- 3. AI TRÉNING ---
+# --- 3. AI TRÉNING (OPRAVA PRE NaN CHYBU) ---
 def train_ai_model():
     if not os.path.exists(HISTORY_FILE): return None
     try:
         df = pd.read_csv(HISTORY_FILE)
+        # Len riadky s jasným výsledkom
         df = df[df['Vysledok'].isin(['V', 'P'])].copy()
-        if len(df) < 20: return None
-        df['win'] = (df['Vysledok'] == 'V').astype(int)
+        
+        # Prevod Edge a Kurzu na čísla, chybné hodnoty budú NaN
         df['EdgeNum'] = pd.to_numeric(df['Edge'].astype(str).str.replace('%',''), errors='coerce')
         df['KurzNum'] = pd.to_numeric(df['Kurz'], errors='coerce')
+        df['win'] = (df['Vysledok'] == 'V').astype(int)
+
+        # KRITICKÝ FIX: Odstránime všetky NaN riadky pred tréningom
         train_data = df.dropna(subset=['EdgeNum', 'KurzNum', 'win'])
-        if len(train_data) < 20: return None
+        
+        if len(train_data) < 25: 
+            logging.info(f"🤖 AI: Málo čistých dát ({len(train_data)}), preskakujem filter.")
+            return None
+            
         model = XGBClassifier(n_estimators=50, max_depth=3, learning_rate=0.1)
         model.fit(train_data[['EdgeNum', 'KurzNum']], train_data['win'])
+        joblib.dump(model, MODEL_FILE)
+        logging.info("✅ AI Model úspešne natrénovaný.")
         return model
-    except: return None
+    except Exception as e: 
+        logging.error(f"❌ AI Chyba: {e}")
+        return None
 
 # --- 4. ANALÝZA ---
 def get_elo(df):
@@ -134,7 +148,11 @@ async def analyzuj():
                                     if lbl in probs:
                                         k, edge = out['price'], (probs[lbl] * out['price']) - 1
                                         if 0.05 <= edge <= 0.45:
-                                            if model is not None and model.predict(pd.DataFrame([[edge*100, k]], columns=['EdgeNum', 'KurzNum']))[0] == 0: continue
+                                            # AI Filter
+                                            if model is not None:
+                                                pred = model.predict(pd.DataFrame([[edge*100, k]], columns=['EdgeNum', 'KurzNum']))[0]
+                                                if pred == 0: continue
+                                            
                                             vklad = round(min(max(0, (((k-1)*probs[lbl]-(1-probs[lbl]))/(k-1))*KELLY_FRAC), 0.02)*AKTUALNY_BANK, 2)
                                             all_bets.append({'Datum': m_t.strftime('%d.%m.%Y'), 'Zápas': f"{h} vs {a}", 'Tip': lbl, 'Kurz': k, 'Edge': f"{round(edge*100,1)}%", 'Vklad': f"{vklad}€", 'Sport': cfg['sport'], 'Vysledok': ''})
             except: continue
@@ -150,7 +168,7 @@ async def analyzuj():
 def posli_email(bets):
     if not GMAIL_USER or not GMAIL_PASSWORD: return
     msg = MIMEMultipart(); msg['Subject'] = f"🤖 AI REPORT - {len(bets)} tipov"; msg['To'] = GMAIL_RECEIVER
-    html = f"<h3>🚀 Model v3.6</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
+    html = f"<h3>🚀 Model v3.7</h3><table border='1' style='border-collapse:collapse; width:100%;'>"
     html += "<tr style='background:#333; color:white;'><th>Sport</th><th>Zápas</th><th>Tip</th><th>Kurz</th><th>Edge</th><th>Vklad</th></tr>"
     for b in bets: html += f"<tr><td>{b['Sport']}</td><td>{b['Zápas']}</td><td>{b['Tip']}</td><td>{b['Kurz']}</td><td>{b['Edge']}</td><td>{b['Vklad']}</td></tr>"
     msg.attach(MIMEText(html + "</table>", 'html'))
