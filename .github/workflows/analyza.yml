@@ -1,40 +1,41 @@
-name: AI Betting Bot Run
+name: AI Betting Bot
 
 on:
+  push:
+    branches: [ main ]
   schedule:
-    - cron: '0 9 * * *'
-  workflow_dispatch:
+    # Spustí sa každých 6 hodín (uprav si podľa potreby)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Umožní ti spustiť bota ručne tlačidlom v GitHub rozhraní
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Run AI Analysis
-        env:
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-          GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
-          AKTUALNY_BANK: 1000
-        run: python main.py
+    - name: Run Bot
+      env:
+        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        GMAIL_USER: ${{ secrets.GMAIL_USER }}
+        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
+      run: python tvoj_skript.py  # <-- Tu zmeň názov na ten tvoj aktuálny
 
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add historia_tipov.csv ai_model.pkl || true
-          git commit -m "Auto-update: Výsledky a AI model" || echo "Nothing to commit"
-          git push
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add historia_tipov.csv ai_model.pkl
+        git commit -m "Automatická aktualizácia histórie a modelu [skip ci]" || echo "Žiadne zmeny na uloženie"
+        git push
