@@ -15,8 +15,20 @@ GMAIL_USER = os.getenv('GMAIL_USER')
 GMAIL_PASSWORD = os.getenv('GMAIL_PASSWORD')
 GMAIL_RECEIVER = os.getenv('GMAIL_RECEIVER', GMAIL_USER)
 
-BANK = float(os.getenv('AKTUALNY_BANK', 1000))
+# --- OPRAVA CHYBY S PRÁZDNYM BANKOM ---
+bank_env = os.getenv('AKTUALNY_BANK', '1000')
+
+if not bank_env or bank_env.strip() == "":
+    BANK = 1000.0
+else:
+    try:
+        # Odstránime prípadné biele znaky a skúsime prevod na číslo
+        BANK = float(bank_env.strip())
+    except ValueError:
+        BANK = 1000.0
+
 KELLY_FRAC = 0.10
+# --------------------------------------
 
 HISTORY_FILE = "historia_tipov.csv"
 MODEL_FILE = "ai_model.pkl"
@@ -167,7 +179,6 @@ async def main():
             new_df = pd.DataFrame(all_bets)
             if os.path.exists(HISTORY_FILE):
                 hist_df = pd.read_csv(HISTORY_FILE)
-                # Vyhneme sa duplicitám pri pridávaní nových tipov
                 final_df = pd.concat([hist_df, new_df]).drop_duplicates(subset=['Zápas','Tip'], keep='first')
             else:
                 final_df = new_df
