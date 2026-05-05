@@ -4,16 +4,21 @@ on:
   push:
     branches: [ main ]
   schedule:
-    # Spustí sa každých 6 hodín (uprav si podľa potreby)
+    # Automatické spustenie každých 6 hodín
     - cron: '0 */6 * * *'
-  workflow_dispatch: # Umožní ti spustiť bota ručne tlačidlom v GitHub rozhraní
+  workflow_dispatch: # Umožní ti spustiť bota ručne cez kartu "Actions"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Povolenia potrebné na zápis do repozitára (ukladanie histórie)
+    permissions:
+      contents: write
+
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -26,16 +31,22 @@ jobs:
 
     - name: Run Bot
       env:
+        # Prepojenie GitHub Secrets s premennými v main.py
         ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         GMAIL_USER: ${{ secrets.GMAIL_USER }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
         AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
-      run: python tvoj_skript.py  # <-- Tu zmeň názov na ten tvoj aktuálny
+      run: python main.py
 
     - name: Commit and Push changes
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Pridáme súbory, ktoré bot počas behu aktualizoval
         git add historia_tipov.csv ai_model.pkl
+        
+        # Ak nie sú žiadne zmeny, commit zlyhá, preto pridávame || echo...
         git commit -m "Automatická aktualizácia histórie a modelu [skip ci]" || echo "Žiadne zmeny na uloženie"
+        
         git push
