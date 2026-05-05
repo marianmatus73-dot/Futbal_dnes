@@ -3,22 +3,26 @@ name: AI Betting Bot
 on:
   push:
     branches: [ main ]
+    # Zabezpečí, že ak sa zmení len história alebo model, bot sa znova NESPUSTÍ
+    paths-ignore:
+      - 'historia_tipov.csv'
+      - 'ai_model.pkl'
   schedule:
-    # Automatické spustenie každých 6 hodín
     - cron: '0 */6 * * *'
-  workflow_dispatch: # Umožní ti spustiť bota ručne cez kartu "Actions"
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    # Povolenia potrebné na zápis do repozitára (ukladanie histórie)
     permissions:
       contents: write
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        # Dôležité pre správny push spät do repozitára
+        persist-credentials: true
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -31,7 +35,6 @@ jobs:
 
     - name: Run Bot
       env:
-        # Prepojenie GitHub Secrets s premennými v main.py
         ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         GMAIL_USER: ${{ secrets.GMAIL_USER }}
         GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
@@ -43,10 +46,13 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         
-        # Pridáme súbory, ktoré bot počas behu aktualizoval
-        git add historia_tipov.csv ai_model.pkl
+        # Pridáme súbory, ak existujú
+        git add historia_tipov.csv ai_model.pkl || true
         
-        # Ak nie sú žiadne zmeny, commit zlyhá, preto pridávame || echo...
-        git commit -m "Automatická aktualizácia histórie a modelu [skip ci]" || echo "Žiadne zmeny na uloženie"
-        
-        git push
+        # Ak nie sú žiadne zmeny v súboroch, skript pôjde ďalej bez chyby
+        if git diff --staged --quiet; then
+          echo "Žiadne zmeny na uloženie."
+        else
+          git commit -m "Automatická aktualizácia dát [skip ci]"
+          git push origin main
+        fi
