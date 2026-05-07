@@ -1,58 +1,41 @@
-name: AI Betting Bot
+name: Futbal Tipper Auto Run
 
 on:
-  push:
-    branches: [ main ]
-    # Zabezpečí, že ak sa zmení len história alebo model, bot sa znova NESPUSTÍ
-    paths-ignore:
-      - 'historia_tipov.csv'
-      - 'ai_model.pkl'
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    # Čas je v UTC (Slovensko je +2 hodiny v lete)
+    # Tento príklad spúšťa skript každý deň o 08:00 a 18:00 nášho času
+    - cron: '0 6,16 * * *'
+  workflow_dispatch: # Toto políčko ti dovolí spustiť skript aj ručne kedykoľvek
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        # Dôležité pre správny push spät do repozitára
-        persist-credentials: true
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install aiohttp pandas numpy scipy lightgbm scikit-learn python-dotenv
 
-    - name: Run Bot
-      env:
-        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-        GMAIL_USER: ${{ secrets.GMAIL_USER }}
-        GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
-        AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
-      run: python main.py
+      - name: Run script
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
+        run: python main.py
 
-    - name: Commit and Push changes
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        
-        # Pridáme súbory, ak existujú
-        git add historia_tipov.csv ai_model.pkl || true
-        
-        # Ak nie sú žiadne zmeny v súboroch, skript pôjde ďalej bez chyby
-        if git diff --staged --quiet; then
-          echo "Žiadne zmeny na uloženie."
-        else
-          git commit -m "Automatická aktualizácia dát [skip ci]"
-          git push origin main
-        fi
+      - name: Commit and Push DB changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add bets.db
+          git commit -m "Update DB: Results and New Bets" || exit 0
+          git push
