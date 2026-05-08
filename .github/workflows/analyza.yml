@@ -2,15 +2,12 @@ name: Football Tipper v10 PROFI
 
 on:
   schedule:
-    # Spúšťa sa 2x denne: 08:00 a 18:00 nášho času (v lete)
     - cron: '0 6,16 * * *'
-  workflow_dispatch: # Umožňuje spustiť skript ručne tlačidlom
+  workflow_dispatch:
 
 jobs:
   run-profi-model:
     runs-on: ubuntu-latest
-    
-    # Dôležité pre ukladanie zmien v databáze (v10 potrebuje zápis)
     permissions:
       contents: write
 
@@ -22,7 +19,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-          cache: 'pip' # Urýchli inštaláciu pri ďalšom spustení
+          # OPRAVA: Povieme GitHubu, ktorý súbor má sledovať pre cache
+          cache: 'pip'
+          cache-dependency-path: 'requirements_v10.txt'
 
       - name: Install dependencies
         run: |
@@ -30,7 +29,7 @@ jobs:
           if [ -f requirements_v10.txt ]; then
             pip install -r requirements_v10.txt
           else
-            echo "Súbor requirements_v10.txt nebol nájdený!"
+            echo "CHYBA: requirements_v10.txt nenájdený!"
             exit 1
           fi
 
@@ -42,27 +41,21 @@ jobs:
 
       - name: Run Profi Model
         env:
-          # Tajné kľúče ťaháme z GitHub Secrets
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
           AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
-        # Spúšťame presný názov tvojho v10 súboru
         run: python main_v10_profi_betting.py
 
       - name: Commit and Push DB and Exports
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Pridáme databázu, exporty a vynecháme cache
           git add bets.db exports/*.csv exports/*.json 2>/dev/null || true
-          
-          # Commitne zmeny len ak nejaké nastali
           if git diff --staged --quiet; then
-            echo "Žiadne zmeny na uloženie."
+            echo "Žiadne zmeny."
           else
-            git commit -m "v10 PROFI: Automatická aktualizácia dát [skip ci]"
+            git commit -m "v10 PROFI: Automatická aktualizácia [skip ci]"
             git push
           fi
