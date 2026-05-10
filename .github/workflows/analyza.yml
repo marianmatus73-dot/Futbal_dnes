@@ -2,6 +2,8 @@ name: Multisport Betting Engine
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 6,16 * * *'
 
 jobs:
   run:
@@ -47,7 +49,7 @@ jobs:
 
           SPORT_MODE: all
 
-          TENNIS_SPORT_KEYS: tennis_atp
+          TENNIS_SPORT_KEYS: tennis_atp_french_open,tennis_wta_french_open,tennis_atp_wimbledon,tennis_wta_wimbledon,tennis_atp_us_open,tennis_wta_us_open
           BASKETBALL_SPORT_KEYS: basketball_nba
           HOCKEY_SPORT_KEYS: icehockey_nhl
 
