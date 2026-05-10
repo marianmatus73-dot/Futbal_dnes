@@ -1,4 +1,4 @@
-name: Football Tipper v10 PROFI
+name: Multisport Betting Engine
 
 on:
   schedule:
@@ -6,20 +6,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  run-profi-model:
+  run-multisport-model:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          # OPRAVA: Povieme GitHubu, ktorý súbor má sledovať pre cache
           cache: 'pip'
           cache-dependency-path: 'requirements_v10.txt'
 
@@ -28,8 +27,10 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements_v10.txt ]; then
             pip install -r requirements_v10.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
           else
-            echo "CHYBA: requirements_v10.txt nenájdený!"
+            echo "CHYBA: requirements súbor nenájdený!"
             exit 1
           fi
 
@@ -39,14 +40,20 @@ jobs:
           mkdir -p exports
           echo "Priečinky pripravené."
 
-      - name: Run Profi Model
+      - name: Run Multisport Engine
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
           AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
-        run: python main_v10_profi_betting.py
+          SPORT_MODE: all
+          MIN_EDGE: 0.08
+          MAX_EDGE: 0.15
+          MAX_ODDS: 7.5
+          KELLY_FRAC: 0.015
+          MAX_STAKE_PCT: 0.01
+        run: python main.py --sport all
 
       - name: Commit and Push DB and Exports
         run: |
@@ -56,6 +63,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "Žiadne zmeny."
           else
-            git commit -m "v10 PROFI: Automatická aktualizácia [skip ci]"
+            git commit -m "Multisport: Automatická aktualizácia [skip ci]"
             git push
           fi
