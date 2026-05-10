@@ -63,6 +63,10 @@ def best_outlier_prices(bookmakers: list[dict]) -> list[tuple[str, str, float]]:
 
 
 def dedupe_best_bets(bets):
+    """
+    Keep only one best bet per sport + league + event + market + start_time.
+    This prevents opposite picks on the same match.
+    """
     best = {}
 
     for bet in bets:
@@ -71,7 +75,6 @@ def dedupe_best_bets(bets):
             bet.league,
             bet.event,
             bet.market,
-            bet.selection,
             bet.start_time,
         )
 
@@ -81,7 +84,7 @@ def dedupe_best_bets(bets):
             best[key] = bet
             continue
 
-        if (bet.odds, bet.edge, bet.score) > (current.odds, current.edge, current.score):
+        if (bet.edge, bet.score, bet.odds) > (current.edge, current.score, current.odds):
             best[key] = bet
 
     return sorted(
