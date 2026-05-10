@@ -1,14 +1,14 @@
-#!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
 import asyncio
 import logging
 import os
+
 from dotenv import load_dotenv
 
 from core.config import Settings
-from core.registry import get_sports, get_sport
+from core.registry import get_sport, get_sports
 from core.reporting import print_report
 
 load_dotenv()
@@ -17,26 +17,31 @@ logging.basicConfig(
     level=getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO),
     format="%(asctime)s | %(levelname)s | %(message)s",
 )
+
 log = logging.getLogger("multisport-main")
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Multisport betting engine")
+
     parser.add_argument(
         "--sport",
         choices=["all"] + sorted(get_sports().keys()),
         default=os.getenv("SPORT_MODE", "football"),
         help="Sport to run: football, tennis, basketball, hockey, or all",
     )
-    parser.add_argument("--dry-run", action="store_true", help="Do not save bets")
-    parser.add_argument("--analytics", action="store_true", help="Show analytics")
-    parser.add_argument("--backtest", action="store_true", help="Run backtest")
+
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--analytics", action="store_true")
+    parser.add_argument("--backtest", action="store_true")
     parser.add_argument("--backtest-days", type=int, default=int(os.getenv("BACKTEST_DAYS", "180")))
+
     return parser.parse_args()
 
 
 async def run() -> None:
     args = parse_args()
+
     settings = Settings.from_env()
     settings.dry_run = args.dry_run
 
@@ -45,7 +50,7 @@ async def run() -> None:
     else:
         selected = [get_sport(args.sport)]
 
-    all_results = []
+    results = []
 
     for sport in selected:
         log.info("Running sport module: %s", sport.name)
@@ -57,9 +62,9 @@ async def run() -> None:
         else:
             result = await sport.scan(settings)
 
-        all_results.append(result)
+        results.append(result)
 
-    print_report(all_results)
+    print_report(results)
 
 
 if __name__ == "__main__":
