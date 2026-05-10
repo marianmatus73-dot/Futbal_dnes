@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 
 from core.config import Settings
-from core.market import consensus_h2h, best_outlier_prices
+from core.market import consensus_h2h, best_outlier_prices, dedupe_best_bets
 from core.odds_api import fetch_odds
 from core.staking import kelly_stake
 from core.types import Bet, SportResult
@@ -16,7 +16,7 @@ class BasketballModule(SportModule):
     async def scan(self, settings: Settings) -> SportResult:
         sport_keys = os.getenv(
             "BASKETBALL_SPORT_KEYS",
-            "basketball_nba,basketball_euroleague",
+            "basketball_nba",
         ).split(",")
 
         min_books = int(os.getenv("MIN_BASKETBALL_BOOKMAKERS", "3"))
@@ -34,11 +34,13 @@ class BasketballModule(SportModule):
 
                 bookmakers = event.get("bookmakers", [])
                 consensus = consensus_h2h(bookmakers, min_books=min_books)
+
                 if not consensus:
                     continue
 
                 for bookmaker, selection, odds in best_outlier_prices(bookmakers):
                     prob_market = consensus.get(selection)
+
                     if not prob_market:
                         continue
 
@@ -53,6 +55,7 @@ class BasketballModule(SportModule):
                         continue
 
                     stake = kelly_stake(prob_final, odds, settings)
+
                     if stake <= 0:
                         continue
 
@@ -73,11 +76,11 @@ class BasketballModule(SportModule):
                         score=edge * 100,
                     ))
 
-        bets.sort(key=lambda b: (b.score, b.edge), reverse=True)
+        bets = dedupe_best_bets(bets)
 
         return SportResult(
             sport=self.name,
             mode="scan",
             bets=bets[: int(os.getenv("TOP_N_REPORT", "8"))],
             message="Basketball: market-consensus/outlier model.",
-                  )
+        )
