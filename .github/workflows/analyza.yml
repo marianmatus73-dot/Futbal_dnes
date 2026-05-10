@@ -7,6 +7,9 @@ jobs:
   run:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,6 +19,57 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Test
+      - name: Install dependencies
         run: |
-          echo "Workflow funguje"
+          python -m pip install --upgrade pip
+
+          if [ -f requirements_v10.txt ]; then
+            pip install -r requirements_v10.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "requirements file missing"
+            exit 1
+          fi
+
+      - name: Create directories
+        run: |
+          mkdir -p cache
+          mkdir -p exports
+
+      - name: Run engine
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+          AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
+
+          SPORT_MODE: all
+
+          TENNIS_SPORT_KEYS: tennis_atp
+          BASKETBALL_SPORT_KEYS: basketball_nba
+          HOCKEY_SPORT_KEYS: icehockey_nhl
+
+          MIN_EDGE: 0.08
+          MAX_EDGE: 0.15
+          MAX_ODDS: 7.5
+          KELLY_FRAC: 0.015
+          MAX_STAKE_PCT: 0.01
+
+        run: |
+          python main.py --sport all
+
+      - name: Commit exports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add bets.db exports/*.csv exports/*.json 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Multisport update [skip ci]"
+            git push
+          fi
