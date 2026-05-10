@@ -39,16 +39,48 @@ jobs:
           mkdir -p cache
           mkdir -p exports
 
+      - name: Fix Python file names
+        run: |
+          find . -name "*.py.txt" -exec sh -c 'mv "$1" "${1%.txt}"' _ {} \;
+
+          touch core/__init__.py
+          touch sports/__init__.py
+
+          if [ ! -f sports/base.py ]; then
+            cat > sports/base.py <<'EOF'
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+
+from core.config import Settings
+from core.types import SportResult
+
+
+class SportModule(ABC):
+    name: str
+
+    @abstractmethod
+    async def scan(self, settings: Settings) -> SportResult:
+        pass
+
+    async def backtest(self, settings: Settings, days: int = 180) -> SportResult:
+        return SportResult(self.name, "backtest", [], "Backtest not implemented yet.")
+
+    async def analytics(self, settings: Settings) -> SportResult:
+        return SportResult(self.name, "analytics", [], "Analytics not implemented yet.")
+EOF
+          fi
+
       - name: Debug structure
         run: |
           echo "ROOT:"
           ls -la
 
-          echo "SPORTS:"
-          ls -la sports || true
-
           echo "CORE:"
           ls -la core || true
+
+          echo "SPORTS:"
+          ls -la sports || true
 
       - name: Run multisport engine
         env:
@@ -61,6 +93,10 @@ jobs:
           AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
 
           SPORT_MODE: all
+
+          TENNIS_SPORT_KEYS: tennis_atp
+          BASKETBALL_SPORT_KEYS: basketball_nba
+          HOCKEY_SPORT_KEYS: icehockey_nhl
 
           MIN_EDGE: 0.08
           MAX_EDGE: 0.15
