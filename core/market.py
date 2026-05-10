@@ -60,3 +60,32 @@ def best_outlier_prices(bookmakers: list[dict]) -> list[tuple[str, str, float]]:
                     rows.append((bookmaker, name, price))
 
     return rows
+
+
+def dedupe_best_bets(bets):
+    best = {}
+
+    for bet in bets:
+        key = (
+            bet.sport,
+            bet.league,
+            bet.event,
+            bet.market,
+            bet.selection,
+            bet.start_time,
+        )
+
+        current = best.get(key)
+
+        if current is None:
+            best[key] = bet
+            continue
+
+        if (bet.odds, bet.edge, bet.score) > (current.odds, current.edge, current.score):
+            best[key] = bet
+
+    return sorted(
+        best.values(),
+        key=lambda b: (b.score, b.edge, b.odds),
+        reverse=True,
+    )
