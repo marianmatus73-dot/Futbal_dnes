@@ -4,6 +4,13 @@ import argparse
 import asyncio
 import logging
 import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from io import StringIO
+from contextlib import redirect_stdout
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 
@@ -28,7 +35,6 @@ def parse_args() -> argparse.Namespace:
         "--sport",
         choices=["all"] + sorted(get_sports().keys()),
         default=os.getenv("SPORT_MODE", "football"),
-        help="Sport to run: football, tennis, basketball, hockey, or all",
     )
 
     parser.add_argument("--dry-run", action="store_true")
@@ -37,6 +43,37 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--backtest-days", type=int, default=int(os.getenv("BACKTEST_DAYS", "180")))
 
     return parser.parse_args()
+
+
+def send_multisport_email(body: str) -> bool:
+    gmail_user = os.getenv("GMAIL_USER", "").strip()
+    gmail_password = os.getenv("GMAIL_PASSWORD", "").strip()
+    gmail_receiver = os.getenv("GMAIL_RECEIVER", gmail_user).strip()
+
+    if not gmail_user or not gmail_password or not gmail_receiver:
+        log.info("Email credentials missing - multisport email skipped.")
+        return False
+
+    local_tz = ZoneInfo(os.getenv("LOCAL_TZ", "Europe/Bratislava"))
+    subject = f"Multisport Betting Report - {datetime.now(local_tz).strftime('%d.%m.%Y %H:%M')}"
+
+    msg = MIMEMultipart()
+    msg["From"] = gmail_user
+    msg["To"] = gmail_receiver
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain", "utf-8"))
+
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=30) as server:
+            server.login(gmail_user, gmail_password)
+            server.send_message(msg)
+
+        log.info("Multisport email report sent to %s", gmail_receiver)
+        return True
+
+    except Exception as e:
+        log.warning("Multisport email failed: %s", e)
+        return False
 
 
 async def run() -> None:
@@ -64,7 +101,17 @@ async def run() -> None:
 
         results.append(result)
 
-    print_report(results)
+    buffer = StringIO()
+
+    with redirect_stdout(buffer):
+        print_report(results)
+
+    report_text = buffer.getvalue()
+
+    print(report_text)
+
+    if not args.dry_run and not args.analytics and not args.backtest:
+        send_multisport_email(report_text)
 
 
 if __name__ == "__main__":
