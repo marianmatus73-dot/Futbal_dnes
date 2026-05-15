@@ -78,8 +78,8 @@ class FootballModule(SportModule):
             message="\n".join(message_parts) or "Football engine finished with no output.",
         )
 
-    async def scan(self, settings: Settings) -> SportResult:
-        args = []
+       async def scan(self, settings: Settings) -> SportResult:
+        args = ["--no-email"]
 
         if settings.dry_run:
             args.append("--dry-run")
