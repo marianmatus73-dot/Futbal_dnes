@@ -19,7 +19,7 @@ class HockeyModule(SportModule):
             "icehockey_nhl",
         ).split(",")
 
-        min_books = int(os.getenv("MIN_HOCKEY_BOOKMAKERS", "3"))
+        min_books = int(os.getenv("MIN_HOCKEY_BOOKMAKERS", "4"))
         bets: list[Bet] = []
 
         for sport_key in [s.strip() for s in sport_keys if s.strip()]:
