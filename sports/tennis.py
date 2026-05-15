@@ -26,7 +26,7 @@ class TennisModule(SportModule):
             ),
         ).split(",")
 
-        min_books = int(os.getenv("MIN_TENNIS_BOOKMAKERS", "3"))
+        min_books = int(os.getenv("MIN_TENNIS_BOOKMAKERS", "4"))
         bets: list[Bet] = []
 
         for sport_key in [s.strip() for s in sport_keys if s.strip()]:
@@ -41,49 +41,34 @@ class TennisModule(SportModule):
 
             for event in data:
                 league = sport_key
-
                 home = str(event.get("home_team", ""))
                 away = str(event.get("away_team", ""))
-
                 start = str(event.get("commence_time", ""))
-
                 event_name = f"{home} vs {away}"
 
                 bookmakers = event.get("bookmakers", [])
-
-                consensus = consensus_h2h(
-                    bookmakers,
-                    min_books=min_books,
-                )
+                consensus = consensus_h2h(bookmakers, min_books=min_books)
 
                 if not consensus:
                     continue
 
                 for bookmaker, selection, odds in best_outlier_prices(bookmakers):
-
                     prob_market = consensus.get(selection)
 
                     if not prob_market:
                         continue
 
                     prob_final = prob_market
-
                     edge = prob_final * odds - 1.0
 
                     if edge < settings.min_edge:
                         continue
-
                     if edge > settings.max_edge:
                         continue
-
                     if odds > settings.max_odds:
                         continue
 
-                    stake = kelly_stake(
-                        prob_final,
-                        odds,
-                        settings,
-                    )
+                    stake = kelly_stake(prob_final, odds, settings)
 
                     if stake <= 0:
                         continue
