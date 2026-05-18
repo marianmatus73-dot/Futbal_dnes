@@ -57,12 +57,47 @@ jobs:
           MIN_BASKETBALL_BOOKMAKERS: 4
           MIN_HOCKEY_BOOKMAKERS: 4
 
-          MIN_EDGE: 0.09
-          MAX_EDGE: 0.15
-          MAX_ODDS: 7.5
+          MIN_EDGE: 0.08
+          MAX_EDGE: 0.13
+          MIN_PROB: 0.20
+          MAX_ODDS: 4.50
 
-          KELLY_FRAC: 0.015
-          MAX_STAKE_PCT: 0.01
+          KELLY_FRAC: 0.0075
+          MAX_STAKE_PCT: 0.005
+          MIN_STAKE: 1
+
+          TOP_N_REPORT: 2
+          MAX_BETS_PER_DAY: 2
+          MAX_DAILY_EXPOSURE_PCT: 0.03
+          MAX_MATCH_EXPOSURE_PCT: 0.01
+          MAX_LEAGUE_EXPOSURE_PCT: 0.025
+
+          LONGSHOT_MAX_ODDS: 4.00
+          LONGSHOT_MIN_EDGE: 0.14
+          LONGSHOT_MIN_PROB: 0.24
+
+          REQUIRE_MARKET_AGREEMENT: 1
+          MIN_BOOKMAKERS_AGREE: 2
+          MARKET_BLEND_WEIGHT: 0.55
+          MIN_MARKET_EDGE: 0.04
+          PROB_SHRINK: 0.72
+
+          AI_FILTER_ENABLED: 0
+
+          SNAPSHOT_ODDS: 1
+          CLV_LOOKBACK_HOURS: 12
+          CLV_MODEL_MIN_SAMPLES: 25
+
+          ELO_ENABLED: 1
+          META_LAYER_ENABLED: 1
+          META_MIN_CONFIDENCE: 0.60
+          META_REDUCE_BELOW: 0.72
+
+          LIVE_MODE_ENABLED: 0
+          INJURY_NEWS_ENABLED: 0
+
+          LOCAL_TZ: Europe/Bratislava
+          LOG_LEVEL: INFO
 
         run: |
           python main.py --sport all
