@@ -41,62 +41,99 @@ jobs:
 
       - name: Run engine
         env:
+          # ===== API =====
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+
+          # ===== EMAIL =====
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+
+          # ===== BANK =====
           AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
 
+          # ===== SPORTS =====
           SPORT_MODE: all
 
-          TENNIS_SPORT_KEYS: tennis_atp_french_open,tennis_wta_french_open,tennis_atp_wimbledon,tennis_wta_wimbledon,tennis_atp_us_open,tennis_wta_us_open
+          # ===== TENNIS =====
+          TENNIS_SPORT_KEYS: tennis_atp,tennis_wta
+
+          # ===== BASKETBALL =====
           BASKETBALL_SPORT_KEYS: basketball_nba
-          HOCKEY_SPORT_KEYS: icehockey_nhl
 
-          MIN_TENNIS_BOOKMAKERS: 4
-          MIN_BASKETBALL_BOOKMAKERS: 4
-          MIN_HOCKEY_BOOKMAKERS: 4
+          # ===== HOCKEY =====
+          HOCKEY_SPORT_KEYS: icehockey_nhl,icehockey_sweden_hockey_league,icehockey_finland_liiga,icehockey_germany_del,icehockey_czech_extraliga,icehockey_switzerland_national_league
 
+          # ===== MARKET DEPTH =====
+          MIN_TENNIS_BOOKMAKERS: 3
+          MIN_BASKETBALL_BOOKMAKERS: 3
+          MIN_HOCKEY_BOOKMAKERS: 3
+
+          # ===== EDGE FILTERS =====
           MIN_EDGE: 0.08
           MAX_EDGE: 0.13
           MIN_PROB: 0.20
           MAX_ODDS: 4.50
 
+          # ===== KELLY / RISK =====
           KELLY_FRAC: 0.0075
           MAX_STAKE_PCT: 0.005
           MIN_STAKE: 1
 
           TOP_N_REPORT: 2
           MAX_BETS_PER_DAY: 2
+
           MAX_DAILY_EXPOSURE_PCT: 0.03
           MAX_MATCH_EXPOSURE_PCT: 0.01
           MAX_LEAGUE_EXPOSURE_PCT: 0.025
 
+          # ===== LONGSHOTS =====
           LONGSHOT_MAX_ODDS: 4.00
           LONGSHOT_MIN_EDGE: 0.14
           LONGSHOT_MIN_PROB: 0.24
 
+          # ===== MARKET CONSENSUS =====
           REQUIRE_MARKET_AGREEMENT: 1
           MIN_BOOKMAKERS_AGREE: 2
+
           MARKET_BLEND_WEIGHT: 0.55
           MIN_MARKET_EDGE: 0.04
           PROB_SHRINK: 0.72
 
+          # ===== AI =====
           AI_FILTER_ENABLED: 0
 
+          # ===== CLV =====
           SNAPSHOT_ODDS: 1
           CLV_LOOKBACK_HOURS: 12
           CLV_MODEL_MIN_SAMPLES: 25
 
+          # ===== ELO =====
           ELO_ENABLED: 1
+          ELO_BASE: 1500
+          ELO_K: 22
+          ELO_HOME_ADV: 65
+
+          # ===== META =====
           META_LAYER_ENABLED: 1
           META_MIN_CONFIDENCE: 0.60
           META_REDUCE_BELOW: 0.72
 
+          # ===== LIVE =====
           LIVE_MODE_ENABLED: 0
+
+          # ===== NEWS / INJURY =====
           INJURY_NEWS_ENABLED: 0
 
+          # ===== PERFORMANCE =====
+          CACHE_TTL_SECONDS: 3600
+          HTTP_TIMEOUT: 30
+          LOOKAHEAD_HOURS: 72
+
+          # ===== TIMEZONE =====
           LOCAL_TZ: Europe/Bratislava
+
+          # ===== LOGGING =====
           LOG_LEVEL: INFO
 
         run: |
