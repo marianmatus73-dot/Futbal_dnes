@@ -137,7 +137,7 @@ jobs:
           MIN_MARKET_EDGE: 0.04
           PROB_SHRINK: 0.72
 
-          AI_FILTER_ENABLED: 0
+          AI_FILTER_ENABLED: 1
 
           # ===== QUANT / CLV =====
           SNAPSHOT_ODDS: 1
