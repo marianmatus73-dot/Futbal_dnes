@@ -142,6 +142,31 @@ LIGY: Dict[str, Dict[str, Any]] = {
     "Ligue 1": {"csv": "F1", "api": "soccer_france_ligue_one", "ha": 0.32},
     "Eredivisie": {"csv": "N1", "api": "soccer_netherlands_eredivisie", "ha": 0.42},
     "Championship": {"csv": "E1", "api": "soccer_efl_champ", "ha": 0.28},
+
+    # ===== FIFA =====
+    "FIFA World Cup": {
+        "csv": "WC",
+        "api": "soccer_fifa_world_cup",
+        "ha": 0.18
+    },
+
+    "World Cup Qualifiers Europe": {
+        "csv": "WCQEU",
+        "api": "soccer_fifa_world_cup_qualifiers_europe",
+        "ha": 0.20
+    },
+
+    "World Cup Qualifiers South America": {
+        "csv": "WCQSA",
+        "api": "soccer_fifa_world_cup_qualifiers_south_america",
+        "ha": 0.28
+    },
+
+    "Club World Cup": {
+        "csv": "CWC",
+        "api": "soccer_fifa_club_world_cup",
+        "ha": 0.15
+    },
 }
 
 ACTIVE_LEAGUES: Optional[set[str]] = None
