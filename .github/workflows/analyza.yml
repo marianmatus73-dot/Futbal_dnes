@@ -107,6 +107,10 @@ jobs:
           NFL_HOME_ADV_ENABLED: 1
           NFL_HOME_PROB_ADV: 0.015
 
+          # ===== ESPORTS =====
+          # OPRAVENÉ: Zmenené na funkčné kľúče esports_cs2 a esports_lol
+          ESPORTS_SPORT_KEYS: esports_cs2,esports_lol
+          
           # ===== GLOBAL FILTERS =====
           MIN_EDGE: 0.08
           MAX_EDGE: 0.13
