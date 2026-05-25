@@ -10,6 +10,7 @@ from typing import Any
 from core.config import Settings
 from core.market import consensus_h2h, best_outlier_prices, dedupe_best_bets
 from core.odds_api import fetch_odds
+from core.sport_settlement import settle_sport_bets
 from core.staking import kelly_stake
 from core.types import Bet, SportResult
 from sports.base import SportModule
@@ -135,6 +136,7 @@ class HockeyModule(SportModule):
 
         for bookmaker in bookmakers:
             book = str(bookmaker.get("title", ""))
+
             for market in bookmaker.get("markets", []):
                 if market.get("key") != "h2h":
                     continue
@@ -296,6 +298,13 @@ class HockeyModule(SportModule):
             "icehockey_nhl",
         ).split(",")
 
+        clean_sport_keys = [s.strip() for s in sport_keys if s.strip()]
+        settled = await settle_sport_bets(
+            settings=settings,
+            sport=self.name,
+            sport_keys=clean_sport_keys,
+        )
+
         min_books = int(os.getenv("MIN_HOCKEY_BOOKMAKERS", "3"))
         top_n = int(os.getenv("TOP_N_REPORT", "8"))
 
@@ -304,7 +313,7 @@ class HockeyModule(SportModule):
         blocked = 0
         scanned_events = 0
 
-        for sport_key in [s.strip() for s in sport_keys if s.strip()]:
+        for sport_key in clean_sport_keys:
             data = await fetch_odds(settings.odds_api_key, sport_key, markets="h2h")
 
             for event in data:
@@ -329,10 +338,7 @@ class HockeyModule(SportModule):
 
                 if not consensus:
                     blocked += 1
-                    self._audit(
-                        settings, sport_key, event_name, "", "", 0,
-                        None, None, "BLOCK", "no market consensus"
-                    )
+                    self._audit(settings, sport_key, event_name, "", "", 0, None, None, "BLOCK", "no market consensus")
                     continue
 
                 for bookmaker, selection, odds in best_outlier_prices(bookmakers):
@@ -340,10 +346,7 @@ class HockeyModule(SportModule):
 
                     if not prob_market:
                         blocked += 1
-                        self._audit(
-                            settings, sport_key, event_name, selection, bookmaker, odds,
-                            None, None, "BLOCK", "selection missing in consensus"
-                        )
+                        self._audit(settings, sport_key, event_name, selection, bookmaker, odds, None, None, "BLOCK", "selection missing in consensus")
                         continue
 
                     grade = self._bookmaker_grade(settings, bookmaker)
@@ -354,26 +357,17 @@ class HockeyModule(SportModule):
 
                     if edge < settings.min_edge:
                         blocked += 1
-                        self._audit(
-                            settings, sport_key, event_name, selection, bookmaker, odds,
-                            prob_market, edge, "BLOCK", "edge below minimum"
-                        )
+                        self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "edge below minimum")
                         continue
 
                     if edge > settings.max_edge:
                         blocked += 1
-                        self._audit(
-                            settings, sport_key, event_name, selection, bookmaker, odds,
-                            prob_market, edge, "BLOCK", "edge above max guard"
-                        )
+                        self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "edge above max guard")
                         continue
 
                     if odds > settings.max_odds:
                         blocked += 1
-                        self._audit(
-                            settings, sport_key, event_name, selection, bookmaker, odds,
-                            prob_market, edge, "BLOCK", "odds above max odds"
-                        )
+                        self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "odds above max odds")
                         continue
 
                     stake = kelly_stake(prob_final, odds, settings)
@@ -381,10 +375,7 @@ class HockeyModule(SportModule):
 
                     if stake <= 0:
                         blocked += 1
-                        self._audit(
-                            settings, sport_key, event_name, selection, bookmaker, odds,
-                            prob_market, edge, "BLOCK", "stake <= 0"
-                        )
+                        self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "stake <= 0")
                         continue
 
                     bet = Bet(
@@ -406,11 +397,7 @@ class HockeyModule(SportModule):
 
                     bets.append(bet)
                     self._save_bet(settings, bet)
-
-                    self._audit(
-                        settings, sport_key, event_name, selection, bookmaker, odds,
-                        prob_market, edge, "PASS", f"bookmaker grade {grade:.2f}"
-                    )
+                    self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "PASS", f"bookmaker grade {grade:.2f}")
 
         bets = dedupe_best_bets(bets)
 
@@ -420,6 +407,7 @@ class HockeyModule(SportModule):
             bets=bets[:top_n],
             message=(
                 "Hockey: enhanced history/CLV-ready market model. "
+                f"Settled: {settled}. "
                 f"Events scanned: {scanned_events}. "
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Blocked: {blocked}. "
