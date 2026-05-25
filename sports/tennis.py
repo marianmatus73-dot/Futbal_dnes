@@ -10,6 +10,7 @@ from typing import Any
 from core.config import Settings
 from core.market import consensus_h2h, best_outlier_prices, dedupe_best_bets
 from core.odds_api import fetch_odds
+from core.sport_settlement import settle_sport_bets
 from core.staking import kelly_stake
 from core.types import Bet, SportResult
 from sports.base import SportModule
@@ -304,6 +305,14 @@ class TennisModule(SportModule):
             ),
         ).split(",")
 
+        clean_sport_keys = [s.strip() for s in sport_keys if s.strip()]
+
+        settled = await settle_sport_bets(
+            settings=settings,
+            sport=self.name,
+            sport_keys=clean_sport_keys,
+        )
+
         min_books = int(os.getenv("MIN_TENNIS_BOOKMAKERS", "2"))
         top_n = int(os.getenv("TOP_N_REPORT", "8"))
 
@@ -312,7 +321,7 @@ class TennisModule(SportModule):
         blocked = 0
         scanned_events = 0
 
-        for sport_key in [s.strip() for s in sport_keys if s.strip()]:
+        for sport_key in clean_sport_keys:
             data = await fetch_odds(
                 settings.odds_api_key,
                 sport_key,
@@ -435,6 +444,7 @@ class TennisModule(SportModule):
             bets=bets[:top_n],
             message=(
                 "Tennis: enhanced history/CLV-ready market model. "
+                f"Settled: {settled}. "
                 f"Events scanned: {scanned_events}. "
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Blocked: {blocked}. "
