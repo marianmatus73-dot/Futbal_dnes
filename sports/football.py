@@ -18,6 +18,9 @@ class FootballModule(SportModule):
         root = Path(__file__).resolve().parents[1]
 
         candidates = [
+            root / "main_v12_syndicate_infra_betting_engine.py",
+            root / "main_v11_1_quant_pro_live_news_engine.py",
+            root / "main_v11_quant_pro_betting_engine.py",
             root / "main_v10_profi_betting.py",
             root / "main_v10_profi_betting_ai_backtest_engine.py",
             root / "football_engine.py",
@@ -29,13 +32,14 @@ class FootballModule(SportModule):
 
         raise FileNotFoundError(
             "Football engine not found. Put main_v10_profi_betting.py "
-            "in the project root."
+            "or main_v11_1_quant_pro_live_news_engine.py in the project root."
         )
 
     async def _run_engine(self, args: list[str], settings: Settings) -> SportResult:
         engine = self._engine_path()
 
         env = os.environ.copy()
+
         env["AKTUALNY_BANK"] = str(settings.bank)
         env["MIN_EDGE"] = str(settings.min_edge)
         env["MAX_EDGE"] = str(settings.max_edge)
@@ -46,6 +50,16 @@ class FootballModule(SportModule):
 
         if settings.odds_api_key:
             env["ODDS_API_KEY"] = settings.odds_api_key
+
+        # Extra football competitions from GitHub Actions / .env
+        football_extra_keys = os.getenv("FOOTBALL_EXTRA_SPORT_KEYS", "").strip()
+        if football_extra_keys:
+            env["FOOTBALL_EXTRA_SPORT_KEYS"] = football_extra_keys
+
+        # Optional override: allow fully custom football keys
+        football_sport_keys = os.getenv("FOOTBALL_SPORT_KEYS", "").strip()
+        if football_sport_keys:
+            env["FOOTBALL_SPORT_KEYS"] = football_sport_keys
 
         cmd = [sys.executable, str(engine)] + args
 
