@@ -212,7 +212,7 @@ class TennisModule(SportModule):
                 f"Events scanned: {scanned_events}. "
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Blocked: {blocked}. "
-                f"Stored candidates: {len(bets)}.\\n"
+                f"Stored candidates: {len(bets)}.\n"
                 f"{analytics}"
             ),
         )
