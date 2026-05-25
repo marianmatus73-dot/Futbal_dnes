@@ -18,6 +18,18 @@ from core.config import Settings
 from core.registry import get_sport, get_sports
 from core.reporting import print_report
 
+# EXISTING SPORTS
+from sports.football import FootballModule
+from sports.tennis import TennisModule
+from sports.basketball import BasketballModule
+from sports.hockey import HockeyModule
+
+# NEW SPORTS
+from sports.baseball import BaseballModule
+from sports.mma import MMAModule
+from sports.nfl import NFLModule
+from sports.esports import EsportsModule
+
 load_dotenv()
 
 logging.basicConfig(
@@ -28,19 +40,37 @@ logging.basicConfig(
 log = logging.getLogger("multisport-main")
 
 
+# REGISTER ALL SPORTS
+SPORT_MODULES = [
+    FootballModule(),
+    TennisModule(),
+    BasketballModule(),
+    HockeyModule(),
+
+    BaseballModule(),
+    MMAModule(),
+    NFLModule(),
+    EsportsModule(),
+]
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Multisport betting engine")
 
     parser.add_argument(
         "--sport",
-        choices=["all"] + sorted(get_sports().keys()),
+        choices=["all"] + sorted([m.name for m in SPORT_MODULES]),
         default=os.getenv("SPORT_MODE", "football"),
     )
 
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--analytics", action="store_true")
     parser.add_argument("--backtest", action="store_true")
-    parser.add_argument("--backtest-days", type=int, default=int(os.getenv("BACKTEST_DAYS", "180")))
+    parser.add_argument(
+        "--backtest-days",
+        type=int,
+        default=int(os.getenv("BACKTEST_DAYS", "180")),
+    )
 
     return parser.parse_args()
 
@@ -55,7 +85,10 @@ def send_multisport_email(body: str) -> bool:
         return False
 
     local_tz = ZoneInfo(os.getenv("LOCAL_TZ", "Europe/Bratislava"))
-    subject = f"Multisport Betting Report - {datetime.now(local_tz).strftime('%d.%m.%Y %H:%M')}"
+    subject = (
+        f"Multisport Betting Report - "
+        f"{datetime.now(local_tz).strftime('%d.%m.%Y %H:%M')}"
+    )
 
     msg = MIMEMultipart()
     msg["From"] = gmail_user
@@ -83,23 +116,32 @@ async def run() -> None:
     settings.dry_run = args.dry_run
 
     if args.sport == "all":
-        selected = list(get_sports().values())
+        selected = SPORT_MODULES
     else:
-        selected = [get_sport(args.sport)]
+        selected = [m for m in SPORT_MODULES if m.name == args.sport]
 
     results = []
 
     for sport in selected:
         log.info("Running sport module: %s", sport.name)
 
-        if args.analytics:
-            result = await sport.analytics(settings)
-        elif args.backtest:
-            result = await sport.backtest(settings, days=args.backtest_days)
-        else:
-            result = await sport.scan(settings)
+        try:
+            if args.analytics:
+                result = await sport.analytics(settings)
 
-        results.append(result)
+            elif args.backtest:
+                result = await sport.backtest(
+                    settings,
+                    days=args.backtest_days,
+                )
+
+            else:
+                result = await sport.scan(settings)
+
+            results.append(result)
+
+        except Exception as e:
+            log.exception("Sport module failed: %s", sport.name)
 
     buffer = StringIO()
 
@@ -110,7 +152,11 @@ async def run() -> None:
 
     print(report_text)
 
-    if not args.dry_run and not args.analytics and not args.backtest:
+    if (
+        not args.dry_run
+        and not args.analytics
+        and not args.backtest
+    ):
         send_multisport_email(report_text)
 
 
