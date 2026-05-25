@@ -201,9 +201,10 @@ class EsportsModule(SportModule):
     async def scan(self, settings: Settings) -> SportResult:
         init_sport_db(settings)
 
+        # OPRAVENÉ: Zmenené nesprávne kľúče na esports_csgo a esports_lol
         configured_keys = os.getenv(
             "ESPORTS_SPORT_KEYS",
-            "esports_counterstrike,esports_league_of_legends",
+            "esports_csgo,esports_lol",
         ).split(",")
 
         clean_sport_keys = [s.strip() for s in configured_keys if s.strip()]
