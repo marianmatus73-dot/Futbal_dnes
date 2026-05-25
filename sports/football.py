@@ -74,6 +74,13 @@ class FootballModule(SportModule):
         output = process.stdout.strip()
         error = process.stderr.strip()
 
+        # OPRAVENÉ: Odfiltrovanie otravných HTTP 404 chýb z football-data.co.uk
+        if error:
+            error_lines = error.splitlines()
+            # Ponecháme len riadky, ktoré neobsahujú HTTP 404 (napr. chýbajúce CSV pre ligy)
+            filtered_lines = [line for line in error_lines if "HTTP 404" not in line]
+            error = "\n".join(filtered_lines).strip()
+
         message_parts = []
 
         if output:
@@ -106,6 +113,11 @@ class FootballModule(SportModule):
             settings,
         )
 
+    async def analytics(self, settings: Settings) -> SportResult:
+        return await self._run_engine(
+            ["--analytics", "--no-email"],
+            settings,
+        )
     async def analytics(self, settings: Settings) -> SportResult:
         return await self._run_engine(
             ["--analytics", "--no-email"],
