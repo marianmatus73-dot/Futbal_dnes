@@ -1,0 +1,196 @@
+name: Multisport Betting Engine
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6,16 * * *'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+          if [ -f requirements_v10.txt ]; then
+            pip install -r requirements_v10.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "requirements file missing"
+            exit 1
+          fi
+
+      - name: Create directories
+        run: |
+          mkdir -p cache
+          mkdir -p exports
+
+      - name: Run engine
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+
+          AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
+
+          SPORT_MODE: all
+          SPORT_KEY_AUTO_DISCOVERY: 1
+
+          # ===== FOOTBALL =====
+          FOOTBALL_EXTRA_SPORT_KEYS: soccer_fifa_world_cup,soccer_fifa_world_cup_qualifiers_europe,soccer_fifa_world_cup_qualifiers_south_america,soccer_fifa_club_world_cup,soccer_usa_mls,soccer_brazil_campeonato,soccer_argentina_primera_division,soccer_sweden_allsvenskan,soccer_norway_eliteserien,soccer_japan_j_league,soccer_korea_kleague1
+
+          # ===== TENNIS =====
+          TENNIS_SPORT_KEYS: tennis_atp_french_open,tennis_wta_french_open,tennis_atp_wimbledon,tennis_wta_wimbledon,tennis_atp_us_open,tennis_wta_us_open,tennis_atp_italian_open,tennis_wta_italian_open,tennis_atp_madrid_open,tennis_wta_madrid_open,tennis_atp_miami_open,tennis_wta_miami_open,tennis_atp_indian_wells,tennis_wta_indian_wells,tennis_atp_cincinnati_open,tennis_wta_cincinnati_open,tennis_atp_monte_carlo_masters,tennis_atp_paris_masters,tennis_atp_shanghai_masters,tennis_atp_canadian_open,tennis_wta_canadian_open,tennis_atp_dubai,tennis_wta_dubai,tennis_atp_qatar_open,tennis_wta_qatar_open
+
+          MIN_TENNIS_BOOKMAKERS: 2
+          TENNIS_BOOKMAKER_GRADE_MIN_SAMPLES: 20
+
+          TENNIS_CLAY_EDGE_BONUS: 0.0
+          TENNIS_GRASS_EDGE_BONUS: 0.0
+          TENNIS_HARD_EDGE_BONUS: 0.0
+
+          # ===== BASKETBALL =====
+          BASKETBALL_SPORT_KEYS: basketball_nba,basketball_euroleague,basketball_ncaab,basketball_wnba,basketball_nba_preseason,basketball_nba_summer_league
+
+          MIN_BASKETBALL_BOOKMAKERS: 3
+          BASKETBALL_BOOKMAKER_GRADE_MIN_SAMPLES: 20
+
+          BASKETBALL_HOME_ADV_ENABLED: 1
+          BASKETBALL_HOME_PROB_ADV: 0.012
+
+          # ===== HOCKEY =====
+          HOCKEY_SPORT_KEYS: icehockey_nhl,icehockey_ahl,icehockey_sweden_hockey_league,icehockey_sweden_allsvenskan,icehockey_liiga,icehockey_mestis
+
+          MIN_HOCKEY_BOOKMAKERS: 3
+          HOCKEY_BOOKMAKER_GRADE_MIN_SAMPLES: 20
+
+          HOCKEY_ELO_ENABLED: 1
+          HOCKEY_HOME_ELO_ADV: 35
+
+          # ===== BASEBALL =====
+          BASEBALL_SPORT_KEYS: baseball_mlb,baseball_npb,baseball_kbo
+
+          MIN_BASEBALL_BOOKMAKERS: 3
+          BASEBALL_BOOKMAKER_GRADE_MIN_SAMPLES: 20
+
+          BASEBALL_HOME_ADV_ENABLED: 1
+          BASEBALL_HOME_PROB_ADV: 0.006
+
+          # ===== MMA =====
+          MMA_SPORT_KEYS: mma_mixed_martial_arts
+
+          MIN_MMA_BOOKMAKERS: 3
+          MMA_BOOKMAKER_GRADE_MIN_SAMPLES: 20
+
+          # ===== NFL =====
+          NFL_SPORT_KEYS: americanfootball_nfl
+
+          MIN_NFL_BOOKMAKERS: 3
+          NFL_BOOKMAKER_GRADE_MIN_SAMPLES: 20
+
+          NFL_HOME_ADV_ENABLED: 1
+          NFL_HOME_PROB_ADV: 0.015
+
+          # ===== GLOBAL FILTERS =====
+          MIN_EDGE: 0.07
+          MAX_EDGE: 0.14
+
+          MIN_PROB: 0.20
+          MAX_ODDS: 4.50
+
+          KELLY_FRAC: 0.0075
+          MAX_STAKE_PCT: 0.005
+
+          MIN_STAKE: 1
+
+          TOP_N_REPORT: 2
+          MAX_BETS_PER_DAY: 2
+
+          MAX_DAILY_EXPOSURE_PCT: 0.03
+          MAX_MATCH_EXPOSURE_PCT: 0.01
+          MAX_LEAGUE_EXPOSURE_PCT: 0.025
+
+          LONGSHOT_MAX_ODDS: 4.00
+          LONGSHOT_MIN_EDGE: 0.14
+          LONGSHOT_MIN_PROB: 0.24
+
+          REQUIRE_MARKET_AGREEMENT: 1
+          MIN_BOOKMAKERS_AGREE: 2
+
+          MARKET_BLEND_WEIGHT: 0.55
+          MIN_MARKET_EDGE: 0.04
+          PROB_SHRINK: 0.72
+
+          AI_FILTER_ENABLED: 0
+
+          # ===== QUANT / CLV =====
+          SNAPSHOT_ODDS: 1
+
+          CLV_LOOKBACK_HOURS: 12
+          CLV_MODEL_MIN_SAMPLES: 25
+
+          ELO_ENABLED: 1
+
+          ELO_BASE: 1500
+          ELO_K: 22
+          ELO_HOME_ADV: 65
+
+          META_LAYER_ENABLED: 1
+          META_MIN_CONFIDENCE: 0.60
+          META_REDUCE_BELOW: 0.72
+
+          # ===== LIVE / NEWS =====
+          LIVE_MODE_ENABLED: 0
+          LIVE_BETTING_ENABLED: 0
+
+          INJURY_NEWS_ENABLED: 0
+
+          # ===== SYSTEM =====
+          CACHE_TTL_SECONDS: 3600
+          HTTP_TIMEOUT: 30
+          LOOKAHEAD_HOURS: 168
+
+          LOCAL_TZ: Europe/Bratislava
+          LOG_LEVEL: INFO
+
+        run: |
+          python main.py --sport all
+
+      - name: Commit exports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Stop tracking the large SQLite DB in git.
+          git rm --cached bets.db 2>/dev/null || true
+          git rm --cached bets.db-wal 2>/dev/null || true
+          git rm --cached bets.db-shm 2>/dev/null || true
+
+          # Commit only lightweight exports.
+          git add exports/*.csv exports/*.json 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Multisport update without large database [skip ci]"
+            git push
+          fi
