@@ -323,10 +323,18 @@ def extract_pro_tips(module_outputs: list[dict]) -> list:
         candidates = []
 
         if isinstance(result, dict):
-            candidates = result.get("tips") or result.get("picks") or []
+            candidates = (
+                result.get("tips")
+                or result.get("picks")
+                or result.get("bets")
+                or []
+            )
 
         elif isinstance(result, list):
             candidates = result
+
+        else:
+            candidates = getattr(result, "bets", []) or []
 
         for tip in candidates:
             if not isinstance(tip, dict):
@@ -395,7 +403,12 @@ def extract_pro_tips(module_outputs: list[dict]) -> list:
             except Exception as e:
                 log.warning("Could not convert consensus tip to ProTip: %s", e)
 
+    log.info("Extracted %s raw pro tips before value filter", len(raw_tips))
+
     value_tips = filter_value_tips(raw_tips)
+
+    log.info("Value tips after filter: %s", len(value_tips))
+
     return sort_tips(value_tips)
 
 
