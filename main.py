@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 
 from core.config import Settings
 from core.reporting import print_report
+from core.bet_converter import bet_to_tip_dict
 from core.pro_tipper import (
     build_pro_tip,
     filter_value_tips,
@@ -336,8 +337,10 @@ def extract_pro_tips(module_outputs: list[dict]) -> list:
         else:
             candidates = getattr(result, "bets", []) or []
 
-        for tip in candidates:
-            if not isinstance(tip, dict):
+        for candidate in candidates:
+            tip = bet_to_tip_dict(candidate, fallback_sport=item["sport"])
+
+            if not tip:
                 continue
 
             try:
