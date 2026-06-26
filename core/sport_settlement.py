@@ -94,7 +94,7 @@ async def fetch_scores(
         return []
 
 
-def _ensure_settlement_columns(settings: Settings) -> None:
+def ensure_settlement_columns(settings: Settings) -> None:
     """
     Bezpečne doplní settlement stĺpce, ak ešte v DB nie sú.
     SQLite nepodporuje IF NOT EXISTS pri ADD COLUMN vo všetkých verziách,
@@ -129,7 +129,7 @@ async def settle_sport_bets(
     if not api_key:
         return 0
 
-    _ensure_settlement_columns(settings)
+    ensure_settlement_columns(settings)
     update_closing_lines(settings, sport)
 
     with connect(settings) as conn:
