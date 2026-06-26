@@ -28,6 +28,7 @@ from core.pro_tipper import (
 )
 from core.top_tips import select_top_tips, select_telegram_tips
 from core.learning_model import retrain_from_results
+from core.consensus_engine import ConsensusInput, build_consensus
 
 from sports.football import FootballModule
 from sports.tennis import TennisModule
@@ -300,6 +301,16 @@ async def run_sport_module(
         }
 
 
+def to_float_or_none(value) -> float | None:
+    if value is None or value == "":
+        return None
+
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def extract_pro_tips(module_outputs: list[dict]) -> list:
     raw_tips = []
 
@@ -322,31 +333,67 @@ def extract_pro_tips(module_outputs: list[dict]) -> list:
                 continue
 
             try:
-                odds = tip.get("odds")
-                probability = (
-                    tip.get("model_probability")
-                    or tip.get("probability")
-                    or tip.get("win_probability")
-                )
+                odds = to_float_or_none(tip.get("odds"))
 
-                if odds is None or probability is None:
+                if odds is None or odds <= 1:
                     continue
 
+                market_probability = to_float_or_none(
+                    tip.get("market_probability")
+                )
+
+                if market_probability is None:
+                    market_probability = 1 / odds
+
+                consensus = build_consensus(
+                    ConsensusInput(
+                        sport=tip.get("sport", item["sport"]),
+                        league=tip.get("league", "Unknown"),
+                        match=tip.get("match") or tip.get("event") or "Unknown",
+                        pick=tip.get("pick") or tip.get("selection") or "Unknown",
+                        odds=odds,
+                        elo_probability=to_float_or_none(
+                            tip.get("elo_probability")
+                        ),
+                        xg_probability=to_float_or_none(
+                            tip.get("xg_probability")
+                        ),
+                        form_probability=to_float_or_none(
+                            tip.get("form_probability")
+                        ),
+                        market_probability=market_probability,
+                        injury_penalty=to_float_or_none(
+                            tip.get("injury_penalty")
+                        ) or 0.0,
+                        news_penalty=to_float_or_none(
+                            tip.get("news_penalty")
+                        ) or 0.0,
+                    )
+                )
+
+                reason_parts = []
+
+                if tip.get("reason"):
+                    reason_parts.append(str(tip.get("reason")))
+
+                if consensus.reason:
+                    reason_parts.append(consensus.reason)
+
                 pro_tip = build_pro_tip(
-                    sport=tip.get("sport", item["sport"]),
-                    league=tip.get("league", "Unknown"),
-                    match=tip.get("match") or tip.get("event") or "Unknown",
-                    pick=tip.get("pick") or tip.get("selection") or "Unknown",
-                    odds=float(odds),
-                    model_probability=float(probability),
+                    sport=consensus.sport,
+                    league=consensus.league,
+                    match=consensus.match,
+                    pick=consensus.pick,
+                    odds=consensus.odds,
+                    model_probability=consensus.model_probability,
                     bookmaker=tip.get("bookmaker", ""),
-                    reason=tip.get("reason", ""),
+                    reason=" | ".join(reason_parts),
                 )
 
                 raw_tips.append(pro_tip)
 
             except Exception as e:
-                log.warning("Could not convert tip to ProTip: %s", e)
+                log.warning("Could not convert consensus tip to ProTip: %s", e)
 
     value_tips = filter_value_tips(raw_tips)
     return sort_tips(value_tips)
@@ -362,30 +409,37 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
 
     pro_tips = extract_pro_tips(module_outputs)
 
-    top_tips = select_top_tips(pro_tips, limit=5)
-    telegram_tips = select_telegram_tips(top_tips, min_confidence=80)
+    top_limit = int(os.getenv("TOP_TIPS_LIMIT", "5"))
+    min_telegram_conf = int(os.getenv("TELEGRAM_MIN_CONFIDENCE", "80"))
+
+    top_tips = select_top_tips(pro_tips, limit=top_limit)
+    telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
 
     saved = save_tip_audit_log(top_tips)
 
     if saved:
         log.info("Saved %s top pro tips to audit log", saved)
 
-    try:
-        weights = retrain_from_results()
-        log.info("Learning model weights updated: %s", weights)
-    except Exception as e:
-        log.warning("Learning model retrain failed: %s", e)
+    if os.getenv("LEARNING_RETRAIN_AFTER_SCAN", "1") == "1":
+        try:
+            weights = retrain_from_results()
+            log.info("Learning model weights updated: %s", weights)
+        except Exception as e:
+            log.warning("Learning model retrain failed: %s", e)
 
     report_text = ""
-    report_text += "\n=== TOP 5 TIPS OF THE DAY ===\n"
+    report_text += "\n=== TOP TIPS OF THE DAY ===\n"
     report_text += format_pro_report(top_tips)
 
+    report_text += "\n\n=== HIGH CONFIDENCE TIPS ===\n"
+
     if telegram_tips:
-        report_text += "\n\n=== TELEGRAM ELIGIBLE TIPS ===\n"
-        report_text += f"Tips with confidence >= 80: {len(telegram_tips)}\n"
+        report_text += (
+            f"Tips with confidence >= {min_telegram_conf}: "
+            f"{len(telegram_tips)}\n"
+        )
     else:
-        report_text += "\n\n=== TELEGRAM ELIGIBLE TIPS ===\n"
-        report_text += "No tips with confidence >= 80.\n"
+        report_text += f"No tips with confidence >= {min_telegram_conf}.\n"
 
     report_text += "\n\n=== ORIGINAL MODULE REPORT ===\n"
     report_text += base_report_text
@@ -411,15 +465,16 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
 
 
 def save_report(report_text: str) -> Path:
-    export_dir = Path("exports")
+    export_dir = Path(os.getenv("EXPORT_DIR", "exports"))
     export_dir.mkdir(parents=True, exist_ok=True)
 
     latest_file = export_dir / "latest_multisport_report.txt"
     latest_file.write_text(report_text, encoding="utf-8")
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    archive_file = export_dir / f"multisport_report_{timestamp}.txt"
-    archive_file.write_text(report_text, encoding="utf-8")
+    if os.getenv("REPORT_SAVE_HISTORY", "1") == "1":
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        archive_file = export_dir / f"multisport_report_{timestamp}.txt"
+        archive_file.write_text(report_text, encoding="utf-8")
 
     return latest_file
 
