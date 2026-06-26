@@ -26,6 +26,8 @@ from core.pro_tipper import (
     save_tip_audit_log,
     format_pro_report,
 )
+from core.top_tips import select_top_tips, select_telegram_tips
+from core.learning_model import retrain_from_results
 
 from sports.football import FootballModule
 from sports.tennis import TennisModule
@@ -230,7 +232,7 @@ def send_multisport_email(body: str) -> bool:
 
     local_tz = ZoneInfo(os.getenv("LOCAL_TZ", "Europe/Bratislava"))
     subject = (
-        f"Multisport Betting Report - "
+        f"Top 5 Pro Betting Tips - "
         f"{datetime.now(local_tz).strftime('%d.%m.%Y %H:%M')}"
     )
 
@@ -344,8 +346,7 @@ def extract_pro_tips(module_outputs: list[dict]) -> list:
                 raw_tips.append(pro_tip)
 
             except Exception as e:
-                log.debug("Skipping invalid tip from %s: %s", item["sport"], e)
-                continue
+                log.warning("Could not convert tip to ProTip: %s", e)
 
     value_tips = filter_value_tips(raw_tips)
     return sort_tips(value_tips)
@@ -357,12 +358,37 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
     with redirect_stdout(buffer):
         print_report(results)
 
-    report_text = buffer.getvalue()
+    base_report_text = buffer.getvalue()
 
     pro_tips = extract_pro_tips(module_outputs)
-    save_tip_audit_log(pro_tips)
 
-    report_text += format_pro_report(pro_tips)
+    top_tips = select_top_tips(pro_tips, limit=5)
+    telegram_tips = select_telegram_tips(top_tips, min_confidence=80)
+
+    saved = save_tip_audit_log(top_tips)
+
+    if saved:
+        log.info("Saved %s top pro tips to audit log", saved)
+
+    try:
+        weights = retrain_from_results()
+        log.info("Learning model weights updated: %s", weights)
+    except Exception as e:
+        log.warning("Learning model retrain failed: %s", e)
+
+    report_text = ""
+    report_text += "\n=== TOP 5 TIPS OF THE DAY ===\n"
+    report_text += format_pro_report(top_tips)
+
+    if telegram_tips:
+        report_text += "\n\n=== TELEGRAM ELIGIBLE TIPS ===\n"
+        report_text += f"Tips with confidence >= 80: {len(telegram_tips)}\n"
+    else:
+        report_text += "\n\n=== TELEGRAM ELIGIBLE TIPS ===\n"
+        report_text += "No tips with confidence >= 80.\n"
+
+    report_text += "\n\n=== ORIGINAL MODULE REPORT ===\n"
+    report_text += base_report_text
 
     report_text += "\n\n=== ENGINE SUMMARY ===\n"
 
