@@ -298,6 +298,59 @@ async def run_sport_module(
         }
 
 
+def extract_pro_tips(module_outputs: list[dict]) -> list:
+    raw_tips = []
+
+    for item in module_outputs:
+        result = item.get("result")
+
+        if not result:
+            continue
+
+        candidates = []
+
+        if isinstance(result, dict):
+            candidates = result.get("tips") or result.get("picks") or []
+
+        elif isinstance(result, list):
+            candidates = result
+
+        for tip in candidates:
+            if not isinstance(tip, dict):
+                continue
+
+            try:
+                odds = tip.get("odds")
+                probability = (
+                    tip.get("model_probability")
+                    or tip.get("probability")
+                    or tip.get("win_probability")
+                )
+
+                if odds is None or probability is None:
+                    continue
+
+                pro_tip = build_pro_tip(
+                    sport=tip.get("sport", item["sport"]),
+                    league=tip.get("league", "Unknown"),
+                    match=tip.get("match") or tip.get("event") or "Unknown",
+                    pick=tip.get("pick") or tip.get("selection") or "Unknown",
+                    odds=float(odds),
+                    model_probability=float(probability),
+                    bookmaker=tip.get("bookmaker", ""),
+                    reason=tip.get("reason", ""),
+                )
+
+                raw_tips.append(pro_tip)
+
+            except Exception as e:
+                log.debug("Skipping invalid tip from %s: %s", item["sport"], e)
+                continue
+
+    value_tips = filter_value_tips(raw_tips)
+    return sort_tips(value_tips)
+
+
 def build_report(results: list, module_outputs: list[dict]) -> str:
     buffer = StringIO()
 
@@ -305,6 +358,11 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
         print_report(results)
 
     report_text = buffer.getvalue()
+
+    pro_tips = extract_pro_tips(module_outputs)
+    save_tip_audit_log(pro_tips)
+
+    report_text += format_pro_report(pro_tips)
 
     report_text += "\n\n=== ENGINE SUMMARY ===\n"
 
