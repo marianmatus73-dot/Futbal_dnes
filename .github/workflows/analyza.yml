@@ -53,10 +53,10 @@ jobs:
           SPORT_CONCURRENCY: "5"
           SPORT_KEY_AUTO_DISCOVERY: "1"
 
-          MIN_EDGE: "0.09"
-          MAX_EDGE: "0.13"
+          MIN_EDGE: "0.06"
+          MAX_EDGE: "0.18"
           MIN_PROB: "0.20"
-          MAX_ODDS: "3.60"
+          MAX_ODDS: "4.50"
 
           KELLY_FRAC: "0.0075"
           MAX_STAKE_PCT: "0.005"
@@ -64,10 +64,10 @@ jobs:
           MAX_STAKE_PERCENT: "0.03"
           MIN_STAKE: "1"
 
-          TOP_N_REPORT: "1"
+          TOP_N_REPORT: "3"
           TOP_TIPS_LIMIT: "5"
           MIN_CONFIDENCE: "65"
-          MAX_BETS_PER_DAY: "1"
+          MAX_BETS_PER_DAY: "3"
 
           CONSENSUS_ENABLED: "1"
           ELO_WEIGHT: "0.25"
