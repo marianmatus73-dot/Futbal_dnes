@@ -2,15 +2,112 @@ name: Multisport Betting Engine
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 6,16 * * *"
 
 jobs:
   run:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Test
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
         run: |
-          echo "Workflow works"
+          python -m pip install --upgrade pip
+
+          if [ -f requirements_v10.txt ]; then
+            pip install -r requirements_v10.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "requirements file missing"
+            exit 1
+          fi
+
+      - name: Create directories
+        run: |
+          mkdir -p cache
+          mkdir -p exports
+
+      - name: Run engine
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
+
+          AKTUALNY_BANK: ${{ secrets.AKTUALNY_BANK }}
+          BANKROLL: ${{ secrets.AKTUALNY_BANK }}
+
+          SPORT_MODE: "all"
+          SPORT_CONCURRENCY: "5"
+          SPORT_KEY_AUTO_DISCOVERY: "1"
+
+          MIN_EDGE: "0.09"
+          MAX_EDGE: "0.13"
+          MIN_PROB: "0.20"
+          MAX_ODDS: "3.60"
+
+          KELLY_FRAC: "0.0075"
+          MAX_STAKE_PCT: "0.005"
+          KELLY_FRACTION: "0.25"
+          MAX_STAKE_PERCENT: "0.03"
+          MIN_STAKE: "1"
+
+          TOP_N_REPORT: "1"
+          TOP_TIPS_LIMIT: "5"
+          MIN_CONFIDENCE: "65"
+          MAX_BETS_PER_DAY: "1"
+
+          CONSENSUS_ENABLED: "1"
+          ELO_WEIGHT: "0.25"
+          XG_WEIGHT: "0.25"
+          FORM_WEIGHT: "0.20"
+          MARKET_WEIGHT: "0.20"
+          CONTEXT_WEIGHT: "0.10"
+
+          LEARNING_ENABLED: "1"
+          LEARNING_MIN_SAMPLES: "20"
+          LEARNING_RETRAIN_AFTER_SCAN: "1"
+
+          EXPORT_DIR: "exports"
+          CACHE_DIR: "cache"
+
+          CACHE_TTL_SECONDS: "3600"
+          HTTP_TIMEOUT: "30"
+          LOOKAHEAD_HOURS: "168"
+
+          LOCAL_TZ: "Europe/Bratislava"
+          LOG_LEVEL: "INFO"
+
+          GITHUB_ACTIONS: "1"
+        run: |
+          python main.py --sport all
+
+      - name: Commit exports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git rm --cached bets.db 2>/dev/null || true
+          git rm --cached bets.db-wal 2>/dev/null || true
+          git rm --cached bets.db-shm 2>/dev/null || true
+
+          git add exports/*.csv exports/*.json exports/*.txt 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Multisport update [skip ci]"
+            git push
+          fi
