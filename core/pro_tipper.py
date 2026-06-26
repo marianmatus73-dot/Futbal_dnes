@@ -48,7 +48,7 @@ def calculate_confidence(edge: float, model_probability: float) -> int:
 def calculate_risk(confidence: int, edge: float) -> str:
     if confidence >= 80 and edge >= 0.08:
         return "low"
-    if confidence >= 65 and edge >= 0.04:
+    if confidence >= 55 and edge >= 0.04:
         return "medium"
     return "high"
 
