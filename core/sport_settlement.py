@@ -22,10 +22,12 @@ def now_utc() -> str:
 
 def _winner_from_scores(event: dict[str, Any]) -> str | None:
     scores = event.get("scores") or []
+
     if len(scores) < 2:
         return None
 
     parsed = []
+
     for item in scores:
         name = str(item.get("name", ""))
         score_raw = item.get("score")
@@ -42,12 +44,28 @@ def _winner_from_scores(event: dict[str, Any]) -> str | None:
 
     if parsed[0][1] > parsed[1][1]:
         return parsed[0][0]
+
     if parsed[1][1] > parsed[0][1]:
         return parsed[1][0]
+
     return "DRAW"
 
 
-async def fetch_scores(api_key: str, sport_key: str, days_from: int = 3) -> list[dict[str, Any]]:
+def _profit_for_result(result: str, odds: float, stake: float) -> float:
+    if result == "WON":
+        return round((odds - 1.0) * stake, 4)
+
+    if result == "LOST":
+        return round(-stake, 4)
+
+    return 0.0
+
+
+async def fetch_scores(
+    api_key: str,
+    sport_key: str,
+    days_from: int = 3,
+) -> list[dict[str, Any]]:
     if not api_key:
         return []
 
@@ -62,36 +80,81 @@ async def fetch_scores(api_key: str, sport_key: str, days_from: int = 3) -> list
             async with session.get(url, params=params, timeout=30) as resp:
                 if resp.status != 200:
                     body = await resp.text()
-                    print(f"WARNING | Scores API {resp.status} for {sport_key}: {body[:200]}")
+                    print(
+                        f"WARNING | Scores API {resp.status} "
+                        f"for {sport_key}: {body[:200]}"
+                    )
                     return []
+
                 data = await resp.json()
                 return data if isinstance(data, list) else []
+
     except Exception as exc:
         print(f"WARNING | Scores API error for {sport_key}: {exc}")
         return []
 
 
-async def settle_sport_bets(settings: Settings, sport: str, sport_keys: list[str]) -> int:
+def _ensure_settlement_columns(settings: Settings) -> None:
+    """
+    Bezpečne doplní settlement stĺpce, ak ešte v DB nie sú.
+    SQLite nepodporuje IF NOT EXISTS pri ADD COLUMN vo všetkých verziách,
+    preto kontrolujeme PRAGMA table_info.
+    """
+
+    with connect(settings) as conn:
+        columns = {
+            row[1]
+            for row in conn.execute("PRAGMA table_info(sport_bets)").fetchall()
+        }
+
+        if "settled_at" not in columns:
+            conn.execute("ALTER TABLE sport_bets ADD COLUMN settled_at TEXT")
+
+        if "profit" not in columns:
+            conn.execute("ALTER TABLE sport_bets ADD COLUMN profit REAL DEFAULT 0")
+
+        if "profit_units" not in columns:
+            conn.execute(
+                "ALTER TABLE sport_bets ADD COLUMN profit_units REAL DEFAULT 0"
+            )
+
+
+async def settle_sport_bets(
+    settings: Settings,
+    sport: str,
+    sport_keys: list[str],
+) -> int:
     api_key = settings.odds_api_key or os.getenv("ODDS_API_KEY", "")
+
     if not api_key:
         return 0
 
+    _ensure_settlement_columns(settings)
     update_closing_lines(settings, sport)
 
     with connect(settings) as conn:
-        open_rows = conn.execute("""
-            SELECT id, league, event, home_team, away_team, selection
+        open_rows = conn.execute(
+            """
+            SELECT id, league, event, home_team, away_team,
+                   selection, odds, stake
             FROM sport_bets
             WHERE sport=?
               AND market='h2h'
-              AND (result IS NULL OR result='')
-        """, (sport,)).fetchall()
+              AND (
+                    result IS NULL
+                    OR result=''
+                    OR result IN ('V', 'P')
+                  )
+            """,
+            (sport,),
+        ).fetchall()
 
     if not open_rows:
         refresh_bookmaker_stats(settings, sport)
         return 0
 
     rows_by_league: dict[str, list[tuple[Any, ...]]] = {}
+
     for row in open_rows:
         rows_by_league.setdefault(str(row[1]), []).append(row)
 
@@ -99,10 +162,12 @@ async def settle_sport_bets(settings: Settings, sport: str, sport_keys: list[str
 
     for sport_key in [s.strip() for s in sport_keys if s.strip()]:
         scores = await fetch_scores(api_key, sport_key, days_from=3)
+
         if not scores:
             continue
 
         score_events = []
+
         for event in scores:
             if not event.get("completed"):
                 continue
@@ -114,21 +179,32 @@ async def settle_sport_bets(settings: Settings, sport: str, sport_keys: list[str
             if not winner:
                 continue
 
-            score_events.append({
-                "home": home,
-                "away": away,
-                "event": f"{home} vs {away}",
-                "winner": winner,
-            })
+            score_events.append(
+                {
+                    "home": home,
+                    "away": away,
+                    "event": f"{home} vs {away}",
+                    "winner": winner,
+                }
+            )
 
         if not score_events:
             continue
 
-        updates: list[tuple[str, str, int]] = []
+        updates: list[tuple[str, str, float, float, int]] = []
         elo_updates: list[tuple[str, str, str]] = []
 
         for row in rows_by_league.get(sport_key, []):
-            bet_id, league, event_name, home_team, away_team, selection = row
+            (
+                bet_id,
+                league,
+                event_name,
+                home_team,
+                away_team,
+                selection,
+                odds,
+                stake,
+            ) = row
 
             bet_home = norm(home_team or "")
             bet_away = norm(away_team or "")
@@ -142,7 +218,12 @@ async def settle_sport_bets(settings: Settings, sport: str, sport_keys: list[str
                 score_away = norm(score_event["away"])
                 score_event_name = norm(score_event["event"])
 
-                if bet_home and bet_away and bet_home == score_home and bet_away == score_away:
+                if (
+                    bet_home
+                    and bet_away
+                    and bet_home == score_home
+                    and bet_away == score_away
+                ):
                     matched = score_event
                     break
 
@@ -154,14 +235,56 @@ async def settle_sport_bets(settings: Settings, sport: str, sport_keys: list[str
                 continue
 
             winner = str(matched["winner"])
-            won = norm(winner) == bet_selection
-            updates.append(("V" if won else "P", now_utc(), int(bet_id)))
-            elo_updates.append((str(matched["home"]), str(matched["away"]), winner))
+
+            if winner == "DRAW":
+                result = "VOID"
+            else:
+                result = "WON" if norm(winner) == bet_selection else "LOST"
+
+            odds_float = float(odds or 0)
+            stake_float = float(stake or 0)
+
+            profit = _profit_for_result(
+                result=result,
+                odds=odds_float,
+                stake=stake_float,
+            )
+
+            profit_units = round(
+                profit / stake_float,
+                4,
+            ) if stake_float > 0 else 0.0
+
+            updates.append(
+                (
+                    result,
+                    now_utc(),
+                    profit,
+                    profit_units,
+                    int(bet_id),
+                )
+            )
+
+            if result in {"WON", "LOST"}:
+                elo_updates.append(
+                    (
+                        str(matched["home"]),
+                        str(matched["away"]),
+                        winner,
+                    )
+                )
 
         if updates:
             with connect(settings) as conn:
                 conn.executemany(
-                    "UPDATE sport_bets SET result=?, settled_at=? WHERE id=?",
+                    """
+                    UPDATE sport_bets
+                    SET result=?,
+                        settled_at=?,
+                        profit=?,
+                        profit_units=?
+                    WHERE id=?
+                    """,
                     updates,
                 )
 
@@ -169,8 +292,21 @@ async def settle_sport_bets(settings: Settings, sport: str, sport_keys: list[str
 
             for home, away, winner in elo_updates:
                 k = 20.0 if sport == "tennis" else 24.0
-                home_adv = 0.0 if sport == "tennis" else float(os.getenv("HOCKEY_HOME_ELO_ADV", "35"))
-                update_elo_after_result(settings, sport, home, away, winner, k=k, home_adv=home_adv)
+                home_adv = (
+                    0.0
+                    if sport == "tennis"
+                    else float(os.getenv("HOCKEY_HOME_ELO_ADV", "35"))
+                )
+
+                update_elo_after_result(
+                    settings,
+                    sport,
+                    home,
+                    away,
+                    winner,
+                    k=k,
+                    home_adv=home_adv,
+                )
 
     update_closing_lines(settings, sport)
     refresh_bookmaker_stats(settings, sport)
