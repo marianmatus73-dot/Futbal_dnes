@@ -1,0 +1,94 @@
+
+=== TOP TIPS OF THE DAY ===
+
+
+=== PRO TIPPER ===
+Dnes nebol nájdený žiadny dostatočne kvalitný value bet.
+NO BET je tiež profi rozhodnutie.
+
+
+=== HIGH CONFIDENCE TIPS ===
+No tips with confidence >= 80.
+
+
+=== ORIGINAL MODULE REPORT ===
+
+MULTISPORT BETTING ENGINE REPORT
+==========================================
+
+[FOOTBALL] --no-email
+PRODUCTION FOOTBALL BETTING MODEL v11.1-quant-pro-live-news-ecl
+Bank: 1000.00 EUR | Kelly fraction: 0.0075 | Max stake: 0.5% | Market weight: 55% | Shrink: 72%
+Vyhodnotene stare tipy: 0
+Nove ulozene tipy: 0
+Performance: 1326 settled | Win rate 42.9% | P/L 382.21 EUR | Yield 3.2% | Max DD 6220.87 EUR
+Portfolio: 0 tipov | Exposure 0.00 EUR
+
+Dnes bez value tipov podla aktualnych filtrov.
+
+WARNINGS / ERRORS:
+2026-06-26 07:48:32,294 | INFO | Migrujem historiu z historia_tipov.csv
+2026-06-26 07:48:32,442 | INFO | AI filter vypnuty cez AI_FILTER_ENABLED=0.
+2026-06-26 07:48:33,045 | INFO | World Cup Qualifiers Europe: malo historickych dat.
+2026-06-26 07:48:33,047 | INFO | Club World Cup: malo historickych dat.
+2026-06-26 07:48:33,051 | INFO | World Cup Qualifiers South America: malo historickych dat.
+2026-06-26 07:48:34,966 | INFO | Portfolio risk layer: risk normal: 14d P/L 382.21 EUR
+
+Football consensus tips loaded: 0 (new after run approx: 0)
+No bets found.
+
+[TENNIS] scan
+Tennis: quant history/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 0. Snapshots saved: 0. Blocked: 0. Stored candidates: 0.
+TENNIS ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+No bets found.
+
+[BASKETBALL] scan
+Basketball: quant history/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 6. Snapshots saved: 120. Blocked: 119. Stored candidates: 1.
+BASKETBALL ANALYTICS
+Settled: 9 | W-L: 1-8 | Winrate: 11.1% | P/L: -2.76 | Yield: -63.3% | Avg CLV: 0.00%
+Top leagues/tours:
+- basketball_wnba: bets=9, P/L=-2.76, yield=-63.3%, CLV=0.00%
+01. 2026-06-27T18:00:00Z | basketball_wnba | Toronto Tempo vs Phoenix Mercury | Phoenix Mercury @ 2.28 | P 49.4% | Edge 12.7% | Stake 0.74 | Coolbet
+
+[HOCKEY] scan
+Hockey: quant history/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 0. Snapshots saved: 0. Blocked: 0. Stored candidates: 0.
+HOCKEY ANALYTICS
+Settled: 14 | W-L: 3-11 | Winrate: 21.4% | P/L: -2.00 | Yield: -32.0% | Avg CLV: 0.00%
+Top bookmakers:
+- Unibet (SE): bets=3, P/L=-0.02, yield=-1.3%, CLV=0.00%
+- LeoVegas (SE): bets=3, P/L=-0.02, yield=-1.3%, CLV=0.00%
+- 1xBet: bets=5, P/L=-0.90, yield=-40.5%, CLV=0.00%
+Top leagues/tours:
+- icehockey_nhl: bets=14, P/L=-2.00, yield=-32.0%, CLV=0.00%
+No bets found.
+
+[BASEBALL] scan
+Baseball: quant history/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 24. Snapshots saved: 910. Blocked: 910. Stored candidates: 0.
+BASEBALL ANALYTICS
+Settled: 1 | W-L: 0-1 | Winrate: 0.0% | P/L: -0.33 | Yield: -100.0% | Avg CLV: 0.00%
+No bets found.
+
+[MMA] scan
+MMA: quant history/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 55. Snapshots saved: 538. Blocked: 507. Stored candidates: 0.
+MMA ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+No bets found.
+
+[NFL] scan
+NFL: quant history/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 75. Snapshots saved: 484. Blocked: 518. Stored candidates: 0.
+NFL ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+No bets found.
+
+Total bets: 1
+
+
+=== ENGINE SUMMARY ===
+- football: OK (4.72s)
+- tennis: OK (0.13s)
+- basketball: OK (0.61s)
+- hockey: OK (5.02s)
+- baseball: OK (4.34s)
+- mma: OK (1.39s)
+- nfl: OK (1.82s)
