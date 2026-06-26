@@ -19,6 +19,13 @@ from dotenv import load_dotenv
 
 from core.config import Settings
 from core.reporting import print_report
+from core.pro_tipper import (
+    build_pro_tip,
+    filter_value_tips,
+    sort_tips,
+    save_tip_audit_log,
+    format_pro_report,
+)
 
 from sports.football import FootballModule
 from sports.tennis import TennisModule
