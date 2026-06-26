@@ -69,6 +69,7 @@ def db_path(settings: Settings) -> Path:
 def db_connect(settings: Settings) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path(settings))
     conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
     return conn
 
 
@@ -80,7 +81,14 @@ def table_exists(conn: sqlite3.Connection, table: str) -> bool:
     return row is not None
 
 
+def safe_table_name(table: str) -> str:
+    if table not in HISTORY_EXPORTS:
+        raise ValueError(f"Unsupported table: {table}")
+    return table
+
+
 def import_csv_to_table(settings: Settings, table: str, csv_file: str) -> int:
+    table = safe_table_name(table)
     path = Path(csv_file)
 
     if not path.exists():
@@ -107,18 +115,17 @@ def import_csv_to_table(settings: Settings, table: str, csv_file: str) -> int:
             VALUES ({placeholders})
         """
 
-        values = [
-            [row.get(col, "") for col in columns]
-            for row in rows
-        ]
+        values = [[row.get(col, "") for col in columns] for row in rows]
 
         before = conn.total_changes
         conn.executemany(sql, values)
+        conn.commit()
 
         return conn.total_changes - before
 
 
 def export_table_to_csv(settings: Settings, table: str, csv_file: str) -> int:
+    table = safe_table_name(table)
     path = Path(csv_file)
     path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -182,16 +189,24 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--sport",
         choices=["all"] + sorted([m.name for m in SPORT_MODULES]),
-        default=os.getenv("SPORT_MODE", "football"),
+        default=os.getenv("SPORT_MODE", "all"),
     )
 
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--analytics", action="store_true")
     parser.add_argument("--backtest", action="store_true")
+    parser.add_argument("--no-email", action="store_true")
+
     parser.add_argument(
         "--backtest-days",
         type=int,
         default=int(os.getenv("BACKTEST_DAYS", "180")),
+    )
+
+    parser.add_argument(
+        "--concurrency",
+        type=int,
+        default=int(os.getenv("SPORT_CONCURRENCY", "3")),
     )
 
     return parser.parse_args()
@@ -231,6 +246,93 @@ def send_multisport_email(body: str) -> bool:
         return False
 
 
+async def run_sport_module(
+    sport,
+    settings: Settings,
+    args: argparse.Namespace,
+) -> dict:
+    started = datetime.now()
+
+    try:
+        log.info("Running sport module: %s", sport.name)
+
+        if args.analytics:
+            result = await sport.analytics(settings)
+
+        elif args.backtest:
+            result = await sport.backtest(
+                settings,
+                days=args.backtest_days,
+            )
+
+        else:
+            result = await sport.scan(settings)
+
+        duration = (datetime.now() - started).total_seconds()
+
+        return {
+            "sport": sport.name,
+            "ok": True,
+            "duration_sec": duration,
+            "result": result,
+            "error": None,
+        }
+
+    except Exception as e:
+        duration = (datetime.now() - started).total_seconds()
+        log.exception("Sport module failed: %s", sport.name)
+
+        return {
+            "sport": sport.name,
+            "ok": False,
+            "duration_sec": duration,
+            "result": None,
+            "error": str(e),
+        }
+
+
+def build_report(results: list, module_outputs: list[dict]) -> str:
+    buffer = StringIO()
+
+    with redirect_stdout(buffer):
+        print_report(results)
+
+    report_text = buffer.getvalue()
+
+    report_text += "\n\n=== ENGINE SUMMARY ===\n"
+
+    for item in module_outputs:
+        status = "OK" if item["ok"] else "FAILED"
+        report_text += (
+            f"- {item['sport']}: {status} "
+            f"({item['duration_sec']:.2f}s)\n"
+        )
+
+    failed = [item for item in module_outputs if not item["ok"]]
+
+    if failed:
+        report_text += "\n=== FAILED MODULES ===\n"
+
+        for item in failed:
+            report_text += f"- {item['sport']}: {item['error']}\n"
+
+    return report_text
+
+
+def save_report(report_text: str) -> Path:
+    export_dir = Path("exports")
+    export_dir.mkdir(parents=True, exist_ok=True)
+
+    latest_file = export_dir / "latest_multisport_report.txt"
+    latest_file.write_text(report_text, encoding="utf-8")
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    archive_file = export_dir / f"multisport_report_{timestamp}.txt"
+    archive_file.write_text(report_text, encoding="utf-8")
+
+    return latest_file
+
+
 async def run() -> None:
     args = parse_args()
 
@@ -244,45 +346,45 @@ async def run() -> None:
     else:
         selected = [m for m in SPORT_MODULES if m.name == args.sport]
 
-    results = []
+    if not selected:
+        log.warning("No sport modules selected.")
+        return
 
-    for sport in selected:
-        log.info("Running sport module: %s", sport.name)
+    concurrency = max(1, args.concurrency)
+    semaphore = asyncio.Semaphore(concurrency)
 
-        try:
-            if args.analytics:
-                result = await sport.analytics(settings)
+    async def guarded_run(sport):
+        async with semaphore:
+            return await run_sport_module(sport, settings, args)
 
-            elif args.backtest:
-                result = await sport.backtest(
-                    settings,
-                    days=args.backtest_days,
-                )
-
-            else:
-                result = await sport.scan(settings)
-
-            results.append(result)
-
-        except Exception:
-            log.exception("Sport module failed: %s", sport.name)
+    module_outputs = await asyncio.gather(
+        *(guarded_run(sport) for sport in selected)
+    )
 
     save_learning_history(settings)
 
-    buffer = StringIO()
+    successful_results = [
+        item["result"]
+        for item in module_outputs
+        if item["ok"] and item["result"] is not None
+    ]
 
-    with redirect_stdout(buffer):
-        print_report(results)
+    report_text = build_report(successful_results, module_outputs)
 
-    report_text = buffer.getvalue()
+    report_file = save_report(report_text)
 
     print(report_text)
 
-    if (
+    log.info("Report saved to %s", report_file)
+
+    should_send_email = (
         not args.dry_run
         and not args.analytics
         and not args.backtest
-    ):
+        and not args.no_email
+    )
+
+    if should_send_email:
         send_multisport_email(report_text)
 
 
