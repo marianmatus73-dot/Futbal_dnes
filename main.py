@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 
 from core.config import Settings
 from core.reporting import print_report
+from core.audit_summary import audit_block_summary
 from core.bet_converter import bet_to_tip_dict
 from core.pro_tipper import (
     build_pro_tip,
@@ -532,6 +533,8 @@ async def run() -> None:
     ]
 
     report_text = build_report(successful_results, module_outputs)
+
+    report_text += audit_block_summary(settings)
 
     report_file = save_report(report_text)
 
