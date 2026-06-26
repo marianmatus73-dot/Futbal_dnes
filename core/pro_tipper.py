@@ -4,7 +4,8 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 import csv
-import math
+
+from core.bankroll import load_bankroll, kelly_stake_amount
 
 
 @dataclass
@@ -23,6 +24,7 @@ class ProTip:
     confidence: int = 0
     risk: str = "medium"
     stake_units: float = 0.0
+    stake_amount: float = 0.0
     created_at: str = ""
 
 
@@ -68,7 +70,6 @@ def calculate_stake_units(
     if kelly <= 0:
         return 0.0
 
-    # konzervatívny fractional Kelly
     stake = kelly * 0.25 * 10
 
     return round(max(0.25, min(max_units, stake)), 2)
@@ -91,6 +92,16 @@ def build_pro_tip(
     risk = calculate_risk(confidence, edge)
     stake = calculate_stake_units(model_probability, odds)
 
+    bankroll = load_bankroll()
+
+    stake_amount = kelly_stake_amount(
+        bankroll=bankroll.bankroll,
+        odds=odds,
+        probability=model_probability,
+        kelly_fraction=bankroll.kelly_fraction,
+        max_stake_percent=bankroll.max_stake_percent,
+    )
+
     return ProTip(
         sport=sport,
         league=league,
@@ -105,6 +116,7 @@ def build_pro_tip(
         confidence=confidence,
         risk=risk,
         stake_units=stake,
+        stake_amount=stake_amount,
         created_at=datetime.now().isoformat(timespec="seconds"),
     )
 
@@ -176,6 +188,7 @@ def format_pro_report(tips: list[ProTip]) -> str:
         text += f"Confidence: {tip.confidence}/100\n"
         text += f"Risk: {tip.risk}\n"
         text += f"Stake: {tip.stake_units}u\n"
+        text += f"Stake amount: {tip.stake_amount:.2f}\n"
 
         if tip.reason:
             text += f"Reason: {tip.reason}\n"
