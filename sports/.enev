@@ -1,0 +1,72 @@
+#######################################
+# DATABASE
+#######################################
+
+DB_FILE=bets.db
+
+#######################################
+# ENGINE
+#######################################
+
+SPORT_MODE=all
+SPORT_CONCURRENCY=5
+BACKTEST_DAYS=180
+
+#######################################
+# LOGGING
+#######################################
+
+LOG_LEVEL=INFO
+
+#######################################
+# TIMEZONE
+#######################################
+
+LOCAL_TZ=Europe/Bratislava
+
+#######################################
+# GMAIL
+#######################################
+
+GMAIL_USER=tvoj@gmail.com
+GMAIL_PASSWORD=SEM_PATRI_GMAIL_APP_PASSWORD
+GMAIL_RECEIVER=tvoj@gmail.com
+
+#######################################
+# TELEGRAM
+#######################################
+
+TELEGRAM_BOT_TOKEN=SEM_PATRI_TOKEN_OD_BOTFATHERA
+TELEGRAM_CHAT_ID=SEM_PATRI_CHAT_ID
+
+#######################################
+# BANKROLL
+#######################################
+
+BANKROLL=1000
+MAX_STAKE_PERCENT=0.03
+KELLY_FRACTION=0.25
+
+#######################################
+# VALUE BET FILTER
+#######################################
+
+MIN_EDGE=0.04
+MIN_CONFIDENCE=65
+TOP_TIPS_LIMIT=5
+
+#######################################
+# AI CONSENSUS
+#######################################
+
+ELO_WEIGHT=0.25
+XG_WEIGHT=0.25
+FORM_WEIGHT=0.20
+MARKET_WEIGHT=0.20
+CONTEXT_WEIGHT=0.10
+
+#######################################
+# DASHBOARD
+#######################################
+
+DASHBOARD_PORT=8080
