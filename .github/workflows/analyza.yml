@@ -54,6 +54,37 @@ jobs:
 
           SPORT_MODE: all
           SPORT_KEY_AUTO_DISCOVERY: 1
+          SPORT_CONCURRENCY: 5
+
+# ===== PRO TIPPER =====
+TOP_TIPS_LIMIT: 5
+MIN_CONFIDENCE: 65
+TELEGRAM_MIN_CONFIDENCE: 80
+SAVE_AUDIT_LOG: 1
+
+# ===== CONSENSUS ENGINE =====
+CONSENSUS_ENABLED: 1
+ELO_WEIGHT: 0.25
+XG_WEIGHT: 0.25
+FORM_WEIGHT: 0.20
+MARKET_WEIGHT: 0.20
+CONTEXT_WEIGHT: 0.10
+
+# ===== LEARNING =====
+LEARNING_ENABLED: 1
+LEARNING_MIN_SAMPLES: 20
+LEARNING_RETRAIN_AFTER_SCAN: 1
+
+# ===== NEW BANKROLL ENGINE =====
+BANKROLL: ${{ secrets.AKTUALNY_BANK }}
+KELLY_FRACTION: 0.25
+MAX_STAKE_PERCENT: 0.03
+
+# ===== REPORT =====
+REPORT_SAVE_HISTORY: 1
+REPORT_SAVE_LATEST: 1
+EMAIL_TOP_TIPS_ONLY: 1
+EXPORT_DIR: exports
 
           # ===== FOOTBALL =====
           FOOTBALL_EXTRA_SPORT_KEYS: soccer_fifa_world_cup,soccer_fifa_world_cup_qualifiers_europe,soccer_fifa_world_cup_qualifiers_south_america,soccer_fifa_club_world_cup,soccer_usa_mls,soccer_brazil_campeonato,soccer_argentina_primera_division,soccer_sweden_allsvenskan,soccer_norway_eliteserien,soccer_japan_j_league,soccer_korea_kleague1
@@ -140,7 +171,7 @@ jobs:
           MIN_MARKET_EDGE: 0.04
           PROB_SHRINK: 0.72
 
-          AI_FILTER_ENABLED: 0
+          AI_FILTER_ENABLED: 1
 
           # ===== QUANT / CLV =====
           SNAPSHOT_ODDS: 1
@@ -186,7 +217,7 @@ jobs:
           git rm --cached bets.db-shm 2>/dev/null || true
 
           # Commit only lightweight exports.
-          git add exports/*.csv exports/*.json 2>/dev/null || true
+          git add exports/*.csv exports/*.json exports/*.txt 2>/dev/null || true
 
           if git diff --staged --quiet; then
             echo "No changes"
