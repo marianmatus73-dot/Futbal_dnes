@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 
 from core.config import Settings
 from core.reporting import print_report
+from core.sport_settlement import ensure_settlement_columns
 from core.audit_summary import audit_block_summary
 from core.bet_converter import bet_to_tip_dict
 from core.pro_tipper import (
@@ -164,6 +165,11 @@ def restore_learning_history(settings: Settings) -> None:
         except Exception as e:
             log.warning("Could not init sport learning tables: %s", e)
 
+    try:
+        ensure_settlement_columns(settings)
+    except Exception as e:
+        log.warning("Could not ensure settlement columns: %s", e)
+
     total = 0
 
     for table, csv_file in HISTORY_EXPORTS.items():
@@ -178,8 +184,6 @@ def restore_learning_history(settings: Settings) -> None:
             log.warning("History import failed for %s: %s", table, e)
 
     log.info("Learning history restore finished. Imported rows: %s", total)
-
-
 def save_learning_history(settings: Settings) -> None:
     total = 0
 
