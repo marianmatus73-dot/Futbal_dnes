@@ -108,9 +108,51 @@ class TennisModule(SportModule):
         init_sport_db(settings)
 
         configured_keys = os.getenv(
-            "TENNIS_SPORT_KEYS",
-            "tennis_atp_french_open,tennis_wta_french_open,tennis_atp_wimbledon,tennis_wta_wimbledon,tennis_atp_us_open,tennis_wta_us_open",
-        ).split(",")
+    "TENNIS_SPORT_KEYS",
+    ",".join([
+        "tennis_atp_australian_open",
+        "tennis_wta_australian_open",
+        "tennis_atp_french_open",
+        "tennis_wta_french_open",
+        "tennis_atp_wimbledon",
+        "tennis_wta_wimbledon",
+        "tennis_atp_us_open",
+        "tennis_wta_us_open",
+
+        "tennis_atp_indian_wells",
+        "tennis_wta_indian_wells",
+        "tennis_atp_miami_open",
+        "tennis_wta_miami_open",
+        "tennis_atp_monte_carlo_masters",
+        "tennis_atp_madrid_open",
+        "tennis_wta_madrid_open",
+        "tennis_atp_italian_open",
+        "tennis_wta_italian_open",
+        "tennis_atp_canadian_open",
+        "tennis_wta_canadian_open",
+        "tennis_atp_cincinnati_open",
+        "tennis_wta_cincinnati_open",
+        "tennis_atp_shanghai_masters",
+        "tennis_atp_paris_masters",
+
+        "tennis_atp_dubai",
+        "tennis_wta_dubai",
+        "tennis_atp_qatar_open",
+        "tennis_wta_qatar_open",
+        "tennis_atp_halle",
+        "tennis_atp_queens_club",
+        "tennis_atp_stuttgart",
+        "tennis_wta_berlin",
+        "tennis_wta_eastbourne",
+        "tennis_atp_eastbourne",
+        "tennis_atp_basel",
+        "tennis_atp_vienna",
+        "tennis_atp_tokyo",
+        "tennis_wta_tokyo",
+        "tennis_atp_beijing",
+        "tennis_wta_beijing",
+    ]),
+).split(",")
 
         clean_sport_keys = [s.strip() for s in configured_keys if s.strip()]
 
