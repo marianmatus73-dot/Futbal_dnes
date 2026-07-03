@@ -400,15 +400,16 @@ def extract_pro_tips(module_outputs: list[dict]) -> tuple[list, list]:
                     reason_parts.append(consensus.reason)
 
                 pro_tip = build_pro_tip(
-                    sport=consensus.sport,
-                    league=consensus.league,
-                    match=consensus.match,
-                    pick=consensus.pick,
-                    odds=consensus.odds,
-                    model_probability=consensus.model_probability,
-                    bookmaker=tip.get("bookmaker", ""),
-                    reason=" | ".join(reason_parts),
-                )
+                     sport=consensus.sport,
+    league=consensus.league,
+    match=consensus.match,
+    pick=consensus.pick,
+    odds=consensus.odds,
+    model_probability=consensus.model_probability,
+    bookmaker=tip.get("bookmaker", ""),
+    reason=" | ".join(reason_parts),
+    raw_edge=to_float_or_none(tip.get("raw_edge")),
+)
 
                 raw_tips.append(pro_tip)
 
