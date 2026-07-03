@@ -59,3 +59,23 @@ def kelly_stake_amount(
     max_stake = bankroll * max_stake_percent
 
     return round(min(raw_stake, max_stake), 2)
+
+def bankroll_summary() -> str:
+    state = load_bankroll()
+
+    return (
+        "\n=== BANKROLL SUMMARY ===\n"
+        f"Bankroll: {state.bankroll:.2f}\n"
+        f"Kelly fraction: {state.kelly_fraction:.2f}\n"
+        f"Max stake %: {state.max_stake_percent * 100:.1f}%\n"
+    )
+
+
+def bankroll_dict() -> dict:
+    state = load_bankroll()
+
+    return {
+        "bankroll": state.bankroll,
+        "kelly_fraction": state.kelly_fraction,
+        "max_stake_percent": state.max_stake_percent,
+    }
