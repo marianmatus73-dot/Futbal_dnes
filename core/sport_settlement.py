@@ -133,21 +133,23 @@ async def settle_sport_bets(
     update_closing_lines(settings, sport)
 
     with connect(settings) as conn:
-        open_rows = conn.execute(
-            """
-            SELECT id, league, event, home_team, away_team,
-                   selection, odds, stake
-            FROM sport_bets
-            WHERE sport=?
-              AND market='h2h'
-              AND (
-                    result IS NULL
-                    OR result=''
-                    OR result IN ('V', 'P')
-                  )
-            """,
-            (sport,),
-        ).fetchall()
+    open_rows = conn.execute(
+        """
+        SELECT id, league, event, home_team, away_team,
+               selection, odds, stake
+        FROM sport_bets
+        WHERE sport=?
+          AND market='h2h'
+          AND (
+                result IS NULL
+                OR result=''
+                OR result='OPEN'
+                OR result='V'
+                OR result='P'
+              )
+        """,
+        (sport,),
+    ).fetchall()
 
     if not open_rows:
         refresh_bookmaker_stats(settings, sport)
