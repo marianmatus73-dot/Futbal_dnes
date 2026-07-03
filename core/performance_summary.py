@@ -65,6 +65,7 @@ def update_model_stats(settings: Settings) -> dict:
     finally:
         conn.close()
 
+
 def performance_report(settings: Settings) -> str:
     stats = update_model_stats(settings)
 
@@ -83,23 +84,14 @@ def performance_report(settings: Settings) -> str:
         conn.close()
 
     open_bets = 0
-settled_bets = 0
+    settled_bets = 0
 
-for result, count in rows:
-    if result:
-        settled_bets += count
-    else:
-        open_bets += count
+    for result, count in rows:
+        if result:
+            settled_bets += count
+        else:
+            open_bets += count
 
-text += f"\nOpen bets: {open_bets}\n"
-text += f"Settled bets: {settled_bets}\n"
-
-text += "\nResult distribution:\n"
-
-for result, count in rows:
-    label = result if result else "OPEN"
-    text += f"- {label}: {count}\n"
-    
     text = (
         "\n=== MODEL PERFORMANCE ===\n"
         f"Total bets: {stats['total_bets']}\n"
@@ -110,6 +102,9 @@ for result, count in rows:
         f"Profit: {stats['profit']:.2f}\n"
     )
 
+    text += f"\nOpen bets: {open_bets}\n"
+    text += f"Settled bets: {settled_bets}\n"
+
     text += "\nResult distribution:\n"
 
     for result, count in rows:
@@ -117,4 +112,3 @@ for result, count in rows:
         text += f"- {label}: {count}\n"
 
     return text
-
