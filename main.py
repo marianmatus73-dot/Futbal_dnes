@@ -22,6 +22,7 @@ from core.reporting import print_report
 from core.sport_settlement import ensure_settlement_columns
 from core.audit_summary import audit_block_summary
 from core.bet_converter import bet_to_tip_dict
+from core.bankroll import bankroll_summary
 from core.pro_tipper import (
     build_pro_tip,
     filter_value_tips,
@@ -546,6 +547,8 @@ async def run() -> None:
     report_text = build_report(successful_results, module_outputs)
 
     report_text += audit_block_summary(settings)
+    
+    report_text += bankroll_summary()
 
     report_file = save_report(report_text)
 
