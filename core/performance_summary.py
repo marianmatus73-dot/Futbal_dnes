@@ -1,0 +1,80 @@
+from __future__ import annotations
+
+import sqlite3
+
+from core.config import Settings
+from core.model_stats import save_model_stats, load_model_stats
+
+
+def update_model_stats(settings: Settings) -> dict:
+    conn = sqlite3.connect(settings.db_file)
+
+    try:
+        cur = conn.cursor()
+
+        total = cur.execute(
+            """
+            SELECT COUNT(*)
+            FROM sport_bets
+            WHERE result IN ('V','P')
+            """
+        ).fetchone()[0]
+
+        wins = cur.execute(
+            """
+            SELECT COUNT(*)
+            FROM sport_bets
+            WHERE result='V'
+            """
+        ).fetchone()[0]
+
+        losses = cur.execute(
+            """
+            SELECT COUNT(*)
+            FROM sport_bets
+            WHERE result='P'
+            """
+        ).fetchone()[0]
+
+        profit = 0.0
+
+        try:
+            profit = float(
+                cur.execute(
+                    """
+                    SELECT COALESCE(SUM(profit),0)
+                    FROM sport_bets
+                    """
+                ).fetchone()[0]
+            )
+        except Exception:
+            pass
+
+        yield_pct = 0.0
+
+        save_model_stats(
+            total_bets=total,
+            wins=wins,
+            losses=losses,
+            profit=profit,
+            yield_pct=yield_pct,
+        )
+
+        return load_model_stats()
+
+    finally:
+        conn.close()
+
+
+def performance_report(settings: Settings) -> str:
+    stats = update_model_stats(settings)
+
+    return (
+        "\n=== MODEL PERFORMANCE ===\n"
+        f"Total bets: {stats['total_bets']}\n"
+        f"Wins: {stats['wins']}\n"
+        f"Losses: {stats['losses']}\n"
+        f"Winrate: {stats['winrate']:.2f}%\n"
+        f"Yield: {stats['yield']:.2f}%\n"
+        f"Profit: {stats['profit']:.2f}\n"
+    )
