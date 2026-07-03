@@ -63,6 +63,18 @@ class FootballModule(SportModule):
                     return value
             return default
 
+        # 1. OCHRANA: Ak riadok explicitne obsahuje iný šport, preskočíme ho
+        row_sport = str(row.get("sport", "")).lower()
+        if row_sport and row_sport != "football":
+            return None
+
+        league = pick_first("league", "competition", "sport_key", default="Unknown")
+        
+        # 2. OCHRANA: Ak je v názve ligy iný šport, úplne ho odignorujeme
+        other_sports = ["baseball", "tennis", "basketball", "hockey", "mma", "nfl", "americanfootball"]
+        if any(x in league.lower() for x in other_sports):
+            return None
+
         odds = pick_first(
             "odds",
             "best_odds",
@@ -110,7 +122,7 @@ class FootballModule(SportModule):
 
         tip = {
             "sport": "football",
-            "league": pick_first("league", "competition", "sport_key", default="Unknown"),
+            "league": league,
             "match": match or "Unknown",
             "pick": pick,
             "odds": odds,
