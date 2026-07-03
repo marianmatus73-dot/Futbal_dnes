@@ -142,7 +142,129 @@ LIGY: Dict[str, Dict[str, Any]] = {
     "Ligue 1": {"csv": "F1", "api": "soccer_france_ligue_one", "ha": 0.32},
     "Eredivisie": {"csv": "N1", "api": "soccer_netherlands_eredivisie", "ha": 0.42},
     "Championship": {"csv": "E1", "api": "soccer_efl_champ", "ha": 0.28},
+   # England
+"League One": {
+    "csv": "E2",
+    "api": "soccer_england_league1",
+    "ha": 0.30
+},
 
+"League Two": {
+    "csv": "E3",
+    "api": "soccer_england_league2",
+    "ha": 0.30
+},
+
+# Scotland
+"Scottish Premiership": {
+    "csv": "SC0",
+    "api": "soccer_spl",
+    "ha": 0.32
+},
+
+# Portugal
+"Primeira Liga": {
+    "csv": "P1",
+    "api": "soccer_portugal_primeira_liga",
+    "ha": 0.34
+},
+
+# Belgium
+"Belgian Pro League": {
+    "csv": "B1",
+    "api": "soccer_belgium_first_div",
+    "ha": 0.33
+},
+
+# Turkey
+"Turkish Super Lig": {
+    "csv": "T1",
+    "api": "soccer_turkey_super_league",
+    "ha": 0.36
+},
+
+# Greece
+"Greek Super League": {
+    "csv": "G1",
+    "api": "soccer_greece_super_league",
+    "ha": 0.35
+},
+
+# Austria
+"Austrian Bundesliga": {
+    "csv": "AUT1",
+    "api": "soccer_austria_bundesliga",
+    "ha": 0.34
+},
+
+# Switzerland
+"Swiss Super League": {
+    "csv": "SWZ1",
+    "api": "soccer_switzerland_superleague",
+    "ha": 0.32
+},
+
+# Denmark
+"Danish Superliga": {
+    "csv": "DNK1",
+    "api": "soccer_denmark_superliga",
+    "ha": 0.34
+},
+
+# Norway
+"Eliteserien": {
+    "csv": "NOR1",
+    "api": "soccer_norway_eliteserien",
+    "ha": 0.39
+},
+
+# Sweden
+"Allsvenskan": {
+    "csv": "SWE1",
+    "api": "soccer_sweden_allsvenskan",
+    "ha": 0.38
+},
+
+# Brazil
+"Brazil Serie A": {
+    "csv": "BRA1",
+    "api": "soccer_brazil_campeonato",
+    "ha": 0.28
+},
+
+# Argentina
+"Argentina Primera Division": {
+    "csv": "ARG1",
+    "api": "soccer_argentina_primera_division",
+    "ha": 0.27
+},
+
+# USA
+"MLS": {
+    "csv": "USA1",
+    "api": "soccer_usa_mls",
+    "ha": 0.42
+},
+
+# UEFA
+"UEFA Champions League": {
+    "csv": "UCL",
+    "api": "soccer_uefa_champs_league",
+    "ha": 0.15
+},
+
+"UEFA Europa League": {
+    "csv": "UEL",
+    "api": "soccer_uefa_europa_league",
+    "ha": 0.15
+},
+
+"UEFA Conference League": {
+    "csv": "UECL",
+    "api": "soccer_uefa_europa_conference_league",
+    "ha": 0.15
+},
+    
     # ===== FIFA =====
     "FIFA World Cup": {
         "csv": "WC",
