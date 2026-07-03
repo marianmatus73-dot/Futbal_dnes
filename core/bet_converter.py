@@ -58,6 +58,11 @@ def bet_to_tip_dict(bet: Any, fallback_sport: str = "") -> dict | None:
         or prob_final
     )
 
+    raw_edge = to_float_or_none(data.get("edge"))
+
+    if raw_edge is None and prob_final is not None:
+        raw_edge = (prob_final * odds) - 1.0
+
     event = (
         data.get("event")
         or data.get("match")
@@ -74,15 +79,13 @@ def bet_to_tip_dict(bet: Any, fallback_sport: str = "") -> dict | None:
         or "Unknown"
     )
 
-    edge = to_float_or_none(data.get("edge"))
-
     reason_parts = []
 
     if data.get("reason"):
         reason_parts.append(str(data.get("reason")))
 
-    if edge is not None:
-        reason_parts.append(f"Edge {edge:.1%}")
+    if raw_edge is not None:
+        reason_parts.append(f"Raw edge {raw_edge:.1%}")
 
     if data.get("score") not in (None, ""):
         reason_parts.append(f"Score {data.get('score')}")
@@ -93,13 +96,18 @@ def bet_to_tip_dict(bet: Any, fallback_sport: str = "") -> dict | None:
         "match": event,
         "pick": selection,
         "odds": odds,
+
         "model_probability": prob_final or prob_model or prob_market,
         "market_probability": prob_market,
+
         "elo_probability": prob_model or prob_final or prob_market,
         "xg_probability": prob_final or prob_model or prob_market,
         "form_probability": prob_final or prob_model or prob_market,
+
+        "raw_edge": raw_edge,
         "injury_penalty": data.get("injury_penalty", 0.0),
         "news_penalty": data.get("news_penalty", 0.0),
+
         "bookmaker": data.get("bookmaker", ""),
         "reason": " | ".join(reason_parts),
     }
