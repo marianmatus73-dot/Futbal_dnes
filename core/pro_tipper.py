@@ -71,7 +71,6 @@ def calculate_stake_units(
         return 0.0
 
     stake = kelly * 0.25 * 10
-
     return round(max(0.25, min(max_units, stake)), 2)
 
 
@@ -134,6 +133,25 @@ def filter_value_tips(
     ]
 
 
+def rejected_tips(
+    tips: list[ProTip],
+    accepted: list[ProTip],
+    limit: int = 10,
+) -> list[ProTip]:
+    accepted_keys = {
+        (tip.sport, tip.league, tip.match, tip.pick, tip.odds)
+        for tip in accepted
+    }
+
+    rejected = [
+        tip for tip in tips
+        if (tip.sport, tip.league, tip.match, tip.pick, tip.odds)
+        not in accepted_keys
+    ]
+
+    return sort_tips(rejected)[:limit]
+
+
 def sort_tips(tips: list[ProTip]) -> list[ProTip]:
     return sorted(
         tips,
@@ -177,20 +195,38 @@ def format_pro_report(tips: list[ProTip]) -> str:
     text = "\n\n=== PRO TIPPER VALUE BETS ===\n"
 
     for i, tip in enumerate(tips, start=1):
-        text += f"\n#{i} 🔥 {tip.sport.upper()} | {tip.league}\n"
-        text += f"Match: {tip.match}\n"
-        text += f"Pick: {tip.pick}\n"
-        text += f"Odds: {tip.odds:.2f}\n"
-        text += f"Bookmaker: {tip.bookmaker or 'N/A'}\n"
-        text += f"Model probability: {tip.model_probability:.1%}\n"
-        text += f"Market probability: {tip.implied_probability:.1%}\n"
-        text += f"Edge: {tip.edge:.1%}\n"
-        text += f"Confidence: {tip.confidence}/100\n"
-        text += f"Risk: {tip.risk}\n"
-        text += f"Stake: {tip.stake_units}u\n"
-        text += f"Stake amount: {tip.stake_amount:.2f}\n"
+        text += format_tip_block(tip, i)
 
-        if tip.reason:
-            text += f"Reason: {tip.reason}\n"
+    return text
+
+
+def format_rejected_report(tips: list[ProTip]) -> str:
+    if not tips:
+        return "\n\n=== CANDIDATES REJECTED BY PRO FILTER ===\nŽiadni odmietnutí kandidáti.\n"
+
+    text = "\n\n=== CANDIDATES REJECTED BY PRO FILTER ===\n"
+
+    for i, tip in enumerate(tips, start=1):
+        text += format_tip_block(tip, i)
+
+    return text
+
+
+def format_tip_block(tip: ProTip, index: int) -> str:
+    text = f"\n#{index} {tip.sport.upper()} | {tip.league}\n"
+    text += f"Match: {tip.match}\n"
+    text += f"Pick: {tip.pick}\n"
+    text += f"Odds: {tip.odds:.2f}\n"
+    text += f"Bookmaker: {tip.bookmaker or 'N/A'}\n"
+    text += f"Model probability: {tip.model_probability:.1%}\n"
+    text += f"Market probability: {tip.implied_probability:.1%}\n"
+    text += f"Edge: {tip.edge:.1%}\n"
+    text += f"Confidence: {tip.confidence}/100\n"
+    text += f"Risk: {tip.risk}\n"
+    text += f"Stake: {tip.stake_units}u\n"
+    text += f"Stake amount: {tip.stake_amount:.2f}\n"
+
+    if tip.reason:
+        text += f"Reason: {tip.reason}\n"
 
     return text
