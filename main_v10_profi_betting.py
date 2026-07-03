@@ -109,7 +109,7 @@ MAX_EDGE = env_float("MAX_EDGE", 0.13)  # PROFI SAFE: reject suspiciously huge e
 # AI filter settings. The AI layer is intentionally conservative: it is used
 # only when there is enough settled history and when a holdout check does not
 # show obvious overfitting.
-AI_FILTER_ENABLED = env_int("AI_FILTER_ENABLED", 0)  # PROFI SAFE: disabled until holdout yield is stable positive
+AI_FILTER_ENABLED = env_int("AI_FILTER_ENABLED", 1)  # PROFI SAFE: disabled until holdout yield is stable positive
 MIN_AI_PROB = env_float("MIN_AI_PROB", 0.54)
 MIN_AI_EDGE = env_float("MIN_AI_EDGE", 0.015)
 MIN_AI_TRAIN_ROWS = env_int("MIN_AI_TRAIN_ROWS", 180)
