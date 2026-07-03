@@ -65,11 +65,24 @@ def update_model_stats(settings: Settings) -> dict:
     finally:
         conn.close()
 
-
 def performance_report(settings: Settings) -> str:
     stats = update_model_stats(settings)
 
-    return (
+    conn = sqlite3.connect(settings.db_file)
+
+    try:
+        rows = conn.execute(
+            """
+            SELECT COALESCE(result, ''), COUNT(*)
+            FROM sport_bets
+            GROUP BY COALESCE(result, '')
+            ORDER BY COUNT(*) DESC
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    text = (
         "\n=== MODEL PERFORMANCE ===\n"
         f"Total bets: {stats['total_bets']}\n"
         f"Wins: {stats['wins']}\n"
@@ -78,3 +91,12 @@ def performance_report(settings: Settings) -> str:
         f"Yield: {stats['yield']:.2f}%\n"
         f"Profit: {stats['profit']:.2f}\n"
     )
+
+    text += "\nResult distribution:\n"
+
+    for result, count in rows:
+        label = result if result else "OPEN"
+        text += f"- {label}: {count}\n"
+
+    return text
+
