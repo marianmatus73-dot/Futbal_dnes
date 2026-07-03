@@ -28,6 +28,8 @@ from core.pro_tipper import (
     sort_tips,
     save_tip_audit_log,
     format_pro_report,
+    rejected_tips,
+    format_rejected_report,
 )
 from core.top_tips import select_top_tips, select_telegram_tips
 from core.learning_model import retrain_from_results
@@ -184,6 +186,8 @@ def restore_learning_history(settings: Settings) -> None:
             log.warning("History import failed for %s: %s", table, e)
 
     log.info("Learning history restore finished. Imported rows: %s", total)
+
+
 def save_learning_history(settings: Settings) -> None:
     total = 0
 
@@ -317,7 +321,7 @@ def to_float_or_none(value) -> float | None:
         return None
 
 
-def extract_pro_tips(module_outputs: list[dict]) -> list:
+def extract_pro_tips(module_outputs: list[dict]) -> tuple[list, list]:
     raw_tips = []
 
     for item in module_outputs:
@@ -411,13 +415,13 @@ def extract_pro_tips(module_outputs: list[dict]) -> list:
             except Exception as e:
                 log.warning("Could not convert consensus tip to ProTip: %s", e)
 
-    log.info("Extracted %s raw pro tips before value filter", len(raw_tips))
+    all_tips = sort_tips(raw_tips)
+    value_tips = filter_value_tips(all_tips)
 
-    value_tips = filter_value_tips(raw_tips)
-
+    log.info("Extracted %s raw pro tips before value filter", len(all_tips))
     log.info("Value tips after filter: %s", len(value_tips))
 
-    return sort_tips(value_tips)
+    return all_tips, sort_tips(value_tips)
 
 
 def build_report(results: list, module_outputs: list[dict]) -> str:
@@ -428,12 +432,13 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
 
     base_report_text = buffer.getvalue()
 
-    pro_tips = extract_pro_tips(module_outputs)
+    all_tips, pro_tips = extract_pro_tips(module_outputs)
 
     top_limit = int(os.getenv("TOP_TIPS_LIMIT", "5"))
     min_telegram_conf = int(os.getenv("TELEGRAM_MIN_CONFIDENCE", "80"))
 
     top_tips = select_top_tips(pro_tips, limit=top_limit)
+    rejected = rejected_tips(all_tips, top_tips, limit=10)
     telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
 
     saved = save_tip_audit_log(top_tips)
@@ -451,6 +456,7 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
     report_text = ""
     report_text += "\n=== TOP TIPS OF THE DAY ===\n"
     report_text += format_pro_report(top_tips)
+    report_text += format_rejected_report(rejected)
 
     report_text += "\n\n=== HIGH CONFIDENCE TIPS ===\n"
 
