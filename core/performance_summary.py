@@ -16,7 +16,7 @@ def update_model_stats(settings: Settings) -> dict:
             """
             SELECT COUNT(*)
             FROM sport_bets
-            WHERE result IN ('V','P')
+            WHERE result IN ('WON','LOST','V','P')
             """
         ).fetchone()[0]
 
@@ -24,7 +24,7 @@ def update_model_stats(settings: Settings) -> dict:
             """
             SELECT COUNT(*)
             FROM sport_bets
-            WHERE result='V'
+            WHERE result IN ('WON','V')
             """
         ).fetchone()[0]
 
@@ -32,7 +32,7 @@ def update_model_stats(settings: Settings) -> dict:
             """
             SELECT COUNT(*)
             FROM sport_bets
-            WHERE result='P'
+            WHERE result IN ('LOST','P')
             """
         ).fetchone()[0]
 
