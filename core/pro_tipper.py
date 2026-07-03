@@ -19,6 +19,7 @@ class ProTip:
     bookmaker: str = ""
     reason: str = ""
 
+    raw_edge: float | None = None
     edge: float = 0.0
     implied_probability: float = 0.0
     confidence: int = 0
@@ -74,6 +75,28 @@ def calculate_stake_units(
     return round(max(0.25, min(max_units, stake)), 2)
 
 
+def rejection_reasons(
+    tip: ProTip,
+    min_edge: float = 0.04,
+    min_confidence: int = 65,
+) -> list[str]:
+    reasons = []
+
+    if tip.edge < min_edge:
+        reasons.append(f"consensus edge below {min_edge:.1%}")
+
+    if tip.confidence < min_confidence:
+        reasons.append(f"confidence below {min_confidence}")
+
+    if tip.stake_units <= 0:
+        reasons.append("stake <= 0")
+
+    if tip.risk == "high":
+        reasons.append("risk high")
+
+    return reasons
+
+
 def build_pro_tip(
     *,
     sport: str,
@@ -84,6 +107,7 @@ def build_pro_tip(
     model_probability: float,
     bookmaker: str = "",
     reason: str = "",
+    raw_edge: float | None = None,
 ) -> ProTip:
     imp = implied_probability(odds)
     edge = model_probability - imp
@@ -110,6 +134,7 @@ def build_pro_tip(
         model_probability=model_probability,
         bookmaker=bookmaker,
         reason=reason,
+        raw_edge=raw_edge,
         edge=edge,
         implied_probability=imp,
         confidence=confidence,
@@ -195,7 +220,7 @@ def format_pro_report(tips: list[ProTip]) -> str:
     text = "\n\n=== PRO TIPPER VALUE BETS ===\n"
 
     for i, tip in enumerate(tips, start=1):
-        text += format_tip_block(tip, i)
+        text += format_tip_block(tip, i, show_rejection=False)
 
     return text
 
@@ -207,12 +232,16 @@ def format_rejected_report(tips: list[ProTip]) -> str:
     text = "\n\n=== CANDIDATES REJECTED BY PRO FILTER ===\n"
 
     for i, tip in enumerate(tips, start=1):
-        text += format_tip_block(tip, i)
+        text += format_tip_block(tip, i, show_rejection=True)
 
     return text
 
 
-def format_tip_block(tip: ProTip, index: int) -> str:
+def format_tip_block(
+    tip: ProTip,
+    index: int,
+    show_rejection: bool = False,
+) -> str:
     text = f"\n#{index} {tip.sport.upper()} | {tip.league}\n"
     text += f"Match: {tip.match}\n"
     text += f"Pick: {tip.pick}\n"
@@ -220,11 +249,23 @@ def format_tip_block(tip: ProTip, index: int) -> str:
     text += f"Bookmaker: {tip.bookmaker or 'N/A'}\n"
     text += f"Model probability: {tip.model_probability:.1%}\n"
     text += f"Market probability: {tip.implied_probability:.1%}\n"
-    text += f"Edge: {tip.edge:.1%}\n"
+
+    if tip.raw_edge is not None:
+        text += f"Raw edge: {tip.raw_edge:.1%}\n"
+
+    text += f"Consensus edge: {tip.edge:.1%}\n"
     text += f"Confidence: {tip.confidence}/100\n"
     text += f"Risk: {tip.risk}\n"
     text += f"Stake: {tip.stake_units}u\n"
     text += f"Stake amount: {tip.stake_amount:.2f}\n"
+
+    if show_rejection:
+        reasons = rejection_reasons(tip)
+
+        if reasons:
+            text += "Rejected because:\n"
+            for reason in reasons:
+                text += f"- {reason}\n"
 
     if tip.reason:
         text += f"Reason: {tip.reason}\n"
