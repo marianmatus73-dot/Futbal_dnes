@@ -1,13 +1,13 @@
 {
-  "total_bets": 15,
-  "wins": 10,
-  "losses": 5,
-  "winrate": 66.67,
-  "yield": 47.62,
-  "profit": 4.27,
-  "stake_sum": 8.96,
-  "open_bets": 175,
-  "settled_bets": 15,
+  "total_bets": 20,
+  "wins": 14,
+  "losses": 6,
+  "winrate": 70.0,
+  "yield": 40.98,
+  "profit": 4.83,
+  "stake_sum": 11.78,
+  "open_bets": 179,
+  "settled_bets": 20,
   "by_sport": {
     "basketball": {
       "total": 15,
@@ -17,9 +17,27 @@
       "profit": 4.27,
       "stake_sum": 8.96,
       "yield": 47.62
+    },
+    "baseball": {
+      "total": 5,
+      "wins": 4,
+      "losses": 1,
+      "winrate": 80.0,
+      "profit": 0.56,
+      "stake_sum": 2.82,
+      "yield": 19.88
     }
   },
   "by_bookmaker": {
+    "Matchbook": {
+      "total": 3,
+      "wins": 3,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 1.59,
+      "stake_sum": 1.13,
+      "yield": 140.53
+    },
     "BetAnything": {
       "total": 1,
       "wins": 1,
@@ -38,23 +56,23 @@
       "stake_sum": 0.79,
       "yield": 157.0
     },
-    "Matchbook": {
+    "GTbets": {
       "total": 2,
       "wins": 2,
       "losses": 0,
       "winrate": 100.0,
-      "profit": 1.12,
-      "stake_sum": 0.88,
-      "yield": 127.05
+      "profit": 1.23,
+      "stake_sum": 0.76,
+      "yield": 162.32
     },
-    "GTbets": {
+    "Unibet (NL)": {
       "total": 1,
       "wins": 1,
       "losses": 0,
       "winrate": 100.0,
-      "profit": 0.62,
-      "stake_sum": 0.44,
-      "yield": 140.0
+      "profit": 0.66,
+      "stake_sum": 0.34,
+      "yield": 195.0
     },
     "Betfair": {
       "total": 1,
@@ -64,6 +82,15 @@
       "profit": 0.52,
       "stake_sum": 0.41,
       "yield": 126.0
+    },
+    "Unibet (SE)": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 0.47,
+      "stake_sum": 0.25,
+      "yield": 188.0
     },
     "Nordic Bet": {
       "total": 2,
@@ -100,6 +127,15 @@
       "profit": -0.6,
       "stake_sum": 2.2,
       "yield": -27.27
+    },
+    "Pinnacle": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -1.66,
+      "stake_sum": 1.66,
+      "yield": -100.0
     }
   },
   "by_league": {
@@ -111,7 +147,16 @@
       "profit": 4.27,
       "stake_sum": 8.96,
       "yield": 47.62
+    },
+    "baseball_mlb": {
+      "total": 5,
+      "wins": 4,
+      "losses": 1,
+      "winrate": 80.0,
+      "profit": 0.56,
+      "stake_sum": 2.82,
+      "yield": 19.88
     }
   },
-  "last_update": "2026-07-05T17:33:09.644472+00:00"
+  "last_update": "2026-07-05T17:55:29.052028+00:00"
 }
