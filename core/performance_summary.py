@@ -50,7 +50,19 @@ def update_model_stats(settings: Settings) -> dict:
         except Exception:
             pass
 
-        yield_pct = 0.0
+        stake_sum = cur.execute(
+    """
+    SELECT COALESCE(SUM(stake),0)
+    FROM sport_bets
+    WHERE result IN ('WON','LOST')
+    """
+).fetchone()[0]
+
+yield_pct = (
+    (profit / stake_sum) * 100
+    if stake_sum > 0
+    else 0.0
+)
 
         save_model_stats(
             total_bets=total,
