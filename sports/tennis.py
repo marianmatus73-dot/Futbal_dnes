@@ -258,7 +258,13 @@ class TennisModule(SportModule):
 
                     prob_final = ensemble.probability
                     edge = ensemble.edge
-                    adjusted_edge = ensemble.score * grade
+                    adjusted_edge = (
+    edge
+    * grade
+    * sport_weight(self.name)
+    * bookmaker_weight(bookmaker)
+    * league_weight(league)
+)
 
                     if edge < settings.min_edge:
                         blocked += 1
