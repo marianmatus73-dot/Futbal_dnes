@@ -26,6 +26,11 @@ from core.sport_settlement import settle_sport_bets
 from core.staking import kelly_stake
 from core.types import Bet, SportResult
 from sports.base import SportModule
+from core.adaptive_weights import (
+    sport_weight,
+    bookmaker_weight,
+    league_weight,
+)
 
 
 def now_utc() -> str:
