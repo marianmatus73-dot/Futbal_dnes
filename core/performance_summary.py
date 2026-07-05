@@ -121,7 +121,6 @@ def update_model_stats(settings: Settings) -> dict:
         )
 
         settled_bets = total
-
         yield_pct = (profit / stake_sum) * 100 if stake_sum > 0 else 0.0
 
         save_model_stats(
@@ -142,6 +141,35 @@ def update_model_stats(settings: Settings) -> dict:
 
     finally:
         conn.close()
+
+
+def _append_top_group(
+    text: str,
+    title: str,
+    data: dict,
+    limit: int = 10,
+) -> str:
+    if not data:
+        return text
+
+    text += f"\n{title}:\n"
+
+    items = sorted(
+        data.items(),
+        key=lambda x: x[1].get("profit", 0),
+        reverse=True,
+    )[:limit]
+
+    for name, row in items:
+        text += (
+            f"- {name}: "
+            f"{row['wins']}-{row['losses']} | "
+            f"profit {row['profit']:.2f} | "
+            f"yield {row['yield']:.2f}% | "
+            f"bets {row['total']}\n"
+        )
+
+    return text
 
 
 def performance_report(settings: Settings) -> str:
@@ -185,14 +213,8 @@ def performance_report(settings: Settings) -> str:
     for result, count in rows:
         text += f"- {result}: {count}\n"
 
-    if stats.get("by_sport"):
-        text += "\nBy sport:\n"
-        for sport, data in stats["by_sport"].items():
-            text += (
-                f"- {sport}: "
-                f"{data['wins']}-{data['losses']} | "
-                f"profit {data['profit']:.2f} | "
-                f"yield {data['yield']:.2f}%\n"
-            )
+    text = _append_top_group(text, "By sport", stats.get("by_sport", {}))
+    text = _append_top_group(text, "Top bookmakers", stats.get("by_bookmaker", {}))
+    text = _append_top_group(text, "Top leagues", stats.get("by_league", {}))
 
     return text
