@@ -1,30 +1,32 @@
 from __future__ import annotations
+from pydantic import BaseModel, Field
+from typing import Optional, Any
 
-from dataclasses import dataclass
-from typing import Optional
-
-
-@dataclass
-class Bet:
+# Tento model bude držať konzistenciu dát v celom systéme
+class SportTip(BaseModel):
     sport: str
     league: str
-    event: str
-    market: str
-    selection: str
+    match: str
+    pick: str
     odds: float
-    prob_model: float
-    prob_market: Optional[float]
-    prob_final: float
-    edge: float
-    stake: float
-    bookmaker: str
-    start_time: str
-    score: float = 0.0
+    model_probability: float
+    bookmaker: str = "N/A"
+    reason: str = ""
+    start_time: str = "N/A"
+    
+    # Štatistiky, ktoré používajú tvoje moduly
+    edge: float = 0.0
+    stake: float = 0.0
+    market_probability: Optional[float] = None
+    
+    class Config:
+        frozen = True  # Tip sa po vytvorení už nesmie meniť (bezpečnosť)
 
-
-@dataclass
-class SportResult:
+class SportResult(BaseModel):
     sport: str
     mode: str
-    bets: list[Bet]
+    bets: list[SportTip] = Field(default_factory=list)
     message: str = ""
+    ok: bool = True
+    error: Optional[str] = None
+    duration_sec: float = 0.0
