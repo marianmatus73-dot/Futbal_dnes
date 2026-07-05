@@ -1,8 +1,9 @@
 from __future__ import annotations
-from pydantic import BaseModel, Field
+from dataclasses import dataclass, field
 from typing import Optional
 
-class SportTip(BaseModel):
+@dataclass
+class SportTip:
     sport: str
     league: str
     match: str
@@ -12,20 +13,17 @@ class SportTip(BaseModel):
     bookmaker: str = "N/A"
     reason: str = ""
     start_time: str = "N/A"
-    
     edge: float = 0.0
     stake: float = 0.0
     market_probability: Optional[float] = None
-    
-    class Config:
-        frozen = True
+    raw_data: dict = field(default_factory=dict)
 
-class SportResult(BaseModel):
+@dataclass
+class SportResult:
     sport: str
     mode: str
-    bets: list[SportTip] = Field(default_factory=list)
+    bets: list[SportTip] = field(default_factory=list)
     message: str = ""
     ok: bool = True
     error: Optional[str] = None
     duration_sec: float = 0.0
-
