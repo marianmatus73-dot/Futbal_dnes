@@ -21,6 +21,7 @@ from core.config import Settings
 from core.reporting import print_report
 from core.sport_settlement import ensure_settlement_columns
 from core.audit_summary import audit_block_summary
+from core.adaptive_weights import build_adaptive_weights
 from core.performance_summary import performance_report
 from core.bet_converter import bet_to_tip_dict
 from core.bankroll import bankroll_summary
