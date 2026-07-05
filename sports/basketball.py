@@ -346,7 +346,13 @@ class BasketballModule(SportModule):
                     )
 
                     edge = prob_final * odds - 1.0
-                    adjusted_edge = edge * grade
+                    adjusted_edge = (
+    edge
+    * grade
+    * sport_weight(self.name)
+    * bookmaker_weight(bookmaker)
+    * league_weight(league)
+                    )
 
                     if edge < settings.min_edge:
                         blocked += 1
