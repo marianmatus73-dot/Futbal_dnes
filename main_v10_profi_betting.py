@@ -135,160 +135,59 @@ log = logging.getLogger("betting-v10")
 
 
 LIGY: Dict[str, Dict[str, Any]] = {
+    # === TOP EURÓPSKE LIGY ===
     "Premier League": {"csv": "E0", "api": "soccer_epl", "ha": 0.35},
     "La Liga": {"csv": "SP1", "api": "soccer_spain_la_liga", "ha": 0.38},
     "Bundesliga": {"csv": "D1", "api": "soccer_germany_bundesliga", "ha": 0.40},
     "Serie A": {"csv": "I1", "api": "soccer_italy_serie_a", "ha": 0.30},
-    "Ligue 1": {"csv": "F1", "api": "soccer_france_ligue_one", "ha": 0.32},
+    "Ligue 1": {"csv": "F1", "api": "soccer_france_ligue_1", "ha": 0.32},
     "Eredivisie": {"csv": "N1", "api": "soccer_netherlands_eredivisie", "ha": 0.42},
     "Championship": {"csv": "E1", "api": "soccer_efl_champ", "ha": 0.28},
-   # England
-"League One": {
-    "csv": "E2",
-    "api": "soccer_england_league1",
-    "ha": 0.30
-},
 
-"League Two": {
-    "csv": "E3",
-    "api": "soccer_england_league2",
-    "ha": 0.30
-},
+    # === ANGLICKO & ŠKÓTSKO ===
+    "League One": {"csv": "E2", "api": "soccer_england_league1", "ha": 0.30},
+    "League Two": {"csv": "E3", "api": "soccer_england_league2", "ha": 0.30},
+    "Scottish Premiership": {"csv": "SC0", "api": "soccer_spl", "ha": 0.32},
+    "Scottish Championship": {"csv": "SC1", "api": "soccer_scotland_championship", "ha": 0.30},
 
-# Scotland
-"Scottish Premiership": {
-    "csv": "SC0",
-    "api": "soccer_spl",
-    "ha": 0.32
-},
+    # === OSTATNÁ EURÓPA (A/B Tier) ===
+    "Primeira Liga": {"csv": "P1", "api": "soccer_portugal_primeira_liga", "ha": 0.34},
+    "Belgian Pro League": {"csv": "B1", "api": "soccer_belgium_first_div", "ha": 0.33},
+    "Turkish Super Lig": {"csv": "T1", "api": "soccer_turkey_super_league", "ha": 0.36},
+    "Greek Super League": {"csv": "G1", "api": "soccer_greece_super_league", "ha": 0.35},
+    "Austrian Bundesliga": {"csv": "AUT1", "api": "soccer_austria_bundesliga", "ha": 0.34},
+    "Swiss Super League": {"csv": "SWZ1", "api": "soccer_switzerland_superleague", "ha": 0.32},
+    "Danish Superliga": {"csv": "DNK1", "api": "soccer_denmark_superliga", "ha": 0.34},
+    "Eliteserien": {"csv": "NOR1", "api": "soccer_norway_eliteserien", "ha": 0.39},
+    "Allsvenskan": {"csv": "SWE1", "api": "soccer_sweden_allsvenskan", "ha": 0.38},
 
-# Portugal
-"Primeira Liga": {
-    "csv": "P1",
-    "api": "soccer_portugal_primeira_liga",
-    "ha": 0.34
-},
+    # === DRUHÉ EURÓPSKE LIGY (Vysoká stabilita dát) ===
+    "2. Bundesliga": {"csv": "D2", "api": "soccer_germany_2bundesliga", "ha": 0.32},
+    "Segunda Division": {"csv": "SP2", "api": "soccer_spain_segunda_division", "ha": 0.28},
+    "Serie B": {"csv": "I2", "api": "soccer_italy_serie_b", "ha": 0.26},
+    "Ligue 2": {"csv": "F2", "api": "soccer_france_ligue_2", "ha": 0.25},
 
-# Belgium
-"Belgian Pro League": {
-    "csv": "B1",
-    "api": "soccer_belgium_first_div",
-    "ha": 0.33
-},
+    # === SEVERNÁ & JUŽNÁ AMERIKA ===
+    "MLS": {"csv": "USA1", "api": "soccer_usa_mls", "ha": 0.42},
+    "Brazil Serie A": {"csv": "BRA1", "api": "soccer_brazil_campeonato", "ha": 0.28},
+    "Argentina Primera Division": {"csv": "ARG1", "api": "soccer_argentina_primera_division", "ha": 0.27},
+    "Liga MX": {"csv": "MEX1", "api": "soccer_mexico_liga_mx", "ha": 0.45},
 
-# Turkey
-"Turkish Super Lig": {
-    "csv": "T1",
-    "api": "soccer_turkey_super_league",
-    "ha": 0.36
-},
+    # === ÁZIA & OCEÁNIA ===
+    "J-League": {"csv": "JPN1", "api": "soccer_japan_j_league", "ha": 0.32},
+    "A-League": {"csv": "AUS1", "api": "soccer_australia_aleague", "ha": 0.35},
 
-# Greece
-"Greek Super League": {
-    "csv": "G1",
-    "api": "soccer_greece_super_league",
-    "ha": 0.35
-},
-
-# Austria
-"Austrian Bundesliga": {
-    "csv": "AUT1",
-    "api": "soccer_austria_bundesliga",
-    "ha": 0.34
-},
-
-# Switzerland
-"Swiss Super League": {
-    "csv": "SWZ1",
-    "api": "soccer_switzerland_superleague",
-    "ha": 0.32
-},
-
-# Denmark
-"Danish Superliga": {
-    "csv": "DNK1",
-    "api": "soccer_denmark_superliga",
-    "ha": 0.34
-},
-
-# Norway
-"Eliteserien": {
-    "csv": "NOR1",
-    "api": "soccer_norway_eliteserien",
-    "ha": 0.39
-},
-
-# Sweden
-"Allsvenskan": {
-    "csv": "SWE1",
-    "api": "soccer_sweden_allsvenskan",
-    "ha": 0.38
-},
-
-# Brazil
-"Brazil Serie A": {
-    "csv": "BRA1",
-    "api": "soccer_brazil_campeonato",
-    "ha": 0.28
-},
-
-# Argentina
-"Argentina Primera Division": {
-    "csv": "ARG1",
-    "api": "soccer_argentina_primera_division",
-    "ha": 0.27
-},
-
-# USA
-"MLS": {
-    "csv": "USA1",
-    "api": "soccer_usa_mls",
-    "ha": 0.42
-},
-
-# UEFA
-"UEFA Champions League": {
-    "csv": "UCL",
-    "api": "soccer_uefa_champs_league",
-    "ha": 0.15
-},
-
-"UEFA Europa League": {
-    "csv": "UEL",
-    "api": "soccer_uefa_europa_league",
-    "ha": 0.15
-},
-
-"UEFA Conference League": {
-    "csv": "UECL",
-    "api": "soccer_uefa_europa_conference_league",
-    "ha": 0.15
-},
+    # === MEDZINÁRODNÉ SÚŤAŽE (UEFA / FIFA) ===
+    "UEFA Champions League": {"csv": "UCL", "api": "soccer_uefa_champs_league", "ha": 0.15},
+    "UEFA Europa League": {"csv": "UEL", "api": "soccer_uefa_europa_league", "ha": 0.15},
+    "UEFA Conference League": {"csv": "UECL", "api": "soccer_uefa_conference_league", "ha": 0.15},
+    "UEFA Nations League": {"csv": "UNL", "api": "soccer_uefa_nations_league", "ha": 0.20},
+    "FIFA World Cup": {"csv": "WC", "api": "soccer_fifa_world_cup", "ha": 0.18},
+    "Club World Cup": {"csv": "CWC", "api": "soccer_fifa_club_world_cup", "ha": 0.15},
     
-    # ===== FIFA =====
-    "FIFA World Cup": {
-        "csv": "WC",
-        "api": "soccer_fifa_world_cup",
-        "ha": 0.18
-    },
-
-    "World Cup Qualifiers Europe": {
-        "csv": "WCQEU",
-        "api": "soccer_fifa_world_cup_qualifiers_europe",
-        "ha": 0.20
-    },
-
-    "World Cup Qualifiers South America": {
-        "csv": "WCQSA",
-        "api": "soccer_fifa_world_cup_qualifiers_south_america",
-        "ha": 0.28
-    },
-
-    "Club World Cup": {
-        "csv": "CWC",
-        "api": "soccer_fifa_club_world_cup",
-        "ha": 0.15
-    },
+    # === KVALIFIKÁCIE ===
+    "World Cup Qualifiers Europe": {"csv": "WCQEU", "api": "soccer_fifa_world_cup_qualifiers_europe", "ha": 0.20},
+    "World Cup Qualifiers South America": {"csv": "WCQSA", "api": "soccer_fifa_world_cup_qualifiers_south_america", "ha": 0.28},
 }
 
 ACTIVE_LEAGUES: Optional[set[str]] = None
