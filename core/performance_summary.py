@@ -36,33 +36,31 @@ def update_model_stats(settings: Settings) -> dict:
             """
         ).fetchone()[0]
 
-        profit = 0.0
+        profit = float(
+            cur.execute(
+                """
+                SELECT COALESCE(SUM(profit),0)
+                FROM sport_bets
+                WHERE result IN ('WON','LOST','V','P')
+                """
+            ).fetchone()[0]
+        )
 
-        try:
-            profit = float(
-                cur.execute(
-                    """
-                    SELECT COALESCE(SUM(profit),0)
-                    FROM sport_bets
-                    """
-                ).fetchone()[0]
-            )
-        except Exception:
-            pass
+        stake_sum = float(
+            cur.execute(
+                """
+                SELECT COALESCE(SUM(stake),0)
+                FROM sport_bets
+                WHERE result IN ('WON','LOST','V','P')
+                """
+            ).fetchone()[0]
+        )
 
-        stake_sum = cur.execute(
-    """
-    SELECT COALESCE(SUM(stake),0)
-    FROM sport_bets
-    WHERE result IN ('WON','LOST')
-    """
-).fetchone()[0]
-
-yield_pct = (
-    (profit / stake_sum) * 100
-    if stake_sum > 0
-    else 0.0
-)
+        yield_pct = (
+            (profit / stake_sum) * 100
+            if stake_sum > 0
+            else 0.0
+        )
 
         save_model_stats(
             total_bets=total,
@@ -86,9 +84,15 @@ def performance_report(settings: Settings) -> str:
     try:
         rows = conn.execute(
             """
-            SELECT COALESCE(result, ''), COUNT(*)
+            SELECT
+                CASE
+                    WHEN result IS NULL OR result='' OR result='OPEN'
+                    THEN 'OPEN'
+                    ELSE result
+                END AS result_group,
+                COUNT(*)
             FROM sport_bets
-            GROUP BY COALESCE(result, '')
+            GROUP BY result_group
             ORDER BY COUNT(*) DESC
             """
         ).fetchall()
@@ -99,10 +103,10 @@ def performance_report(settings: Settings) -> str:
     settled_bets = 0
 
     for result, count in rows:
-        if result:
-            settled_bets += count
-        else:
+        if result == "OPEN":
             open_bets += count
+        else:
+            settled_bets += count
 
     text = (
         "\n=== MODEL PERFORMANCE ===\n"
@@ -120,7 +124,6 @@ def performance_report(settings: Settings) -> str:
     text += "\nResult distribution:\n"
 
     for result, count in rows:
-        label = result if result else "OPEN"
-        text += f"- {label}: {count}\n"
+        text += f"- {result}: {count}\n"
 
     return text
