@@ -93,11 +93,22 @@ class TennisModule(SportModule):
                 bet.event.split(" vs ")[0] if " vs " in bet.event else "",
                 bet.event.split(" vs ")[1] if " vs " in bet.event else "",
                 bet.market, bet.selection, bet.odds, bet.prob_model, bet.prob_market, bet.prob_final,
-                bet.edge, bet.stake, bet.bookmaker, bet.start_time, bet.score, source_hash, "",
+                bet.edge, bet.stake, bet.bookmaker, bet.start_time, bet.score, source_hash, "OPEN",
             ))
 
-    def _audit(self, settings: Settings, sport_key: str, event_name: str, selection: str, bookmaker: str, odds: float,
-               prob_market: float | None, edge: float | None, decision: str, reason: str) -> None:
+    def _audit(
+        self,
+        settings: Settings,
+        sport_key: str,
+        event_name: str,
+        selection: str,
+        bookmaker: str,
+        odds: float,
+        prob_market: float | None,
+        edge: float | None,
+        decision: str,
+        reason: str,
+    ) -> None:
         with self._connect(settings) as conn:
             conn.execute("""
                 INSERT INTO sport_decision_audit
@@ -111,7 +122,6 @@ class TennisModule(SportModule):
         configured_keys = os.getenv(
             "TENNIS_SPORT_KEYS",
             ",".join([
-                # === GRAND SLAMY ===
                 "tennis_atp_australian_open",
                 "tennis_wta_australian_open",
                 "tennis_atp_french_open",
@@ -121,7 +131,6 @@ class TennisModule(SportModule):
                 "tennis_atp_us_open",
                 "tennis_wta_us_open",
 
-                # === ATP MASTERS 1000 & VEĽKÉ TURNAJE ===
                 "tennis_atp_indian_wells",
                 "tennis_wta_indian_wells",
                 "tennis_atp_miami_open",
@@ -138,7 +147,6 @@ class TennisModule(SportModule):
                 "tennis_atp_shanghai_masters",
                 "tennis_atp_paris_masters",
 
-                # === ATP / WTA OSTATNÉ (Špecifické klúče) ===
                 "tennis_atp_dubai",
                 "tennis_wta_dubai",
                 "tennis_atp_qatar_open",
@@ -156,11 +164,10 @@ class TennisModule(SportModule):
                 "tennis_atp_beijing",
                 "tennis_wta_beijing",
 
-                # === GENERICKÉ KĽÚČE (Pre ATP 250/500, WTA 250/500 a Challangere) ===
-                "tennis_atp_wta_generic",  # Zastrešuje menšie ATP/WTA turnaje bežiace paralelne
-                "tennis_atp_challenger",   # Kompletná Challenger tour (výborné na hľadanie neefektivít)
-                "tennis_wta_125",          # WTA 125s séria
-                "tennis_itf",              # ITF okruh (ak ho máš predplatený / je aktívny)
+                "tennis_atp_wta_generic",
+                "tennis_atp_challenger",
+                "tennis_wta_125",
+                "tennis_itf",
             ]),
         ).split(",")
 
@@ -170,7 +177,11 @@ class TennisModule(SportModule):
             active_keys = await discover_active_sport_keys(settings.odds_api_key, ["Tennis"])
             clean_sport_keys = filter_active_keys(clean_sport_keys, active_keys)
 
-        settled = await settle_sport_bets(settings=settings, sport=self.name, sport_keys=clean_sport_keys)
+        settled = await settle_sport_bets(
+            settings=settings,
+            sport=self.name,
+            sport_keys=clean_sport_keys,
+        )
         updated_clv = update_closing_lines(settings, self.name)
         refresh_bookmaker_stats(settings, self.name)
 
@@ -197,7 +208,14 @@ class TennisModule(SportModule):
                 bookmakers = event.get("bookmakers", [])
 
                 scanned_events += 1
-                snapshots_saved += self._save_snapshot(settings, sport_key, event_name, home, away, bookmakers)
+                snapshots_saved += self._save_snapshot(
+                    settings,
+                    sport_key,
+                    event_name,
+                    home,
+                    away,
+                    bookmakers,
+                )
 
                 consensus = consensus_h2h(bookmakers, min_books=min_books)
                 if not consensus:
@@ -212,34 +230,41 @@ class TennisModule(SportModule):
                         self._audit(settings, sport_key, event_name, selection, bookmaker, odds, None, None, "BLOCK", "selection missing in consensus")
                         continue
 
-                    grade = bookmaker_grade(settings, self.name, bookmaker, min_samples=grade_min_samples)
+                    grade = bookmaker_grade(
+                        settings,
+                        self.name,
+                        bookmaker,
+                        min_samples=grade_min_samples,
+                    )
                     elo_adj = elo_adjustment(settings, self.name, home, away, selection)
                     surface_adj = tennis_surface_adjustment(sport_key)
 
                     ensemble = build_ensemble_probability(
-    EnsembleInput(
-        market_probability=prob_market,
-        elo_adjustment=elo_adj,
-        form_adjustment=0.0,
-        clv_adjustment=0.0,
-        bookmaker_adjustment=(grade - 1.0) * 0.02,
-        sport_adjustment=surface_adj,
-    ),
-    odds=odds,
-)
+                        EnsembleInput(
+                            market_probability=prob_market,
+                            elo_adjustment=elo_adj,
+                            form_adjustment=0.0,
+                            clv_adjustment=0.0,
+                            bookmaker_adjustment=(grade - 1.0) * 0.02,
+                            sport_adjustment=surface_adj,
+                        ),
+                        odds=odds,
+                    )
 
-prob_final = ensemble.probability
-edge = ensemble.edge
-adjusted_edge = ensemble.score * grade
+                    prob_final = ensemble.probability
+                    edge = ensemble.edge
+                    adjusted_edge = ensemble.score * grade
 
                     if edge < settings.min_edge:
                         blocked += 1
                         self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "edge below minimum")
                         continue
+
                     if edge > settings.max_edge:
                         blocked += 1
                         self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "edge above max guard")
                         continue
+
                     if odds > settings.max_odds:
                         blocked += 1
                         self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "BLOCK", "odds above max odds")
@@ -252,15 +277,36 @@ adjusted_edge = ensemble.score * grade
                         continue
 
                     bet = Bet(
-                        sport=self.name, league=league, event=event_name, market="h2h", selection=selection,
-                        odds=odds, prob_model=prob_market, prob_market=prob_market, prob_final=prob_final,
-                        edge=edge, stake=stake, bookmaker=bookmaker, start_time=start, score=adjusted_edge * 100,
+                        sport=self.name,
+                        league=league,
+                        event=event_name,
+                        market="h2h",
+                        selection=selection,
+                        odds=odds,
+                        prob_model=prob_market,
+                        prob_market=prob_market,
+                        prob_final=prob_final,
+                        edge=edge,
+                        stake=stake,
+                        bookmaker=bookmaker,
+                        start_time=start,
+                        score=adjusted_edge,
                     )
 
                     bets.append(bet)
                     self._save_bet(settings, bet)
-                    self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "PASS",
-                                f"{ensemble.reason}, bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, surface_adj {surface_adj:.3f}")
+                    self._audit(
+                        settings,
+                        sport_key,
+                        event_name,
+                        selection,
+                        bookmaker,
+                        odds,
+                        prob_market,
+                        edge,
+                        "PASS",
+                        f"{ensemble.reason}, bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, surface_adj {surface_adj:.3f}",
+                    )
 
         bets = dedupe_best_bets(bets)
         analytics = sport_analytics_report(settings, self.name)
@@ -279,4 +325,4 @@ adjusted_edge = ensemble.score * grade
                 f"Stored candidates: {len(bets)}.\n"
                 f"{analytics}"
             ),
-        )
+                )
