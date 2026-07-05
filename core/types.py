@@ -1,8 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel, Field
-from typing import Optional, Any
+from typing import Optional
 
-# Tento model bude držať konzistenciu dát v celom systéme
 class SportTip(BaseModel):
     sport: str
     league: str
@@ -14,13 +13,12 @@ class SportTip(BaseModel):
     reason: str = ""
     start_time: str = "N/A"
     
-    # Štatistiky, ktoré používajú tvoje moduly
     edge: float = 0.0
     stake: float = 0.0
     market_probability: Optional[float] = None
     
     class Config:
-        frozen = True  # Tip sa po vytvorení už nesmie meniť (bezpečnosť)
+        frozen = True
 
 class SportResult(BaseModel):
     sport: str
@@ -30,3 +28,4 @@ class SportResult(BaseModel):
     ok: bool = True
     error: Optional[str] = None
     duration_sec: float = 0.0
+
