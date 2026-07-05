@@ -311,7 +311,13 @@ class MMAModule(SportModule):
 
                     prob_final = max(0.01, min(0.99, prob_market + elo_adj + extra_adj))
                     edge = prob_final * odds - 1.0
-                    adjusted_edge = edge * grade
+                    adjusted_edge = (
+    edge
+    * grade
+    * sport_weight(self.name)
+    * bookmaker_weight(bookmaker)
+    * league_weight(league)
+)
 
                     if edge < settings.min_edge:
                         blocked += 1
