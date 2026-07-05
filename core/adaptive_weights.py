@@ -1,87 +1,75 @@
 from __future__ import annotations
 
-import json
-from pathlib import Path
+from core.model_stats import load_model_stats
 
 
-MODEL_STATS = Path("exports/model_stats.json")
-ADAPTIVE_WEIGHTS = Path("exports/adaptive_weights.json")
+def sport_weight(sport: str) -> float:
+    stats = load_model_stats()
+
+    by_sport = stats.get("by_sport", {})
+    item = by_sport.get(sport)
+
+    if not item:
+        return 1.0
+
+    y = float(item.get("yield", 0))
+
+    if y > 20:
+        return 1.20
+
+    if y > 10:
+        return 1.10
+
+    if y < -10:
+        return 0.90
+
+    if y < -20:
+        return 0.80
+
+    return 1.0
 
 
-def build_adaptive_weights() -> dict:
-    if not MODEL_STATS.exists():
-        return {}
+def bookmaker_weight(bookmaker: str) -> float:
+    stats = load_model_stats()
 
-    data = json.loads(
-        MODEL_STATS.read_text(encoding="utf-8")
-    )
+    by_bookmaker = stats.get("by_bookmaker", {})
+    item = by_bookmaker.get(bookmaker)
 
-    result = {
-        "sports": {},
-        "bookmakers": {},
-        "leagues": {},
-    }
+    if not item:
+        return 1.0
 
-    for sport, stats in data.get("by_sport", {}).items():
-        profit = float(stats.get("profit", 0))
-        yield_pct = float(stats.get("yield", 0))
+    y = float(item.get("yield", 0))
 
-        weight = 1.0
+    if y > 30:
+        return 1.15
 
-        if yield_pct > 20:
-            weight = 1.20
-        elif yield_pct > 10:
-            weight = 1.10
-        elif yield_pct < -10:
-            weight = 0.90
-        elif yield_pct < -20:
-            weight = 0.80
+    if y > 15:
+        return 1.10
 
-        result["sports"][sport] = round(weight, 3)
+    if y < -15:
+        return 0.90
 
-    for bookmaker, stats in data.get("by_bookmaker", {}).items():
-        profit = float(stats.get("profit", 0))
-        yield_pct = float(stats.get("yield", 0))
-        bets = int(stats.get("total", 0))
+    return 1.0
 
-        weight = 1.0
 
-        if bets >= 5:
-            if yield_pct > 20:
-                weight = 1.20
-            elif yield_pct > 10:
-                weight = 1.10
-            elif yield_pct < -10:
-                weight = 0.90
-            elif yield_pct < -20:
-                weight = 0.80
+def league_weight(league: str) -> float:
+    stats = load_model_stats()
 
-        result["bookmakers"][bookmaker] = round(weight, 3)
+    by_league = stats.get("by_league", {})
+    item = by_league.get(league)
 
-    for league, stats in data.get("by_league", {}).items():
-        yield_pct = float(stats.get("yield", 0))
+    if not item:
+        return 1.0
 
-        weight = 1.0
+    y = float(item.get("yield", 0))
 
-        if yield_pct > 20:
-            weight = 1.15
-        elif yield_pct > 10:
-            weight = 1.05
-        elif yield_pct < -10:
-            weight = 0.95
-        elif yield_pct < -20:
-            weight = 0.85
+    if y > 20:
+        return 1.15
 
-        result["leagues"][league] = round(weight, 3)
+    if y > 10:
+        return 1.05
 
-    ADAPTIVE_WEIGHTS.parent.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
+    if y < -10:
+        return 0.90
 
-    ADAPTIVE_WEIGHTS.write_text(
-        json.dumps(result, indent=2),
-        encoding="utf-8",
-    )
-
-    return result
+    return 1.0
