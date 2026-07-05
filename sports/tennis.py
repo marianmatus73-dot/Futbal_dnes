@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from core.config import Settings
+from core.ensemble_model import EnsembleInput, build_ensemble_probability
 from core.market import consensus_h2h, best_outlier_prices, dedupe_best_bets
 from core.odds_api import fetch_odds
 from core.sport_quant import (
