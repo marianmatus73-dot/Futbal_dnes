@@ -216,9 +216,21 @@ class TennisModule(SportModule):
                     elo_adj = elo_adjustment(settings, self.name, home, away, selection)
                     surface_adj = tennis_surface_adjustment(sport_key)
 
-                    prob_final = max(0.01, min(0.99, prob_market + elo_adj + surface_adj))
-                    edge = prob_final * odds - 1.0
-                    adjusted_edge = edge * grade
+                    ensemble = build_ensemble_probability(
+    EnsembleInput(
+        market_probability=prob_market,
+        elo_adjustment=elo_adj,
+        form_adjustment=0.0,
+        clv_adjustment=0.0,
+        bookmaker_adjustment=(grade - 1.0) * 0.02,
+        sport_adjustment=surface_adj,
+    ),
+    odds=odds,
+)
+
+prob_final = ensemble.probability
+edge = ensemble.edge
+adjusted_edge = ensemble.score * grade
 
                     if edge < settings.min_edge:
                         blocked += 1
@@ -248,7 +260,7 @@ class TennisModule(SportModule):
                     bets.append(bet)
                     self._save_bet(settings, bet)
                     self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "PASS",
-                                f"bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, surface_adj {surface_adj:.3f}")
+                                f"{ensemble.reason}, bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, surface_adj {surface_adj:.3f}")
 
         bets = dedupe_best_bets(bets)
         analytics = sport_analytics_report(settings, self.name)
