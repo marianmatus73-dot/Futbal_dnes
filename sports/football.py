@@ -9,11 +9,6 @@ from pathlib import Path
 
 from core.config import Settings
 from core.types import SportResult
-from core.adaptive_weights import (
-    sport_weight,
-    bookmaker_weight,
-    league_weight,
-)
 from sports.base import SportModule
 from sports.football_signals import enrich_football_tip
 
