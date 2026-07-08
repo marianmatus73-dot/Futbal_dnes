@@ -1,22 +1,22 @@
 {
-  "total_bets": 54,
+  "total_bets": 56,
   "wins": 24,
-  "losses": 30,
-  "winrate": 44.44,
-  "yield": 10.09,
-  "profit": 2.77,
-  "stake_sum": 27.47,
-  "open_bets": 177,
-  "settled_bets": 54,
+  "losses": 32,
+  "winrate": 42.86,
+  "yield": 7.39,
+  "profit": 2.08,
+  "stake_sum": 28.16,
+  "open_bets": 175,
+  "settled_bets": 56,
   "by_sport": {
     "baseball": {
-      "total": 17,
+      "total": 19,
       "wins": 12,
-      "losses": 5,
-      "winrate": 70.59,
-      "profit": 3.14,
-      "stake_sum": 10.44,
-      "yield": 30.08
+      "losses": 7,
+      "winrate": 63.16,
+      "profit": 2.45,
+      "stake_sum": 11.13,
+      "yield": 22.02
     },
     "basketball": {
       "total": 37,
@@ -83,15 +83,6 @@
       "stake_sum": 1.19,
       "yield": 29.12
     },
-    "Matchbook": {
-      "total": 7,
-      "wins": 3,
-      "losses": 4,
-      "winrate": 42.86,
-      "profit": 0.34,
-      "stake_sum": 2.38,
-      "yield": 14.2
-    },
     "LeoVegas (SE)": {
       "total": 3,
       "wins": 1,
@@ -119,6 +110,15 @@
       "stake_sum": 1.09,
       "yield": 6.57
     },
+    "Matchbook": {
+      "total": 8,
+      "wins": 3,
+      "losses": 5,
+      "winrate": 37.5,
+      "profit": 0.03,
+      "stake_sum": 2.69,
+      "yield": 1.04
+    },
     "Coolbet": {
       "total": 2,
       "wins": 1,
@@ -136,6 +136,15 @@
       "profit": -0.27,
       "stake_sum": 2.07,
       "yield": -12.96
+    },
+    "1xBet": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.38,
+      "stake_sum": 0.38,
+      "yield": -100.0
     },
     "Everygame": {
       "total": 1,
@@ -176,13 +185,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 17,
+      "total": 19,
       "wins": 12,
-      "losses": 5,
-      "winrate": 70.59,
-      "profit": 3.14,
-      "stake_sum": 10.44,
-      "yield": 30.08
+      "losses": 7,
+      "winrate": 63.16,
+      "profit": 2.45,
+      "stake_sum": 11.13,
+      "yield": 22.02
     },
     "basketball_wnba": {
       "total": 37,
@@ -194,5 +203,5 @@
       "yield": -2.16
     }
   },
-  "last_update": "2026-07-07T18:04:13.275294+00:00"
+  "last_update": "2026-07-08T08:36:07.534445+00:00"
 }
