@@ -1,13 +1,13 @@
 {
-  "total_bets": 56,
-  "wins": 24,
+  "total_bets": 58,
+  "wins": 26,
   "losses": 32,
-  "winrate": 42.86,
-  "yield": 7.39,
-  "profit": 2.08,
-  "stake_sum": 28.16,
-  "open_bets": 177,
-  "settled_bets": 56,
+  "winrate": 44.83,
+  "yield": 13.0,
+  "profit": 3.75,
+  "stake_sum": 28.84,
+  "open_bets": 181,
+  "settled_bets": 58,
   "by_sport": {
     "baseball": {
       "total": 19,
@@ -19,13 +19,13 @@
       "yield": 22.02
     },
     "basketball": {
-      "total": 37,
-      "wins": 12,
+      "total": 39,
+      "wins": 14,
       "losses": 25,
-      "winrate": 32.43,
-      "profit": -0.37,
-      "stake_sum": 17.03,
-      "yield": -2.16
+      "winrate": 35.9,
+      "profit": 1.3,
+      "stake_sum": 17.71,
+      "yield": 7.33
     }
   },
   "by_bookmaker": {
@@ -37,6 +37,15 @@
       "profit": 2.15,
       "stake_sum": 2.9,
       "yield": 73.98
+    },
+    "Betfair": {
+      "total": 8,
+      "wins": 4,
+      "losses": 4,
+      "winrate": 50.0,
+      "profit": 1.6,
+      "stake_sum": 3.73,
+      "yield": 42.85
     },
     "BetAnything": {
       "total": 1,
@@ -56,14 +65,14 @@
       "stake_sum": 0.76,
       "yield": 162.32
     },
-    "Betfair": {
-      "total": 7,
-      "wins": 3,
-      "losses": 4,
-      "winrate": 42.86,
-      "profit": 0.77,
-      "stake_sum": 3.39,
-      "yield": 22.58
+    "Matchbook": {
+      "total": 9,
+      "wins": 4,
+      "losses": 5,
+      "winrate": 44.44,
+      "profit": 0.86,
+      "stake_sum": 3.03,
+      "yield": 28.42
     },
     "Unibet (NL)": {
       "total": 5,
@@ -109,15 +118,6 @@
       "profit": 0.07,
       "stake_sum": 1.09,
       "yield": 6.57
-    },
-    "Matchbook": {
-      "total": 8,
-      "wins": 3,
-      "losses": 5,
-      "winrate": 37.5,
-      "profit": 0.03,
-      "stake_sum": 2.69,
-      "yield": 1.04
     },
     "Coolbet": {
       "total": 2,
@@ -194,14 +194,14 @@
       "yield": 22.02
     },
     "basketball_wnba": {
-      "total": 37,
-      "wins": 12,
+      "total": 39,
+      "wins": 14,
       "losses": 25,
-      "winrate": 32.43,
-      "profit": -0.37,
-      "stake_sum": 17.03,
-      "yield": -2.16
+      "winrate": 35.9,
+      "profit": 1.3,
+      "stake_sum": 17.71,
+      "yield": 7.33
     }
   },
-  "last_update": "2026-07-08T17:42:06.875900+00:00"
+  "last_update": "2026-07-09T09:53:25.758575+00:00"
 }
