@@ -35,6 +35,10 @@ from core.sport_settlement import settle_sport_bets
 from core.staking import kelly_stake
 from core.types import Bet, SportResult
 from sports.base import SportModule
+from core.meta_model import (
+    MetaFeatures,
+    predict_probability,
+)
 
 
 def now_utc() -> str:
@@ -444,11 +448,21 @@ class BaseballModule(SportModule):
                         league=league,
                     )
 
-                    prob_final = clamp(
-                        prob_market + elo_adj + extra_adj
-                    )
+                    features = MetaFeatures(
+    market_probability=prob_market,
+    elo_adjustment=elo_adj,
+    form_adjustment=0.0,
+    clv_adjustment=0.0,
+    bookmaker_grade=grade,
+    sport_weight=current_sport_weight,
+    league_weight=current_league_weight,
+    confidence=base_confidence,
+    monte_carlo_probability=mc.win_probability,
+)
 
-                    edge = prob_final * odds - 1.0
+prob_final = predict_probability(features)
+
+edge = prob_final * odds - 1.0
 
                     current_sport_weight = sport_weight(self.name)
                     current_bookmaker_weight = bookmaker_weight(bookmaker)
