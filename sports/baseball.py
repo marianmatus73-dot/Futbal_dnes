@@ -448,19 +448,9 @@ class BaseballModule(SportModule):
                         league=league,
                     )
 
-                    features = MetaFeatures(
-    market_probability=prob_market,
-    elo_adjustment=elo_adj,
-    form_adjustment=0.0,
-    clv_adjustment=0.0,
-    bookmaker_grade=grade,
-    sport_weight=current_sport_weight,
-    league_weight=current_league_weight,
-    confidence=base_confidence,
-    monte_carlo_probability=mc.win_probability,
+                    prob_final = clamp(
+    prob_market + elo_adj + extra_adj
 )
-
-prob_final = predict_probability(features)
 
 edge = prob_final * odds - 1.0
 
