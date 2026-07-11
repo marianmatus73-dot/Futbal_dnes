@@ -135,15 +135,13 @@ class BasketballModule(SportModule):
 
     def _save_bet(self, settings: Settings, bet: Bet) -> None:
         source_hash = make_hash(
-            bet.sport,
-            bet.league,
-            bet.event,
-            bet.market,
-            bet.selection,
-            bet.odds,
-            bet.bookmaker,
-            bet.start_time,
-        )
+    bet.sport,
+    bet.league,
+    bet.event,
+    bet.market,
+    bet.selection,
+    bet.start_time,
+)
 
         with self._connect(settings) as conn:
             conn.execute("""
