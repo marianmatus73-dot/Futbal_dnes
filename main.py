@@ -411,6 +411,7 @@ def extract_pro_tips(module_outputs: list[dict]) -> tuple[list, list]:
     bookmaker=tip.get("bookmaker", ""),
     reason=" | ".join(reason_parts),
     raw_edge=to_float_or_none(tip.get("raw_edge")),
+    model_score=tip_data.get("model_score"),                
 )
 
                 raw_tips.append(pro_tip)
