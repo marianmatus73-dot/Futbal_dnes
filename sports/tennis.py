@@ -100,15 +100,13 @@ class TennisModule(SportModule):
                         continue
 
                     source_hash = make_hash(
-                        captured_at,
-                        self.name,
-                        sport_key,
-                        event_name,
-                        book,
-                        "h2h",
-                        selection,
-                        odds,
-                    )
+    bet.sport,
+    bet.league,
+    bet.event,
+    bet.market,
+    bet.selection,
+    bet.start_time,
+)
 
                     rows.append(
                         (
