@@ -36,6 +36,9 @@ from core.pro_tipper import (
 from core.top_tips import select_top_tips, select_telegram_tips
 from core.learning_model import retrain_from_results
 from core.consensus_engine import ConsensusInput, build_consensus
+from core.train_meta_model import train
+
+train(settings.db_file)
 
 from sports.football import FootballModule
 from sports.tennis import TennisModule
