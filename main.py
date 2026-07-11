@@ -543,16 +543,7 @@ async def run() -> None:
 
     save_learning_history(settings)
 
-    try:
-        trained = train(settings.db_file)
-
-        if trained:
-            log.info("Meta model trained successfully.")
-        else:
-            log.info("Meta model training skipped.")
-
-    except Exception as e:
-        log.warning("Meta model training failed: %s", e)
+    
 
     successful_results = [
         item["result"]
