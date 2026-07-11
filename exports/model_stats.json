@@ -1,22 +1,22 @@
 {
-  "total_bets": 92,
-  "wins": 55,
-  "losses": 37,
-  "winrate": 59.78,
-  "yield": 34.33,
-  "profit": 28.66,
-  "stake_sum": 83.48,
-  "open_bets": 137,
-  "settled_bets": 92,
+  "total_bets": 95,
+  "wins": 56,
+  "losses": 39,
+  "winrate": 58.95,
+  "yield": 30.48,
+  "profit": 26.66,
+  "stake_sum": 87.48,
+  "open_bets": 136,
+  "settled_bets": 95,
   "by_sport": {
     "baseball": {
-      "total": 81,
-      "wins": 49,
-      "losses": 32,
-      "winrate": 60.49,
-      "profit": 26.38,
-      "stake_sum": 76.74,
-      "yield": 34.37
+      "total": 84,
+      "wins": 50,
+      "losses": 34,
+      "winrate": 59.52,
+      "profit": 24.38,
+      "stake_sum": 80.74,
+      "yield": 30.19
     },
     "basketball": {
       "total": 11,
@@ -30,13 +30,13 @@
   },
   "by_bookmaker": {
     "888sport": {
-      "total": 19,
-      "wins": 17,
-      "losses": 2,
-      "winrate": 89.47,
-      "profit": 16.44,
-      "stake_sum": 22.28,
-      "yield": 73.8
+      "total": 21,
+      "wins": 18,
+      "losses": 3,
+      "winrate": 85.71,
+      "profit": 15.19,
+      "stake_sum": 25.53,
+      "yield": 59.51
     },
     "Tipico": {
       "total": 5,
@@ -146,15 +146,6 @@
       "stake_sum": 1.6,
       "yield": 32.64
     },
-    "1xBet": {
-      "total": 5,
-      "wins": 2,
-      "losses": 3,
-      "winrate": 40.0,
-      "profit": -0.2,
-      "stake_sum": 2.7,
-      "yield": -7.42
-    },
     "Unibet (SE)": {
       "total": 3,
       "wins": 1,
@@ -181,6 +172,15 @@
       "profit": -0.66,
       "stake_sum": 0.66,
       "yield": -100.0
+    },
+    "1xBet": {
+      "total": 6,
+      "wins": 2,
+      "losses": 4,
+      "winrate": 33.33,
+      "profit": -0.95,
+      "stake_sum": 3.45,
+      "yield": -27.55
     },
     "BetOnline.ag": {
       "total": 2,
@@ -212,13 +212,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 81,
-      "wins": 49,
-      "losses": 32,
-      "winrate": 60.49,
-      "profit": 26.38,
-      "stake_sum": 76.74,
-      "yield": 34.37
+      "total": 84,
+      "wins": 50,
+      "losses": 34,
+      "winrate": 59.52,
+      "profit": 24.38,
+      "stake_sum": 80.74,
+      "yield": 30.19
     },
     "basketball_wnba": {
       "total": 11,
@@ -230,5 +230,5 @@
       "yield": 33.88
     }
   },
-  "last_update": "2026-07-11T19:21:34.519313+00:00"
+  "last_update": "2026-07-11T19:33:29.959230+00:00"
 }
