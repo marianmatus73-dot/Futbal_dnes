@@ -1,22 +1,22 @@
 {
-  "total_bets": 96,
-  "wins": 41,
+  "total_bets": 97,
+  "wins": 42,
   "losses": 55,
-  "winrate": 42.71,
-  "yield": 13.55,
-  "profit": 6.0,
-  "stake_sum": 44.29,
+  "winrate": 43.3,
+  "yield": 14.54,
+  "profit": 6.49,
+  "stake_sum": 44.63,
   "open_bets": 190,
-  "settled_bets": 96,
+  "settled_bets": 97,
   "by_sport": {
     "baseball": {
-      "total": 55,
-      "wins": 27,
+      "total": 56,
+      "wins": 28,
       "losses": 28,
-      "winrate": 49.09,
-      "profit": 5.05,
-      "stake_sum": 26.23,
-      "yield": 19.26
+      "winrate": 50.0,
+      "profit": 5.54,
+      "stake_sum": 26.57,
+      "yield": 20.86
     },
     "basketball": {
       "total": 41,
@@ -92,6 +92,15 @@
       "stake_sum": 1.07,
       "yield": 82.8
     },
+    "Betfair": {
+      "total": 14,
+      "wins": 6,
+      "losses": 8,
+      "winrate": 42.86,
+      "profit": 0.73,
+      "stake_sum": 6.46,
+      "yield": 11.27
+    },
     "BetAnything": {
       "total": 3,
       "wins": 1,
@@ -155,15 +164,6 @@
       "stake_sum": 1.68,
       "yield": 16.55
     },
-    "Betfair": {
-      "total": 13,
-      "wins": 5,
-      "losses": 8,
-      "winrate": 38.46,
-      "profit": 0.24,
-      "stake_sum": 6.12,
-      "yield": 3.9
-    },
     "888sport": {
       "total": 5,
       "wins": 2,
@@ -212,13 +212,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 55,
-      "wins": 27,
+      "total": 56,
+      "wins": 28,
       "losses": 28,
-      "winrate": 49.09,
-      "profit": 5.05,
-      "stake_sum": 26.23,
-      "yield": 19.26
+      "winrate": 50.0,
+      "profit": 5.54,
+      "stake_sum": 26.57,
+      "yield": 20.86
     },
     "basketball_wnba": {
       "total": 41,
@@ -230,5 +230,5 @@
       "yield": 5.25
     }
   },
-  "last_update": "2026-07-11T09:34:35.010273+00:00"
+  "last_update": "2026-07-11T09:55:51.668277+00:00"
 }
