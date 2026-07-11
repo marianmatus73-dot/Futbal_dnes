@@ -16,6 +16,11 @@ from core.confidence_model import ConfidenceInput, confidence_score
 from core.config import Settings
 from core.ensemble_model import EnsembleInput, build_ensemble_probability
 from core.market import best_outlier_prices, consensus_h2h, dedupe_best_bets
+from core.monte_carlo import (
+    format_monte_carlo_reason,
+    monte_carlo_score,
+    simulate_single_bet,
+)
 from core.odds_api import fetch_odds
 from core.sport_quant import (
     bookmaker_grade,
@@ -257,7 +262,6 @@ class TennisModule(SportModule):
             "TENNIS_SPORT_KEYS",
             ",".join(
                 [
-                    # Grand Slam
                     "tennis_atp_australian_open",
                     "tennis_wta_australian_open",
                     "tennis_atp_french_open",
@@ -266,8 +270,6 @@ class TennisModule(SportModule):
                     "tennis_wta_wimbledon",
                     "tennis_atp_us_open",
                     "tennis_wta_us_open",
-
-                    # Masters a veľké turnaje
                     "tennis_atp_indian_wells",
                     "tennis_wta_indian_wells",
                     "tennis_atp_miami_open",
@@ -283,8 +285,6 @@ class TennisModule(SportModule):
                     "tennis_wta_cincinnati_open",
                     "tennis_atp_shanghai_masters",
                     "tennis_atp_paris_masters",
-
-                    # Ďalšie ATP a WTA turnaje
                     "tennis_atp_dubai",
                     "tennis_wta_dubai",
                     "tennis_atp_qatar_open",
@@ -301,8 +301,6 @@ class TennisModule(SportModule):
                     "tennis_wta_tokyo",
                     "tennis_atp_beijing",
                     "tennis_wta_beijing",
-
-                    # Menšie okruhy
                     "tennis_atp_wta_generic",
                     "tennis_atp_challenger",
                     "tennis_wta_125",
@@ -451,6 +449,13 @@ class TennisModule(SportModule):
                     prob_final = ensemble.probability
                     edge = ensemble.edge
 
+                    mc = simulate_single_bet(
+                        probability=prob_final,
+                        odds=odds,
+                    )
+
+                    mc_score = monte_carlo_score(mc)
+
                     current_sport_weight = sport_weight(self.name)
                     current_bookmaker_weight = bookmaker_weight(bookmaker)
                     current_league_weight = league_weight(league)
@@ -463,10 +468,7 @@ class TennisModule(SportModule):
                         * current_league_weight
                     )
 
-                    # Bayesian informácia je už zahrnutá v adaptive weights.
-                    # Priamo dostupné historické CLV pre konkrétny nový tip zatiaľ nie je,
-                    # preto používame neutrálnu hodnotu.
-                    confidence = confidence_score(
+                    base_confidence = confidence_score(
                         ConfidenceInput(
                             edge=edge,
                             consensus=max(0.0, min(0.20, edge)),
@@ -478,6 +480,15 @@ class TennisModule(SportModule):
                             samples=0,
                         )
                     )
+
+                    confidence = int(
+                        round(
+                            base_confidence * 0.80
+                            + mc_score * 0.20
+                        )
+                    )
+
+                    confidence = max(1, min(100, confidence))
 
                     if edge < settings.min_edge:
                         blocked += 1
@@ -493,8 +504,12 @@ class TennisModule(SportModule):
                             edge,
                             "BLOCK",
                             (
-                                f"edge below minimum; confidence={confidence}; "
-                                f"adaptive edge={adjusted_edge:.4f}"
+                                f"edge below minimum; "
+                                f"confidence={confidence}; "
+                                f"base_confidence={base_confidence}; "
+                                f"mc_score={mc_score:.2f}; "
+                                f"adaptive_edge={adjusted_edge:.4f}; "
+                                f"{format_monte_carlo_reason(mc)}"
                             ),
                         )
                         continue
@@ -513,8 +528,12 @@ class TennisModule(SportModule):
                             edge,
                             "BLOCK",
                             (
-                                f"edge above max guard; confidence={confidence}; "
-                                f"adaptive edge={adjusted_edge:.4f}"
+                                f"edge above max guard; "
+                                f"confidence={confidence}; "
+                                f"base_confidence={base_confidence}; "
+                                f"mc_score={mc_score:.2f}; "
+                                f"adaptive_edge={adjusted_edge:.4f}; "
+                                f"{format_monte_carlo_reason(mc)}"
                             ),
                         )
                         continue
@@ -533,8 +552,12 @@ class TennisModule(SportModule):
                             edge,
                             "BLOCK",
                             (
-                                f"odds above max odds; confidence={confidence}; "
-                                f"adaptive edge={adjusted_edge:.4f}"
+                                f"odds above max odds; "
+                                f"confidence={confidence}; "
+                                f"base_confidence={base_confidence}; "
+                                f"mc_score={mc_score:.2f}; "
+                                f"adaptive_edge={adjusted_edge:.4f}; "
+                                f"{format_monte_carlo_reason(mc)}"
                             ),
                         )
                         continue
@@ -563,8 +586,12 @@ class TennisModule(SportModule):
                             edge,
                             "BLOCK",
                             (
-                                f"stake <= 0; confidence={confidence}; "
-                                f"adaptive edge={adjusted_edge:.4f}"
+                                f"stake <= 0; "
+                                f"confidence={confidence}; "
+                                f"base_confidence={base_confidence}; "
+                                f"mc_score={mc_score:.2f}; "
+                                f"adaptive_edge={adjusted_edge:.4f}; "
+                                f"{format_monte_carlo_reason(mc)}"
                             ),
                         )
                         continue
@@ -602,13 +629,16 @@ class TennisModule(SportModule):
                         (
                             f"{ensemble.reason}; "
                             f"confidence={confidence}; "
+                            f"base_confidence={base_confidence}; "
+                            f"mc_score={mc_score:.2f}; "
                             f"adaptive_edge={adjusted_edge:.4f}; "
                             f"grade={grade:.3f}; "
                             f"sport_weight={current_sport_weight:.4f}; "
                             f"bookmaker_weight={current_bookmaker_weight:.4f}; "
                             f"league_weight={current_league_weight:.4f}; "
                             f"elo_adj={elo_adj:.4f}; "
-                            f"surface_adj={surface_adj:.4f}"
+                            f"surface_adj={surface_adj:.4f}; "
+                            f"{format_monte_carlo_reason(mc)}"
                         ),
                     )
 
@@ -620,7 +650,7 @@ class TennisModule(SportModule):
             mode="scan",
             bets=bets[:top_n],
             message=(
-                "Tennis: ensemble/Bayesian/adaptive confidence model. "
+                "Tennis: ensemble/Bayesian/adaptive confidence/Monte Carlo model. "
                 f"Settled: {settled}. "
                 f"CLV updated: {updated_clv}. "
                 f"Events scanned: {scanned_events}. "
@@ -629,4 +659,4 @@ class TennisModule(SportModule):
                 f"Stored candidates: {len(bets)}.\n"
                 f"{analytics}"
             ),
-            )
+        )
