@@ -1,15 +1,126 @@
 {
-  "total_bets": 0,
-  "wins": 0,
-  "losses": 0,
-  "winrate": 0.0,
-  "yield": 0.0,
-  "profit": 0.0,
-  "stake_sum": 0.0,
-  "open_bets": 85,
-  "settled_bets": 0,
-  "by_sport": {},
-  "by_bookmaker": {},
-  "by_league": {},
-  "last_update": "2026-07-11T20:15:41.193174+00:00"
+  "total_bets": 34,
+  "wins": 26,
+  "losses": 8,
+  "winrate": 76.47,
+  "yield": 50.04,
+  "profit": 20.23,
+  "stake_sum": 40.42,
+  "open_bets": 52,
+  "settled_bets": 34,
+  "by_sport": {
+    "baseball": {
+      "total": 34,
+      "wins": 26,
+      "losses": 8,
+      "winrate": 76.47,
+      "profit": 20.23,
+      "stake_sum": 40.42,
+      "yield": 50.04
+    }
+  },
+  "by_bookmaker": {
+    "888sport": {
+      "total": 16,
+      "wins": 15,
+      "losses": 1,
+      "winrate": 93.75,
+      "profit": 14.69,
+      "stake_sum": 18.83,
+      "yield": 77.99
+    },
+    "GTbets": {
+      "total": 3,
+      "wins": 3,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 3.7,
+      "stake_sum": 5.17,
+      "yield": 71.62
+    },
+    "Unibet (FR)": {
+      "total": 4,
+      "wins": 4,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 3.46,
+      "stake_sum": 3.86,
+      "yield": 89.77
+    },
+    "BetOnline.ag": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 1.34,
+      "stake_sum": 1.23,
+      "yield": 109.0
+    },
+    "Betclic (FR)": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 0.87,
+      "stake_sum": 0.83,
+      "yield": 105.0
+    },
+    "Winamax (DE)": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "winrate": 66.67,
+      "profit": 0.06,
+      "stake_sum": 6.6,
+      "yield": 0.94
+    },
+    "Betfair": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.47,
+      "stake_sum": 0.47,
+      "yield": -100.0
+    },
+    "Matchbook": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.57,
+      "stake_sum": 0.57,
+      "yield": -100.0
+    },
+    "William Hill": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.72,
+      "stake_sum": 0.72,
+      "yield": -100.0
+    },
+    "1xBet": {
+      "total": 3,
+      "wins": 0,
+      "losses": 3,
+      "winrate": 0.0,
+      "profit": -2.14,
+      "stake_sum": 2.14,
+      "yield": -100.0
+    }
+  },
+  "by_league": {
+    "baseball_mlb": {
+      "total": 34,
+      "wins": 26,
+      "losses": 8,
+      "winrate": 76.47,
+      "profit": 20.23,
+      "stake_sum": 40.42,
+      "yield": 50.04
+    }
+  },
+  "last_update": "2026-07-11T20:24:34.346385+00:00"
 }
