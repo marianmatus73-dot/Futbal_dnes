@@ -1,8 +1,8 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 47
-Score events: 7
+Open bets: 48
+Score events: 9
 
 === OPEN BETS ===
 soccer_epl | 2026-08-23T15:30:00Z | Newcastle United vs Liverpool | pick=Newcastle United
@@ -52,10 +52,13 @@ soccer_mexico_ligamx | 2026-07-17T03:00:00Z | Tijuana vs Tigres | pick=Tijuana
 soccer_mexico_ligamx | 2026-07-18T01:00:00Z | Atlético San Luis vs Cruz Azul | pick=Atlético San Luis
 soccer_mexico_ligamx | 2026-07-19T03:00:00Z | Querétaro vs América | pick=Querétaro
 soccer_fifa_world_cup | 2026-07-11T21:01:00Z | Norway vs England | pick=England
+soccer_france_ligue_one | 2026-08-22T15:15:00Z | RC Lens vs Auxerre | pick=Draw
 
 === SCORE EVENTS ===
 soccer_fifa_world_cup | 2026-07-09T20:00:00Z | France vs Morocco | 2-0
 soccer_fifa_world_cup | 2026-07-10T19:00:00Z | Spain vs Belgium | 2-1
+soccer_fifa_world_cup | 2026-07-11T21:01:00Z | Norway vs England | 1-2
+soccer_fifa_world_cup | 2026-07-12T01:00:00Z | Argentina vs Switzerland | 3-1
 soccer_norway_eliteserien | 2026-07-11T12:00:00Z | Fredrikstad FK vs Lillestrom | 0-2
 soccer_norway_eliteserien | 2026-07-11T14:00:00Z | Aalesund vs Molde | 2-2
 soccer_norway_eliteserien | 2026-07-11T16:01:00Z | Tromso vs Vålerenga | 4-0
@@ -109,4 +112,5 @@ soccer_argentina_primera_division | Deportivo Riestra vs Boca Juniors | no score
 soccer_mexico_ligamx | Tijuana vs Tigres | no score candidates
 soccer_mexico_ligamx | Atlético San Luis vs Cruz Azul | no score candidates
 soccer_mexico_ligamx | Querétaro vs América | no score candidates
-soccer_fifa_world_cup | Norway vs England -> Spain vs Belgium | combined=0.234 min=0.182 | bet_time=2026-07-11T21:01:00Z score_time=2026-07-10T19:00:00Z
+soccer_fifa_world_cup | Norway vs England -> Norway vs England | combined=1.000 min=1.000 | bet_time=2026-07-11T21:01:00Z score_time=2026-07-11T21:01:00Z
+soccer_france_ligue_one | RC Lens vs Auxerre | no score candidates
