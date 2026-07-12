@@ -1,13 +1,13 @@
 {
-  "total_bets": 54,
-  "wins": 35,
-  "losses": 19,
-  "winrate": 64.81,
-  "yield": 38.01,
+  "total_bets": 58,
+  "wins": 36,
+  "losses": 22,
+  "winrate": 62.07,
+  "yield": 35.99,
   "profit": 21.11,
-  "stake_sum": 55.55,
-  "open_bets": 67,
-  "settled_bets": 54,
+  "stake_sum": 58.67,
+  "open_bets": 63,
+  "settled_bets": 58,
   "by_sport": {
     "baseball": {
       "total": 49,
@@ -28,12 +28,12 @@
       "yield": 40.0
     },
     "football": {
-      "total": 1,
-      "wins": 1,
-      "losses": 0,
-      "winrate": 100.0,
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "winrate": 40.0,
       "profit": 0.0,
-      "stake_sum": 0.19,
+      "stake_sum": 3.31,
       "yield": 0.0
     },
     "mma": {
@@ -110,6 +110,15 @@
       "stake_sum": 6.6,
       "yield": 0.94
     },
+    "Unibet (SE)": {
+      "total": 2,
+      "wins": 0,
+      "losses": 2,
+      "winrate": 0.0,
+      "profit": 0.0,
+      "stake_sum": 0.52,
+      "yield": 0.0
+    },
     "Nordic Bet": {
       "total": 1,
       "wins": 0,
@@ -147,22 +156,22 @@
       "yield": -100.0
     },
     "Pinnacle": {
-      "total": 1,
-      "wins": 0,
+      "total": 2,
+      "wins": 1,
       "losses": 1,
-      "winrate": 0.0,
+      "winrate": 50.0,
       "profit": -1.0,
-      "stake_sum": 1.0,
-      "yield": -100.0
+      "stake_sum": 3.45,
+      "yield": -28.99
     },
     "Betfair": {
-      "total": 6,
+      "total": 7,
       "wins": 1,
-      "losses": 5,
-      "winrate": 16.67,
+      "losses": 6,
+      "winrate": 14.29,
       "profit": -2.71,
-      "stake_sum": 2.9,
-      "yield": -93.45
+      "stake_sum": 3.05,
+      "yield": -88.85
     },
     "1xBet": {
       "total": 4,
@@ -202,6 +211,15 @@
       "stake_sum": 0.19,
       "yield": 0.0
     },
+    "Allsvenskan": {
+      "total": 4,
+      "wins": 1,
+      "losses": 3,
+      "winrate": 25.0,
+      "profit": 0.0,
+      "stake_sum": 3.12,
+      "yield": 0.0
+    },
     "mma_mixed_martial_arts": {
       "total": 2,
       "wins": 0,
@@ -212,5 +230,5 @@
       "yield": -100.0
     }
   },
-  "last_update": "2026-07-12T13:56:13.281205+00:00"
+  "last_update": "2026-07-12T14:03:15.148365+00:00"
 }

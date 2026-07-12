@@ -1,7 +1,7 @@
 feature,column,samples,wins,losses,winrate,average_value
-Consensus safety,consensus_safety,1,1,0,1.0,0.0
-Raw edge,raw_edge,1,1,0,1.0,0.1266
-ELO separation,elo_difference,1,1,0,1.0,-46.3309
-Form separation,form_difference,1,1,0,1.0,-1.0
-Competition importance,competition_importance,1,1,0,1.0,0.0
-Context reliability,context_reliability,1,1,0,1.0,0.0
+Consensus safety,consensus_safety,5,2,3,0.4,0.2944
+Raw edge,raw_edge,5,2,3,0.4,0.1409
+ELO separation,elo_difference,5,2,3,0.4,53.7743
+Form separation,form_difference,5,2,3,0.4,0.6
+Competition importance,competition_importance,5,2,3,0.4,0.272
+Context reliability,context_reliability,5,2,3,0.4,0.22
