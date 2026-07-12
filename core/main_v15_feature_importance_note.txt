@@ -1,0 +1,17 @@
+
+Football Feature Importance V15 created.
+
+Integration point:
+Run after Football Evaluation Dashboard.
+
+Output:
+exports/football_feature_importance_v15.json
+exports/football_feature_importance_v15.csv
+
+Purpose:
+- rank predictive signals
+- compare wins/losses by feature
+- avoid manual weight changes
+- prepare future Meta AI feature selection
+
+Does not modify prediction logic.
