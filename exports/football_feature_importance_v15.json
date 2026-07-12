@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 6,
+  "training_samples": 12,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 0.5,
-      "average_value": 0.3357
+      "samples": 12,
+      "wins": 4,
+      "losses": 8,
+      "winrate": 0.3333,
+      "average_value": 0.2649
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 0.5,
-      "average_value": 0.1303
+      "samples": 12,
+      "wins": 4,
+      "losses": 8,
+      "winrate": 0.3333,
+      "average_value": 0.1217
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 0.5,
-      "average_value": 36.5721
+      "samples": 12,
+      "wins": 4,
+      "losses": 8,
+      "winrate": 0.3333,
+      "average_value": 7.4116
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 0.5,
-      "average_value": 0.3333
+      "samples": 12,
+      "wins": 4,
+      "losses": 8,
+      "winrate": 0.3333,
+      "average_value": 0.1667
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 0.5,
-      "average_value": 0.34
+      "samples": 12,
+      "wins": 4,
+      "losses": 8,
+      "winrate": 0.3333,
+      "average_value": 0.2833
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 0.5,
-      "average_value": 0.275
+      "samples": 12,
+      "wins": 4,
+      "losses": 8,
+      "winrate": 0.3333,
+      "average_value": 0.2292
     }
   ],
   "warning": "Small sample size - information only",

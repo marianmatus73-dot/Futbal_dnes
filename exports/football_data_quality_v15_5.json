@@ -1,6 +1,6 @@
 {
   "version": "v15.5",
-  "created_at": "2026-07-12T15:51:31+00:00",
+  "created_at": "2026-07-12T17:04:08+00:00",
   "quality_score": 60,
   "features": {
     "elo": true,
@@ -12,9 +12,9 @@
   "blockers": [
     "Missing xG history",
     "Missing closing odds",
-    "Small sample size (6/20)"
+    "Small sample size (12/20)"
   ],
-  "settled_samples": 6,
+  "settled_samples": 12,
   "meta_ai_training_ready": false,
   "status": "BUILDING"
 }
