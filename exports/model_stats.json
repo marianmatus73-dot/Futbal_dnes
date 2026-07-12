@@ -1,22 +1,22 @@
 {
-  "total_bets": 58,
+  "total_bets": 59,
   "wins": 36,
-  "losses": 22,
-  "winrate": 62.07,
-  "yield": 35.99,
-  "profit": 21.11,
-  "stake_sum": 58.67,
-  "open_bets": 64,
-  "settled_bets": 58,
+  "losses": 23,
+  "winrate": 61.02,
+  "yield": 34.88,
+  "profit": 20.63,
+  "stake_sum": 59.15,
+  "open_bets": 63,
+  "settled_bets": 59,
   "by_sport": {
     "baseball": {
-      "total": 49,
+      "total": 50,
       "wins": 33,
-      "losses": 16,
-      "winrate": 67.35,
-      "profit": 21.29,
-      "stake_sum": 54.22,
-      "yield": 39.26
+      "losses": 17,
+      "winrate": 66.0,
+      "profit": 20.81,
+      "stake_sum": 54.7,
+      "yield": 38.04
     },
     "basketball": {
       "total": 2,
@@ -156,13 +156,13 @@
       "yield": -100.0
     },
     "Pinnacle": {
-      "total": 2,
+      "total": 3,
       "wins": 1,
-      "losses": 1,
-      "winrate": 50.0,
-      "profit": -1.0,
-      "stake_sum": 3.45,
-      "yield": -28.99
+      "losses": 2,
+      "winrate": 33.33,
+      "profit": -1.48,
+      "stake_sum": 3.93,
+      "yield": -37.66
     },
     "Betfair": {
       "total": 7,
@@ -185,13 +185,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 49,
+      "total": 50,
       "wins": 33,
-      "losses": 16,
-      "winrate": 67.35,
-      "profit": 21.29,
-      "stake_sum": 54.22,
-      "yield": 39.26
+      "losses": 17,
+      "winrate": 66.0,
+      "profit": 20.81,
+      "stake_sum": 54.7,
+      "yield": 38.04
     },
     "basketball_wnba": {
       "total": 2,
@@ -230,5 +230,5 @@
       "yield": -100.0
     }
   },
-  "last_update": "2026-07-12T14:12:05.305174+00:00"
+  "last_update": "2026-07-12T14:22:52.021563+00:00"
 }

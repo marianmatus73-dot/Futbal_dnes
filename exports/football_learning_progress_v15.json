@@ -1,0 +1,23 @@
+{
+  "version": "v15.3",
+  "created_at": "2026-07-12T14:22:51+00:00",
+  "settled_samples": 5,
+  "meta_ai": {
+    "progress_percent": 25.0,
+    "milestone": 20,
+    "status": "LOCKED"
+  },
+  "weight_optimizer": {
+    "progress_percent": 5.0,
+    "milestone": 100,
+    "status": "LOCKED"
+  },
+  "data_quality": {
+    "elo": true,
+    "form": true,
+    "xg": false,
+    "closing_odds": false,
+    "market_snapshots": false
+  },
+  "learning_readiness": "EARLY"
+}
