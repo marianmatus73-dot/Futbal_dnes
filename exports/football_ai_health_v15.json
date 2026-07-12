@@ -1,0 +1,28 @@
+{
+  "version": "v15.2",
+  "created_at": "2026-07-12T13:47:10+00:00",
+  "model_maturity": "EARLY",
+  "training_samples": 1,
+  "meta_ai": {
+    "samples": 0,
+    "milestone": 20,
+    "status": "LOCKED"
+  },
+  "weight_tuning": {
+    "enabled": false,
+    "reason": "Need 100+ settled samples"
+  },
+  "explainability_records": 0,
+  "top_feature": "Consensus safety",
+  "current_weights": {
+    "elo": 0.25,
+    "xg": 0.25,
+    "form": 0.2,
+    "market": 0.2,
+    "context": 0.1
+  },
+  "warnings": [
+    "Small sample size",
+    "Missing feature: market_model_gap"
+  ]
+}
