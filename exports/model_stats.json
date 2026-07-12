@@ -1,22 +1,22 @@
 {
-  "total_bets": 71,
-  "wins": 39,
-  "losses": 32,
-  "winrate": 54.93,
-  "yield": 26.62,
-  "profit": 18.26,
-  "stake_sum": 68.61,
-  "open_bets": 64,
-  "settled_bets": 71,
+  "total_bets": 74,
+  "wins": 40,
+  "losses": 34,
+  "winrate": 54.05,
+  "yield": 25.46,
+  "profit": 17.74,
+  "stake_sum": 69.69,
+  "open_bets": 63,
+  "settled_bets": 74,
   "by_sport": {
     "baseball": {
-      "total": 55,
+      "total": 56,
       "wins": 34,
-      "losses": 21,
-      "winrate": 61.82,
-      "profit": 18.44,
-      "stake_sum": 57.97,
-      "yield": 31.81
+      "losses": 22,
+      "winrate": 60.71,
+      "profit": 17.92,
+      "stake_sum": 58.49,
+      "yield": 30.63
     },
     "basketball": {
       "total": 2,
@@ -28,12 +28,12 @@
       "yield": 40.0
     },
     "football": {
-      "total": 12,
-      "wins": 4,
-      "losses": 8,
-      "winrate": 33.33,
+      "total": 14,
+      "wins": 5,
+      "losses": 9,
+      "winrate": 35.71,
       "profit": 0.0,
-      "stake_sum": 9.5,
+      "stake_sum": 10.06,
       "yield": 0.0
     },
     "mma": {
@@ -84,13 +84,13 @@
       "yield": 96.41
     },
     "Betclic (FR)": {
-      "total": 2,
+      "total": 3,
       "wins": 2,
-      "losses": 0,
-      "winrate": 100.0,
-      "profit": 1.7,
-      "stake_sum": 1.86,
-      "yield": 91.16
+      "losses": 1,
+      "winrate": 66.67,
+      "profit": 1.18,
+      "stake_sum": 2.38,
+      "yield": 49.39
     },
     "PMU (FR)": {
       "total": 1,
@@ -108,6 +108,15 @@
       "winrate": 0.0,
       "profit": 0.0,
       "stake_sum": 0.68,
+      "yield": 0.0
+    },
+    "Coolbet": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 0.0,
+      "stake_sum": 0.38,
       "yield": 0.0
     },
     "Nordic Bet": {
@@ -147,13 +156,13 @@
       "yield": -100.0
     },
     "Matchbook": {
-      "total": 2,
+      "total": 3,
       "wins": 0,
-      "losses": 2,
+      "losses": 3,
       "winrate": 0.0,
       "profit": -0.99,
-      "stake_sum": 0.99,
-      "yield": -100.0
+      "stake_sum": 1.17,
+      "yield": -84.62
     },
     "MyBookie.ag": {
       "total": 2,
@@ -194,13 +203,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 55,
+      "total": 56,
       "wins": 34,
-      "losses": 21,
-      "winrate": 61.82,
-      "profit": 18.44,
-      "stake_sum": 57.97,
-      "yield": 31.81
+      "losses": 22,
+      "winrate": 60.71,
+      "profit": 17.92,
+      "stake_sum": 58.49,
+      "yield": 30.63
     },
     "basketball_wnba": {
       "total": 2,
@@ -221,12 +230,12 @@
       "yield": 0.0
     },
     "Eliteserien": {
-      "total": 4,
-      "wins": 1,
-      "losses": 3,
-      "winrate": 25.0,
+      "total": 6,
+      "wins": 2,
+      "losses": 4,
+      "winrate": 33.33,
       "profit": 0.0,
-      "stake_sum": 2.93,
+      "stake_sum": 3.49,
       "yield": 0.0
     },
     "Allsvenskan": {
@@ -248,5 +257,5 @@
       "yield": -100.0
     }
   },
-  "last_update": "2026-07-12T18:55:50.267212+00:00"
+  "last_update": "2026-07-12T19:35:36.776958+00:00"
 }
