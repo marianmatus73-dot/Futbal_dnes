@@ -1,13 +1,13 @@
 {
-  "total_bets": 59,
-  "wins": 36,
+  "total_bets": 60,
+  "wins": 37,
   "losses": 23,
-  "winrate": 61.02,
-  "yield": 34.88,
+  "winrate": 61.67,
+  "yield": 33.97,
   "profit": 20.63,
-  "stake_sum": 59.15,
-  "open_bets": 63,
-  "settled_bets": 59,
+  "stake_sum": 60.74,
+  "open_bets": 62,
+  "settled_bets": 60,
   "by_sport": {
     "baseball": {
       "total": 50,
@@ -28,12 +28,12 @@
       "yield": 40.0
     },
     "football": {
-      "total": 5,
-      "wins": 2,
+      "total": 6,
+      "wins": 3,
       "losses": 3,
-      "winrate": 40.0,
+      "winrate": 50.0,
       "profit": 0.0,
-      "stake_sum": 3.31,
+      "stake_sum": 4.9,
       "yield": 0.0
     },
     "mma": {
@@ -156,13 +156,13 @@
       "yield": -100.0
     },
     "Pinnacle": {
-      "total": 3,
-      "wins": 1,
+      "total": 4,
+      "wins": 2,
       "losses": 2,
-      "winrate": 33.33,
+      "winrate": 50.0,
       "profit": -1.48,
-      "stake_sum": 3.93,
-      "yield": -37.66
+      "stake_sum": 5.52,
+      "yield": -26.81
     },
     "Betfair": {
       "total": 7,
@@ -211,6 +211,15 @@
       "stake_sum": 0.19,
       "yield": 0.0
     },
+    "Eliteserien": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 0.0,
+      "stake_sum": 1.59,
+      "yield": 0.0
+    },
     "Allsvenskan": {
       "total": 4,
       "wins": 1,
@@ -230,5 +239,5 @@
       "yield": -100.0
     }
   },
-  "last_update": "2026-07-12T14:22:52.021563+00:00"
+  "last_update": "2026-07-12T14:46:05.528937+00:00"
 }
