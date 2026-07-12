@@ -1,12 +1,32 @@
 {
-  "generated_at": "2026-07-12T07:55:22+00:00",
-  "version": "v14",
+  "generated_at": "2026-07-12T08:15:10+00:00",
+  "version": "v14.1",
   "settled_samples": 1,
+  "valid_probability_samples": 1,
   "open_samples": 50,
   "wins": 1,
   "losses": 0,
-  "accuracy": 1.0,
-  "brier_score": 0.25,
-  "average_clv": 0.0,
-  "meta_model_exists": false
+  "hit_rate": 1.0,
+  "threshold_accuracy": 0.0,
+  "brier_score": 0.4837561373586532,
+  "log_loss": 1.189168921872277,
+  "average_clv": null,
+  "meta_model_exists": false,
+  "metrics_reliable": false,
+  "warnings": [
+    "No valid CLV values are available yet",
+    "Model-health metrics are not statistically reliable yet"
+  ],
+  "calibration_bins": [
+    {
+      "lower": 0.3,
+      "upper": 0.4,
+      "samples": 1,
+      "mean_probability": 0.30447420079579135,
+      "actual_win_rate": 1.0
+    }
+  ],
+  "market_snapshots": 50,
+  "closing_snapshots": 8,
+  "events_with_closing_snapshot": 7
 }
