@@ -1,12 +1,13 @@
 {
-  "version": "v15.14",
+  "version": "v15.15",
   "created_at": "2026-07-12T20:02:13+00:00",
   "matches": 14,
   "snapshots": 47,
-  "closing_matched": 0,
+  "closing_extracted": 0,
+  "clv_ready": 0,
   "coverage_percent": 0.0,
   "status": "BUILDING",
   "blockers": [
-    "Closing snapshot not matched for all matches"
+    "Closing odds extraction incomplete"
   ]
 }
