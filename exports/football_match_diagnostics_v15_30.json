@@ -1,0 +1,16 @@
+{
+  "version": "v15.30",
+  "created_at": "2026-07-15T14:38:39+00:00",
+  "snapshot_source": "exports/history_football_market_snapshots_v14.csv",
+  "postmatch_source": "exports/history_football_postmatch_dataset_v14.csv",
+  "snapshots": 68,
+  "postmatch_rows": 14,
+  "diagnostic_rows": 42,
+  "top_candidates_per_match": 3,
+  "likely_matches": 0,
+  "reason_counts": {
+    "team_names_different": 42
+  },
+  "csv_report": "exports/football_match_diagnostics_v15_30.csv",
+  "status": "READY"
+}
