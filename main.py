@@ -9,6 +9,9 @@ import sqlite3
 import smtplib
 from contextlib import redirect_stdout
 from datetime import datetime
+from core.football_snapshot_schema_extractor_v15_20 import (
+    run_snapshot_schema_extractor_v15_20
+)
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from io import StringIO
