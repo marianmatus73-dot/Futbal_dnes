@@ -1,0 +1,22 @@
+name: V16.03 Main CLV Patch Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  patch-test:
+    name: Run Main CLV Patch Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run patch test
+        run: |
+          python main_clv_patch_v16_03.py
