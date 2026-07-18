@@ -1,0 +1,22 @@
+name: V16.01.2 Real CLV Snapshot Connector Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  connector-test:
+    name: Run Real CLV Snapshot Connector Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run connector test
+        run: |
+          python real_clv_snapshot_connector_v16_01_2.py
