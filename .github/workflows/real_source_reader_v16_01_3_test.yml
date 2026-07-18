@@ -1,0 +1,22 @@
+name: V16.01.3 Real Source Reader Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  source-reader-test:
+    name: Run Real Source Reader Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run source reader test
+        run: |
+          python real_source_reader_v16_01_3.py
