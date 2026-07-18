@@ -1,0 +1,22 @@
+name: V16.05 MERGED CLV MAIN
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-merged-clv:
+    name: Run V16.05 Merged CLV
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run merged CLV main
+        run: |
+          python main_v16_05_merged_clv.py
