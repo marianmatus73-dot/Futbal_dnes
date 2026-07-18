@@ -1,0 +1,19 @@
+name: V16.05 CLV Final Main
+
+on:
+  workflow_dispatch:
+
+jobs:
+  final-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run V16.05 CLV Final
+        run: |
+          python main_v16_05_clv_final.py --sport all
