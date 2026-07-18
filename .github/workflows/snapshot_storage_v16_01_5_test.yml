@@ -1,0 +1,22 @@
+name: V16.01.5 Snapshot Storage Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  storage-test:
+    name: Run Snapshot Storage Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run storage test
+        run: |
+          python snapshot_storage_v16_01_5.py
