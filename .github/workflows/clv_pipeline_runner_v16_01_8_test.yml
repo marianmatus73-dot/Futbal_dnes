@@ -1,0 +1,22 @@
+name: V16.01.8 Full CLV Pipeline Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pipeline-test:
+    name: Run Full CLV Pipeline Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run full pipeline
+        run: |
+          python clv_pipeline_runner_v16_01_8.py
