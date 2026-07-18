@@ -1,0 +1,22 @@
+name: V16.01.1 Real Snapshot Loader Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  snapshot-loader-test:
+    name: Run Real Snapshot Loader Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run snapshot loader test
+        run: |
+          python real_snapshot_loader_v16_01_1.py
