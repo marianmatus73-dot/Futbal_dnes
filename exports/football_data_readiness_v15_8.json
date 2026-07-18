@@ -1,7 +1,7 @@
 {
   "version": "v15.8",
-  "created_at": "2026-07-15T13:25:43+00:00",
-  "samples": 14,
+  "created_at": "2026-07-18T13:49:42+00:00",
+  "samples": 25,
   "quality_score": 60,
   "features": {
     "elo": true,
@@ -13,7 +13,6 @@
   "meta_ai_ready": false,
   "blockers": [
     "Missing closing_odds",
-    "Missing xg",
-    "Sample size 14/20 for Meta AI"
+    "Missing xg"
   ]
 }
