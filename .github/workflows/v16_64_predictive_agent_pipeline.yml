@@ -1,0 +1,17 @@
+name: V16.64 PREDICTIVE AGENT PIPELINE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: python v16_64_predictive_agent_pipeline.py
