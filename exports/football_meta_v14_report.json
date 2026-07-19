@@ -1,5 +1,5 @@
 {
-  "trained_at": "2026-07-19T08:26:14+00:00",
+  "trained_at": "2026-07-19T15:07:58+00:00",
   "samples": 31,
   "wins": 9,
   "losses": 22,
@@ -10,7 +10,7 @@
   "selected_metrics": {
     "accuracy": 0.875,
     "brier_score": 0.1699483119869304,
-    "log_loss": 0.5218422072205409
+    "log_loss": 0.5218422072205408
   },
   "candidate_models": [
     {
@@ -24,7 +24,7 @@
       "model_type": "random_forest",
       "accuracy": 0.875,
       "brier_score": 0.1699483119869304,
-      "log_loss": 0.5218422072205409,
+      "log_loss": 0.5218422072205408,
       "validation_score": 0.5589037967311856
     },
     {
