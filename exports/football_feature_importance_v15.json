@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 32,
+  "training_samples": 33,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 32,
+      "samples": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 0.2812,
-      "average_value": 0.3457
+      "losses": 24,
+      "winrate": 0.2727,
+      "average_value": 0.3628
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 32,
+      "samples": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 0.2812,
-      "average_value": 0.1576
+      "losses": 24,
+      "winrate": 0.2727,
+      "average_value": 0.1561
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 32,
+      "samples": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 0.2812,
-      "average_value": 5.304
+      "losses": 24,
+      "winrate": 0.2727,
+      "average_value": 6.109
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 32,
+      "samples": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 0.2812,
-      "average_value": 0.1632
+      "losses": 24,
+      "winrate": 0.2727,
+      "average_value": 0.1886
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 32,
+      "samples": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 0.2812,
-      "average_value": 0.3075
+      "losses": 24,
+      "winrate": 0.2727,
+      "average_value": 0.3285
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 32,
+      "samples": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 0.2812,
-      "average_value": 0.2406
+      "losses": 24,
+      "winrate": 0.2727,
+      "average_value": 0.25
     }
   ],
   "warning": "Small sample size - information only",

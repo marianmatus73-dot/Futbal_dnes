@@ -1,22 +1,22 @@
 {
-  "total_bets": 158,
-  "wins": 79,
-  "losses": 79,
-  "winrate": 50.0,
-  "yield": 14.91,
-  "profit": 19.67,
-  "stake_sum": 131.96,
-  "open_bets": 180,
-  "settled_bets": 158,
+  "total_bets": 163,
+  "wins": 80,
+  "losses": 83,
+  "winrate": 49.08,
+  "yield": 13.42,
+  "profit": 18.17,
+  "stake_sum": 135.39,
+  "open_bets": 210,
+  "settled_bets": 163,
   "by_sport": {
     "baseball": {
-      "total": 109,
-      "wins": 61,
-      "losses": 48,
-      "winrate": 55.96,
-      "profit": 15.26,
-      "stake_sum": 107.73,
-      "yield": 14.17
+      "total": 113,
+      "wins": 62,
+      "losses": 51,
+      "winrate": 54.87,
+      "profit": 13.76,
+      "stake_sum": 110.98,
+      "yield": 12.4
     },
     "basketball": {
       "total": 12,
@@ -37,12 +37,12 @@
       "yield": 50.04
     },
     "football": {
-      "total": 32,
+      "total": 33,
       "wins": 9,
-      "losses": 23,
-      "winrate": 28.12,
+      "losses": 24,
+      "winrate": 27.27,
       "profit": 0.0,
-      "stake_sum": 14.28,
+      "stake_sum": 14.46,
       "yield": 0.0
     }
   },
@@ -146,15 +146,6 @@
       "stake_sum": 0.78,
       "yield": 0.0
     },
-    "Everygame": {
-      "total": 2,
-      "wins": 1,
-      "losses": 1,
-      "winrate": 50.0,
-      "profit": -0.02,
-      "stake_sum": 0.9,
-      "yield": -2.0
-    },
     "Coolbet": {
       "total": 3,
       "wins": 1,
@@ -164,6 +155,24 @@
       "stake_sum": 0.88,
       "yield": -56.82
     },
+    "Everygame": {
+      "total": 3,
+      "wins": 1,
+      "losses": 2,
+      "winrate": 33.33,
+      "profit": -0.55,
+      "stake_sum": 1.43,
+      "yield": -38.32
+    },
+    "Pinnacle": {
+      "total": 8,
+      "wins": 4,
+      "losses": 4,
+      "winrate": 50.0,
+      "profit": -0.66,
+      "stake_sum": 10.54,
+      "yield": -6.28
+    },
     "William Hill": {
       "total": 1,
       "wins": 0,
@@ -171,6 +180,15 @@
       "winrate": 0.0,
       "profit": -0.72,
       "stake_sum": 0.72,
+      "yield": -100.0
+    },
+    "Winamax (FR)": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.94,
+      "stake_sum": 0.94,
       "yield": -100.0
     },
     "Matchbook": {
@@ -182,24 +200,6 @@
       "stake_sum": 1.17,
       "yield": -84.62
     },
-    "1xBet": {
-      "total": 7,
-      "wins": 3,
-      "losses": 4,
-      "winrate": 42.86,
-      "profit": -1.4,
-      "stake_sum": 6.04,
-      "yield": -23.13
-    },
-    "Pinnacle": {
-      "total": 7,
-      "wins": 3,
-      "losses": 4,
-      "winrate": 42.86,
-      "profit": -1.48,
-      "stake_sum": 9.61,
-      "yield": -15.4
-    },
     "Winamax (DE)": {
       "total": 5,
       "wins": 2,
@@ -209,14 +209,23 @@
       "stake_sum": 8.41,
       "yield": -20.78
     },
+    "1xBet": {
+      "total": 8,
+      "wins": 3,
+      "losses": 5,
+      "winrate": 37.5,
+      "profit": -2.25,
+      "stake_sum": 6.89,
+      "yield": -32.62
+    },
     "Betfair": {
-      "total": 21,
+      "total": 22,
       "wins": 5,
-      "losses": 16,
-      "winrate": 23.81,
+      "losses": 17,
+      "winrate": 22.73,
       "profit": -2.52,
-      "stake_sum": 6.77,
-      "yield": -37.23
+      "stake_sum": 6.95,
+      "yield": -36.27
     },
     "MyBookie.ag": {
       "total": 6,
@@ -230,13 +239,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 109,
-      "wins": 61,
-      "losses": 48,
-      "winrate": 55.96,
-      "profit": 15.26,
-      "stake_sum": 107.73,
-      "yield": 14.17
+      "total": 113,
+      "wins": 62,
+      "losses": 51,
+      "winrate": 54.87,
+      "profit": 13.76,
+      "stake_sum": 110.98,
+      "yield": 12.4
     },
     "basketball_wnba": {
       "total": 12,
@@ -266,12 +275,12 @@
       "yield": 0.0
     },
     "FIFA World Cup": {
-      "total": 2,
+      "total": 3,
       "wins": 2,
-      "losses": 0,
-      "winrate": 100.0,
+      "losses": 1,
+      "winrate": 66.67,
       "profit": 0.0,
-      "stake_sum": 0.37,
+      "stake_sum": 0.55,
       "yield": 0.0
     },
     "Eliteserien": {
@@ -302,5 +311,5 @@
       "yield": 0.0
     }
   },
-  "last_update": "2026-07-19T17:02:58.278351+00:00"
+  "last_update": "2026-07-20T09:23:50.937812+00:00"
 }
