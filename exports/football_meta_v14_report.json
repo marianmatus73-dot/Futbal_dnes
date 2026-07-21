@@ -1,24 +1,24 @@
 {
-  "trained_at": "2026-07-21T08:36:18+00:00",
+  "trained_at": "2026-07-21T17:26:11+00:00",
   "samples": 34,
   "wins": 9,
   "losses": 25,
   "positive_rate": 0.2647058823529412,
   "milestone": 50,
   "selected_model": "logistic_regression",
-  "selected_validation_score": 0.34881257914229147,
+  "selected_validation_score": 0.3488125791422914,
   "selected_metrics": {
     "accuracy": 0.6666666666666666,
-    "brier_score": 0.21949213803606785,
-    "log_loss": 0.7067574032562391
+    "brier_score": 0.21949213803606787,
+    "log_loss": 0.70675740325624
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
       "accuracy": 0.6666666666666666,
-      "brier_score": 0.21949213803606785,
-      "log_loss": 0.7067574032562391,
-      "validation_score": 0.34881257914229147
+      "brier_score": 0.21949213803606787,
+      "log_loss": 0.70675740325624,
+      "validation_score": 0.3488125791422914
     },
     {
       "model_type": "random_forest",
