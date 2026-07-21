@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 33,
+  "training_samples": 34,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 33,
+      "samples": 34,
       "wins": 9,
-      "losses": 24,
-      "winrate": 0.2727,
-      "average_value": 0.3628
+      "losses": 25,
+      "winrate": 0.2647,
+      "average_value": 0.3775
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 33,
+      "samples": 34,
       "wins": 9,
-      "losses": 24,
-      "winrate": 0.2727,
-      "average_value": 0.1561
+      "losses": 25,
+      "winrate": 0.2647,
+      "average_value": 0.1541
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 33,
+      "samples": 34,
       "wins": 9,
-      "losses": 24,
-      "winrate": 0.2727,
-      "average_value": 6.109
+      "losses": 25,
+      "winrate": 0.2647,
+      "average_value": 4.5637
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 33,
+      "samples": 34,
       "wins": 9,
-      "losses": 24,
-      "winrate": 0.2727,
-      "average_value": 0.1886
+      "losses": 25,
+      "winrate": 0.2647,
+      "average_value": 0.1569
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 33,
+      "samples": 34,
       "wins": 9,
-      "losses": 24,
-      "winrate": 0.2727,
-      "average_value": 0.3285
+      "losses": 25,
+      "winrate": 0.2647,
+      "average_value": 0.3388
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 33,
+      "samples": 34,
       "wins": 9,
-      "losses": 24,
-      "winrate": 0.2727,
-      "average_value": 0.25
+      "losses": 25,
+      "winrate": 0.2647,
+      "average_value": 0.2588
     }
   ],
   "warning": "Small sample size - information only",
