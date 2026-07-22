@@ -1,22 +1,22 @@
 {
-  "total_bets": 216,
-  "wins": 106,
-  "losses": 110,
-  "winrate": 49.07,
-  "yield": 10.75,
-  "profit": 19.61,
-  "stake_sum": 182.38,
-  "open_bets": 257,
-  "settled_bets": 216,
+  "total_bets": 240,
+  "wins": 120,
+  "losses": 120,
+  "winrate": 50.0,
+  "yield": 13.03,
+  "profit": 27.08,
+  "stake_sum": 207.88,
+  "open_bets": 237,
+  "settled_bets": 240,
   "by_sport": {
     "baseball": {
-      "total": 162,
-      "wins": 87,
-      "losses": 75,
-      "winrate": 53.7,
-      "profit": 15.68,
-      "stake_sum": 156.6,
-      "yield": 10.01
+      "total": 186,
+      "wins": 101,
+      "losses": 85,
+      "winrate": 54.3,
+      "profit": 23.15,
+      "stake_sum": 182.1,
+      "yield": 12.71
     },
     "basketball": {
       "total": 13,
@@ -48,40 +48,40 @@
   },
   "by_bookmaker": {
     "888sport": {
-      "total": 53,
-      "wins": 36,
-      "losses": 17,
-      "winrate": 67.92,
-      "profit": 18.06,
-      "stake_sum": 56.94,
-      "yield": 31.72
+      "total": 60,
+      "wins": 42,
+      "losses": 18,
+      "winrate": 70.0,
+      "profit": 22.39,
+      "stake_sum": 65.44,
+      "yield": 34.21
     },
     "BetOnline.ag": {
-      "total": 50,
-      "wins": 28,
-      "losses": 22,
-      "winrate": 56.0,
-      "profit": 6.84,
-      "stake_sum": 47.44,
-      "yield": 14.41
+      "total": 57,
+      "wins": 33,
+      "losses": 24,
+      "winrate": 57.89,
+      "profit": 11.07,
+      "stake_sum": 56.32,
+      "yield": 19.66
     },
     "Unibet (FR)": {
-      "total": 9,
+      "total": 10,
       "wins": 8,
-      "losses": 1,
-      "winrate": 88.89,
-      "profit": 6.54,
-      "stake_sum": 8.82,
-      "yield": 74.16
+      "losses": 2,
+      "winrate": 80.0,
+      "profit": 5.75,
+      "stake_sum": 9.61,
+      "yield": 59.84
     },
     "GTbets": {
-      "total": 5,
-      "wins": 3,
-      "losses": 2,
-      "winrate": 60.0,
-      "profit": 3.32,
-      "stake_sum": 5.83,
-      "yield": 56.99
+      "total": 11,
+      "wins": 6,
+      "losses": 5,
+      "winrate": 54.55,
+      "profit": 4.25,
+      "stake_sum": 11.93,
+      "yield": 35.6
     },
     "Betclic (FR)": {
       "total": 5,
@@ -146,6 +146,15 @@
       "stake_sum": 0.78,
       "yield": 0.0
     },
+    "BetAnything": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.35,
+      "stake_sum": 0.35,
+      "yield": -100.0
+    },
     "William Hill": {
       "total": 1,
       "wins": 0,
@@ -191,15 +200,6 @@
       "stake_sum": 3.77,
       "yield": -35.09
     },
-    "Matchbook": {
-      "total": 4,
-      "wins": 0,
-      "losses": 4,
-      "winrate": 0.0,
-      "profit": -1.52,
-      "stake_sum": 1.7,
-      "yield": -89.41
-    },
     "Winamax (DE)": {
       "total": 5,
       "wins": 2,
@@ -208,6 +208,15 @@
       "profit": -1.75,
       "stake_sum": 8.41,
       "yield": -20.78
+    },
+    "Matchbook": {
+      "total": 5,
+      "wins": 0,
+      "losses": 5,
+      "winrate": 0.0,
+      "profit": -1.99,
+      "stake_sum": 2.17,
+      "yield": -91.71
     },
     "Betfair": {
       "total": 25,
@@ -219,13 +228,13 @@
       "yield": -28.34
     },
     "1xBet": {
-      "total": 13,
+      "total": 14,
       "wins": 5,
-      "losses": 8,
-      "winrate": 38.46,
-      "profit": -3.38,
-      "stake_sum": 9.74,
-      "yield": -34.74
+      "losses": 9,
+      "winrate": 35.71,
+      "profit": -3.79,
+      "stake_sum": 10.15,
+      "yield": -37.38
     },
     "MyBookie.ag": {
       "total": 8,
@@ -239,13 +248,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 162,
-      "wins": 87,
-      "losses": 75,
-      "winrate": 53.7,
-      "profit": 15.68,
-      "stake_sum": 156.6,
-      "yield": 10.01
+      "total": 186,
+      "wins": 101,
+      "losses": 85,
+      "winrate": 54.3,
+      "profit": 23.15,
+      "stake_sum": 182.1,
+      "yield": 12.71
     },
     "basketball_wnba": {
       "total": 13,
@@ -311,5 +320,5 @@
       "yield": 0.0
     }
   },
-  "last_update": "2026-07-22T08:36:10.482891+00:00"
+  "last_update": "2026-07-22T17:25:17.405016+00:00"
 }
