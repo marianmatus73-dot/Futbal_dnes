@@ -1,11 +1,18 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 0
-Score events: 0
+Open bets: 2
+Score events: 3
 
 === OPEN BETS ===
+soccer_mexico_ligamx | 2026-07-22T03:00:00Z | Toluca vs Pumas | pick=Pumas
+soccer_brazil_campeonato | 2026-07-21T22:30:00Z | Atletico Mineiro vs Bahia | pick=Bahia
 
 === SCORE EVENTS ===
+soccer_brazil_campeonato | 2026-07-21T22:29:00Z | Atletico Mineiro vs Bahia | 1-1
+soccer_mexico_ligamx | 2026-07-22T01:00:00Z | Cruz Azul vs Puebla | 2-1
+soccer_mexico_ligamx | 2026-07-22T03:05:00Z | Toluca vs Pumas | 1-2
 
 === CLOSEST CANDIDATES ===
+soccer_mexico_ligamx | Toluca vs Pumas -> Toluca vs Pumas | combined=1.000 min=1.000 | bet_time=2026-07-22T03:00:00Z score_time=2026-07-22T03:05:00Z
+soccer_brazil_campeonato | Atletico Mineiro vs Bahia -> Atletico Mineiro vs Bahia | combined=1.000 min=1.000 | bet_time=2026-07-21T22:30:00Z score_time=2026-07-21T22:29:00Z
