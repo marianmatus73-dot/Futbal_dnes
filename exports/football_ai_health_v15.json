@@ -1,8 +1,8 @@
 {
   "version": "v15.2",
-  "created_at": "2026-07-22T17:25:17+00:00",
+  "created_at": "2026-07-23T08:37:14+00:00",
   "model_maturity": "EARLY",
-  "training_samples": 36,
+  "training_samples": 53,
   "meta_ai": {
     "samples": 0,
     "milestone": 20,
@@ -22,7 +22,7 @@
     "context": 0.1
   },
   "warnings": [
-    "Small sample size",
+    null,
     "Missing feature: market_model_gap"
   ]
 }
