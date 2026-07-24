@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 53,
+  "training_samples": 54,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 53,
+      "samples": 54,
       "wins": 17,
-      "losses": 36,
-      "winrate": 0.3208,
-      "average_value": 0.4782
+      "losses": 37,
+      "winrate": 0.3148,
+      "average_value": 0.4693
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 53,
+      "samples": 54,
       "wins": 17,
-      "losses": 36,
-      "winrate": 0.3208,
-      "average_value": 0.1492
+      "losses": 37,
+      "winrate": 0.3148,
+      "average_value": 0.1521
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 53,
+      "samples": 54,
       "wins": 17,
-      "losses": 36,
-      "winrate": 0.3208,
-      "average_value": 4.2778
+      "losses": 37,
+      "winrate": 0.3148,
+      "average_value": 3.3406
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 53,
+      "samples": 54,
       "wins": 17,
-      "losses": 36,
-      "winrate": 0.3208,
-      "average_value": 0.1572
+      "losses": 37,
+      "winrate": 0.3148,
+      "average_value": 0.1358
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 53,
+      "samples": 54,
       "wins": 17,
-      "losses": 36,
-      "winrate": 0.3208,
-      "average_value": 0.4002
+      "losses": 37,
+      "winrate": 0.3148,
+      "average_value": 0.3928
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 53,
+      "samples": 54,
       "wins": 17,
-      "losses": 36,
-      "winrate": 0.3208,
-      "average_value": 0.3113
+      "losses": 37,
+      "winrate": 0.3148,
+      "average_value": 0.3056
     }
   ],
   "warning": null,
