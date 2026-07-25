@@ -1,22 +1,22 @@
 {
-  "total_bets": 312,
+  "total_bets": 313,
   "wins": 155,
-  "losses": 157,
-  "winrate": 49.68,
-  "yield": 10.72,
-  "profit": 28.94,
-  "stake_sum": 269.92,
-  "open_bets": 272,
-  "settled_bets": 312,
+  "losses": 158,
+  "winrate": 49.52,
+  "yield": 10.47,
+  "profit": 28.32,
+  "stake_sum": 270.54,
+  "open_bets": 280,
+  "settled_bets": 313,
   "by_sport": {
     "baseball": {
-      "total": 234,
+      "total": 235,
       "wins": 128,
-      "losses": 106,
-      "winrate": 54.7,
-      "profit": 25.0,
-      "stake_sum": 239.23,
-      "yield": 10.45
+      "losses": 107,
+      "winrate": 54.47,
+      "profit": 24.38,
+      "stake_sum": 239.85,
+      "yield": 10.17
     },
     "basketball": {
       "total": 13,
@@ -245,15 +245,6 @@
       "stake_sum": 9.38,
       "yield": -28.6
     },
-    "1xBet": {
-      "total": 23,
-      "wins": 9,
-      "losses": 14,
-      "winrate": 39.13,
-      "profit": -5.4,
-      "stake_sum": 14.08,
-      "yield": -38.38
-    },
     "MyBookie.ag": {
       "total": 10,
       "wins": 2,
@@ -262,17 +253,26 @@
       "profit": -5.83,
       "stake_sum": 7.79,
       "yield": -74.81
+    },
+    "1xBet": {
+      "total": 24,
+      "wins": 9,
+      "losses": 15,
+      "winrate": 37.5,
+      "profit": -6.02,
+      "stake_sum": 14.7,
+      "yield": -40.98
     }
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 234,
+      "total": 235,
       "wins": 128,
-      "losses": 106,
-      "winrate": 54.7,
-      "profit": 25.0,
-      "stake_sum": 239.23,
-      "yield": 10.45
+      "losses": 107,
+      "winrate": 54.47,
+      "profit": 24.38,
+      "stake_sum": 239.85,
+      "yield": 10.17
     },
     "basketball_wnba": {
       "total": 13,
@@ -365,5 +365,5 @@
       "yield": 0.0
     }
   },
-  "last_update": "2026-07-25T12:00:37.430179+00:00"
+  "last_update": "2026-07-25T17:04:24.459852+00:00"
 }
