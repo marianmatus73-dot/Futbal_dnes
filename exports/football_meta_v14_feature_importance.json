@@ -1,211 +1,199 @@
 {
-  "trained_at": "2026-07-26T08:33:01+00:00",
-  "model_type": "logistic_regression",
-  "samples": 80,
+  "trained_at": "2026-07-26T17:07:53+00:00",
+  "model_type": "random_forest",
+  "samples": 84,
   "features": [
     {
-      "feature": "league_weight",
-      "importance": 0.09954573353146638
-    },
-    {
-      "feature": "form_difference",
-      "importance": 0.06691476607857672
-    },
-    {
-      "feature": "confidence_input",
-      "importance": 0.06178028954861366
-    },
-    {
-      "feature": "model_consensus_probability",
-      "importance": 0.05821753744184902
-    },
-    {
       "feature": "odds",
-      "importance": 0.05173910940151617
+      "importance": 0.10723679604156458
     },
     {
       "feature": "market_selection_probability",
-      "importance": 0.043322496323160826
+      "importance": 0.09990361832475174
     },
     {
-      "feature": "market_model_gap",
-      "importance": 0.03674099972817792
-    },
-    {
-      "feature": "market_draw_probability",
-      "importance": 0.03620444814057106
-    },
-    {
-      "feature": "competition_importance",
-      "importance": 0.034424270367864586
-    },
-    {
-      "feature": "market_overround",
-      "importance": 0.03434809176641986
-    },
-    {
-      "feature": "form_draw_probability",
-      "importance": 0.032672447614457714
-    },
-    {
-      "feature": "form_away_probability",
-      "importance": 0.0314762272543143
-    },
-    {
-      "feature": "bookmaker_weight",
-      "importance": 0.030647875896621688
-    },
-    {
-      "feature": "form_home_probability",
-      "importance": 0.027722052789207828
+      "feature": "model_consensus_probability",
+      "importance": 0.07594573304549007
     },
     {
       "feature": "market_home_probability",
-      "importance": 0.02529311681590674
+      "importance": 0.07015037944348214
     },
     {
-      "feature": "form_selection_probability",
-      "importance": 0.02328875620322417
-    },
-    {
-      "feature": "model_dispersion",
-      "importance": 0.02171252568303845
-    },
-    {
-      "feature": "dixon_draw_adjustment",
-      "importance": 0.017360679272978453
-    },
-    {
-      "feature": "bookmaker_count",
-      "importance": 0.01735804539596387
-    },
-    {
-      "feature": "dixon_draw_probability",
-      "importance": 0.01708922664661282
-    },
-    {
-      "feature": "dixon_rho",
-      "importance": 0.016558834800111763
-    },
-    {
-      "feature": "consensus_safety",
-      "importance": 0.0153718883277651
+      "feature": "market_overround",
+      "importance": 0.05111608068315519
     },
     {
       "feature": "elo_selection_probability",
-      "importance": 0.0147451306797595
+      "importance": 0.05078150710006465
     },
     {
       "feature": "market_away_probability",
-      "importance": 0.014389204541810975
+      "importance": 0.04948931118348829
     },
     {
-      "feature": "context_reliability",
-      "importance": 0.013492298489237317
+      "feature": "market_model_gap",
+      "importance": 0.04638929542017995
     },
     {
-      "feature": "form_home_reliability",
-      "importance": 0.011829129971622356
+      "feature": "model_dispersion",
+      "importance": 0.03830647955245049
     },
     {
-      "feature": "elo_home_reliability",
-      "importance": 0.011829129971622351
+      "feature": "bookmaker_weight",
+      "importance": 0.03216706705233253
     },
     {
-      "feature": "dixon_selection_probability",
-      "importance": 0.01173100931967058
+      "feature": "market_draw_probability",
+      "importance": 0.031045465284260006
     },
     {
       "feature": "raw_edge",
-      "importance": 0.011685578319219347
+      "importance": 0.03054726050402905
     },
     {
-      "feature": "reliability_input",
-      "importance": 0.011362616082478133
+      "feature": "consensus_safety",
+      "importance": 0.026918648063114104
     },
     {
-      "feature": "is_international",
-      "importance": 0.009489323281859294
+      "feature": "dixon_selection_probability",
+      "importance": 0.022394238254017255
     },
     {
-      "feature": "form_away_reliability",
-      "importance": 0.008111260879566175
+      "feature": "bookmaker_count",
+      "importance": 0.01731355925768692
     },
     {
-      "feature": "elo_away_reliability",
-      "importance": 0.008111260879566169
-    },
-    {
-      "feature": "xg_total",
-      "importance": 0.0075454905645220465
-    },
-    {
-      "feature": "over_25_probability",
-      "importance": 0.0074080667697608285
-    },
-    {
-      "feature": "under_25_probability",
-      "importance": 0.0074080667697608285
-    },
-    {
-      "feature": "xg_home",
-      "importance": 0.007259861350568458
-    },
-    {
-      "feature": "elo_difference",
-      "importance": 0.0069632695544008
-    },
-    {
-      "feature": "home_advantage_elo",
-      "importance": 0.0054535505846337535
-    },
-    {
-      "feature": "dixon_home_probability",
-      "importance": 0.00430319358320662
-    },
-    {
-      "feature": "home_advantage_xg",
-      "importance": 0.004159405476366942
-    },
-    {
-      "feature": "xg_difference",
-      "importance": 0.003685100315531701
-    },
-    {
-      "feature": "elo_home_probability",
-      "importance": 0.003534520202288831
-    },
-    {
-      "feature": "elo_away_probability",
-      "importance": 0.0035235661487971193
-    },
-    {
-      "feature": "elo_draw_probability",
-      "importance": 0.0033220868978726826
-    },
-    {
-      "feature": "xg_away",
-      "importance": 0.0019474538685358808
+      "feature": "dixon_draw_adjustment",
+      "importance": 0.01603815620035785
     },
     {
       "feature": "sport_weight",
-      "importance": 0.0018913669811865326
+      "importance": 0.014798689695435437
     },
     {
-      "feature": "btts_yes_probability",
-      "importance": 0.001652729120284856
+      "feature": "dixon_draw_probability",
+      "importance": 0.012073846483618544
+    },
+    {
+      "feature": "confidence_input",
+      "importance": 0.011631189092034462
+    },
+    {
+      "feature": "elo_home_probability",
+      "importance": 0.011369480765428997
+    },
+    {
+      "feature": "home_advantage_elo",
+      "importance": 0.011252861695621534
+    },
+    {
+      "feature": "over_25_probability",
+      "importance": 0.0111192170642925
+    },
+    {
+      "feature": "home_advantage_xg",
+      "importance": 0.010706366154545136
+    },
+    {
+      "feature": "elo_difference",
+      "importance": 0.01060222995768768
+    },
+    {
+      "feature": "xg_total",
+      "importance": 0.010341961155822525
     },
     {
       "feature": "btts_no_probability",
-      "importance": 0.001652729120284856
+      "importance": 0.009954917470955626
     },
     {
-      "feature": "season_stage",
-      "importance": 0.0010729729519888553
+      "feature": "dixon_rho",
+      "importance": 0.009660082226553238
+    },
+    {
+      "feature": "elo_draw_probability",
+      "importance": 0.00948354771861412
+    },
+    {
+      "feature": "elo_away_probability",
+      "importance": 0.009093415460132799
+    },
+    {
+      "feature": "under_25_probability",
+      "importance": 0.008716758781643586
+    },
+    {
+      "feature": "dixon_home_probability",
+      "importance": 0.00842354825182288
+    },
+    {
+      "feature": "elo_away_reliability",
+      "importance": 0.008212527121580913
+    },
+    {
+      "feature": "btts_yes_probability",
+      "importance": 0.008058710692461795
+    },
+    {
+      "feature": "xg_home",
+      "importance": 0.0078113364934164625
+    },
+    {
+      "feature": "xg_difference",
+      "importance": 0.006757733012081485
+    },
+    {
+      "feature": "xg_away",
+      "importance": 0.006731956797961442
+    },
+    {
+      "feature": "form_selection_probability",
+      "importance": 0.005738197047252913
     },
     {
       "feature": "dixon_away_probability",
-      "importance": 0.0006512082951772582
+      "importance": 0.005195156861990909
+    },
+    {
+      "feature": "league_weight",
+      "importance": 0.004476790573950412
+    },
+    {
+      "feature": "form_draw_probability",
+      "importance": 0.004263223913310722
+    },
+    {
+      "feature": "form_away_reliability",
+      "importance": 0.0034776883560633715
+    },
+    {
+      "feature": "context_reliability",
+      "importance": 0.0032105893988443397
+    },
+    {
+      "feature": "form_away_probability",
+      "importance": 0.0031773527861165005
+    },
+    {
+      "feature": "season_stage",
+      "importance": 0.002559860557788947
+    },
+    {
+      "feature": "competition_importance",
+      "importance": 0.002495403644097687
+    },
+    {
+      "feature": "reliability_input",
+      "importance": 0.0011050045621028958
+    },
+    {
+      "feature": "form_home_probability",
+      "importance": 0.001084314230256081
+    },
+    {
+      "feature": "form_difference",
+      "importance": 0.0006724465660892862
     },
     {
       "feature": "xg_home_reliability",
@@ -213,6 +201,18 @@
     },
     {
       "feature": "xg_away_reliability",
+      "importance": 0.0
+    },
+    {
+      "feature": "elo_home_reliability",
+      "importance": 0.0
+    },
+    {
+      "feature": "form_home_reliability",
+      "importance": 0.0
+    },
+    {
+      "feature": "is_international",
       "importance": 0.0
     },
     {
