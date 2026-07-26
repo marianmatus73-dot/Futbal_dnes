@@ -1,41 +1,41 @@
 {
-  "trained_at": "2026-07-25T17:04:24+00:00",
-  "samples": 60,
-  "wins": 18,
-  "losses": 42,
-  "positive_rate": 0.3,
+  "trained_at": "2026-07-26T08:33:01+00:00",
+  "samples": 80,
+  "wins": 22,
+  "losses": 58,
+  "positive_rate": 0.275,
   "milestone": 80,
   "selected_model": "logistic_regression",
-  "selected_validation_score": 0.27,
+  "selected_validation_score": 0.48280802670496503,
   "selected_metrics": {
-    "accuracy": 0.6,
-    "brier_score": 0.3193543647893752,
-    "log_loss": 1.2693628535549908
+    "accuracy": 0.75,
+    "brier_score": 0.18081551956794462,
+    "log_loss": 0.5332016753759614
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
-      "accuracy": 0.6,
-      "brier_score": 0.3193543647893752,
-      "log_loss": 1.2693628535549908,
-      "validation_score": 0.27
+      "accuracy": 0.75,
+      "brier_score": 0.18081551956794462,
+      "log_loss": 0.5332016753759614,
+      "validation_score": 0.48280802670496503
     },
     {
       "model_type": "random_forest",
-      "accuracy": 0.5333333333333333,
-      "brier_score": 0.24020034378435098,
-      "log_loss": 0.6844804136528667,
-      "validation_score": 0.25755493660525625
+      "accuracy": 0.6875,
+      "brier_score": 0.19734351873258643,
+      "log_loss": 0.5750827819413253,
+      "validation_score": 0.4191749759683061
     },
     {
       "model_type": "hist_gradient_boosting",
-      "accuracy": 0.6,
-      "brier_score": 0.2862478422931144,
-      "log_loss": 0.8924632808047271,
-      "validation_score": 0.27
+      "accuracy": 0.6875,
+      "brier_score": 0.2650067264535993,
+      "log_loss": 0.8539530105127674,
+      "validation_score": 0.309375
     }
   ],
-  "next_milestone": 80,
+  "next_milestone": 120,
   "model_path": "models/football_meta_model.pkl",
   "metadata_path": "models/football_meta_model.json",
   "importance_path": "exports/football_meta_v14_feature_importance.json"
