@@ -1,22 +1,22 @@
 {
-  "total_bets": 377,
-  "wins": 180,
+  "total_bets": 378,
+  "wins": 181,
   "losses": 197,
-  "winrate": 47.75,
-  "yield": 9.14,
-  "profit": 28.02,
-  "stake_sum": 306.53,
-  "open_bets": 279,
-  "settled_bets": 377,
+  "winrate": 47.88,
+  "yield": 9.47,
+  "profit": 29.13,
+  "stake_sum": 307.54,
+  "open_bets": 302,
+  "settled_bets": 378,
   "by_sport": {
     "baseball": {
-      "total": 260,
-      "wins": 142,
+      "total": 261,
+      "wins": 143,
       "losses": 118,
-      "winrate": 54.62,
-      "profit": 26.36,
-      "stake_sum": 266.22,
-      "yield": 9.9
+      "winrate": 54.79,
+      "profit": 27.47,
+      "stake_sum": 267.23,
+      "yield": 10.28
     },
     "basketball": {
       "total": 13,
@@ -65,6 +65,15 @@
       "stake_sum": 93.28,
       "yield": 13.69
     },
+    "Unibet (FR)": {
+      "total": 16,
+      "wins": 11,
+      "losses": 5,
+      "winrate": 68.75,
+      "profit": 5.02,
+      "stake_sum": 17.95,
+      "yield": 27.97
+    },
     "GTbets": {
       "total": 15,
       "wins": 7,
@@ -73,15 +82,6 @@
       "profit": 4.28,
       "stake_sum": 13.07,
       "yield": 32.78
-    },
-    "Unibet (FR)": {
-      "total": 15,
-      "wins": 10,
-      "losses": 5,
-      "winrate": 66.67,
-      "profit": 3.91,
-      "stake_sum": 16.94,
-      "yield": 23.08
     },
     "Betclic (FR)": {
       "total": 5,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 260,
-      "wins": 142,
+      "total": 261,
+      "wins": 143,
       "losses": 118,
-      "winrate": 54.62,
-      "profit": 26.36,
-      "stake_sum": 266.22,
-      "yield": 9.9
+      "winrate": 54.79,
+      "profit": 27.47,
+      "stake_sum": 267.23,
+      "yield": 10.28
     },
     "basketball_wnba": {
       "total": 13,
@@ -383,5 +383,5 @@
       "yield": -24.75
     }
   },
-  "last_update": "2026-07-27T10:00:04.478203+00:00"
+  "last_update": "2026-07-27T17:46:48.305380+00:00"
 }
