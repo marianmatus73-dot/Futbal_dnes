@@ -1,22 +1,22 @@
 {
-  "total_bets": 398,
-  "wins": 186,
-  "losses": 212,
-  "winrate": 46.73,
-  "yield": 6.74,
-  "profit": 21.95,
-  "stake_sum": 325.69,
+  "total_bets": 407,
+  "wins": 190,
+  "losses": 217,
+  "winrate": 46.68,
+  "yield": 6.12,
+  "profit": 20.54,
+  "stake_sum": 335.44,
   "open_bets": 306,
-  "settled_bets": 398,
+  "settled_bets": 407,
   "by_sport": {
     "baseball": {
-      "total": 278,
-      "wins": 148,
-      "losses": 130,
-      "winrate": 53.24,
-      "profit": 20.3,
-      "stake_sum": 284.86,
-      "yield": 7.13
+      "total": 287,
+      "wins": 152,
+      "losses": 135,
+      "winrate": 52.96,
+      "profit": 18.89,
+      "stake_sum": 294.61,
+      "yield": 6.41
     },
     "basketball": {
       "total": 13,
@@ -48,31 +48,40 @@
   },
   "by_bookmaker": {
     "888sport": {
-      "total": 90,
+      "total": 92,
       "wins": 61,
-      "losses": 29,
-      "winrate": 67.78,
-      "profit": 26.86,
-      "stake_sum": 102.17,
-      "yield": 26.29
+      "losses": 31,
+      "winrate": 66.3,
+      "profit": 24.34,
+      "stake_sum": 104.69,
+      "yield": 23.25
     },
     "BetOnline.ag": {
-      "total": 88,
-      "wins": 50,
-      "losses": 38,
-      "winrate": 56.82,
-      "profit": 11.14,
-      "stake_sum": 94.91,
-      "yield": 11.73
+      "total": 91,
+      "wins": 51,
+      "losses": 40,
+      "winrate": 56.04,
+      "profit": 9.63,
+      "stake_sum": 98.4,
+      "yield": 9.79
     },
     "GTbets": {
-      "total": 18,
-      "wins": 9,
+      "total": 19,
+      "wins": 10,
       "losses": 9,
-      "winrate": 50.0,
-      "profit": 4.99,
-      "stake_sum": 16.77,
-      "yield": 29.76
+      "winrate": 52.63,
+      "profit": 6.32,
+      "stake_sum": 18.64,
+      "yield": 33.9
+    },
+    "Betclic (FR)": {
+      "total": 6,
+      "wins": 5,
+      "losses": 1,
+      "winrate": 83.33,
+      "profit": 3.03,
+      "stake_sum": 4.05,
+      "yield": 74.74
     },
     "Unibet (FR)": {
       "total": 22,
@@ -82,15 +91,6 @@
       "profit": 2.67,
       "stake_sum": 23.98,
       "yield": 11.14
-    },
-    "Betclic (FR)": {
-      "total": 5,
-      "wins": 4,
-      "losses": 1,
-      "winrate": 80.0,
-      "profit": 1.83,
-      "stake_sum": 3.03,
-      "yield": 60.51
     },
     "Betsson": {
       "total": 6,
@@ -191,15 +191,6 @@
       "stake_sum": 0.72,
       "yield": -100.0
     },
-    "Everygame": {
-      "total": 4,
-      "wins": 1,
-      "losses": 3,
-      "winrate": 25.0,
-      "profit": -1.09,
-      "stake_sum": 1.97,
-      "yield": -55.23
-    },
     "Coolbet": {
       "total": 14,
       "wins": 2,
@@ -218,6 +209,24 @@
       "stake_sum": 12.15,
       "yield": -10.96
     },
+    "Everygame": {
+      "total": 5,
+      "wins": 1,
+      "losses": 4,
+      "winrate": 20.0,
+      "profit": -1.46,
+      "stake_sum": 2.34,
+      "yield": -62.31
+    },
+    "Betfair": {
+      "total": 38,
+      "wins": 12,
+      "losses": 26,
+      "winrate": 31.58,
+      "profit": -1.53,
+      "stake_sum": 11.16,
+      "yield": -13.68
+    },
     "Winamax (DE)": {
       "total": 5,
       "wins": 2,
@@ -226,15 +235,6 @@
       "profit": -1.75,
       "stake_sum": 8.41,
       "yield": -20.78
-    },
-    "Betfair": {
-      "total": 37,
-      "wins": 11,
-      "losses": 26,
-      "winrate": 29.73,
-      "profit": -1.99,
-      "stake_sum": 10.68,
-      "yield": -18.61
     },
     "Matchbook": {
       "total": 8,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 278,
-      "wins": 148,
-      "losses": 130,
-      "winrate": 53.24,
-      "profit": 20.3,
-      "stake_sum": 284.86,
-      "yield": 7.13
+      "total": 287,
+      "wins": 152,
+      "losses": 135,
+      "winrate": 52.96,
+      "profit": 18.89,
+      "stake_sum": 294.61,
+      "yield": 6.41
     },
     "basketball_wnba": {
       "total": 13,
@@ -383,5 +383,5 @@
       "yield": -24.75
     }
   },
-  "last_update": "2026-07-28T08:42:03.793025+00:00"
+  "last_update": "2026-07-28T17:39:12.280412+00:00"
 }
