@@ -1,5 +1,5 @@
 {
-  "trained_at": "2026-07-30T08:34:36+00:00",
+  "trained_at": "2026-07-30T17:40:56+00:00",
   "samples": 103,
   "wins": 29,
   "losses": 74,
@@ -24,8 +24,8 @@
       "model_type": "random_forest",
       "accuracy": 0.7619047619047619,
       "brier_score": 0.18127368779770517,
-      "log_loss": 0.5567219103673694,
-      "validation_score": 0.4823422201112161
+      "log_loss": 0.5567219103673695,
+      "validation_score": 0.482342220111216
     },
     {
       "model_type": "hist_gradient_boosting",
