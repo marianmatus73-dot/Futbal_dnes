@@ -1,17 +1,41 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 1
-Score events: 4
+Open bets: 6
+Score events: 18
 
 === OPEN BETS ===
+soccer_brazil_campeonato | 2026-07-30T22:30:00Z | Corinthians vs Atletico Paranaense | pick=Atletico Paranaense
+soccer_brazil_campeonato | 2026-07-31T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
 soccer_brazil_campeonato | 2026-07-29T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
+soccer_brazil_campeonato | 2026-07-31T00:30:00Z | Coritiba vs Cruzeiro | pick=Coritiba
+soccer_argentina_primera_division | 2026-07-30T22:00:00Z | Talleres vs Velez Sarsfield BA | pick=Velez Sarsfield BA
+soccer_argentina_primera_division | 2026-07-31T00:15:00Z | Central Córdoba vs Atlético Tucuman | pick=Central Córdoba
 
 === SCORE EVENTS ===
+soccer_argentina_primera_division | 2026-07-28T22:00:00Z | Banfield vs Sarmiento de Junin | 3-2
+soccer_argentina_primera_division | 2026-07-28T22:00:00Z | San Lorenzo vs Gimnasia Mendoza | 1-0
+soccer_argentina_primera_division | 2026-07-29T00:15:00Z | Argentinos Juniors vs Estudiantes de Río Cuarto | 3-0
+soccer_argentina_primera_division | 2026-07-29T00:15:00Z | Rosario Central vs Racing Club | 0-0
+soccer_argentina_primera_division | 2026-07-29T17:30:00Z | Barracas Central vs Aldosivi Mar del Plata | 1-0
+soccer_argentina_primera_division | 2026-07-29T20:00:00Z | Defensa y Justicia vs Deportivo Riestra | 2-1
+soccer_argentina_primera_division | 2026-07-29T22:15:00Z | Gimnasia La Plata vs River Plate | 1-0
+soccer_argentina_primera_division | 2026-07-30T00:30:00Z | Instituto de Córdoba vs Platense | 2-1
+soccer_argentina_primera_division | 2026-07-30T22:00:00Z | Independiente Rivadavia vs Atlético Huracán | 2-1
+soccer_argentina_primera_division | 2026-07-30T22:00:00Z | Talleres vs Velez Sarsfield BA | 1-3
+soccer_argentina_primera_division | 2026-07-31T00:15:00Z | Central Córdoba vs Atlético Tucuman | 0-2
+soccer_argentina_primera_division | 2026-07-31T00:15:00Z | Independiente vs Newells Old Boys | 1-0
 soccer_brazil_campeonato | 2026-07-29T22:30:00Z | Internacional vs Flamengo | 1-1
 soccer_brazil_campeonato | 2026-07-29T22:30:00Z | Mirassol vs Remo | 2-1
 soccer_brazil_campeonato | 2026-07-30T00:30:00Z | Vitoria vs Palmeiras | 0-4
 soccer_brazil_campeonato | 2026-07-30T00:31:00Z | Fluminense vs Bahia | 0-0
+soccer_brazil_campeonato | 2026-07-30T22:30:00Z | Corinthians vs Atletico Paranaense | 0-0
+soccer_brazil_campeonato | 2026-07-31T00:30:00Z | Coritiba vs Cruzeiro | 0-1
 
 === CLOSEST CANDIDATES ===
-soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Fluminense vs Bahia | combined=0.302 min=0.222 | bet_time=2026-07-29T00:00:00Z score_time=2026-07-30T00:31:00Z
+soccer_brazil_campeonato | Corinthians vs Atletico Paranaense -> Corinthians vs Atletico Paranaense | combined=1.000 min=1.000 | bet_time=2026-07-30T22:30:00Z score_time=2026-07-30T22:30:00Z
+soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Corinthians vs Atletico Paranaense | combined=0.401 min=0.364 | bet_time=2026-07-31T00:00:00Z score_time=2026-07-30T22:30:00Z
+soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Corinthians vs Atletico Paranaense | combined=0.401 min=0.364 | bet_time=2026-07-29T00:00:00Z score_time=2026-07-30T22:30:00Z
+soccer_brazil_campeonato | Coritiba vs Cruzeiro -> Coritiba vs Cruzeiro | combined=1.000 min=1.000 | bet_time=2026-07-31T00:30:00Z score_time=2026-07-31T00:30:00Z
+soccer_argentina_primera_division | Talleres vs Velez Sarsfield BA -> Talleres vs Velez Sarsfield BA | combined=1.000 min=1.000 | bet_time=2026-07-30T22:00:00Z score_time=2026-07-30T22:00:00Z
+soccer_argentina_primera_division | Central Córdoba vs Atlético Tucuman -> Central Córdoba vs Atlético Tucuman | combined=1.000 min=1.000 | bet_time=2026-07-31T00:15:00Z score_time=2026-07-31T00:15:00Z
