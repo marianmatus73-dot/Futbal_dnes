@@ -1,21 +1,36 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 2
-Score events: 6
+Open bets: 7
+Score events: 11
 
 === OPEN BETS ===
 soccer_brazil_campeonato | 2026-07-31T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
+soccer_mexico_ligamx | 2026-08-01T01:00:00Z | Puebla vs Guadalajara | pick=Puebla
+soccer_austria_bundesliga | 2026-07-31T17:30:00Z | LASK vs Grazer AK | pick=LASK
 soccer_brazil_campeonato | 2026-07-29T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
+soccer_usa_mls | 2026-07-31T23:30:00Z | New York City FC vs Toronto FC | pick=Draw
+soccer_mexico_ligamx | 2026-08-01T01:00:00Z | Puebla vs Guadalajara | pick=Draw
+soccer_mexico_ligamx | 2026-08-01T03:00:00Z | Atlético San Luis vs Tijuana | pick=Tijuana
 
 === SCORE EVENTS ===
+soccer_austria_bundesliga | 2026-07-31T17:30:00Z | LASK vs Grazer AK | 3-0
 soccer_brazil_campeonato | 2026-07-29T22:30:00Z | Internacional vs Flamengo | 1-1
 soccer_brazil_campeonato | 2026-07-29T22:30:00Z | Mirassol vs Remo | 2-1
 soccer_brazil_campeonato | 2026-07-30T00:30:00Z | Vitoria vs Palmeiras | 0-4
 soccer_brazil_campeonato | 2026-07-30T00:31:00Z | Fluminense vs Bahia | 0-0
 soccer_brazil_campeonato | 2026-07-30T22:30:00Z | Corinthians vs Atletico Paranaense | 0-0
 soccer_brazil_campeonato | 2026-07-31T00:30:00Z | Coritiba vs Cruzeiro | 0-1
+soccer_mexico_ligamx | 2026-08-01T01:00:00Z | Puebla vs Guadalajara | 1-1
+soccer_mexico_ligamx | 2026-08-01T03:00:00Z | Atlético San Luis vs Tijuana | 0-0
+soccer_mexico_ligamx | 2026-08-01T03:00:00Z | FC Juárez vs Pumas | 1-5
+soccer_usa_mls | 2026-07-31T23:40:00Z | New York City FC vs Toronto FC | 1-1
 
 === CLOSEST CANDIDATES ===
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Corinthians vs Atletico Paranaense | combined=0.401 min=0.364 | bet_time=2026-07-31T00:00:00Z score_time=2026-07-30T22:30:00Z
+soccer_mexico_ligamx | Puebla vs Guadalajara -> Puebla vs Guadalajara | combined=1.000 min=1.000 | bet_time=2026-08-01T01:00:00Z score_time=2026-08-01T01:00:00Z
+soccer_austria_bundesliga | LASK vs Grazer AK -> LASK vs Grazer AK | combined=1.000 min=1.000 | bet_time=2026-07-31T17:30:00Z score_time=2026-07-31T17:30:00Z
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Corinthians vs Atletico Paranaense | combined=0.401 min=0.364 | bet_time=2026-07-29T00:00:00Z score_time=2026-07-30T22:30:00Z
+soccer_usa_mls | New York City FC vs Toronto FC -> New York City FC vs Toronto FC | combined=1.000 min=1.000 | bet_time=2026-07-31T23:30:00Z score_time=2026-07-31T23:40:00Z
+soccer_mexico_ligamx | Puebla vs Guadalajara -> Puebla vs Guadalajara | combined=1.000 min=1.000 | bet_time=2026-08-01T01:00:00Z score_time=2026-08-01T01:00:00Z
+soccer_mexico_ligamx | Atlético San Luis vs Tijuana -> Atlético San Luis vs Tijuana | combined=1.000 min=1.000 | bet_time=2026-08-01T03:00:00Z score_time=2026-08-01T03:00:00Z
