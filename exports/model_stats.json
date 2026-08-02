@@ -1,22 +1,22 @@
 {
-  "total_bets": 565,
-  "wins": 271,
-  "losses": 294,
-  "winrate": 47.96,
-  "yield": 6.52,
-  "profit": 28.48,
-  "stake_sum": 436.67,
-  "open_bets": 311,
-  "settled_bets": 565,
+  "total_bets": 567,
+  "wins": 272,
+  "losses": 295,
+  "winrate": 47.97,
+  "yield": 6.63,
+  "profit": 29.01,
+  "stake_sum": 437.58,
+  "open_bets": 322,
+  "settled_bets": 567,
   "by_sport": {
     "baseball": {
-      "total": 392,
-      "wins": 214,
+      "total": 393,
+      "wins": 215,
       "losses": 178,
-      "winrate": 54.59,
-      "profit": 27.18,
-      "stake_sum": 383.68,
-      "yield": 7.08
+      "winrate": 54.71,
+      "profit": 27.7,
+      "stake_sum": 384.34,
+      "yield": 7.21
     },
     "basketball": {
       "total": 17,
@@ -28,12 +28,12 @@
       "yield": 26.55
     },
     "football": {
-      "total": 143,
+      "total": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 32.17,
+      "losses": 98,
+      "winrate": 31.94,
       "profit": 0.0,
-      "stake_sum": 38.08,
+      "stake_sum": 38.33,
       "yield": 0.0
     },
     "mma": {
@@ -147,12 +147,12 @@
       "yield": 0.0
     },
     "Codere (IT)": {
-      "total": 6,
+      "total": 7,
       "wins": 3,
-      "losses": 3,
-      "winrate": 50.0,
+      "losses": 4,
+      "winrate": 42.86,
       "profit": 0.0,
-      "stake_sum": 1.19,
+      "stake_sum": 1.44,
       "yield": 0.0
     },
     "Betfair": {
@@ -163,6 +163,15 @@
       "profit": -0.34,
       "stake_sum": 15.48,
       "yield": -2.18
+    },
+    "Matchbook": {
+      "total": 17,
+      "wins": 8,
+      "losses": 9,
+      "winrate": 47.06,
+      "profit": -0.34,
+      "stake_sum": 5.93,
+      "yield": -5.77
     },
     "Nordic Bet": {
       "total": 7,
@@ -190,15 +199,6 @@
       "profit": -0.83,
       "stake_sum": 14.07,
       "yield": -5.89
-    },
-    "Matchbook": {
-      "total": 16,
-      "wins": 7,
-      "losses": 9,
-      "winrate": 43.75,
-      "profit": -0.86,
-      "stake_sum": 5.27,
-      "yield": -16.38
     },
     "Marathon Bet": {
       "total": 2,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 392,
-      "wins": 214,
+      "total": 393,
+      "wins": 215,
       "losses": 178,
-      "winrate": 54.59,
-      "profit": 27.18,
-      "stake_sum": 383.68,
-      "yield": 7.08
+      "winrate": 54.71,
+      "profit": 27.7,
+      "stake_sum": 384.34,
+      "yield": 7.21
     },
     "basketball_wnba": {
       "total": 17,
@@ -347,12 +347,12 @@
       "yield": 0.0
     },
     "Danish Superliga": {
-      "total": 5,
+      "total": 6,
       "wins": 0,
-      "losses": 5,
+      "losses": 6,
       "winrate": 0.0,
       "profit": 0.0,
-      "stake_sum": 1.02,
+      "stake_sum": 1.27,
       "yield": 0.0
     },
     "Brazil Serie A": {
@@ -401,5 +401,5 @@
       "yield": -24.75
     }
   },
-  "last_update": "2026-08-02T15:51:29.246326+00:00"
+  "last_update": "2026-08-02T16:13:09.069732+00:00"
 }

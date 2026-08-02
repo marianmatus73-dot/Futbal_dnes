@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 143,
+  "training_samples": 144,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 143,
+      "samples": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 0.3217,
-      "average_value": 0.6915
+      "losses": 98,
+      "winrate": 0.3194,
+      "average_value": 0.6926
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 143,
+      "samples": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 0.3217,
+      "losses": 98,
+      "winrate": 0.3194,
       "average_value": 0.1402
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 143,
+      "samples": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 0.3217,
-      "average_value": 0.6524
+      "losses": 98,
+      "winrate": 0.3194,
+      "average_value": 0.6493
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 143,
+      "samples": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 0.3217,
-      "average_value": 0.0785
+      "losses": 98,
+      "winrate": 0.3194,
+      "average_value": 0.0779
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 143,
+      "samples": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 0.3217,
-      "average_value": 0.5501
+      "losses": 98,
+      "winrate": 0.3194,
+      "average_value": 0.551
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 143,
+      "samples": 144,
       "wins": 46,
-      "losses": 97,
-      "winrate": 0.3217,
-      "average_value": 0.4308
+      "losses": 98,
+      "winrate": 0.3194,
+      "average_value": 0.4316
     }
   ],
   "warning": null,
