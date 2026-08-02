@@ -1,41 +1,41 @@
 {
-  "trained_at": "2026-08-01T17:05:30+00:00",
-  "samples": 116,
-  "wins": 35,
-  "losses": 81,
-  "positive_rate": 0.3017241379310345,
-  "milestone": 120,
+  "trained_at": "2026-08-02T08:30:20+00:00",
+  "samples": 141,
+  "wins": 46,
+  "losses": 95,
+  "positive_rate": 0.3262411347517731,
+  "milestone": 200,
   "selected_model": "random_forest",
-  "selected_validation_score": 0.4343354538487757,
+  "selected_validation_score": 0.3732260508581978,
   "selected_metrics": {
-    "accuracy": 0.7083333333333334,
-    "brier_score": 0.1941170927927589,
-    "log_loss": 0.5722030039483118
+    "accuracy": 0.6896551724137931,
+    "brier_score": 0.21951836565847563,
+    "log_loss": 0.6279421611397912
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
-      "accuracy": 0.5416666666666666,
-      "brier_score": 0.3004680826392199,
-      "log_loss": 0.872822411193625,
-      "validation_score": 0.24375
+      "accuracy": 0.5517241379310345,
+      "brier_score": 0.2747406954060566,
+      "log_loss": 0.7699219971665049,
+      "validation_score": 0.2482758620689655
     },
     {
       "model_type": "random_forest",
-      "accuracy": 0.7083333333333334,
-      "brier_score": 0.1941170927927589,
-      "log_loss": 0.5722030039483118,
-      "validation_score": 0.4343354538487757
+      "accuracy": 0.6896551724137931,
+      "brier_score": 0.21951836565847563,
+      "log_loss": 0.6279421611397912,
+      "validation_score": 0.3732260508581978
     },
     {
       "model_type": "hist_gradient_boosting",
-      "accuracy": 0.7083333333333334,
-      "brier_score": 0.23932724996507496,
-      "log_loss": 0.7818101132402497,
-      "validation_score": 0.3358264000558801
+      "accuracy": 0.6551724137931034,
+      "brier_score": 0.24480815575419287,
+      "log_loss": 0.816249514133926,
+      "validation_score": 0.30313453700018794
     }
   ],
-  "next_milestone": 120,
+  "next_milestone": 200,
   "model_path": "models/football_meta_model.pkl",
   "metadata_path": "models/football_meta_model.json",
   "importance_path": "exports/football_meta_v14_feature_importance.json"
