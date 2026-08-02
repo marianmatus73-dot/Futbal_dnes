@@ -1,17 +1,51 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 2
-Score events: 2
+Open bets: 10
+Score events: 20
 
 === OPEN BETS ===
 soccer_brazil_campeonato | 2026-07-31T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
+soccer_switzerland_superleague | 2026-08-02T14:30:00Z | Grasshopper Zürich vs FC Lugano | pick=Grasshopper Zürich
+soccer_norway_eliteserien | 2026-08-02T15:00:00Z | Molde vs Sarpsborg FK | pick=Sarpsborg FK
+soccer_switzerland_superleague | 2026-08-02T14:30:00Z | FC Sion vs FC Luzern | pick=FC Luzern
 soccer_brazil_campeonato | 2026-07-29T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
+soccer_norway_eliteserien | 2026-08-02T15:00:00Z | Aalesund vs Tromso | pick=Aalesund
+soccer_norway_eliteserien | 2026-08-02T15:00:00Z | Molde vs Sarpsborg FK | pick=Draw
+soccer_austria_bundesliga | 2026-08-02T15:00:00Z | Austria Lustenau vs Ried | pick=Austria Lustenau
+soccer_austria_bundesliga | 2026-08-02T15:00:00Z | Wolfsberger AC vs Austria Wien | pick=Draw
+soccer_austria_bundesliga | 2026-08-02T15:00:00Z | Austria Lustenau vs Ried | pick=Draw
 
 === SCORE EVENTS ===
+soccer_austria_bundesliga | 2026-07-31T17:30:00Z | LASK vs Grazer AK | 3-0
+soccer_austria_bundesliga | 2026-08-01T15:00:00Z | WSG Tirol vs Sturm Graz | 1-1
+soccer_austria_bundesliga | 2026-08-01T17:30:00Z | RB Salzburg vs Hartberg | 1-0
+soccer_austria_bundesliga | 2026-08-02T15:00:00Z | Austria Lustenau vs Ried | 1-1
+soccer_austria_bundesliga | 2026-08-02T15:00:00Z | Wolfsberger AC vs Austria Wien | 3-0
 soccer_brazil_campeonato | 2026-07-30T22:30:00Z | Corinthians vs Atletico Paranaense | 0-0
 soccer_brazil_campeonato | 2026-07-31T00:30:00Z | Coritiba vs Cruzeiro | 0-1
+soccer_norway_eliteserien | 2026-07-31T17:00:00Z | Vålerenga vs HamKam | 0-3
+soccer_norway_eliteserien | 2026-07-31T19:00:00Z | Bodø/Glimt vs Lillestrom | 4-0
+soccer_norway_eliteserien | 2026-08-01T14:00:00Z | Fredrikstad FK vs Sandefjord | 1-0
+soccer_norway_eliteserien | 2026-08-01T16:00:00Z | IK Start vs Viking FK | 0-3
+soccer_norway_eliteserien | 2026-08-02T15:00:00Z | Aalesund vs Tromso | 2-6
+soccer_norway_eliteserien | 2026-08-02T15:00:00Z | KFUM vs Kristiansund BK | 2-1
+soccer_norway_eliteserien | 2026-08-02T15:00:00Z | Molde vs Sarpsborg FK | 3-3
+soccer_switzerland_superleague | 2026-08-01T16:00:00Z | FC Basel vs FC Lausanne-Sport | 0-1
+soccer_switzerland_superleague | 2026-08-01T16:00:00Z | FC Zurich vs Servette | 2-1
+soccer_switzerland_superleague | 2026-08-01T18:30:00Z | FC Thun vs BSC Young Boys | 0-6
+soccer_switzerland_superleague | 2026-08-02T12:00:00Z | FC Vaduz vs FC St Gallen | 2-3
+soccer_switzerland_superleague | 2026-08-02T14:30:00Z | Grasshopper Zürich vs FC Lugano | 1-4
+soccer_switzerland_superleague | 2026-08-02T14:30:00Z | FC Sion vs FC Luzern | 3-0
 
 === CLOSEST CANDIDATES ===
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Corinthians vs Atletico Paranaense | combined=0.401 min=0.364 | bet_time=2026-07-31T00:00:00Z score_time=2026-07-30T22:30:00Z
+soccer_switzerland_superleague | Grasshopper Zürich vs FC Lugano -> Grasshopper Zürich vs FC Lugano | combined=1.000 min=1.000 | bet_time=2026-08-02T14:30:00Z score_time=2026-08-02T14:30:00Z
+soccer_norway_eliteserien | Molde vs Sarpsborg FK -> Molde vs Sarpsborg FK | combined=1.000 min=1.000 | bet_time=2026-08-02T15:00:00Z score_time=2026-08-02T15:00:00Z
+soccer_switzerland_superleague | FC Sion vs FC Luzern -> FC Sion vs FC Luzern | combined=1.000 min=1.000 | bet_time=2026-08-02T14:30:00Z score_time=2026-08-02T14:30:00Z
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Corinthians vs Atletico Paranaense | combined=0.401 min=0.364 | bet_time=2026-07-29T00:00:00Z score_time=2026-07-30T22:30:00Z
+soccer_norway_eliteserien | Aalesund vs Tromso -> Aalesund vs Tromso | combined=1.000 min=1.000 | bet_time=2026-08-02T15:00:00Z score_time=2026-08-02T15:00:00Z
+soccer_norway_eliteserien | Molde vs Sarpsborg FK -> Molde vs Sarpsborg FK | combined=1.000 min=1.000 | bet_time=2026-08-02T15:00:00Z score_time=2026-08-02T15:00:00Z
+soccer_austria_bundesliga | Austria Lustenau vs Ried -> Austria Lustenau vs Ried | combined=1.000 min=1.000 | bet_time=2026-08-02T15:00:00Z score_time=2026-08-02T15:00:00Z
+soccer_austria_bundesliga | Wolfsberger AC vs Austria Wien -> Wolfsberger AC vs Austria Wien | combined=1.000 min=1.000 | bet_time=2026-08-02T15:00:00Z score_time=2026-08-02T15:00:00Z
+soccer_austria_bundesliga | Austria Lustenau vs Ried -> Austria Lustenau vs Ried | combined=1.000 min=1.000 | bet_time=2026-08-02T15:00:00Z score_time=2026-08-02T15:00:00Z
