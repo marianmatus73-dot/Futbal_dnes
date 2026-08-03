@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-08-03T15:55:38.219706+02:00",
+  "publishable": true,
+  "total_stake_u": 3.5,
+  "policy": {
+    "min_edge": 0.06,
+    "odds_min": 1.5,
+    "odds_max": 3.2,
+    "min_confidence": 70,
+    "top_limit": 5,
+    "kelly_fraction": 0.25
+  },
+  "selected": [
+    {
+      "sport": "mma",
+      "league": "mma_mixed_martial_arts",
+      "match": "Louie Sutherland vs Jose Montanha",
+      "pick": "Jose Montanha",
+      "odds": 2.4,
+      "bookmaker": "Pinnacle",
+      "edge": 0.0783,
+      "confidence": 81,
+      "score": 44.181,
+      "stake_u": 2.5,
+      "kelly_raw": 0.1343,
+      "model_probability": 0.495,
+      "market_probability": 0.504,
+      "signals": "ELO+xG+FORM+MKT",
+      "reason": "Raw edge 16.6% | Score 15.070863766877613 | Consensus: elo, xg, form, market"
+    },
+    {
+      "sport": "mma",
+      "league": "mma_mixed_martial_arts",
+      "match": "Juliana Miller vs Ravena Oliveira",
+      "pick": "Ravena Oliveira",
+      "odds": 3.15,
+      "bookmaker": "BetOnline.ag",
+      "edge": 0.0645,
+      "confidence": 76,
+      "score": 41.054,
+      "stake_u": 1.0,
+      "kelly_raw": 0.0946,
+      "model_probability": 0.382,
+      "market_probability": 0.3897,
+      "signals": "ELO+xG+FORM+MKT",
+      "reason": "Raw edge 17.9% | Score 17.767641229680457 | Consensus: elo, xg, form, market"
+    }
+  ],
+  "rejected_sample": [
+    {
+      "sport": "baseball",
+      "match": "New York Yankees vs St. Louis Cardinals",
+      "pick": "New York Yankees",
+      "odds": 1.5,
+      "reason": "edge 0.054 < min 0.060"
+    },
+    {
+      "sport": "baseball",
+      "match": "Colorado Rockies vs Tampa Bay Rays",
+      "pick": "Tampa Bay Rays",
+      "odds": 1.64,
+      "reason": "edge 0.051 < min 0.060"
+    },
+    {
+      "sport": "mma",
+      "match": "Steven Asplund vs Guilherme Pat",
+      "pick": "Guilherme Pat",
+      "odds": 3.11,
+      "reason": "edge 0.060 < min 0.060"
+    },
+    {
+      "sport": "baseball",
+      "match": "Arizona Diamondbacks vs San Diego Padres",
+      "pick": "Arizona Diamondbacks",
+      "odds": 1.89,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "hockey",
+      "match": "Carolina Hurricanes vs Florida Panthers",
+      "pick": "Carolina Hurricanes",
+      "odds": 2.36,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "football",
+      "match": "Newells Old Boys vs Deportivo Riestra",
+      "pick": "Deportivo Riestra",
+      "odds": 4.3,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "football",
+      "match": "Rayo Vallecano vs Alavés",
+      "pick": "Alavés",
+      "odds": 4.42,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "football",
+      "match": "Belgrano de Cordoba vs Independiente Rivadavia",
+      "pick": "Independiente Rivadavia",
+      "odds": 4.3,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "hockey",
+      "match": "Utah Mammoth vs Chicago Blackhawks",
+      "pick": "Chicago Blackhawks",
+      "odds": 3.73,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "basketball",
+      "match": "Atlanta Dream vs Las Vegas Aces",
+      "pick": "Las Vegas Aces",
+      "odds": 2.22,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "tennis",
+      "match": "Camilo Ugo Carabelli vs Cameron Norrie",
+      "pick": "Camilo Ugo Carabelli",
+      "odds": 4.8,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "tennis",
+      "match": "Alex Michelsen vs Jan-Lennard Struff",
+      "pick": "Jan-Lennard Struff",
+      "odds": 3.75,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "tennis",
+      "match": "Alex Michelsen vs Jan-Lennard Struff",
+      "pick": "Jan-Lennard Struff",
+      "odds": 3.75,
+      "reason": "failed value filter"
+    },
+    {
+      "sport": "hockey",
+      "match": "Vegas Golden Knights vs Chicago Blackhawks",
+      "pick": "Chicago Blackhawks",
+      "odds": 3.95,
+      "reason": "failed value filter"
+    }
+  ]
+}
