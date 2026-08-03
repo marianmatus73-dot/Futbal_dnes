@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<title>V16 Dashboard</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 24px; }
+.cards { display: flex; gap: 12px; flex-wrap: wrap; }
+.card { border: 1px solid #ccc; border-radius: 8px; padding: 12px 18px; }
+table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 8px; font-size: 13px; }
+th { background: #f4f4f4; position: sticky; top: 0; }
+</style>
+</head>
+<body>
+<h1>V16 Autonomous Cycle Dashboard</h1>
+<div class="cards">
+<div class="card"><strong>Cycles</strong><br>1</div>
+<div class="card"><strong>READY</strong><br>1</div>
+<div class="card"><strong>Error cycles</strong><br>0</div>
+<div class="card"><strong>Avg loop score</strong><br>0.989</div>
+<div class="card"><strong>Avg runtime health</strong><br>1.0</div>
+</div>
+<table>
+<thead><tr><th>created_at</th><th>cycle_id</th><th>status</th><th>stages_completed</th><th>loop_state</th><th>loop_score</th><th>decision</th><th>monitor_score</th><th>errors_count</th><th>previous_result</th><th>previous_profit</th><th>runtime_health</th><th>latency_ms</th></tr></thead>
+<tbody><tr><td>2026-08-03T05:48:02.391149+00:00</td><td>1</td><td>READY</td><td>17</td><td>AUTONOMOUS_ACTIVE</td><td>0.989</td><td>EXECUTE_NOW</td><td>0.972</td><td>0</td><td>WIN</td><td>0.0</td><td>1.0</td><td>12222</td></tr></tbody>
+</table>
+</body>
+</html>

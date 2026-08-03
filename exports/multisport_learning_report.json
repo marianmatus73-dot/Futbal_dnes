@@ -1,0 +1,349 @@
+{
+  "sports": {
+    "tennis": {
+      "sport": "tennis",
+      "stages": {
+        "settlement": {
+          "open_events": 0,
+          "settled_events": 0,
+          "status": "READY"
+        },
+        "result_learning": {
+          "samples": 0,
+          "wins": 0,
+          "losses": 0,
+          "hit_rate": null,
+          "status": "READY"
+        },
+        "ratings": {
+          "rating_system": "SURFACE_ELO",
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "form": {
+          "window": 12,
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "market": {
+          "snapshots": 0,
+          "closing_snapshots": 0,
+          "closing_coverage": 0.0,
+          "status": "BUILDING"
+        },
+        "dataset": {
+          "dataset_rows": 0,
+          "training_ready": 0,
+          "status": "READY"
+        },
+        "evaluation": {
+          "samples": 0,
+          "brier_score": null,
+          "log_loss": null,
+          "status": "BUILDING"
+        },
+        "ai_health": {
+          "training_samples": 0,
+          "market_snapshots": 0,
+          "closing_snapshots": 0,
+          "maturity": "EMPTY",
+          "status": "READY"
+        },
+        "maintenance": {
+          "deleted_invalid_snapshots": 0,
+          "status": "READY"
+        }
+      },
+      "status": "READY",
+      "errors": []
+    },
+    "basketball": {
+      "sport": "basketball",
+      "stages": {
+        "settlement": {
+          "open_events": 0,
+          "settled_events": 0,
+          "status": "READY"
+        },
+        "result_learning": {
+          "samples": 0,
+          "wins": 0,
+          "losses": 0,
+          "hit_rate": null,
+          "status": "READY"
+        },
+        "ratings": {
+          "rating_system": "ELO_MARGIN_ADJUSTED",
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "form": {
+          "window": 10,
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "market": {
+          "snapshots": 0,
+          "closing_snapshots": 0,
+          "closing_coverage": 0.0,
+          "status": "BUILDING"
+        },
+        "dataset": {
+          "dataset_rows": 0,
+          "training_ready": 0,
+          "status": "READY"
+        },
+        "evaluation": {
+          "samples": 0,
+          "brier_score": null,
+          "log_loss": null,
+          "status": "BUILDING"
+        },
+        "ai_health": {
+          "training_samples": 0,
+          "market_snapshots": 0,
+          "closing_snapshots": 0,
+          "maturity": "EMPTY",
+          "status": "READY"
+        },
+        "maintenance": {
+          "deleted_invalid_snapshots": 0,
+          "status": "READY"
+        }
+      },
+      "status": "READY",
+      "errors": []
+    },
+    "hockey": {
+      "sport": "hockey",
+      "stages": {
+        "settlement": {
+          "open_events": 0,
+          "settled_events": 0,
+          "status": "READY"
+        },
+        "result_learning": {
+          "samples": 0,
+          "wins": 0,
+          "losses": 0,
+          "hit_rate": null,
+          "status": "READY"
+        },
+        "ratings": {
+          "rating_system": "ELO_GOAL_ADJUSTED",
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "form": {
+          "window": 10,
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "market": {
+          "snapshots": 0,
+          "closing_snapshots": 0,
+          "closing_coverage": 0.0,
+          "status": "BUILDING"
+        },
+        "dataset": {
+          "dataset_rows": 0,
+          "training_ready": 0,
+          "status": "READY"
+        },
+        "evaluation": {
+          "samples": 0,
+          "brier_score": null,
+          "log_loss": null,
+          "status": "BUILDING"
+        },
+        "ai_health": {
+          "training_samples": 0,
+          "market_snapshots": 0,
+          "closing_snapshots": 0,
+          "maturity": "EMPTY",
+          "status": "READY"
+        },
+        "maintenance": {
+          "deleted_invalid_snapshots": 0,
+          "status": "READY"
+        }
+      },
+      "status": "READY",
+      "errors": []
+    },
+    "baseball": {
+      "sport": "baseball",
+      "stages": {
+        "settlement": {
+          "open_events": 0,
+          "settled_events": 0,
+          "status": "READY"
+        },
+        "result_learning": {
+          "samples": 0,
+          "wins": 0,
+          "losses": 0,
+          "hit_rate": null,
+          "status": "READY"
+        },
+        "ratings": {
+          "rating_system": "ELO_RUN_ADJUSTED",
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "form": {
+          "window": 10,
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "market": {
+          "snapshots": 0,
+          "closing_snapshots": 0,
+          "closing_coverage": 0.0,
+          "status": "BUILDING"
+        },
+        "dataset": {
+          "dataset_rows": 0,
+          "training_ready": 0,
+          "status": "READY"
+        },
+        "evaluation": {
+          "samples": 0,
+          "brier_score": null,
+          "log_loss": null,
+          "status": "BUILDING"
+        },
+        "ai_health": {
+          "training_samples": 0,
+          "market_snapshots": 0,
+          "closing_snapshots": 0,
+          "maturity": "EMPTY",
+          "status": "READY"
+        },
+        "maintenance": {
+          "deleted_invalid_snapshots": 0,
+          "status": "READY"
+        }
+      },
+      "status": "READY",
+      "errors": []
+    },
+    "mma": {
+      "sport": "mma",
+      "stages": {
+        "settlement": {
+          "open_events": 0,
+          "settled_events": 0,
+          "status": "READY"
+        },
+        "result_learning": {
+          "samples": 0,
+          "wins": 0,
+          "losses": 0,
+          "hit_rate": null,
+          "status": "READY"
+        },
+        "ratings": {
+          "rating_system": "FIGHTER_ELO",
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "form": {
+          "window": 5,
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "market": {
+          "snapshots": 0,
+          "closing_snapshots": 0,
+          "closing_coverage": 0.0,
+          "status": "BUILDING"
+        },
+        "dataset": {
+          "dataset_rows": 0,
+          "training_ready": 0,
+          "status": "READY"
+        },
+        "evaluation": {
+          "samples": 0,
+          "brier_score": null,
+          "log_loss": null,
+          "status": "BUILDING"
+        },
+        "ai_health": {
+          "training_samples": 0,
+          "market_snapshots": 0,
+          "closing_snapshots": 0,
+          "maturity": "EMPTY",
+          "status": "READY"
+        },
+        "maintenance": {
+          "deleted_invalid_snapshots": 0,
+          "status": "READY"
+        }
+      },
+      "status": "READY",
+      "errors": []
+    },
+    "nfl": {
+      "sport": "nfl",
+      "stages": {
+        "settlement": {
+          "open_events": 0,
+          "settled_events": 0,
+          "status": "READY"
+        },
+        "result_learning": {
+          "samples": 0,
+          "wins": 0,
+          "losses": 0,
+          "hit_rate": null,
+          "status": "READY"
+        },
+        "ratings": {
+          "rating_system": "ELO_POINT_ADJUSTED",
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "form": {
+          "window": 8,
+          "rebuilt": 0,
+          "status": "READY"
+        },
+        "market": {
+          "snapshots": 0,
+          "closing_snapshots": 0,
+          "closing_coverage": 0.0,
+          "status": "BUILDING"
+        },
+        "dataset": {
+          "dataset_rows": 0,
+          "training_ready": 0,
+          "status": "READY"
+        },
+        "evaluation": {
+          "samples": 0,
+          "brier_score": null,
+          "log_loss": null,
+          "status": "BUILDING"
+        },
+        "ai_health": {
+          "training_samples": 0,
+          "market_snapshots": 0,
+          "closing_snapshots": 0,
+          "maturity": "EMPTY",
+          "status": "READY"
+        },
+        "maintenance": {
+          "deleted_invalid_snapshots": 0,
+          "status": "READY"
+        }
+      },
+      "status": "READY",
+      "errors": []
+    }
+  },
+  "sports_completed": 6,
+  "ready": 6,
+  "status": "READY"
+}

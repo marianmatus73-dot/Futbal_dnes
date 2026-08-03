@@ -1,38 +1,38 @@
 {
-  "trained_at": "2026-08-02T17:05:47+00:00",
-  "samples": 152,
-  "wins": 48,
-  "losses": 104,
-  "positive_rate": 0.3157894736842105,
+  "trained_at": "2026-08-03T05:48:02+00:00",
+  "samples": 162,
+  "wins": 51,
+  "losses": 111,
+  "positive_rate": 0.3148148148148148,
   "milestone": 200,
   "selected_model": "random_forest",
-  "selected_validation_score": 0.31120987021561863,
+  "selected_validation_score": 0.3392522452611153,
   "selected_metrics": {
-    "accuracy": 0.6129032258064516,
-    "brier_score": 0.233057231345619,
-    "log_loss": 0.6548160228596585
+    "accuracy": 0.6363636363636364,
+    "brier_score": 0.22453179276744292,
+    "log_loss": 0.6370507180689304
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
-      "accuracy": 0.5806451612903226,
-      "brier_score": 0.26866268039236535,
-      "log_loss": 0.7390842733250442,
-      "validation_score": 0.26129032258064516
+      "accuracy": 0.5151515151515151,
+      "brier_score": 0.34428679267041873,
+      "log_loss": 1.1124589739319855,
+      "validation_score": 0.2318181818181818
     },
     {
       "model_type": "random_forest",
-      "accuracy": 0.6129032258064516,
-      "brier_score": 0.233057231345619,
-      "log_loss": 0.6548160228596585,
-      "validation_score": 0.31120987021561863
+      "accuracy": 0.6363636363636364,
+      "brier_score": 0.22453179276744292,
+      "log_loss": 0.6370507180689304,
+      "validation_score": 0.3392522452611153
     },
     {
       "model_type": "hist_gradient_boosting",
-      "accuracy": 0.6129032258064516,
-      "brier_score": 0.26929096779273975,
-      "log_loss": 0.8870460871383179,
-      "validation_score": 0.27580645161290324
+      "accuracy": 0.5151515151515151,
+      "brier_score": 0.272023726751381,
+      "log_loss": 0.7384392494423508,
+      "validation_score": 0.2318181818181818
     }
   ],
   "next_milestone": 200,
