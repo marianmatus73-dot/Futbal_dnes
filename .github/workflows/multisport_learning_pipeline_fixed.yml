@@ -1,0 +1,28 @@
+name: Multisport Complete Learning Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 */6 * * *"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run complete learning pipeline
+        working-directory: ${{ github.workspace }}
+        run: python scripts/run_all_sports_pipeline.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multisport-learning-report
+          path: exports/multisport_learning_report.json
