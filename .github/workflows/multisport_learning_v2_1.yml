@@ -1,0 +1,49 @@
+name: Multisport Learning V2.1 Production
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 */6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+      DB_FILE: bets.db
+      EXPORT_DIR: exports
+      MULTISPORT_V2_HISTORY_CSV: exports/history_sport_bets.csv
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Verify files
+        run: |
+          test -f scripts/run_multisport_learning_v2.py
+          test -f core/multisport_learning_v2/manager.py
+          python -m py_compile scripts/run_multisport_learning_v2.py
+
+      - name: Run production installer
+        run: |
+          python scripts/install_multisport_v2_1.py --database bets.db
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: multisport-learning-v2-1
+          if-no-files-found: warn
+          path: |
+            exports/multisport_learning_v2_1_report.json
+            exports/multisport_learning_v2_1_metrics.csv
+            exports/multisport_learning_v2_1_dashboard.html
+            bets.db
