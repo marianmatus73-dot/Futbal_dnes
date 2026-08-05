@@ -2,66 +2,53 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
 
 from .dashboard import export_dashboard
-from .meta import adaptive_weights, recommendations
-from .metrics import calculate_metrics, load_sport_rows
-from .schema import SUPPORTED_SPORTS, detect_sport_bets_schema
+from .meta import adaptive_weights
+from .metrics import calculate, load_rows
+from .schema import SUPPORTED_SPORTS, detect_schema
 
 
 class MultisportLearningV2Manager:
-    def __init__(
-        self,
-        database: str | Path,
-        table: str = "sport_bets",
-    ) -> None:
+    def __init__(self, database: str | Path) -> None:
         self.database = Path(database)
-        self.table = table
 
     def run_all(
         self,
-        sports: Iterable[str] | None = None,
         export_dir: str | Path = "exports",
-    ) -> dict[str, Any]:
-        schema = detect_sport_bets_schema(self.database, self.table)
-        selected = list(sports or SUPPORTED_SPORTS)
-        sport_results: dict[str, dict[str, Any]] = {}
-        errors: list[str] = []
+    ) -> dict:
+        schema = detect_schema(self.database)
+        sports = {}
+        errors = []
 
-        for sport in selected:
+        for sport in SUPPORTED_SPORTS:
             try:
-                rows = load_sport_rows(self.database, schema, sport)
-                sport_results[sport] = calculate_metrics(rows)
-                sport_results[sport]["status"] = "READY"
+                sports[sport] = calculate(
+                    load_rows(self.database, schema, sport)
+                )
+                sports[sport]["status"] = "READY"
             except Exception as exc:
                 errors.append(
                     f"{sport}: {type(exc).__name__}: {exc}"
                 )
-                sport_results[sport] = {
+                sports[sport] = {
                     "status": "FAILED",
                     "error": str(exc),
                 }
 
-        weights = adaptive_weights(sport_results)
-        recs = recommendations(sport_results)
-
         result = {
-            "version": "V2",
+            "version": "V2.1",
             "generated_at": datetime.now(timezone.utc).isoformat(),
-            "source_table": schema.table,
-            "sports": sport_results,
-            "adaptive_weights": weights,
-            "recommendations": recs,
-            "sports_completed": len(sport_results),
+            "sports": sports,
+            "adaptive_weights": adaptive_weights(sports),
+            "sports_completed": len(sports),
             "sports_ready": sum(
                 1
-                for item in sport_results.values()
+                for item in sports.values()
                 if item.get("status") == "READY"
             ),
             "errors": errors,
             "status": "READY" if not errors else "PARTIAL",
         }
-
         result["artifacts"] = export_dashboard(result, export_dir)
         return result
