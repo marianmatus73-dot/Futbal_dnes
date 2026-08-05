@@ -1,49 +1,91 @@
-# Multisport Learning Bundle
+# Multisport Learning V2.1 Production Edition
 
-Reusable learning framework for:
+Samostatný produkčný modul pre:
 
 - baseball
 - basketball
 - tennis
 - hockey
-- mma
-- nfl
+- MMA
+- NFL
 
-The bundle provides one shared architecture for settlement, result learning,
-feature history, ratings, form, market snapshots, datasets, evaluation,
-AI health, learning progress, closing-odds/CLV readiness, maintenance and
-competition profiles.
+Modul:
 
-## Important
+- neimportuje `main.py`,
+- nevyžaduje `python-dotenv`,
+- dokáže vytvoriť minimálnu schému `sport_bets`,
+- dokáže obnoviť históriu z CSV,
+- kontroluje databázu,
+- vykonáva bezpečné migrácie,
+- vytvára JSON, CSV a HTML dashboard,
+- je pripravený pre GitHub Actions.
 
-This is a production-oriented framework and integration scaffold. It does not
-invent sport results or closing odds. Sport-specific APIs, scoring rules and
-feature extraction should be connected through the adapters in
-`core/sports/<sport>.py`.
+## Inštalácia
 
-## Quick test
+Rozbaľ balík do koreňa projektu.
 
-```bash
-python scripts/run_all_sports_pipeline.py
+Výsledná štruktúra:
+
+```text
+core/
+  multisport_learning_v2/
+  db_bootstrap.py
+  history_restore.py
+  db_inspector.py
+  migration_engine.py
+  sqlite_helpers.py
+
+scripts/
+  run_multisport_learning_v2.py
+  inspect_database.py
+  migrate_database.py
+  validate_database.py
+  install_multisport_v2_1.py
+
+.github/workflows/
+  multisport_learning_v2_1.yml
 ```
 
-## Single sport
+## Produkčné spustenie
 
 ```bash
-python scripts/run_sport_pipeline.py --sport baseball
+python scripts/run_multisport_learning_v2.py --database bets.db
 ```
 
-## Output
+## Kontrola databázy
 
-- SQLite tables in `multisport_learning.db`
-- JSON summaries in `exports/`
-- one combined report in `exports/multisport_learning_report.json`
+```bash
+python scripts/inspect_database.py --database bets.db
+python scripts/validate_database.py --database bets.db
+```
 
-## Main integration
+## Migrácia
 
-```python
-from core.multisport_learning.manager import MultisportLearningManager
+```bash
+python scripts/migrate_database.py --database bets.db
+```
 
-manager = MultisportLearningManager("multisport_learning.db")
-result = manager.run_all()
+## Inštalácia a test
+
+```bash
+python scripts/install_multisport_v2_1.py --database bets.db
+```
+
+## CSV história
+
+Predvolený zdroj:
+
+```text
+exports/history_sport_bets.csv
+```
+
+Ak súbor existuje, bootstrap ho importuje do `sport_bets`.
+
+## Environment
+
+```env
+MULTISPORT_LEARNING_V2_ENABLED=1
+MULTISPORT_V2_HISTORY_CSV=exports/history_sport_bets.csv
+EXPORT_DIR=exports
+DB_FILE=bets.db
 ```
