@@ -2061,7 +2061,16 @@ async def run() -> None:
     )
 
     if should_send_email:
-        send_multisport_email(report_text)
+    log.info("Email sending enabled. Starting SMTP send...")
+    send_multisport_email(report_text)
+else:
+    log.info(
+        "Email disabled. dry_run=%s analytics=%s backtest=%s no_email=%s",
+        args.dry_run,
+        args.analytics,
+        args.backtest,
+        args.no_email,
+    )
 
 
 if __name__ == "__main__":
