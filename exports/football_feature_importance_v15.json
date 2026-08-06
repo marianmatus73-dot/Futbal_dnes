@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 165,
+  "training_samples": 166,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 165,
+      "samples": 166,
       "wins": 52,
-      "losses": 113,
-      "winrate": 0.3152,
-      "average_value": 0.7092
+      "losses": 114,
+      "winrate": 0.3133,
+      "average_value": 0.7104
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 165,
+      "samples": 166,
       "wins": 52,
-      "losses": 113,
-      "winrate": 0.3152,
+      "losses": 114,
+      "winrate": 0.3133,
       "average_value": 0.1405
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 165,
+      "samples": 166,
       "wins": 52,
-      "losses": 113,
-      "winrate": 0.3152,
-      "average_value": -2.6312
+      "losses": 114,
+      "winrate": 0.3133,
+      "average_value": -2.6633
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 165,
+      "samples": 166,
       "wins": 52,
-      "losses": 113,
-      "winrate": 0.3152,
-      "average_value": 0.0469
+      "losses": 114,
+      "winrate": 0.3133,
+      "average_value": 0.0459
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 165,
+      "samples": 166,
       "wins": 52,
-      "losses": 113,
-      "winrate": 0.3152,
-      "average_value": 0.5664
+      "losses": 114,
+      "winrate": 0.3133,
+      "average_value": 0.5671
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 165,
+      "samples": 166,
       "wins": 52,
-      "losses": 113,
-      "winrate": 0.3152,
-      "average_value": 0.4433
+      "losses": 114,
+      "winrate": 0.3133,
+      "average_value": 0.444
     }
   ],
   "warning": null,
