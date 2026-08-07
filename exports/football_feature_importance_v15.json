@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 166,
+  "training_samples": 167,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 166,
+      "samples": 167,
       "wins": 52,
-      "losses": 114,
-      "winrate": 0.3133,
-      "average_value": 0.7104
+      "losses": 115,
+      "winrate": 0.3114,
+      "average_value": 0.7116
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 166,
+      "samples": 167,
       "wins": 52,
-      "losses": 114,
-      "winrate": 0.3133,
-      "average_value": 0.1405
+      "losses": 115,
+      "winrate": 0.3114,
+      "average_value": 0.1402
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 166,
+      "samples": 167,
       "wins": 52,
-      "losses": 114,
-      "winrate": 0.3133,
-      "average_value": -2.6633
+      "losses": 115,
+      "winrate": 0.3114,
+      "average_value": -2.8646
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 166,
+      "samples": 167,
       "wins": 52,
-      "losses": 114,
-      "winrate": 0.3133,
-      "average_value": 0.0459
+      "losses": 115,
+      "winrate": 0.3114,
+      "average_value": 0.041
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 166,
+      "samples": 167,
       "wins": 52,
-      "losses": 114,
-      "winrate": 0.3133,
-      "average_value": 0.5671
+      "losses": 115,
+      "winrate": 0.3114,
+      "average_value": 0.5678
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 166,
+      "samples": 167,
       "wins": 52,
-      "losses": 114,
-      "winrate": 0.3133,
-      "average_value": 0.444
+      "losses": 115,
+      "winrate": 0.3114,
+      "average_value": 0.4446
     }
   ],
   "warning": null,
