@@ -1,41 +1,41 @@
 {
-  "trained_at": "2026-08-08T16:18:26+00:00",
-  "samples": 180,
-  "wins": 55,
-  "losses": 125,
-  "positive_rate": 0.3055555555555556,
+  "trained_at": "2026-08-09T06:35:01+00:00",
+  "samples": 200,
+  "wins": 62,
+  "losses": 138,
+  "positive_rate": 0.31,
   "milestone": 200,
-  "selected_model": "hist_gradient_boosting",
-  "selected_validation_score": 0.25,
+  "selected_model": "logistic_regression",
+  "selected_validation_score": 0.28278237203601,
   "selected_metrics": {
-    "accuracy": 0.5555555555555556,
-    "brier_score": 0.3552830232105355,
-    "log_loss": 1.3484648723360917
+    "accuracy": 0.6,
+    "brier_score": 0.24397728515233794,
+    "log_loss": 0.6786092662398379
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
-      "accuracy": 0.5,
-      "brier_score": 0.29728509331339803,
-      "log_loss": 0.8938555428811532,
-      "validation_score": 0.225
+      "accuracy": 0.6,
+      "brier_score": 0.24397728515233794,
+      "log_loss": 0.6786092662398379,
+      "validation_score": 0.28278237203601
     },
     {
       "model_type": "random_forest",
-      "accuracy": 0.5277777777777778,
-      "brier_score": 0.26751786476764955,
-      "log_loss": 0.7384143780955019,
-      "validation_score": 0.23750000000000002
+      "accuracy": 0.625,
+      "brier_score": 0.25171565542885405,
+      "log_loss": 0.6994850108592205,
+      "validation_score": 0.28125
     },
     {
       "model_type": "hist_gradient_boosting",
-      "accuracy": 0.5555555555555556,
-      "brier_score": 0.3552830232105355,
-      "log_loss": 1.3484648723360917,
-      "validation_score": 0.25
+      "accuracy": 0.6,
+      "brier_score": 0.2746371878575605,
+      "log_loss": 0.9043623415019374,
+      "validation_score": 0.27
     }
   ],
-  "next_milestone": 200,
+  "next_milestone": 350,
   "model_path": "models/football_meta_model.pkl",
   "metadata_path": "models/football_meta_model.json",
   "importance_path": "exports/football_meta_v14_feature_importance.json"
