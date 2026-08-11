@@ -1,30 +1,14 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 6
-Score events: 41
+Open bets: 2
+Score events: 10
 
 === OPEN BETS ===
 soccer_brazil_campeonato | 2026-07-31T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
 soccer_brazil_campeonato | 2026-07-29T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
-soccer_portugal_primeira_liga | 2026-08-10T19:15:00Z | Santa Clara vs Nacional | pick=Nacional
-soccer_sweden_allsvenskan | 2026-08-10T17:00:00Z | Västerås SK vs Djurgardens IF | pick=Västerås SK
-soccer_argentina_primera_division | 2026-08-10T22:00:00Z | Banfield vs Belgrano de Cordoba | pick=Banfield
-soccer_denmark_superliga | 2026-08-10T17:00:00Z | Silkeborg IF vs OB Odense BK | pick=Silkeborg IF
 
 === SCORE EVENTS ===
-soccer_argentina_primera_division | 2026-08-08T17:45:00Z | Deportivo Riestra vs Estudiantes | 2-0
-soccer_argentina_primera_division | 2026-08-08T17:47:00Z | Atlético Tucuman vs Sarmiento de Junin | 1-2
-soccer_argentina_primera_division | 2026-08-08T20:00:00Z | CA Tigre BA vs River Plate | 1-0
-soccer_argentina_primera_division | 2026-08-08T22:15:00Z | Boca Juniors vs Velez Sarsfield BA | 1-1
-soccer_argentina_primera_division | 2026-08-09T00:30:00Z | Instituto de Córdoba vs Gimnasia Mendoza | 1-0
-soccer_argentina_primera_division | 2026-08-09T00:30:00Z | Independiente vs Platense | 0-1
-soccer_argentina_primera_division | 2026-08-09T18:00:00Z | San Lorenzo vs Atlético Huracán | 0-2
-soccer_argentina_primera_division | 2026-08-09T20:45:00Z | Gimnasia La Plata vs Barracas Central | 2-0
-soccer_argentina_primera_division | 2026-08-09T20:45:00Z | Defensa y Justicia vs Newells Old Boys | 2-1
-soccer_argentina_primera_division | 2026-08-09T23:15:00Z | Argentinos Juniors vs Racing Club | 2-1
-soccer_argentina_primera_division | 2026-08-10T22:00:00Z | Banfield vs Belgrano de Cordoba | 0-2
-soccer_argentina_primera_division | 2026-08-11T00:15:00Z | Union Santa Fe vs Central Córdoba | 1-2
 soccer_brazil_campeonato | 2026-08-08T19:00:00Z | Grêmio vs Sao Paulo | 2-1
 soccer_brazil_campeonato | 2026-08-08T21:30:00Z | Remo vs Atletico Mineiro | 2-2
 soccer_brazil_campeonato | 2026-08-08T23:30:00Z | Coritiba vs Chapecoense | 2-1
@@ -35,30 +19,7 @@ soccer_brazil_campeonato | 2026-08-09T19:00:00Z | Palmeiras vs Internacional | 0
 soccer_brazil_campeonato | 2026-08-09T21:30:00Z | Santos vs Atletico Paranaense | 0-2
 soccer_brazil_campeonato | 2026-08-09T21:30:00Z | Bragantino-SP vs Corinthians | 0-2
 soccer_brazil_campeonato | 2026-08-09T22:30:00Z | Flamengo vs Vitoria | 2-0
-soccer_denmark_superliga | 2026-08-09T14:00:00Z | Randers FC vs Lyngby | 2-0
-soccer_denmark_superliga | 2026-08-09T16:00:00Z | AC Horsens vs Brondby IF | 0-2
-soccer_denmark_superliga | 2026-08-10T17:00:00Z | Silkeborg IF vs OB Odense BK | 1-0
-soccer_portugal_primeira_liga | 2026-08-08T14:30:00Z | CS Maritimo vs Casa Pia | 1-0
-soccer_portugal_primeira_liga | 2026-08-08T17:00:00Z | Vitória SC vs Arouca | 0-1
-soccer_portugal_primeira_liga | 2026-08-08T19:30:00Z | CF Estrela vs Sporting Lisbon | 2-2
-soccer_portugal_primeira_liga | 2026-08-09T17:00:00Z | FC Porto vs Alverca | 2-0
-soccer_portugal_primeira_liga | 2026-08-09T19:30:00Z | Benfica vs Académico de Viseu | 2-2
-soccer_portugal_primeira_liga | 2026-08-09T19:30:00Z | Moreirense FC vs Braga | 2-2
-soccer_portugal_primeira_liga | 2026-08-09T19:30:00Z | Gil Vicente vs Rio Ave FC | 1-0
-soccer_portugal_primeira_liga | 2026-08-10T19:15:00Z | Santa Clara vs Nacional | 2-2
-soccer_sweden_allsvenskan | 2026-08-08T13:01:00Z | Örgryte IS vs AIK | 3-4
-soccer_sweden_allsvenskan | 2026-08-08T15:30:00Z | Mjällby AIF vs IF Elfsborg | 0-1
-soccer_sweden_allsvenskan | 2026-08-09T12:00:00Z | Hammarby IF vs BK Hacken | 3-0
-soccer_sweden_allsvenskan | 2026-08-09T12:00:00Z | Malmo FF vs Degerfors IF | 1-2
-soccer_sweden_allsvenskan | 2026-08-09T14:30:00Z | Halmstads BK vs GAIS | 0-2
-soccer_sweden_allsvenskan | 2026-08-09T14:30:00Z | IFK Goteborg vs Kalmar FF | 3-2
-soccer_sweden_allsvenskan | 2026-08-10T17:00:00Z | Västerås SK vs Djurgardens IF | 1-0
-soccer_sweden_allsvenskan | 2026-08-10T17:00:00Z | IK Sirius vs IF Brommapojkarna | 2-2
 
 === CLOSEST CANDIDATES ===
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Bahia vs Vasco da Gama | combined=0.562 min=0.125 | bet_time=2026-07-31T00:00:00Z score_time=2026-08-09T19:00:00Z
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Bahia vs Vasco da Gama | combined=0.562 min=0.125 | bet_time=2026-07-29T00:00:00Z score_time=2026-08-09T19:00:00Z
-soccer_portugal_primeira_liga | Santa Clara vs Nacional -> Santa Clara vs Nacional | combined=1.000 min=1.000 | bet_time=2026-08-10T19:15:00Z score_time=2026-08-10T19:15:00Z
-soccer_sweden_allsvenskan | Västerås SK vs Djurgardens IF -> Västerås SK vs Djurgardens IF | combined=1.000 min=1.000 | bet_time=2026-08-10T17:00:00Z score_time=2026-08-10T17:00:00Z
-soccer_argentina_primera_division | Banfield vs Belgrano de Cordoba -> Banfield vs Belgrano de Cordoba | combined=1.000 min=1.000 | bet_time=2026-08-10T22:00:00Z score_time=2026-08-10T22:00:00Z
-soccer_denmark_superliga | Silkeborg IF vs OB Odense BK -> Silkeborg IF vs OB Odense BK | combined=1.000 min=1.000 | bet_time=2026-08-10T17:00:00Z score_time=2026-08-10T17:00:00Z
