@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 237,
+  "training_samples": 238,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 237,
-      "wins": 74,
+      "samples": 238,
+      "wins": 75,
       "losses": 163,
-      "winrate": 0.3122,
-      "average_value": 0.7426
+      "winrate": 0.3151,
+      "average_value": 0.7431
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 237,
-      "wins": 74,
+      "samples": 238,
+      "wins": 75,
       "losses": 163,
-      "winrate": 0.3122,
-      "average_value": 0.1374
+      "winrate": 0.3151,
+      "average_value": 0.1372
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 237,
-      "wins": 74,
+      "samples": 238,
+      "wins": 75,
       "losses": 163,
-      "winrate": 0.3122,
-      "average_value": -2.0138
+      "winrate": 0.3151,
+      "average_value": -2.2635
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 237,
-      "wins": 74,
+      "samples": 238,
+      "wins": 75,
       "losses": 163,
-      "winrate": 0.3122,
-      "average_value": 0.0561
+      "winrate": 0.3151,
+      "average_value": 0.0544
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 237,
-      "wins": 74,
+      "samples": 238,
+      "wins": 75,
       "losses": 163,
-      "winrate": 0.3122,
-      "average_value": 0.5942
+      "winrate": 0.3151,
+      "average_value": 0.5946
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 237,
-      "wins": 74,
+      "samples": 238,
+      "wins": 75,
       "losses": 163,
-      "winrate": 0.3122,
-      "average_value": 0.4618
+      "winrate": 0.3151,
+      "average_value": 0.4622
     }
   ],
   "warning": null,
