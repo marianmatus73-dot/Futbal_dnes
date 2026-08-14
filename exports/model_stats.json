@@ -1,22 +1,22 @@
 {
-  "total_bets": 883,
-  "wins": 428,
-  "losses": 455,
-  "winrate": 48.47,
-  "yield": 9.47,
-  "profit": 65.42,
-  "stake_sum": 690.89,
-  "open_bets": 412,
-  "settled_bets": 883,
+  "total_bets": 889,
+  "wins": 431,
+  "losses": 458,
+  "winrate": 48.48,
+  "yield": 9.24,
+  "profit": 64.35,
+  "stake_sum": 696.2,
+  "open_bets": 432,
+  "settled_bets": 889,
   "by_sport": {
     "baseball": {
-      "total": 607,
-      "wins": 340,
-      "losses": 267,
-      "winrate": 56.01,
-      "profit": 64.75,
-      "stake_sum": 612.97,
-      "yield": 10.56
+      "total": 613,
+      "wins": 343,
+      "losses": 270,
+      "winrate": 55.95,
+      "profit": 63.68,
+      "stake_sum": 618.28,
+      "yield": 10.3
     },
     "basketball": {
       "total": 20,
@@ -57,13 +57,13 @@
       "yield": 21.43
     },
     "BetOnline.ag": {
-      "total": 188,
+      "total": 190,
       "wins": 109,
-      "losses": 79,
-      "winrate": 57.98,
-      "profit": 26.41,
-      "stake_sum": 207.27,
-      "yield": 12.74
+      "losses": 81,
+      "winrate": 57.37,
+      "profit": 23.65,
+      "stake_sum": 210.03,
+      "yield": 11.26
     },
     "Betclic (FR)": {
       "total": 16,
@@ -84,13 +84,13 @@
       "yield": 17.07
     },
     "GTbets": {
-      "total": 59,
-      "wins": 30,
-      "losses": 29,
-      "winrate": 50.85,
-      "profit": 6.42,
-      "stake_sum": 55.92,
-      "yield": 11.49
+      "total": 62,
+      "wins": 32,
+      "losses": 30,
+      "winrate": 51.61,
+      "profit": 7.65,
+      "stake_sum": 58.01,
+      "yield": 13.19
     },
     "Betsson": {
       "total": 13,
@@ -236,6 +236,15 @@
       "stake_sum": 11.6,
       "yield": -24.36
     },
+    "Betfair": {
+      "total": 95,
+      "wins": 32,
+      "losses": 63,
+      "winrate": 33.68,
+      "profit": -2.94,
+      "stake_sum": 27.39,
+      "yield": -10.72
+    },
     "Matchbook": {
       "total": 33,
       "wins": 14,
@@ -244,15 +253,6 @@
       "profit": -3.04,
       "stake_sum": 14.89,
       "yield": -20.4
-    },
-    "Betfair": {
-      "total": 94,
-      "wins": 31,
-      "losses": 63,
-      "winrate": 32.98,
-      "profit": -3.4,
-      "stake_sum": 26.93,
-      "yield": -12.61
     },
     "MyBookie.ag": {
       "total": 16,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 607,
-      "wins": 340,
-      "losses": 267,
-      "winrate": 56.01,
-      "profit": 64.75,
-      "stake_sum": 612.97,
-      "yield": 10.56
+      "total": 613,
+      "wins": 343,
+      "losses": 270,
+      "winrate": 55.95,
+      "profit": 63.68,
+      "stake_sum": 618.28,
+      "yield": 10.3
     },
     "basketball_wnba": {
       "total": 20,
@@ -455,5 +455,5 @@
       "yield": -24.77
     }
   },
-  "last_update": "2026-08-13T16:44:01.541660+00:00"
+  "last_update": "2026-08-14T07:04:41.874792+00:00"
 }
