@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-08-14T07:04:41+00:00",
+  "generated_at": "2026-08-14T16:39:17+00:00",
   "version": "v15",
-  "total_rows": 238,
-  "training_ready_rows": 238,
+  "total_rows": 239,
+  "training_ready_rows": 239,
   "wins": 75,
-  "losses": 163,
-  "hit_rate": 0.31512605042016806,
-  "brier_score": 0.20821102618002058,
-  "log_loss": 0.6063444788789389,
+  "losses": 164,
+  "hit_rate": 0.3138075313807531,
+  "brier_score": 0.20764845676959254,
+  "log_loss": 0.6051333329835827,
   "average_clv_probability": null,
-  "average_consensus_safety": 0.7431134453781508,
+  "average_consensus_safety": 0.7434267782426774,
   "by_league": [
     {
       "league": "MLS",
@@ -123,12 +123,12 @@
     },
     {
       "league": "J-League",
-      "samples": 5,
+      "samples": 6,
       "wins": 1,
-      "losses": 4,
-      "hit_rate": 0.2,
-      "brier_score": 0.16204199981309447,
-      "log_loss": 0.5069969852444093,
+      "losses": 5,
+      "hit_rate": 0.16666666666666666,
+      "brier_score": 0.147327822692199,
+      "log_loss": 0.47531092268514036,
       "average_clv_probability": null
     },
     {
@@ -185,12 +185,12 @@
   "by_bookmaker": [
     {
       "bookmaker": "Betfair",
-      "samples": 64,
+      "samples": 65,
       "wins": 21,
-      "losses": 43,
-      "hit_rate": 0.328125,
-      "brier_score": 0.21859908428203373,
-      "log_loss": 0.6283136171503003,
+      "losses": 44,
+      "hit_rate": 0.3230769230769231,
+      "brier_score": 0.2163707435559674,
+      "log_loss": 0.623522340115508,
       "average_clv_probability": null
     },
     {
@@ -367,12 +367,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 238,
+      "samples": 239,
       "wins": 75,
-      "losses": 163,
-      "hit_rate": 0.31512605042016806,
-      "brier_score": 0.20821102618002058,
-      "log_loss": 0.6063444788789389
+      "losses": 164,
+      "hit_rate": 0.3138075313807531,
+      "brier_score": 0.20764845676959254,
+      "log_loss": 0.6051333329835827
     }
   ],
   "by_consensus_safety": [
@@ -387,12 +387,12 @@
     },
     {
       "bucket": "0.70-0.84",
-      "samples": 44,
+      "samples": 45,
       "wins": 11,
-      "losses": 33,
-      "hit_rate": 0.25,
-      "brier_score": 0.1842101967798656,
-      "log_loss": 0.5554990338954497
+      "losses": 34,
+      "hit_rate": 0.24444444444444444,
+      "brier_score": 0.18175567989781796,
+      "log_loss": 0.5501964022508574
     },
     {
       "bucket": "0.85-0.94",
@@ -461,12 +461,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 232,
+      "samples": 233,
       "wins": 70,
-      "losses": 162,
-      "hit_rate": 0.3017241379310345,
-      "brier_score": 0.20934380472052122,
-      "log_loss": 0.6091231848624816
+      "losses": 163,
+      "hit_rate": 0.30042918454935624,
+      "brier_score": 0.20876188683368518,
+      "log_loss": 0.6078689248840538
     }
   ],
   "metrics_reliable": true
