@@ -1,18 +1,44 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 3
-Score events: 1
+Open bets: 10
+Score events: 13
 
 === OPEN BETS ===
 soccer_brazil_campeonato | 2026-07-31T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
 soccer_brazil_campeonato | 2026-07-29T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
-soccer_japan_j_league | 2026-08-14T10:00:00Z | Tokyo Verdy vs Kashiwa Reysol | pick=Tokyo Verdy
+soccer_spain_segunda_division | 2026-08-14T18:30:00Z | Real Sociedad B vs CD Castellón | pick=Real Sociedad B
+soccer_norway_eliteserien | 2026-08-14T17:00:00Z | Rosenborg vs Viking FK | pick=Rosenborg
+soccer_sweden_allsvenskan | 2026-08-14T17:00:00Z | IF Elfsborg vs Västerås SK | pick=Västerås SK
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Stade Lavallois vs Nantes | pick=Stade Lavallois
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Grenoble vs Metz | pick=Grenoble
+soccer_denmark_superliga | 2026-08-14T17:00:00Z | Viborg FF vs AGF Aarhus | pick=AGF Aarhus
+soccer_sweden_allsvenskan | 2026-08-14T17:00:00Z | IF Elfsborg vs Västerås SK | pick=Draw
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Red Star vs Sochaux | pick=Sochaux
 
 === SCORE EVENTS ===
-soccer_japan_j_league | 2026-08-14T10:00:00Z | Tokyo Verdy vs Kashiwa Reysol | 1-3
+soccer_denmark_superliga | 2026-08-14T17:00:00Z | Viborg FF vs AGF Aarhus | 2-1
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Annecy FC vs Rodez AF | 2-0
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Guingamp vs Boulogne | 1-0
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Saint Etienne vs Clermont | 3-1
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Dijon vs Pau FC | 0-1
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Grenoble vs Metz | 0-0
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Nancy vs Montpellier | 0-1
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Stade Lavallois vs Nantes | 2-1
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Red Star vs Sochaux | 0-0
+soccer_france_ligue_two | 2026-08-14T18:45:00Z | Stade de Reims vs USL Dunkerque | 3-3
+soccer_norway_eliteserien | 2026-08-14T17:00:00Z | Rosenborg vs Viking FK | 2-1
+soccer_spain_segunda_division | 2026-08-14T18:30:00Z | Real Sociedad B vs CD Castellón | 0-1
+soccer_sweden_allsvenskan | 2026-08-14T17:00:00Z | IF Elfsborg vs Västerås SK | 3-0
 
 === CLOSEST CANDIDATES ===
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama | no score candidates
 soccer_brazil_campeonato | Chapecoense vs Vasco da Gama | no score candidates
-soccer_japan_j_league | Tokyo Verdy vs Kashiwa Reysol -> Tokyo Verdy vs Kashiwa Reysol | combined=1.000 min=1.000 | bet_time=2026-08-14T10:00:00Z score_time=2026-08-14T10:00:00Z
+soccer_spain_segunda_division | Real Sociedad B vs CD Castellón -> Real Sociedad B vs CD Castellón | combined=1.000 min=1.000 | bet_time=2026-08-14T18:30:00Z score_time=2026-08-14T18:30:00Z
+soccer_norway_eliteserien | Rosenborg vs Viking FK -> Rosenborg vs Viking FK | combined=1.000 min=1.000 | bet_time=2026-08-14T17:00:00Z score_time=2026-08-14T17:00:00Z
+soccer_sweden_allsvenskan | IF Elfsborg vs Västerås SK -> IF Elfsborg vs Västerås SK | combined=1.000 min=1.000 | bet_time=2026-08-14T17:00:00Z score_time=2026-08-14T17:00:00Z
+soccer_france_ligue_two | Stade Lavallois vs Nantes -> Stade Lavallois vs Nantes | combined=1.000 min=1.000 | bet_time=2026-08-14T18:45:00Z score_time=2026-08-14T18:45:00Z
+soccer_france_ligue_two | Grenoble vs Metz -> Grenoble vs Metz | combined=1.000 min=1.000 | bet_time=2026-08-14T18:45:00Z score_time=2026-08-14T18:45:00Z
+soccer_denmark_superliga | Viborg FF vs AGF Aarhus -> Viborg FF vs AGF Aarhus | combined=1.000 min=1.000 | bet_time=2026-08-14T17:00:00Z score_time=2026-08-14T17:00:00Z
+soccer_sweden_allsvenskan | IF Elfsborg vs Västerås SK -> IF Elfsborg vs Västerås SK | combined=1.000 min=1.000 | bet_time=2026-08-14T17:00:00Z score_time=2026-08-14T17:00:00Z
+soccer_france_ligue_two | Red Star vs Sochaux -> Red Star vs Sochaux | combined=1.000 min=1.000 | bet_time=2026-08-14T18:45:00Z score_time=2026-08-14T18:45:00Z
