@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-08-16T16:10:59+00:00",
+  "generated_at": "2026-08-17T06:28:49+00:00",
   "version": "v14.1",
-  "settled_samples": 304,
-  "valid_probability_samples": 304,
-  "open_samples": 117,
-  "wins": 94,
-  "losses": 210,
-  "hit_rate": 0.3092105263157895,
-  "threshold_accuracy": 0.7006578947368421,
-  "brier_score": 0.20654480707635203,
-  "log_loss": 0.6026779385853495,
+  "settled_samples": 343,
+  "valid_probability_samples": 343,
+  "open_samples": 91,
+  "wins": 104,
+  "losses": 239,
+  "hit_rate": 0.3032069970845481,
+  "threshold_accuracy": 0.7055393586005831,
+  "brier_score": 0.20565950535964136,
+  "log_loss": 0.6010636908106711,
   "average_clv": null,
   "meta_model_exists": true,
   "metrics_reliable": true,
@@ -20,16 +20,16 @@
     {
       "lower": 0.2,
       "upper": 0.30000000000000004,
-      "samples": 216,
-      "mean_probability": 0.27117398874508847,
-      "actual_win_rate": 0.24074074074074073
+      "samples": 241,
+      "mean_probability": 0.2705583604402942,
+      "actual_win_rate": 0.24481327800829875
     },
     {
       "lower": 0.3,
       "upper": 0.4,
-      "samples": 82,
-      "mean_probability": 0.32464398851119386,
-      "actual_win_rate": 0.45121951219512196
+      "samples": 94,
+      "mean_probability": 0.3249104049160239,
+      "actual_win_rate": 0.4148936170212766
     },
     {
       "lower": 0.4,
@@ -46,11 +46,18 @@
       "actual_win_rate": 0.5
     },
     {
+      "lower": 0.6,
+      "upper": 0.7,
+      "samples": 1,
+      "mean_probability": 0.6149806079158544,
+      "actual_win_rate": 1.0
+    },
+    {
       "lower": 0.7,
       "upper": 0.7999999999999999,
-      "samples": 2,
-      "mean_probability": 0.7473810540853738,
-      "actual_win_rate": 1.0
+      "samples": 3,
+      "mean_probability": 0.7461012724637452,
+      "actual_win_rate": 0.6666666666666666
     },
     {
       "lower": 0.8,
@@ -60,7 +67,7 @@
       "actual_win_rate": 1.0
     }
   ],
-  "market_snapshots": 115,
-  "closing_snapshots": 27,
-  "events_with_closing_snapshot": 24
+  "market_snapshots": 86,
+  "closing_snapshots": 1,
+  "events_with_closing_snapshot": 1
 }
