@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-08-18T06:21:36+00:00",
+  "generated_at": "2026-08-18T16:17:20+00:00",
   "version": "v15",
-  "total_rows": 349,
-  "training_ready_rows": 349,
+  "total_rows": 350,
+  "training_ready_rows": 350,
   "wins": 106,
-  "losses": 243,
-  "hit_rate": 0.3037249283667622,
-  "brier_score": 0.20575802035034496,
-  "log_loss": 0.601236445887482,
+  "losses": 244,
+  "hit_rate": 0.3028571428571429,
+  "brier_score": 0.20547020095349877,
+  "log_loss": 0.6006376716249279,
   "average_clv_probability": null,
-  "average_consensus_safety": 0.7738051575931225,
+  "average_consensus_safety": 0.7743285714285707,
   "by_league": [
     {
       "league": "MLS",
@@ -192,6 +192,16 @@
       "average_clv_probability": null
     },
     {
+      "league": "Turkish Super Lig",
+      "samples": 5,
+      "wins": 1,
+      "losses": 4,
+      "hit_rate": 0.2,
+      "brier_score": 0.16660962235288693,
+      "log_loss": 0.5170042075322276,
+      "average_clv_probability": null
+    },
+    {
       "league": "Championship",
       "samples": 4,
       "wins": 3,
@@ -209,16 +219,6 @@
       "hit_rate": 0.5,
       "brier_score": 0.2868632021450643,
       "log_loss": 0.7753468279135014,
-      "average_clv_probability": null
-    },
-    {
-      "league": "Turkish Super Lig",
-      "samples": 4,
-      "wins": 1,
-      "losses": 3,
-      "hit_rate": 0.25,
-      "brier_score": 0.18200672007756374,
-      "log_loss": 0.5483388959169081,
       "average_clv_probability": null
     },
     {
@@ -285,12 +285,12 @@
     },
     {
       "bookmaker": "Coolbet",
-      "samples": 26,
+      "samples": 27,
       "wins": 9,
-      "losses": 17,
-      "hit_rate": 0.34615384615384615,
-      "brier_score": 0.227719680596469,
-      "log_loss": 0.6472512822224374,
+      "losses": 18,
+      "hit_rate": 0.3333333333333333,
+      "brier_score": 0.223175293591199,
+      "log_loss": 0.6377851404361806,
       "average_clv_probability": null
     },
     {
@@ -437,12 +437,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 349,
+      "samples": 350,
       "wins": 106,
-      "losses": 243,
-      "hit_rate": 0.3037249283667622,
-      "brier_score": 0.20575802035034496,
-      "log_loss": 0.601236445887482
+      "losses": 244,
+      "hit_rate": 0.3028571428571429,
+      "brier_score": 0.20547020095349877,
+      "log_loss": 0.6006376716249279
     }
   ],
   "by_consensus_safety": [
@@ -475,12 +475,12 @@
     },
     {
       "bucket": "0.95+",
-      "samples": 63,
+      "samples": 64,
       "wins": 20,
-      "losses": 43,
-      "hit_rate": 0.31746031746031744,
-      "brier_score": 0.2194975729494212,
-      "log_loss": 0.632029510356714
+      "losses": 44,
+      "hit_rate": 0.3125,
+      "brier_score": 0.21770888011355805,
+      "log_loss": 0.6282738219760388
     },
     {
       "bucket": "<0.50",
@@ -540,12 +540,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 341,
+      "samples": 342,
       "wins": 100,
-      "losses": 241,
-      "hit_rate": 0.2932551319648094,
-      "brier_score": 0.20563634416702364,
-      "log_loss": 0.6011470931069861
+      "losses": 242,
+      "hit_rate": 0.29239766081871343,
+      "brier_score": 0.20534214793102115,
+      "log_loss": 0.6005345736943736
     }
   ],
   "metrics_reliable": true
