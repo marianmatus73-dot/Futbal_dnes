@@ -1,22 +1,22 @@
 {
-  "total_bets": 1104,
-  "wins": 512,
-  "losses": 592,
-  "winrate": 46.38,
-  "yield": 6.36,
-  "profit": 52.87,
-  "stake_sum": 831.06,
-  "open_bets": 448,
-  "settled_bets": 1104,
+  "total_bets": 1125,
+  "wins": 525,
+  "losses": 600,
+  "winrate": 46.67,
+  "yield": 6.75,
+  "profit": 57.47,
+  "stake_sum": 851.0,
+  "open_bets": 437,
+  "settled_bets": 1125,
   "by_sport": {
     "baseball": {
-      "total": 715,
-      "wins": 393,
-      "losses": 322,
-      "winrate": 54.97,
-      "profit": 52.44,
-      "stake_sum": 727.66,
-      "yield": 7.21
+      "total": 736,
+      "wins": 406,
+      "losses": 330,
+      "winrate": 55.16,
+      "profit": 57.04,
+      "stake_sum": 747.6,
+      "yield": 7.63
     },
     "basketball": {
       "total": 21,
@@ -48,22 +48,22 @@
   },
   "by_bookmaker": {
     "888sport": {
-      "total": 201,
-      "wins": 126,
-      "losses": 75,
-      "winrate": 62.69,
-      "profit": 39.94,
-      "stake_sum": 226.49,
-      "yield": 17.63
+      "total": 209,
+      "wins": 133,
+      "losses": 76,
+      "winrate": 63.64,
+      "profit": 45.57,
+      "stake_sum": 234.9,
+      "yield": 19.4
     },
     "BetOnline.ag": {
-      "total": 231,
-      "wins": 128,
-      "losses": 103,
-      "winrate": 55.41,
-      "profit": 19.13,
-      "stake_sum": 256.65,
-      "yield": 7.45
+      "total": 238,
+      "wins": 131,
+      "losses": 107,
+      "winrate": 55.04,
+      "profit": 16.95,
+      "stake_sum": 264.98,
+      "yield": 6.4
     },
     "Betclic (FR)": {
       "total": 19,
@@ -93,13 +93,13 @@
       "yield": 40.4
     },
     "Unibet (FR)": {
-      "total": 62,
-      "wins": 33,
+      "total": 64,
+      "wins": 35,
       "losses": 29,
-      "winrate": 53.23,
-      "profit": 0.87,
-      "stake_sum": 60.26,
-      "yield": 1.44
+      "winrate": 54.69,
+      "profit": 2.92,
+      "stake_sum": 61.76,
+      "yield": 4.73
     },
     "PMU (FR)": {
       "total": 1,
@@ -245,6 +245,15 @@
       "stake_sum": 15.08,
       "yield": -18.3
     },
+    "Betfair": {
+      "total": 128,
+      "wins": 39,
+      "losses": 89,
+      "winrate": 30.47,
+      "profit": -3.78,
+      "stake_sum": 35.43,
+      "yield": -10.66
+    },
     "MyBookie.ag": {
       "total": 16,
       "wins": 6,
@@ -254,34 +263,25 @@
       "stake_sum": 12.09,
       "yield": -33.29
     },
-    "Betfair": {
-      "total": 127,
-      "wins": 38,
-      "losses": 89,
-      "winrate": 29.92,
-      "profit": -4.23,
-      "stake_sum": 35.08,
-      "yield": -12.06
-    },
     "1xBet": {
-      "total": 109,
+      "total": 112,
       "wins": 38,
-      "losses": 71,
-      "winrate": 34.86,
-      "profit": -11.36,
-      "stake_sum": 43.95,
-      "yield": -25.84
+      "losses": 74,
+      "winrate": 33.93,
+      "profit": -12.71,
+      "stake_sum": 45.3,
+      "yield": -28.05
     }
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 715,
-      "wins": 393,
-      "losses": 322,
-      "winrate": 54.97,
-      "profit": 52.44,
-      "stake_sum": 727.66,
-      "yield": 7.21
+      "total": 736,
+      "wins": 406,
+      "losses": 330,
+      "winrate": 55.16,
+      "profit": 57.04,
+      "stake_sum": 747.6,
+      "yield": 7.63
     },
     "basketball_wnba": {
       "total": 21,
@@ -509,5 +509,5 @@
       "yield": -24.77
     }
   },
-  "last_update": "2026-08-19T06:22:48.502074+00:00"
+  "last_update": "2026-08-19T16:17:33.197021+00:00"
 }

@@ -2,7 +2,7 @@ FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
 Open bets: 4
-Score events: 10
+Score events: 8
 
 === OPEN BETS ===
 soccer_spain_la_liga | 2026-08-16T19:00:00Z | Celta Vigo vs CA Osasuna | pick=CA Osasuna
@@ -11,19 +11,17 @@ soccer_brazil_campeonato | 2026-07-31T00:00:00Z | Chapecoense vs Vasco da Gama |
 soccer_brazil_campeonato | 2026-07-29T00:00:00Z | Chapecoense vs Vasco da Gama | pick=Chapecoense
 
 === SCORE EVENTS ===
-soccer_brazil_campeonato | 2026-08-16T14:00:00Z | Chapecoense vs Bahia | 3-3
 soccer_brazil_campeonato | 2026-08-16T19:00:00Z | Atletico Mineiro vs Grêmio | 3-0
 soccer_brazil_campeonato | 2026-08-16T19:00:00Z | Vasco da Gama vs Santos | 0-3
 soccer_brazil_campeonato | 2026-08-16T21:30:00Z | Vitoria vs Botafogo | 1-0
 soccer_brazil_campeonato | 2026-08-16T21:30:00Z | Mirassol vs Flamengo | 1-5
 soccer_brazil_campeonato | 2026-08-16T22:30:00Z | Corinthians vs Cruzeiro | 1-2
 soccer_brazil_campeonato | 2026-08-17T23:00:00Z | Internacional vs Remo | 1-1
-soccer_spain_la_liga | 2026-08-16T15:00:00Z | Real Racing Club de Santander vs Villarreal | 2-2
 soccer_spain_la_liga | 2026-08-16T17:00:00Z | Espanyol vs Levante | 3-0
 soccer_spain_la_liga | 2026-08-17T19:00:00Z | Deportivo La Coruña vs Elche CF | 1-1
 
 === CLOSEST CANDIDATES ===
 soccer_spain_la_liga | Celta Vigo vs CA Osasuna -> Espanyol vs Levante | combined=0.284 min=0.235 | bet_time=2026-08-16T19:00:00Z score_time=2026-08-16T17:00:00Z
 soccer_spain_la_liga | Celta Vigo vs CA Osasuna -> Espanyol vs Levante | combined=0.284 min=0.235 | bet_time=2026-08-16T19:30:00Z score_time=2026-08-16T17:00:00Z
-soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Chapecoense vs Bahia | combined=0.611 min=0.222 | bet_time=2026-07-31T00:00:00Z score_time=2026-08-16T14:00:00Z
-soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Chapecoense vs Bahia | combined=0.611 min=0.222 | bet_time=2026-07-29T00:00:00Z score_time=2026-08-16T14:00:00Z
+soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Atletico Mineiro vs Grêmio | combined=0.327 min=0.211 | bet_time=2026-07-31T00:00:00Z score_time=2026-08-16T19:00:00Z
+soccer_brazil_campeonato | Chapecoense vs Vasco da Gama -> Atletico Mineiro vs Grêmio | combined=0.327 min=0.211 | bet_time=2026-07-29T00:00:00Z score_time=2026-08-16T19:00:00Z

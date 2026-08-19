@@ -1,5 +1,5 @@
 {
-  "trained_at": "2026-08-19T06:22:48+00:00",
+  "trained_at": "2026-08-19T16:17:32+00:00",
   "samples": 350,
   "wins": 106,
   "losses": 244,
@@ -16,8 +16,8 @@
     {
       "model_type": "logistic_regression",
       "accuracy": 0.5571428571428572,
-      "brier_score": 0.2632339461171243,
-      "log_loss": 0.7313845089958219,
+      "brier_score": 0.2632339461171137,
+      "log_loss": 0.7313845089958029,
       "validation_score": 0.2507142857142857
     },
     {
