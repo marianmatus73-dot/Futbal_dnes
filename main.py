@@ -55,7 +55,11 @@ from core.football_learning import run_football_learning
 from core.football_meta_ai_v14 import run_football_meta_ai_v14
 from core.football_data_collector_v14 import run_football_data_collector_v14
 from core.football_maintenance_v14 import run_football_maintenance_v14
-from core.football_market import FootballCLVMetrics, FootballMarketDatabase
+from core.football_market import (
+    FootballCLVMetrics,
+    FootballMarketDatabase,
+    FootballMarketMetrics,
+)
 from core.football_postmatch_dataset_v14 import rebuild_football_postmatch_dataset_v14
 from core.football_dataset_v15 import rebuild_football_dataset_v15
 from core.football_evaluation_dashboard_v15 import run_football_evaluation_dashboard_v15
@@ -710,18 +714,26 @@ async def run() -> None:
     )
 
     football_clv = FootballCLVMetrics()
+    football_market = FootballMarketMetrics()
     football_xg = FootballXGMetrics()
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             market_db = FootballMarketDatabase(settings)
             market_db.reconcile_closing_lines()
             football_clv = market_db.clv_metrics()
+            football_market = market_db.market_metrics()
             log.info(
                 "Football CLV state: eligible=%s, closing=%s, clv=%s, avg=%.3f%%",
                 football_clv.eligible_bets,
                 football_clv.closing_odds_samples,
                 football_clv.clv_ready,
                 football_clv.average_clv * 100.0,
+            )
+            log.info(
+                "Football market state: live=%s, legacy=%s, closing=%s",
+                football_market.live_snapshots,
+                football_market.legacy_snapshots,
+                football_market.closing_snapshots,
             )
         except Exception:
             log.exception("Football closing/CLV reconciliation failed")
@@ -1199,7 +1211,7 @@ async def run() -> None:
                 form_available=True,
                 xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
-                market_snapshots_available=False,
+                market_snapshots_available=football_market.available,
             )
 
             log.info(
@@ -1240,7 +1252,7 @@ async def run() -> None:
                 ),
                 elo_available=True,
                 form_available=True,
-                market_available=True,
+                market_available=football_market.available,
                 xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
             )
@@ -1277,7 +1289,7 @@ async def run() -> None:
             data_quality_report = run_data_quality_booster_v15_5(
                 elo_available=True,
                 form_available=True,
-                market_available=True,
+                market_available=football_market.available,
                 xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
                 settled_samples=(
@@ -1320,7 +1332,7 @@ async def run() -> None:
                 )
                 if "football_dataset_v15" in locals()
                 else 0,
-                market_snapshots=52,
+                market_snapshots=football_market.total_snapshots,
             )
 
             log.info(
@@ -1379,7 +1391,7 @@ async def run() -> None:
                 ),
                 elo=True,
                 form=True,
-                market=True,
+                market=football_market.available,
                 closing_odds=football_clv.closing_odds_samples > 0,
                 xg=football_xg.available,
             )
@@ -1411,7 +1423,7 @@ async def run() -> None:
                 ),
                 elo_available=True,
                 form_available=True,
-                market_available=True,
+                market_available=football_market.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
                 xg_available=football_xg.available,
             )
@@ -1448,7 +1460,7 @@ async def run() -> None:
                     else 0
                 ),
                 closing_odds_samples=football_clv.closing_odds_samples,
-                market_snapshots=55,
+                market_snapshots=football_market.total_snapshots,
             )
 
             log.info(
@@ -1487,7 +1499,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                market_snapshots=49,
+                market_snapshots=football_market.total_snapshots,
                 closing_odds_found=football_clv.closing_odds_samples,
             )
 
@@ -1516,7 +1528,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                market_snapshots=49,
+                market_snapshots=football_market.total_snapshots,
                 closing_written=football_clv.closing_odds_samples,
                 avg_clv=football_clv.average_clv,
             )
@@ -1547,7 +1559,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                market_snapshots=47,
+                market_snapshots=football_market.total_snapshots,
                 closing_recovered=football_clv.closing_odds_samples,
             )
 
@@ -1575,7 +1587,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                snapshots=47,
+                snapshots=football_market.total_snapshots,
                 closing_matched=football_clv.closing_odds_samples,
             )
 
@@ -1605,7 +1617,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                snapshots=47,
+                snapshots=football_market.total_snapshots,
                 closing_extracted=football_clv.closing_odds_samples,
                 clv_ready=football_clv.clv_ready,
             )
@@ -1636,7 +1648,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                market_snapshots=47,
+                market_snapshots=football_market.total_snapshots,
                 matches_resolved=0,
                 closing_recovered=football_clv.closing_odds_samples,
             )
@@ -1668,7 +1680,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                snapshots=47,
+                snapshots=football_market.total_snapshots,
                 keys_created=0,
                 joins_completed=0,
             )
@@ -1700,7 +1712,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                snapshots=47,
+                snapshots=football_market.total_snapshots,
                 keys_created=0,
                 joins_completed=0,
                 closing_written=football_clv.closing_odds_samples,
@@ -1729,7 +1741,7 @@ async def run() -> None:
                 snapshots=(
                     67
                 ),
-                parsed_snapshots=0,
+                parsed_snapshots=football_market.total_snapshots,
                 fingerprints_created=0,
                 join_ready=0,
             )
@@ -1760,7 +1772,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                snapshots=834,
+                snapshots=football_market.total_snapshots,
                 closing_written=football_clv.closing_odds_samples,
                 clv_ready=football_clv.clv_ready,
             )
@@ -1791,7 +1803,7 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                snapshots=639,
+                snapshots=football_market.total_snapshots,
                 joins_executed=0,
                 closing_written=football_clv.closing_odds_samples,
                 clv_calculated=football_clv.clv_ready,
