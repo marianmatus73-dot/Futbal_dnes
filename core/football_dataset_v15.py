@@ -351,6 +351,7 @@ class FootballDatasetV15:
                 """
                 SELECT closing_odds AS selected_odds,
                        closing_probability AS market_selection_probability,
+                       1 AS is_closing_window,
                        captured_at
                 FROM football_market_closing
                 WHERE sport_key=? AND event=? AND selection=?
@@ -435,6 +436,7 @@ class FootballDatasetV15:
             WHERE league=?
               AND home_team=?
               AND away_team=?
+              AND ABS(julianday({played_column}) - julianday(?)) <= 2.0
             ORDER BY
                 ABS(
                     julianday({played_column})
@@ -446,6 +448,7 @@ class FootballDatasetV15:
                 league,
                 home_team,
                 away_team,
+                commence_time,
                 commence_time,
             ),
         ).fetchone()
