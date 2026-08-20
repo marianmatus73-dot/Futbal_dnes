@@ -593,9 +593,9 @@ class FootballModule(SportModule):
                     sport, league, event, home_team, away_team, market,
                     selection, odds, prob_model, prob_market, prob_final,
                     edge, stake, bookmaker, start_time, score, source_hash,
-                    result
+                    result, external_event_id
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 bet.sport,
                 bet.league,
@@ -615,6 +615,7 @@ class FootballModule(SportModule):
                 bet.score,
                 source_hash,
                 "OPEN",
+                bet.external_event_id,
             ))
 
     def _audit(
@@ -779,6 +780,14 @@ class FootballModule(SportModule):
                     sport_key=sport_key,
                     league=league,
                     event=event,
+                )
+                football_market_db.save_closing_snapshot_if_due(
+                    sport_key=sport_key,
+                    league=league,
+                    event=event,
+                    window_hours=float(
+                        os.getenv("FOOTBALL_CLOSING_WINDOW_HOURS", "12")
+                    ),
                 )
 
                 market_snapshot = build_market_snapshot(
@@ -1093,6 +1102,7 @@ class FootballModule(SportModule):
                         bookmaker=bookmaker,
                         start_time=start,
                         score=adjusted_edge * 100,
+                        external_event_id=str(event.get("id", "")),
                     )
 
                     feature_source_hash = make_hash(
