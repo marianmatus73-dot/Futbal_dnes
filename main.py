@@ -32,7 +32,10 @@ from v16_alerting import evaluate_alerts
 from core.multisport_learning_v2.manager import MultisportLearningV2Manager
 from core.config import Settings
 from core.reporting import print_report
-from core.sport_settlement import ensure_settlement_columns
+from core.sport_settlement import (
+    backfill_settled_profit,
+    ensure_settlement_columns,
+)
 from core.audit_summary import audit_block_summary
 from core.performance_summary import performance_report
 from core.bet_converter import bet_to_tip_dict
@@ -167,6 +170,8 @@ HISTORY_EXPORTS = {
     "football_team_elo_v14": "exports/history_football_team_elo_v14.csv",
     "football_team_elo_v14_history": "exports/history_football_team_elo_v14_matches.csv",
     "football_market_snapshots_v14": "exports/history_football_market_snapshots_v14.csv",
+    "football_market_closing": "exports/history_football_market_closing.csv",
+    "football_clv_audit": "exports/history_football_clv_audit.csv",
     "football_xg_history_v14": "exports/history_football_xg_history_v14.csv",
     "football_postmatch_dataset_v14": "exports/history_football_postmatch_dataset_v14.csv",
     "football_dataset_v15": "exports/history_football_dataset_v15.csv",
@@ -228,7 +233,21 @@ def import_csv_to_table(settings: Settings, table: str, csv_file: str) -> int:
             VALUES ({placeholders})
         """
 
-        values = [[row.get(col, "") for col in columns] for row in rows]
+        nullable_sport_bet_columns = {
+            "closing_odds", "clv_pct", "settled_at", "external_event_id",
+            "home_goals", "away_goals", "final_score", "settlement_source",
+            "profit", "profit_units",
+        }
+        values = []
+        for row in rows:
+            values.append([
+                None
+                if table == "sport_bets"
+                and col in nullable_sport_bet_columns
+                and not str(row.get(col, "")).strip()
+                else row.get(col, "")
+                for col in columns
+            ])
 
         before = conn.total_changes
         conn.executemany(sql, values)
@@ -273,6 +292,7 @@ def init_football_v13_learning_tables(settings: Settings) -> None:
     FootballLeagueCalibrationDatabase(settings).init_db()
     FootballTeamXGV14Database(settings).init_db()
     FootballTeamEloV14Database(settings).init_db()
+    FootballMarketDatabase(settings).init_db()
 
 
 def ensure_football_settlement_columns(settings: Settings) -> None:
@@ -362,6 +382,13 @@ def restore_learning_history(settings: Settings) -> None:
 
         except Exception as e:
             log.warning("History import failed for %s: %s", table, e)
+
+    try:
+        repaired = backfill_settled_profit(settings)
+        if repaired:
+            log.info("Repaired accounting for %s settled bets", repaired)
+    except Exception as e:
+        log.warning("Settled profit backfill failed: %s", e)
 
     log.info("Learning history restore finished. Imported rows: %s", total)
 

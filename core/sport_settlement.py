@@ -113,6 +113,41 @@ def ensure_settlement_columns(settings: Settings) -> None:
             )
 
 
+def backfill_settled_profit(settings: Settings) -> int:
+    """Repair legacy settled rows whose accounting fields were never written."""
+    ensure_settlement_columns(settings)
+
+    with connect(settings) as conn:
+        before = conn.total_changes
+        conn.execute(
+            """
+            UPDATE sport_bets
+            SET profit = CASE UPPER(TRIM(result))
+                    WHEN 'WON' THEN ROUND((CAST(odds AS REAL) - 1.0)
+                                          * CAST(stake AS REAL), 4)
+                    WHEN 'LOST' THEN ROUND(-CAST(stake AS REAL), 4)
+                    ELSE 0.0
+                END,
+                profit_units = CASE UPPER(TRIM(result))
+                    WHEN 'WON' THEN ROUND(CAST(odds AS REAL) - 1.0, 4)
+                    WHEN 'LOST' THEN -1.0
+                    ELSE 0.0
+                END
+            WHERE UPPER(TRIM(COALESCE(result, ''))) IN
+                  ('WON', 'LOST', 'VOID')
+              AND CAST(COALESCE(stake, 0) AS REAL) > 0
+              AND CAST(COALESCE(odds, 0) AS REAL) > 1.0
+              AND (
+                    profit IS NULL
+                    OR profit_units IS NULL
+                    OR (CAST(profit AS REAL) = 0.0
+                        AND UPPER(TRIM(result)) IN ('WON', 'LOST'))
+                  )
+            """
+        )
+        return conn.total_changes - before
+
+
 async def settle_sport_bets(
     settings: Settings,
     sport: str,
