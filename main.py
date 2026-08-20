@@ -99,6 +99,7 @@ from core.sport_policy import settings_for_sport
 from core.professional_risk import apply_professional_risk_controls
 from core.sport_walkforward import walkforward_report
 from core.sport_context import SportContextDatabase
+from core.sportmonks import SportmonksClient, sync_upcoming_context
 from core.football_league_calibration import (
     FootballLeagueCalibrationDatabase,
     rebuild_football_league_calibrations,
@@ -716,6 +717,34 @@ async def run() -> None:
     if not selected:
         log.warning("No sport modules selected.")
         return
+
+    if (
+        not args.analytics
+        and not args.backtest
+        and any(module.name == "football" for module in selected)
+        and os.getenv("SPORTMONKS_SYNC_ENABLED", "0") == "1"
+    ):
+        token = os.getenv("SPORTMONKS_API_TOKEN", "").strip()
+        if not token:
+            log.warning("Sportmonks sync enabled but SPORTMONKS_API_TOKEN is missing")
+        else:
+            try:
+                lookahead_hours = max(24, int(os.getenv("LOOKAHEAD_HOURS", "168")))
+                days = min(7, max(1, (lookahead_hours + 23) // 24))
+                context_summary = sync_upcoming_context(
+                    SportmonksClient(
+                        token,
+                        timeout=float(os.getenv("HTTP_TIMEOUT", "30")),
+                        include_xg=os.getenv("SPORTMONKS_INCLUDE_XG", "0") == "1",
+                    ),
+                    SportContextDatabase(settings),
+                    days=days,
+                )
+                log.info("Sportmonks preflight context: %s", context_summary)
+            except Exception:
+                # Context improves a decision but must never stop odds, tips,
+                # persistence or email when the provider is unavailable.
+                log.exception("Sportmonks preflight failed; continuing without fresh context")
 
     concurrency = max(1, args.concurrency)
     semaphore = asyncio.Semaphore(concurrency)
@@ -2163,4 +2192,5 @@ async def run() -> None:
 
 if __name__ == "__main__":
     asyncio.run(run())
+
 

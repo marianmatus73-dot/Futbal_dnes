@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -29,6 +30,8 @@ class SyncSummary:
     confirmed_lineups: int = 0
     sidelined_records: int = 0
     xg_records: int = 0
+    home_absence_impact: float = 0.0
+    away_absence_impact: float = 0.0
 
 
 def _explicit_lineup_confirmation(metadata: Any) -> bool:
@@ -62,6 +65,49 @@ def _explicit_lineup_confirmation(metadata: Any) -> bool:
     return any(_explicit_lineup_confirmation(value) for value in metadata.values())
 
 
+def _fixture_teams(fixture: dict[str, Any]) -> tuple[str, str, str, str]:
+    home_name = away_name = home_id = away_id = ""
+    for participant in fixture.get("participants") or []:
+        if not isinstance(participant, dict):
+            continue
+        location = str((participant.get("meta") or {}).get("location", "")).lower()
+        if location == "home":
+            home_name, home_id = str(participant.get("name", "")), str(participant.get("id", ""))
+        elif location == "away":
+            away_name, away_id = str(participant.get("name", "")), str(participant.get("id", ""))
+    if not home_name or not away_name:
+        name = str(fixture.get("name", ""))
+        if " vs " in name:
+            fallback_home, fallback_away = name.split(" vs ", 1)
+            home_name = home_name or fallback_home.strip()
+            away_name = away_name or fallback_away.strip()
+    return home_name, away_name, home_id, away_id
+
+
+def _absence_impacts(fixture: dict[str, Any]) -> tuple[float, float]:
+    _, _, home_id, away_id = _fixture_teams(fixture)
+    unit = max(0.0, min(.01, float(os.getenv("SPORTMONKS_ABSENCE_UNIT", ".002"))))
+    impacts = {home_id: 0.0, away_id: 0.0}
+    seen: set[str] = set()
+    for item in fixture.get("sidelined") or []:
+        if not isinstance(item, dict):
+            continue
+        identity = str(item.get("sideline_id") or item.get("id") or "")
+        if identity and identity in seen:
+            continue
+        seen.add(identity)
+        team_id = str(item.get("participant_id") or item.get("team_id") or "")
+        sideline = item.get("sideline") if isinstance(item.get("sideline"), dict) else item
+        games_missed = float(sideline.get("games_missed") or 0)
+        category = str(sideline.get("category") or "").lower()
+        weight = unit + min(unit, max(0.0, games_missed) * unit * .20)
+        if "susp" in category:
+            weight *= .80
+        if team_id in impacts:
+            impacts[team_id] += weight
+    return min(.025, impacts.get(home_id, 0.0)), min(.025, impacts.get(away_id, 0.0))
+
+
 class SportmonksClient:
     def __init__(self, token: str, timeout: float = 30.0, include_xg: bool = False):
         token = token.strip()
@@ -93,7 +139,7 @@ class SportmonksClient:
     def fixtures_by_date(self, fixture_date: date, max_pages: int = 10) -> list[dict[str, Any]]:
         fixtures: list[dict[str, Any]] = []
         for page in range(1, max_pages + 1):
-            base_includes = "participants;lineups;sidelined.player;metadata"
+            base_includes = "participants;lineups;sidelined.sideline;metadata"
             includes = f"{base_includes};xGFixture" if self.include_xg else base_includes
             try:
                 payload = self._get(
@@ -152,11 +198,15 @@ def sync_upcoming_context(
                 totals["snapshots_added"] += 1
 
             lineup_confirmed = _explicit_lineup_confirmation(fixture.get("metadata", []))
+            home_team, away_team, _, _ = _fixture_teams(fixture)
+            home_impact, away_impact = _absence_impacts(fixture)
             sidelined = fixture.get("sidelined") or []
             xg = fixture.get("xgfixture") or fixture.get("xGFixture") or []
             totals["confirmed_lineups"] += int(lineup_confirmed)
             totals["sidelined_records"] += len(sidelined) if isinstance(sidelined, list) else 0
             totals["xg_records"] += len(xg) if isinstance(xg, list) else 0
+            totals["home_absence_impact"] += home_impact
+            totals["away_absence_impact"] += away_impact
 
             source_hash = f"sportmonks-v3:{fixture_id}:{captured_at}"
             with database.connect() as conn:
@@ -165,12 +215,15 @@ def sync_upcoming_context(
                     INSERT OR IGNORE INTO sport_context_features (
                         sport, league, event, external_event_id, start_time,
                         lineup_confirmed, injury_impact, suspension_impact,
+                        home_team, away_team, home_absence_impact, away_absence_impact,
                         source, captured_at, source_hash
-                    ) VALUES ('football', ?, ?, ?, ?, ?, 0, 0, ?, ?, ?)
+                    ) VALUES ('football', ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         str(fixture.get("league_id", "")), event, fixture_id, start_time,
-                        int(lineup_confirmed), "sportmonks-v3", captured_at, source_hash,
+                        int(lineup_confirmed), home_team, away_team,
+                        home_impact, away_impact,
+                        "sportmonks-v3", captured_at, source_hash,
                     ),
                 )
             totals["context_rows_added"] += int(cursor.rowcount == 1)

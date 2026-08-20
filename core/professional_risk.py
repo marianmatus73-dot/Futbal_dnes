@@ -113,10 +113,16 @@ def apply_professional_risk_controls(
             summary.candidates += 1
             calibrated = calibrated_probability(bet.prob_final, samples, hit_rate)
             context = context_db.latest(
-                result.sport, bet.event, bet.external_event_id
+                result.sport, bet.event, bet.external_event_id, bet.start_time
             )
             if context.verified:
-                calibrated -= context.injury_impact + context.suspension_impact
+                availability = context_db.selection_availability_adjustment(
+                    context, bet.selection
+                )
+                if context.home_team and context.away_team:
+                    calibrated += availability
+                else:
+                    calibrated -= context.injury_impact + context.suspension_impact
                 if context.travel_km is not None:
                     calibrated -= min(.02, max(0.0, context.travel_km) / 500000.0)
                 if result.sport == "baseball" and context.starting_pitcher_confirmed:
@@ -177,4 +183,5 @@ def apply_professional_risk_controls(
 
     summary.daily_exposure = round(accepted_daily, 2)
     return summary
+
 
