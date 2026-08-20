@@ -11,6 +11,7 @@ from core.market import no_vig_probs
 from core.professional_risk import apply_professional_risk_controls
 from core.sport_policy import settings_for_sport, sport_policy
 from core.sport_walkforward import walkforward_report
+from core.sport_context import SportContextDatabase
 from core.types import Bet, SportResult
 
 
@@ -85,6 +86,33 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertEqual(report["split"], "chronological_70_30")
         self.assertEqual(report["train_samples"], 28)
         self.assertEqual(report["test_samples"], 12)
+
+    def test_only_verified_context_changes_risk_decision(self) -> None:
+        context_db = SportContextDatabase(self.settings)
+        context_db.init_db()
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("CREATE TABLE sport_bets (sport TEXT, result TEXT)")
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES ('football', ?)",
+                [("WON",)] * 120 + [("LOST",)] * 80,
+            )
+            conn.execute(
+                """
+                INSERT INTO sport_context_features (
+                    sport, event, injury_impact, source, captured_at, source_hash
+                ) VALUES ('football', 'A vs B', .12, 'verified-provider',
+                          '2026-08-20T10:00:00Z', 'ctx-1')
+                """
+            )
+        bet = Bet(
+            sport="football", league="L", event="A vs B", market="h2h",
+            selection="A", odds=1.90, prob_model=.70, prob_market=.53,
+            prob_final=.70, edge=.33, stake=5, bookmaker="Book",
+            start_time="2026-08-20T20:00:00Z", score=85,
+        )
+        output = {"result": SportResult(sport="football", mode="scan", bets=[bet])}
+        summary = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(summary.accepted, 0)
 
 
 if __name__ == "__main__":
