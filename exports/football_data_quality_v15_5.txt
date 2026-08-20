@@ -1,6 +1,6 @@
 === FOOTBALL DATA QUALITY BOOSTER V15.5 ===
 
-Quality score: 60/100
+Quality score: 80/100
 Settled samples: 372
 
 FEATURE STATUS
@@ -8,11 +8,10 @@ ELO: READY
 FORM: READY
 MARKET: READY
 XG: MISSING
-CLOSING_ODDS: MISSING
+CLOSING_ODDS: READY
 
-Status: BUILDING
-Meta AI training ready: False
+Status: READY
+Meta AI training ready: True
 
 BLOCKERS
 - Missing xG history
-- Missing closing odds
