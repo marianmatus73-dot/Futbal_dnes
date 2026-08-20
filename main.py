@@ -48,6 +48,7 @@ from core.pro_tipper import (
 )
 from core.top_tips import select_top_tips, select_telegram_tips
 from core.tip_card import save_latest_tip_card
+from core.tip_card_validation import validate_tip_card
 from core.learning_model import retrain_from_results
 from core.consensus_engine import ConsensusInput, build_consensus
 from core.football_learning import run_football_learning
@@ -2067,6 +2068,13 @@ async def run() -> None:
             )
 
     report_file = save_report(report_text)
+
+    if not args.dry_run and not args.analytics and not args.backtest:
+        card_validation = validate_tip_card(
+            Path(os.getenv("EXPORT_DIR", "exports")) / "latest_tip_card.json",
+            max_age_minutes=30,
+        )
+        log.info("Tip card production validation: %s", card_validation)
 
     print(report_text)
 
