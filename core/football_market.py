@@ -142,6 +142,23 @@ class FootballCLVMetrics:
     average_clv: float = 0.0
 
 
+@dataclass
+class FootballMarketMetrics:
+    live_snapshots: int = 0
+    legacy_snapshots: int = 0
+    closing_snapshots: int = 0
+
+    @property
+    def available(self) -> bool:
+        return self.live_snapshots > 0 or self.legacy_snapshots > 0
+
+    @property
+    def total_snapshots(self) -> int:
+        # Live snapshots are the authoritative API observations. The legacy
+        # table is a compatibility fallback and must not be double-counted.
+        return self.live_snapshots or self.legacy_snapshots
+
+
 class FootballMarketDatabase:
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -579,6 +596,30 @@ class FootballMarketDatabase:
             closing_odds_samples=int(row["closing_count"] or 0),
             clv_ready=int(row["clv_count"] or 0),
             average_clv=float(row["average_clv"] or 0.0),
+        )
+
+    def market_metrics(self) -> FootballMarketMetrics:
+        self.init_db()
+        with self.connect() as conn:
+            live = int(conn.execute(
+                "SELECT COUNT(*) FROM football_market_snapshots"
+            ).fetchone()[0] or 0)
+            closing = int(conn.execute(
+                "SELECT COUNT(*) FROM football_market_closing"
+            ).fetchone()[0] or 0)
+            legacy = 0
+            if conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='football_market_snapshots_v14'"
+            ).fetchone() is not None:
+                legacy = int(conn.execute(
+                    "SELECT COUNT(*) FROM football_market_snapshots_v14"
+                ).fetchone()[0] or 0)
+
+        return FootballMarketMetrics(
+            live_snapshots=live,
+            legacy_snapshots=legacy,
+            closing_snapshots=closing,
         )
 
     def opening_odds(
