@@ -92,6 +92,7 @@ jobs:
       - name: Run engine
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          SPORTMONKS_API_TOKEN: ${{ secrets.SPORTMONKS_API_TOKEN }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           GMAIL_RECEIVER: ${{ secrets.GMAIL_RECEIVER }}
@@ -103,6 +104,9 @@ jobs:
           SPORT_MODE: "all"
           SPORT_CONCURRENCY: "5"
           SPORT_KEY_AUTO_DISCOVERY: "1"
+          SPORTMONKS_SYNC_ENABLED: "1"
+          SPORTMONKS_INCLUDE_XG: "0"
+          SPORT_CONTEXT_MAX_AGE_HOURS: "24"
 
           MIN_EDGE: "0.06"
           MAX_EDGE: "0.18"
@@ -218,3 +222,4 @@ jobs:
             git pull --rebase origin "${GITHUB_REF_NAME}"
             git push origin HEAD:"${GITHUB_REF_NAME}"
           fi
+
