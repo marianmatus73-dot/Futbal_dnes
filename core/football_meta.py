@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import pickle
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
@@ -247,12 +248,14 @@ class FootballMetaModel:
 
         if not self.is_loaded:
             reason = (
-                "meta=fallback_untrained; "
+                "meta=fallback_untrained; fallback active; "
                 f"samples={self.metadata.samples}; "
                 f"consensus={features.model_consensus_probability:.4f}; "
                 f"market={features.market_selection_probability:.4f}; "
                 f"fallback={fallback:.4f}"
             )
+            if os.getenv("FOOTBALL_META_VERBOSE_REASON", "0") == "1":
+                reason += f"; detail={self.load_error or 'model unavailable'}"
 
             return FootballMetaPrediction(
                 probability=fallback,
@@ -367,6 +370,11 @@ def clear_football_meta_model_cache() -> None:
     _MODEL_CACHE.clear()
 
 
+def clear_football_meta_cache() -> None:
+    """Backward-compatible public name used by existing tests and scripts."""
+    clear_football_meta_model_cache()
+
+
 def football_meta_status(
     *,
     model_path: str = DEFAULT_MODEL_PATH,
@@ -425,3 +433,4 @@ def save_football_meta_metadata(
         ),
         encoding="utf-8",
     )
+
