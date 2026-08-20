@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import os
+import tempfile
+import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -21,34 +23,36 @@ def make_features():
     )
 
 
-def test_missing_model_uses_concise_fallback(tmp_path: Path):
-    clear_football_meta_cache()
-    os.environ.pop("FOOTBALL_META_VERBOSE_REASON", None)
-
-    prediction = predict_football_probability(
-        make_features(),
-        model_path=str(tmp_path / "missing.pkl"),
-        metadata_path=str(tmp_path / "missing.json"),
-    )
-
-    assert prediction.model_loaded is False
-    assert prediction.source == "FOOTBALL_V13_FALLBACK"
-    assert "model not found" not in prediction.reason
-    assert "fallback active" in prediction.reason
-
-
-def test_verbose_fallback_can_be_enabled(tmp_path: Path):
-    clear_football_meta_cache()
-    os.environ["FOOTBALL_META_VERBOSE_REASON"] = "1"
-
-    try:
-        prediction = predict_football_probability(
-            make_features(),
-            model_path=str(tmp_path / "missing.pkl"),
-            metadata_path=str(tmp_path / "missing.json"),
-        )
-
-        assert "model not found" in prediction.reason
-    finally:
+class FootballMetaFallbackTests(unittest.TestCase):
+    def tearDown(self) -> None:
         os.environ.pop("FOOTBALL_META_VERBOSE_REASON", None)
         clear_football_meta_cache()
+
+    def test_missing_model_uses_concise_fallback(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            tmp_path = Path(directory)
+            prediction = predict_football_probability(
+                make_features(),
+                model_path=str(tmp_path / "missing.pkl"),
+                metadata_path=str(tmp_path / "missing.json"),
+            )
+        self.assertFalse(prediction.model_loaded)
+        self.assertEqual(prediction.source, "FOOTBALL_V13_FALLBACK")
+        self.assertNotIn("model not found", prediction.reason)
+        self.assertIn("fallback active", prediction.reason)
+
+    def test_verbose_fallback_can_be_enabled(self) -> None:
+        os.environ["FOOTBALL_META_VERBOSE_REASON"] = "1"
+        with tempfile.TemporaryDirectory() as directory:
+            tmp_path = Path(directory)
+            prediction = predict_football_probability(
+                make_features(),
+                model_path=str(tmp_path / "missing.pkl"),
+                metadata_path=str(tmp_path / "missing.json"),
+            )
+        self.assertIn("model not found", prediction.reason)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
