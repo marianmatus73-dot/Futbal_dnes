@@ -161,6 +161,24 @@ class MatchXGEstimate:
     reason: str
 
 
+@dataclass
+class FootballXGMetrics:
+    history_rows: int = 0
+    rated_teams: int = 0
+    dataset_samples: int = 0
+    dataset_total: int = 0
+
+    @property
+    def available(self) -> bool:
+        return self.history_rows > 0
+
+    @property
+    def dataset_coverage_pct(self) -> float:
+        if self.dataset_total <= 0:
+            return 0.0
+        return round(self.dataset_samples / self.dataset_total * 100.0, 1)
+
+
 class FootballXGDatabase:
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -242,6 +260,45 @@ class FootballXGDatabase:
             )
 
             conn.commit()
+
+    def metrics(self) -> FootballXGMetrics:
+        """Return real persisted xG coverage without inventing proxy values."""
+        self.init_db()
+        with self.connect() as conn:
+            history_rows = int(conn.execute(
+                "SELECT COUNT(*) FROM football_xg_history"
+            ).fetchone()[0] or 0)
+            rated_teams = int(conn.execute(
+                "SELECT COUNT(*) FROM football_xg_ratings WHERE matches > 0"
+            ).fetchone()[0] or 0)
+
+            dataset_samples = 0
+            dataset_total = 0
+            dataset_exists = conn.execute(
+                "SELECT 1 FROM sqlite_master "
+                "WHERE type='table' AND name='football_dataset_v15'"
+            ).fetchone()
+            if dataset_exists is not None:
+                columns = {
+                    str(row[1])
+                    for row in conn.execute(
+                        "PRAGMA table_info(football_dataset_v15)"
+                    ).fetchall()
+                }
+                dataset_total = int(conn.execute(
+                    "SELECT COUNT(*) FROM football_dataset_v15"
+                ).fetchone()[0] or 0)
+                if "has_xg" in columns:
+                    dataset_samples = int(conn.execute(
+                        "SELECT COUNT(*) FROM football_dataset_v15 WHERE has_xg=1"
+                    ).fetchone()[0] or 0)
+
+        return FootballXGMetrics(
+            history_rows=history_rows,
+            rated_teams=rated_teams,
+            dataset_samples=dataset_samples,
+            dataset_total=dataset_total,
+        )
 
     def load_team(self, team: str, league: str = "UNKNOWN") -> TeamXG:
         self.init_db()
@@ -736,3 +793,4 @@ def update_xg_after_match(
 ) -> bool:
     database = FootballXGDatabase(settings)
     return database.update_after_match(**kwargs)
+
