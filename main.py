@@ -47,6 +47,7 @@ from core.pro_tipper import (
     format_rejected_report,
 )
 from core.top_tips import select_top_tips, select_telegram_tips
+from core.tip_card import save_latest_tip_card
 from core.learning_model import retrain_from_results
 from core.consensus_engine import ConsensusInput, build_consensus
 from core.football_learning import run_football_learning
@@ -582,7 +583,12 @@ def extract_pro_tips(module_outputs: list[dict]) -> tuple[list, list]:
     return all_tips, sort_tips(value_tips)
 
 
-def build_report(results: list, module_outputs: list[dict]) -> str:
+def build_report(
+    results: list,
+    module_outputs: list[dict],
+    *,
+    write_tip_card: bool = True,
+) -> str:
     buffer = StringIO()
 
     with redirect_stdout(buffer):
@@ -598,6 +604,15 @@ def build_report(results: list, module_outputs: list[dict]) -> str:
     top_tips = select_top_tips(pro_tips, limit=top_limit)
     rejected = rejected_tips(all_tips, top_tips, limit=10)
     telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
+
+    if write_tip_card:
+        card_path = save_latest_tip_card(
+            top_tips,
+            rejected,
+            export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+            top_limit=top_limit,
+        )
+        log.info("Saved complete daily tip card: %s", card_path)
 
     saved = save_tip_audit_log(top_tips)
 
@@ -1930,7 +1945,11 @@ async def run() -> None:
         if item["ok"] and item["result"] is not None
     ]
 
-    report_text = build_report(successful_results, module_outputs)
+    report_text = build_report(
+        successful_results,
+        module_outputs,
+        write_tip_card=(not args.dry_run and not args.analytics and not args.backtest),
+    )
 
     report_text += audit_block_summary(settings)
     
