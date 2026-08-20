@@ -728,7 +728,7 @@ async def run() -> None:
         *(guarded_run(sport) for sport in selected)
     )
 
-    if not args.analytics and not args.backtest:
+    if not args.dry_run and not args.analytics and not args.backtest:
         risk_summary = apply_professional_risk_controls(module_outputs, settings)
         log.info(
             "Professional risk controls: candidates=%s, accepted=%s, "
