@@ -8,6 +8,7 @@ from pathlib import Path
 
 from core.config import Settings
 from core.sport_policy import sport_policy
+from core.sport_context import SportContextDatabase
 from core.types import Bet, SportResult
 
 
@@ -66,6 +67,7 @@ def apply_professional_risk_controls(
     daily_limit = settings.bank * float(os.getenv("MAX_DAILY_EXPOSURE_PCT", "0.05"))
 
     accepted_daily = 0.0
+    context_db = SportContextDatabase(settings)
     for output in outputs:
         result = output.get("result")
         if not isinstance(result, SportResult):
@@ -80,6 +82,16 @@ def apply_professional_risk_controls(
         for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
             summary.candidates += 1
             calibrated = calibrated_probability(bet.prob_final, samples, hit_rate)
+            context = context_db.latest(
+                result.sport, bet.event, bet.external_event_id
+            )
+            if context.verified:
+                calibrated -= context.injury_impact + context.suspension_impact
+                if context.travel_km is not None:
+                    calibrated -= min(.02, max(0.0, context.travel_km) / 500000.0)
+                if result.sport == "baseball" and context.starting_pitcher_confirmed:
+                    calibrated += context.starting_pitcher_edge
+                calibrated = max(.01, min(.99, calibrated))
             lower = conservative_probability(calibrated, samples)
             conservative_edge = lower * bet.odds - 1.0
             event_key = (bet.league, bet.event)
