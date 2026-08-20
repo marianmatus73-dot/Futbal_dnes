@@ -147,6 +147,9 @@ class FootballMarketMetrics:
     live_snapshots: int = 0
     legacy_snapshots: int = 0
     closing_snapshots: int = 0
+    parsed_snapshots: int = 0
+    fingerprinted_snapshots: int = 0
+    join_ready_snapshots: int = 0
 
     @property
     def available(self) -> bool:
@@ -616,10 +619,39 @@ class FootballMarketDatabase:
                     "SELECT COUNT(*) FROM football_market_snapshots_v14"
                 ).fetchone()[0] or 0)
 
+            parsed = int(conn.execute(
+                """
+                SELECT COUNT(*) FROM football_market_snapshots
+                WHERE TRIM(event) <> '' AND TRIM(selection) <> ''
+                  AND TRIM(commence_time) <> '' AND odds > 1.01
+                """
+            ).fetchone()[0] or 0)
+            fingerprinted = int(conn.execute(
+                """
+                SELECT COUNT(*) FROM football_market_snapshots
+                WHERE TRIM(COALESCE(source_hash, '')) <> ''
+                """
+            ).fetchone()[0] or 0)
+            join_ready = int(conn.execute(
+                """
+                SELECT COUNT(*) FROM football_market_snapshots
+                WHERE market='h2h' AND TRIM(event) <> ''
+                  AND TRIM(selection) <> '' AND TRIM(commence_time) <> ''
+                  AND TRIM(COALESCE(source_hash, '')) <> ''
+                """
+            ).fetchone()[0] or 0)
+            if live == 0 and legacy > 0:
+                parsed = legacy
+                fingerprinted = legacy
+                join_ready = legacy
+
         return FootballMarketMetrics(
             live_snapshots=live,
             legacy_snapshots=legacy,
             closing_snapshots=closing,
+            parsed_snapshots=parsed,
+            fingerprinted_snapshots=fingerprinted,
+            join_ready_snapshots=join_ready,
         )
 
     def opening_odds(
