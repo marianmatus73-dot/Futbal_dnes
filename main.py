@@ -98,6 +98,7 @@ from core.football_pipeline_metrics import (
 from core.sport_policy import settings_for_sport
 from core.professional_risk import apply_professional_risk_controls
 from core.sport_walkforward import walkforward_report
+from core.sport_context import SportContextDatabase
 from core.football_league_calibration import (
     FootballLeagueCalibrationDatabase,
     rebuild_football_league_calibrations,
@@ -169,6 +170,7 @@ HISTORY_EXPORTS = {
     "football_postmatch_dataset_v14": "exports/history_football_postmatch_dataset_v14.csv",
     "football_dataset_v15": "exports/history_football_dataset_v15.csv",
     "football_explainability_v15": "exports/history_football_explainability_v15.csv",
+    "sport_context_features": "exports/history_sport_context_features.csv",
 }
 
 
@@ -341,6 +343,11 @@ def restore_learning_history(settings: Settings) -> None:
         init_football_v13_learning_tables(settings)
     except Exception as e:
         log.warning("Could not init Football v13 learning tables: %s", e)
+
+    try:
+        SportContextDatabase(settings).init_db()
+    except Exception as e:
+        log.warning("Could not init verified sport context table: %s", e)
 
     total = 0
 
