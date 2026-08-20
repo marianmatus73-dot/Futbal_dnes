@@ -102,6 +102,14 @@ from core.sport_policy import settings_for_sport
 from core.professional_risk import apply_professional_risk_controls
 from core.sport_walkforward import walkforward_report
 from core.sport_context import SportContextDatabase
+from core.football_tip_release import (
+    apply_football_release_policy,
+    ensure_release_columns,
+)
+from core.professional_model_table import (
+    build_professional_model_table,
+    professional_model_report,
+)
 from core.sportmonks import SportmonksClient, sync_upcoming_context
 from core.football_league_calibration import (
     FootballLeagueCalibrationDatabase,
@@ -237,6 +245,8 @@ def import_csv_to_table(settings: Settings, table: str, csv_file: str) -> int:
             "closing_odds", "clv_pct", "settled_at", "external_event_id",
             "home_goals", "away_goals", "final_score", "settlement_source",
             "profit", "profit_units",
+            "opening_odds", "final_odds", "early_released_at",
+            "final_confirmed_at",
         }
         values = []
         for row in rows:
@@ -359,6 +369,11 @@ def restore_learning_history(settings: Settings) -> None:
             "Could not ensure Football v13 settlement columns: %s",
             e,
         )
+
+    try:
+        ensure_release_columns(settings)
+    except Exception as e:
+        log.warning("Could not ensure football release columns: %s", e)
 
     try:
         init_football_v13_learning_tables(settings)
@@ -615,7 +630,9 @@ def extract_pro_tips(module_outputs: list[dict]) -> tuple[list, list]:
     bookmaker=tip.get("bookmaker", ""),
     reason=" | ".join(reason_parts),
     raw_edge=to_float_or_none(tip.get("raw_edge")),
-    model_score=tip.get("model_score"),                
+    model_score=tip.get("model_score"),
+    release_stage=str(tip.get("release_stage", "")),
+    lineup_verified=bool(tip.get("lineup_verified", False)),
 )
 
                 raw_tips.append(pro_tip)
@@ -795,6 +812,18 @@ async def run() -> None:
             risk_summary.daily_exposure,
             risk_summary.drawdown_paused,
         )
+        try:
+            release_summary = apply_football_release_policy(
+                module_outputs, settings
+            )
+            log.info(
+                "Football release policy: early=%s, final=%s, awaiting_lineup=%s",
+                release_summary.early,
+                release_summary.final,
+                release_summary.awaiting_lineup,
+            )
+        except Exception:
+            log.exception("Football two-stage release policy failed")
         try:
             calibration_report = walkforward_report(settings)
             ready = sum(
@@ -2080,6 +2109,12 @@ async def run() -> None:
     report_text += bankroll_summary()
 
     report_text += performance_report(settings)
+
+    try:
+        professional_table = build_professional_model_table(settings)
+        report_text += professional_model_report(professional_table)
+    except Exception:
+        log.exception("Professional model table failed")
 
     if "football_ai_health" in locals():
         report_text += "\n\n=== FOOTBALL AI HEALTH V15.2 ===\n"

@@ -33,6 +33,7 @@ def print_report(results: list[SportResult]) -> None:
                 edge = b.get("edge", 0.0)
                 stake = b.get("stake", 0.0)
                 bookmaker = b.get("bookmaker", "N/A")
+                release_stage = b.get("release_stage", "")
             else:
                 start_time = getattr(b, "start_time", "N/A")
                 league = getattr(b, "league", "N/A")
@@ -43,6 +44,7 @@ def print_report(results: list[SportResult]) -> None:
                 edge = getattr(b, "edge", 0.0)
                 stake = getattr(b, "stake", 0.0)
                 bookmaker = getattr(b, "bookmaker", "N/A")
+                release_stage = getattr(b, "release_stage", "")
 
             # Výpis s pretypovaním na float, ak by náhodou prišiel string z DB/slovníka
             try:
@@ -58,6 +60,7 @@ def print_report(results: list[SportResult]) -> None:
                 f"{selection} @ {odds_val:.2f} | "
                 f"P {prob_val:.1%} | Edge {edge_val:.1%} | "
                 f"Stake {stake_val:.2f} | {bookmaker}"
+                + (f" | {release_stage}" if release_stage else "")
             )
 
     print(f"\nTotal bets: {total}")
