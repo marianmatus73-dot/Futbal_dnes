@@ -84,10 +84,32 @@ def _fixture_teams(fixture: dict[str, Any]) -> tuple[str, str, str, str]:
     return home_name, away_name, home_id, away_id
 
 
-def _absence_impacts(fixture: dict[str, Any]) -> tuple[float, float]:
+def _player_weight(item: dict[str, Any], unit: float) -> float:
+    player = item.get("player") if isinstance(item.get("player"), dict) else item
+    position = str(
+        player.get("position_name") or player.get("position")
+        or (player.get("position") or {}).get("name", "")
+    ).lower()
+    position_factor = 1.0
+    if "goal" in position:
+        position_factor = 1.35
+    elif any(label in position for label in ("forward", "attack", "striker")):
+        position_factor = 1.25
+    elif "mid" in position:
+        position_factor = 1.10
+    minutes = float(player.get("minutes_played") or player.get("minutes") or 0)
+    minutes_factor = min(1.4, max(.75, minutes / 900.0)) if minutes else 1.0
+    rating = float(player.get("rating") or player.get("average_rating") or 0)
+    rating_factor = min(1.25, max(.85, rating / 6.5)) if rating else 1.0
+    return unit * position_factor * minutes_factor * rating_factor
+
+
+def _absence_impacts(fixture: dict[str, Any]) -> dict[str, float]:
     _, _, home_id, away_id = _fixture_teams(fixture)
     unit = max(0.0, min(.01, float(os.getenv("SPORTMONKS_ABSENCE_UNIT", ".002"))))
     impacts = {home_id: 0.0, away_id: 0.0}
+    injuries = {home_id: 0.0, away_id: 0.0}
+    suspensions = {home_id: 0.0, away_id: 0.0}
     seen: set[str] = set()
     for item in fixture.get("sidelined") or []:
         if not isinstance(item, dict):
@@ -100,12 +122,127 @@ def _absence_impacts(fixture: dict[str, Any]) -> tuple[float, float]:
         sideline = item.get("sideline") if isinstance(item.get("sideline"), dict) else item
         games_missed = float(sideline.get("games_missed") or 0)
         category = str(sideline.get("category") or "").lower()
-        weight = unit + min(unit, max(0.0, games_missed) * unit * .20)
+        weight = _player_weight(item, unit) + min(unit, max(0.0, games_missed) * unit * .20)
         if "susp" in category:
             weight *= .80
+            suspensions[team_id] = suspensions.get(team_id, 0.0) + weight
+        else:
+            injuries[team_id] = injuries.get(team_id, 0.0) + weight
         if team_id in impacts:
             impacts[team_id] += weight
-    return min(.025, impacts.get(home_id, 0.0)), min(.025, impacts.get(away_id, 0.0))
+    return {
+        "home": min(.05, impacts.get(home_id, 0.0)),
+        "away": min(.05, impacts.get(away_id, 0.0)),
+        "home_injury": min(.05, injuries.get(home_id, 0.0)),
+        "away_injury": min(.05, injuries.get(away_id, 0.0)),
+        "home_suspension": min(.05, suspensions.get(home_id, 0.0)),
+        "away_suspension": min(.05, suspensions.get(away_id, 0.0)),
+    }
+
+
+def _lineup_strengths(fixture: dict[str, Any]) -> tuple[float | None, float | None]:
+    _, _, home_id, away_id = _fixture_teams(fixture)
+    values: dict[str, list[float]] = {home_id: [], away_id: []}
+    for item in fixture.get("lineups") or []:
+        if not isinstance(item, dict):
+            continue
+        team_id = str(item.get("participant_id") or item.get("team_id") or "")
+        if team_id not in values:
+            continue
+        values[team_id].append(_player_weight(item, 1.0))
+    def score(team_id: str) -> float | None:
+        weights = values.get(team_id, [])
+        return round(sum(weights) / len(weights), 4) if weights else None
+    return score(home_id), score(away_id)
+
+
+def _actual_xg(fixture: dict[str, Any]) -> tuple[float | None, float | None]:
+    _, _, home_id, away_id = _fixture_teams(fixture)
+    values: dict[str, float] = {}
+    payload = fixture.get("xgfixture") or fixture.get("xGFixture") or []
+    if isinstance(payload, dict):
+        payload = [payload]
+    for item in payload:
+        if not isinstance(item, dict):
+            continue
+        team_id = str(item.get("participant_id") or item.get("team_id") or "")
+        raw = item.get("value", item.get("xg"))
+        try:
+            values[team_id] = float(raw)
+        except (TypeError, ValueError):
+            continue
+    return values.get(home_id), values.get(away_id)
+
+
+def _fixture_time(fixture: dict[str, Any]) -> datetime | None:
+    raw = str(fixture.get("starting_at", "")).strip().replace("Z", "+00:00")
+    try:
+        parsed = datetime.fromisoformat(raw)
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _schedule_index(fixtures: list[dict[str, Any]]) -> dict[str, list[datetime]]:
+    index: dict[str, list[datetime]] = {}
+    for fixture in fixtures:
+        kickoff = _fixture_time(fixture)
+        if kickoff is None:
+            continue
+        _, _, home_id, away_id = _fixture_teams(fixture)
+        for team_id in (home_id, away_id):
+            if team_id:
+                index.setdefault(team_id, []).append(kickoff)
+    for dates in index.values():
+        dates.sort()
+    return index
+
+
+def _schedule_load(
+    fixture: dict[str, Any],
+    index: dict[str, list[datetime]],
+) -> tuple[float | None, float | None, float | None]:
+    kickoff = _fixture_time(fixture)
+    if kickoff is None:
+        return None, None, None
+    _, _, home_id, away_id = _fixture_teams(fixture)
+
+    def team_load(team_id: str) -> tuple[float | None, int]:
+        dates = index.get(team_id, [])
+        previous = [date for date in dates if date < kickoff]
+        rest = (kickoff - previous[-1]).total_seconds() / 86400.0 if previous else None
+        congestion = sum(
+            1 for date in dates
+            if date != kickoff and abs((date - kickoff).total_seconds()) <= 7 * 86400
+        )
+        return rest, congestion
+
+    home_rest, home_load = team_load(home_id)
+    away_rest, away_load = team_load(away_id)
+    return home_rest, away_rest, float(max(home_load, away_load))
+
+
+def _explicit_metric(payload: Any, names: set[str]) -> float | None:
+    """Read a provider-supplied metric; never estimate a missing value."""
+    if isinstance(payload, dict):
+        for key, value in payload.items():
+            normalized = str(key).lower().replace("-", "_")
+            if normalized in names:
+                try:
+                    return float(value)
+                except (TypeError, ValueError):
+                    pass
+            found = _explicit_metric(value, names)
+            if found is not None:
+                return found
+    elif isinstance(payload, list):
+        for item in payload:
+            found = _explicit_metric(item, names)
+            if found is not None:
+                return found
+    return None
 
 
 class SportmonksClient:
@@ -178,8 +315,12 @@ def sync_upcoming_context(
     totals = {field: 0 for field in SyncSummary.__dataclass_fields__}
     captured_at = datetime.now(timezone.utc).isoformat()
 
+    fixtures: list[dict[str, Any]] = []
     for offset in range(max(1, days)):
-        for fixture in client.fixtures_by_date(start + timedelta(days=offset)):
+        fixtures.extend(client.fixtures_by_date(start + timedelta(days=offset)))
+    schedule_index = _schedule_index(fixtures)
+
+    for fixture in fixtures:
             totals["fixtures_received"] += 1
             fixture_id = str(fixture.get("id", "")).strip()
             event = str(fixture.get("name", "")).strip()
@@ -199,7 +340,16 @@ def sync_upcoming_context(
 
             lineup_confirmed = _explicit_lineup_confirmation(fixture.get("metadata", []))
             home_team, away_team, _, _ = _fixture_teams(fixture)
-            home_impact, away_impact = _absence_impacts(fixture)
+            absence = _absence_impacts(fixture)
+            home_impact, away_impact = absence["home"], absence["away"]
+            home_lineup_strength, away_lineup_strength = _lineup_strengths(fixture)
+            home_xg, away_xg = _actual_xg(fixture)
+            home_rest, away_rest, schedule_congestion = _schedule_load(
+                fixture, schedule_index
+            )
+            travel_km = _explicit_metric(
+                fixture, {"travel_km", "travel_distance_km"}
+            )
             sidelined = fixture.get("sidelined") or []
             xg = fixture.get("xgfixture") or fixture.get("xGFixture") or []
             totals["confirmed_lineups"] += int(lineup_confirmed)
@@ -215,14 +365,31 @@ def sync_upcoming_context(
                     INSERT OR IGNORE INTO sport_context_features (
                         sport, league, event, external_event_id, start_time,
                         lineup_confirmed, injury_impact, suspension_impact,
+                        rest_days, travel_km,
                         home_team, away_team, home_absence_impact, away_absence_impact,
+                        home_injury_impact, away_injury_impact,
+                        home_suspension_impact, away_suspension_impact,
+                        home_lineup_strength, away_lineup_strength,
+                        home_xg, away_xg,
+                        home_rest_days, away_rest_days, schedule_congestion,
                         source, captured_at, source_hash
-                    ) VALUES ('football', ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?, ?, ?)
+                    ) VALUES ('football', ?, ?, ?, ?, ?, 0, 0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         str(fixture.get("league_id", "")), event, fixture_id, start_time,
-                        int(lineup_confirmed), home_team, away_team,
+                        int(lineup_confirmed),
+                        min(
+                            value for value in (home_rest, away_rest)
+                            if value is not None
+                        ) if home_rest is not None or away_rest is not None else None,
+                        travel_km,
+                        home_team, away_team,
                         home_impact, away_impact,
+                        absence["home_injury"], absence["away_injury"],
+                        absence["home_suspension"], absence["away_suspension"],
+                        home_lineup_strength, away_lineup_strength,
+                        home_xg, away_xg,
+                        home_rest, away_rest, schedule_congestion,
                         "sportmonks-v3", captured_at, source_hash,
                     ),
                 )

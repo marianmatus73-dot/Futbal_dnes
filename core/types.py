@@ -20,6 +20,8 @@ class Bet:
     start_time: str
     score: float = 0.0
     external_event_id: str = ""
+    release_stage: str = ""
+    lineup_verified: bool = False
 
 
 @dataclass

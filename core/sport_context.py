@@ -26,6 +26,17 @@ class SportContext:
     away_team: str = ""
     home_absence_impact: float = 0.0
     away_absence_impact: float = 0.0
+    home_injury_impact: float = 0.0
+    away_injury_impact: float = 0.0
+    home_suspension_impact: float = 0.0
+    away_suspension_impact: float = 0.0
+    home_lineup_strength: float | None = None
+    away_lineup_strength: float | None = None
+    home_xg: float | None = None
+    away_xg: float | None = None
+    home_rest_days: float | None = None
+    away_rest_days: float | None = None
+    schedule_congestion: float | None = None
     source: str = ""
     captured_at: str = ""
 
@@ -72,6 +83,17 @@ class SportContextDatabase:
                 "away_team": "TEXT NOT NULL DEFAULT ''",
                 "home_absence_impact": "REAL NOT NULL DEFAULT 0",
                 "away_absence_impact": "REAL NOT NULL DEFAULT 0",
+                "home_injury_impact": "REAL NOT NULL DEFAULT 0",
+                "away_injury_impact": "REAL NOT NULL DEFAULT 0",
+                "home_suspension_impact": "REAL NOT NULL DEFAULT 0",
+                "away_suspension_impact": "REAL NOT NULL DEFAULT 0",
+                "home_lineup_strength": "REAL",
+                "away_lineup_strength": "REAL",
+                "home_xg": "REAL",
+                "away_xg": "REAL",
+                "home_rest_days": "REAL",
+                "away_rest_days": "REAL",
+                "schedule_congestion": "REAL",
             }.items():
                 if column not in existing:
                     conn.execute(
@@ -260,14 +282,41 @@ class SportContextDatabase:
             away_team=str(row["away_team"] or ""),
             home_absence_impact=max(0.0, min(.05, float(row["home_absence_impact"] or 0))),
             away_absence_impact=max(0.0, min(.05, float(row["away_absence_impact"] or 0))),
+            home_injury_impact=max(0.0, min(.05, float(row["home_injury_impact"] or 0))),
+            away_injury_impact=max(0.0, min(.05, float(row["away_injury_impact"] or 0))),
+            home_suspension_impact=max(0.0, min(.05, float(row["home_suspension_impact"] or 0))),
+            away_suspension_impact=max(0.0, min(.05, float(row["away_suspension_impact"] or 0))),
+            home_lineup_strength=(float(row["home_lineup_strength"]) if row["home_lineup_strength"] is not None else None),
+            away_lineup_strength=(float(row["away_lineup_strength"]) if row["away_lineup_strength"] is not None else None),
+            home_xg=float(row["home_xg"]) if row["home_xg"] is not None else None,
+            away_xg=float(row["away_xg"]) if row["away_xg"] is not None else None,
+            home_rest_days=float(row["home_rest_days"]) if row["home_rest_days"] is not None else None,
+            away_rest_days=float(row["away_rest_days"]) if row["away_rest_days"] is not None else None,
+            schedule_congestion=float(row["schedule_congestion"]) if row["schedule_congestion"] is not None else None,
             source=str(row["source"]), captured_at=str(row["captured_at"]),
         )
 
     def selection_availability_adjustment(self, context: SportContext, selection: str) -> float:
+        lineup_edge = 0.0
+        if context.home_lineup_strength is not None and context.away_lineup_strength is not None:
+            lineup_edge = max(-.02, min(.02, (
+                context.home_lineup_strength - context.away_lineup_strength
+            ) * .02))
+        rest_edge = 0.0
+        if context.home_rest_days is not None and context.away_rest_days is not None:
+            rest_edge = max(-.015, min(.015, (
+                context.home_rest_days - context.away_rest_days
+            ) * .003))
         if context.home_team and teams_match(selection, context.home_team):
-            return context.away_absence_impact - context.home_absence_impact
+            return (
+                context.away_absence_impact - context.home_absence_impact
+                + lineup_edge + rest_edge
+            )
         if context.away_team and teams_match(selection, context.away_team):
-            return context.home_absence_impact - context.away_absence_impact
+            return (
+                context.home_absence_impact - context.away_absence_impact
+                - lineup_edge - rest_edge
+            )
         return 0.0
 
 

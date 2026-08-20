@@ -27,6 +27,8 @@ class ProTip:
     stake_units: float = 0.0
     stake_amount: float = 0.0
     created_at: str = ""
+    release_stage: str = ""
+    lineup_verified: bool = False
 
 
 def _safe_float(
@@ -173,6 +175,8 @@ def build_pro_tip(
     reason: str = "",
     raw_edge: float | None = None,
     model_score: float | int | None = None,
+    release_stage: str = "",
+    lineup_verified: bool = False,
 ) -> ProTip:
     odds = float(odds)
     model_probability = max(
@@ -228,6 +232,8 @@ def build_pro_tip(
         created_at=datetime.now().isoformat(
             timespec="seconds"
         ),
+        release_stage=release_stage,
+        lineup_verified=lineup_verified,
     )
 
 
@@ -406,5 +412,11 @@ def format_tip_block(
 
     if tip.reason:
         text += f"Reason: {tip.reason}\n"
+
+    if tip.release_stage:
+        text += f"Release: {tip.release_stage}"
+        if tip.release_stage == "FINAL":
+            text += f" | lineup verified: {tip.lineup_verified}"
+        text += "\n"
 
     return text
