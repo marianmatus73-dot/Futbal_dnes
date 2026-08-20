@@ -180,6 +180,13 @@ jobs:
 
           python main.py "${ARGS[@]}"
 
+      - name: Validate production tip card
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        shell: bash
+        run: |
+          set -e
+          python -m scripts.validate_tip_card exports/latest_tip_card.json --max-age-minutes 30
+
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
