@@ -26,7 +26,12 @@ def main() -> int:
     database = SportContextDatabase(settings)
     database.init_db()
     summary = sync_upcoming_context(
-        SportmonksClient(token, timeout=float(os.getenv("HTTP_TIMEOUT", "30"))),
+        SportmonksClient(
+            token,
+            timeout=float(os.getenv("HTTP_TIMEOUT", "30")),
+            include_xg=os.getenv("SPORTMONKS_INCLUDE_XG", "0").strip().lower()
+            in {"1", "true", "yes"},
+        ),
         database,
         start_date=args.start_date,
         days=max(1, min(args.days, 7)),
@@ -40,4 +45,5 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 
