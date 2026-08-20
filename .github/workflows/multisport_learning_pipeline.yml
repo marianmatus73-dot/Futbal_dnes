@@ -2,8 +2,6 @@ name: Multisport Complete Learning Pipeline
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "30 */6 * * *"
 
 jobs:
   run:
