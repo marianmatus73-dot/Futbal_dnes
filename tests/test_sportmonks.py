@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+import sqlite3
+import tempfile
+import unittest
+from datetime import date
+from pathlib import Path
+
+from core.config import Settings
+from core.sport_context import SportContextDatabase
+from core.sportmonks import SportmonksClient, _explicit_lineup_confirmation, sync_upcoming_context
+
+
+class FakeSportmonksClient(SportmonksClient):
+    def __init__(self) -> None:
+        pass
+
+    def fixtures_by_date(self, fixture_date: date, max_pages: int = 10):
+        return [{
+            "id": 123,
+            "league_id": 501,
+            "name": "Home vs Away",
+            "starting_at": f"{fixture_date.isoformat()} 18:00:00",
+            "metadata": [{"type": {"developer_name": "LINEUP_CONFIRMED"}, "value": True}],
+            "lineups": [{"type_id": 11}],
+            "sidelined": [{"id": 1}],
+            "xgfixture": [{"data": {"value": 1.2}}],
+        }]
+
+
+class SportmonksTests(unittest.TestCase):
+    def test_confirmation_requires_explicit_true_metadata(self) -> None:
+        self.assertFalse(_explicit_lineup_confirmation([]))
+        self.assertFalse(_explicit_lineup_confirmation([{"name": "lineup_confirmed", "value": False}]))
+        self.assertTrue(_explicit_lineup_confirmation([
+            {"type": {"developer_name": "LINEUP_CONFIRMED"}, "value": True}
+        ]))
+
+    def test_sync_persists_raw_snapshot_and_safe_context(self) -> None:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
+            db_path = Path(folder) / "bets.db"
+            database = SportContextDatabase(Settings(db_file=str(db_path)))
+            summary = sync_upcoming_context(
+                FakeSportmonksClient(), database, start_date=date(2026, 8, 20), days=1
+            )
+            self.assertEqual(summary.fixtures_received, 1)
+            self.assertEqual(summary.snapshots_added, 1)
+            self.assertEqual(summary.confirmed_lineups, 1)
+            with sqlite3.connect(db_path) as conn:
+                context = conn.execute(
+                    "SELECT lineup_confirmed, injury_impact, suspension_impact FROM sport_context_features"
+                ).fetchone()
+                snapshots = conn.execute("SELECT COUNT(*) FROM sport_provider_snapshots").fetchone()[0]
+            self.assertEqual(context, (1, 0.0, 0.0))
+            self.assertEqual(snapshots, 1)
+
+
+if __name__ == "__main__":
+    unittest.main()
+

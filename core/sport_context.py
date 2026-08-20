@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import sqlite3
+import hashlib
+import json
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 from core.config import Settings
 
@@ -57,6 +61,54 @@ class SportContextDatabase:
                 "CREATE INDEX IF NOT EXISTS ix_sport_context_event "
                 "ON sport_context_features(sport, external_event_id, event, captured_at)"
             )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS sport_provider_snapshots (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    provider TEXT NOT NULL, sport TEXT NOT NULL,
+                    external_event_id TEXT NOT NULL, event TEXT NOT NULL,
+                    start_time TEXT, captured_at TEXT NOT NULL,
+                    payload_json TEXT NOT NULL, payload_hash TEXT NOT NULL UNIQUE
+                )
+                """
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS ix_provider_snapshot_event "
+                "ON sport_provider_snapshots(provider, sport, external_event_id, captured_at)"
+            )
+
+    def store_provider_snapshot(
+        self,
+        *,
+        provider: str,
+        sport: str,
+        external_event_id: str,
+        event: str,
+        start_time: str,
+        payload: dict[str, Any],
+        captured_at: str | None = None,
+    ) -> bool:
+        """Persist an immutable provider response without storing credentials."""
+        self.init_db()
+        captured = captured_at or datetime.now(timezone.utc).isoformat()
+        payload_json = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        payload_hash = hashlib.sha256(
+            f"{provider}|{sport}|{external_event_id}|{payload_json}".encode("utf-8")
+        ).hexdigest()
+        with self.connect() as conn:
+            cursor = conn.execute(
+                """
+                INSERT OR IGNORE INTO sport_provider_snapshots (
+                    provider, sport, external_event_id, event, start_time,
+                    captured_at, payload_json, payload_hash
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    provider, sport, external_event_id, event, start_time,
+                    captured, payload_json, payload_hash,
+                ),
+            )
+        return cursor.rowcount == 1
 
     def latest(self, sport: str, event: str, external_event_id: str = "") -> SportContext:
         self.init_db()
@@ -84,4 +136,5 @@ class SportContextDatabase:
             starting_pitcher_edge=max(-.15, min(.15, float(row["starting_pitcher_edge"] or 0))),
             source=str(row["source"]), captured_at=str(row["captured_at"]),
         )
+
 
