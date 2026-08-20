@@ -3,12 +3,14 @@ from __future__ import annotations
 import sqlite3
 import hashlib
 import json
+import os
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 from core.config import Settings
+from core.football_team_aliases import team_similarity, teams_match
 
 
 @dataclass
@@ -20,6 +22,10 @@ class SportContext:
     travel_km: float | None = None
     starting_pitcher_confirmed: bool = False
     starting_pitcher_edge: float = 0.0
+    home_team: str = ""
+    away_team: str = ""
+    home_absence_impact: float = 0.0
+    away_absence_impact: float = 0.0
     source: str = ""
     captured_at: str = ""
 
@@ -57,6 +63,20 @@ class SportContextDatabase:
                 )
                 """
             )
+            existing = {
+                str(row[1])
+                for row in conn.execute("PRAGMA table_info(sport_context_features)")
+            }
+            for column, definition in {
+                "home_team": "TEXT NOT NULL DEFAULT ''",
+                "away_team": "TEXT NOT NULL DEFAULT ''",
+                "home_absence_impact": "REAL NOT NULL DEFAULT 0",
+                "away_absence_impact": "REAL NOT NULL DEFAULT 0",
+            }.items():
+                if column not in existing:
+                    conn.execute(
+                        f"ALTER TABLE sport_context_features ADD COLUMN {column} {definition}"
+                    )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS ix_sport_context_event "
                 "ON sport_context_features(sport, external_event_id, event, captured_at)"
@@ -75,6 +95,17 @@ class SportContextDatabase:
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS ix_provider_snapshot_event "
                 "ON sport_provider_snapshots(provider, sport, external_event_id, captured_at)"
+            )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS sport_event_identity_links (
+                    sport TEXT NOT NULL, consumer_event_id TEXT NOT NULL,
+                    provider TEXT NOT NULL, provider_event_id TEXT NOT NULL,
+                    consumer_event TEXT NOT NULL, provider_event TEXT NOT NULL,
+                    similarity REAL NOT NULL, linked_at TEXT NOT NULL,
+                    PRIMARY KEY (sport, consumer_event_id, provider)
+                )
+                """
             )
 
     def store_provider_snapshot(
@@ -110,21 +141,112 @@ class SportContextDatabase:
             )
         return cursor.rowcount == 1
 
-    def latest(self, sport: str, event: str, external_event_id: str = "") -> SportContext:
+    @staticmethod
+    def _split_event(event: str) -> tuple[str, str]:
+        for separator in (" vs ", " v ", " - "):
+            if separator in event:
+                return tuple(part.strip() for part in event.split(separator, 1))  # type: ignore[return-value]
+        return "", ""
+
+    @staticmethod
+    def _parse_time(value: str) -> datetime | None:
+        raw = str(value or "").strip().replace("Z", "+00:00")
+        if not raw:
+            return None
+        try:
+            parsed = datetime.fromisoformat(raw)
+        except ValueError:
+            return None
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed.astimezone(timezone.utc)
+
+    def latest(
+        self,
+        sport: str,
+        event: str,
+        external_event_id: str = "",
+        start_time: str = "",
+    ) -> SportContext:
         self.init_db()
-        identity = "external_event_id=?" if external_event_id else "event=?"
-        value = external_event_id or event
         with self.connect() as conn:
-            row = conn.execute(
-                f"""
-                SELECT * FROM sport_context_features
-                WHERE sport=? AND {identity}
-                  AND TRIM(source) <> '' AND TRIM(captured_at) <> ''
-                ORDER BY captured_at DESC, id DESC LIMIT 1
-                """,
-                (sport, value),
-            ).fetchone()
+            row = None
+            if external_event_id:
+                link = conn.execute(
+                    """
+                    SELECT provider_event_id FROM sport_event_identity_links
+                    WHERE sport=? AND consumer_event_id=? AND provider='sportmonks-v3'
+                    """,
+                    (sport, external_event_id),
+                ).fetchone()
+                identity = str(link[0]) if link else external_event_id
+                row = conn.execute(
+                    """
+                    SELECT * FROM sport_context_features
+                    WHERE sport=? AND external_event_id=?
+                      AND TRIM(source) <> '' AND TRIM(captured_at) <> ''
+                    ORDER BY captured_at DESC, id DESC LIMIT 1
+                    """,
+                    (sport, identity),
+                ).fetchone()
+            if row is None and not external_event_id:
+                row = conn.execute(
+                    """
+                    SELECT * FROM sport_context_features
+                    WHERE sport=? AND event=?
+                      AND TRIM(source) <> '' AND TRIM(captured_at) <> ''
+                    ORDER BY captured_at DESC, id DESC LIMIT 1
+                    """,
+                    (sport, event),
+                ).fetchone()
+            if row is None and sport == "football":
+                home, away = self._split_event(event)
+                target_time = self._parse_time(start_time)
+                best = None
+                best_score = 0.0
+                rows = conn.execute(
+                    """
+                    SELECT * FROM sport_context_features
+                    WHERE sport='football' AND TRIM(source) <> ''
+                    ORDER BY captured_at DESC, id DESC LIMIT 200
+                    """
+                ).fetchall()
+                for candidate in rows:
+                    candidate_time = self._parse_time(candidate["start_time"])
+                    if target_time and candidate_time:
+                        tolerance = float(os.getenv("SPORT_CONTEXT_MATCH_HOURS", "3"))
+                        if abs((target_time - candidate_time).total_seconds()) > tolerance * 3600:
+                            continue
+                    candidate_home = str(candidate["home_team"] or "")
+                    candidate_away = str(candidate["away_team"] or "")
+                    if not candidate_home or not candidate_away:
+                        candidate_home, candidate_away = self._split_event(str(candidate["event"]))
+                    score = min(
+                        team_similarity(home, candidate_home),
+                        team_similarity(away, candidate_away),
+                    )
+                    if score >= .84 and score > best_score:
+                        best, best_score = candidate, score
+                row = best
+                if row is not None and external_event_id:
+                    conn.execute(
+                        """
+                        INSERT OR REPLACE INTO sport_event_identity_links (
+                            sport, consumer_event_id, provider, provider_event_id,
+                            consumer_event, provider_event, similarity, linked_at
+                        ) VALUES (?, ?, 'sportmonks-v3', ?, ?, ?, ?, ?)
+                        """,
+                        (
+                            sport, external_event_id, str(row["external_event_id"]),
+                            event, str(row["event"]), best_score,
+                            datetime.now(timezone.utc).isoformat(),
+                        ),
+                    )
         if row is None:
+            return SportContext()
+        captured = self._parse_time(str(row["captured_at"]))
+        max_age = float(os.getenv("SPORT_CONTEXT_MAX_AGE_HOURS", "24"))
+        if captured and captured < datetime.now(timezone.utc) - timedelta(hours=max_age):
             return SportContext()
         return SportContext(
             lineup_confirmed=bool(row["lineup_confirmed"]),
@@ -134,7 +256,19 @@ class SportContextDatabase:
             travel_km=float(row["travel_km"]) if row["travel_km"] is not None else None,
             starting_pitcher_confirmed=bool(row["starting_pitcher_confirmed"]),
             starting_pitcher_edge=max(-.15, min(.15, float(row["starting_pitcher_edge"] or 0))),
+            home_team=str(row["home_team"] or ""),
+            away_team=str(row["away_team"] or ""),
+            home_absence_impact=max(0.0, min(.05, float(row["home_absence_impact"] or 0))),
+            away_absence_impact=max(0.0, min(.05, float(row["away_absence_impact"] or 0))),
             source=str(row["source"]), captured_at=str(row["captured_at"]),
         )
+
+    def selection_availability_adjustment(self, context: SportContext, selection: str) -> float:
+        if context.home_team and teams_match(selection, context.home_team):
+            return context.away_absence_impact - context.home_absence_impact
+        if context.away_team and teams_match(selection, context.away_team):
+            return context.home_absence_impact - context.away_absence_impact
+        return 0.0
+
 
 
