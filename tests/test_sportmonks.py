@@ -8,7 +8,12 @@ from pathlib import Path
 
 from core.config import Settings
 from core.sport_context import SportContextDatabase
-from core.sportmonks import SportmonksClient, _explicit_lineup_confirmation, sync_upcoming_context
+from core.sportmonks import (
+    SportmonksClient,
+    SportmonksError,
+    _explicit_lineup_confirmation,
+    sync_upcoming_context,
+)
 
 
 class FakeSportmonksClient(SportmonksClient):
@@ -29,6 +34,28 @@ class FakeSportmonksClient(SportmonksClient):
 
 
 class SportmonksTests(unittest.TestCase):
+    def test_paid_xg_denial_falls_back_to_free_plan_fields(self) -> None:
+        class FallbackClient(SportmonksClient):
+            def __init__(self):
+                super().__init__("test-token", include_xg=True)
+                self.includes = []
+
+            def _get(self, path, params):
+                self.includes.append(params["include"])
+                if "xGFixture" in params["include"]:
+                    raise SportmonksError(
+                        "forbidden", status=403,
+                        detail="You do not have access to the 'xgfixture' include",
+                    )
+                return {"data": []}
+
+        client = FallbackClient()
+        self.assertEqual(client.fixtures_by_date(date(2026, 8, 20)), [])
+        self.assertEqual(len(client.includes), 2)
+        self.assertIn("xGFixture", client.includes[0])
+        self.assertNotIn("xGFixture", client.includes[1])
+        self.assertFalse(client.include_xg)
+
     def test_confirmation_requires_explicit_true_metadata(self) -> None:
         self.assertFalse(_explicit_lineup_confirmation([]))
         self.assertFalse(_explicit_lineup_confirmation([{"name": "lineup_confirmed", "value": False}]))
@@ -57,4 +84,5 @@ class SportmonksTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
 

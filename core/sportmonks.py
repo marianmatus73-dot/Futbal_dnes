@@ -15,7 +15,10 @@ API_BASE = "https://api.sportmonks.com/v3/football"
 
 
 class SportmonksError(RuntimeError):
-    pass
+    def __init__(self, message: str, *, status: int | None = None, detail: str = ""):
+        super().__init__(message)
+        self.status = status
+        self.detail = detail
 
 
 @dataclass(frozen=True)
@@ -60,12 +63,13 @@ def _explicit_lineup_confirmation(metadata: Any) -> bool:
 
 
 class SportmonksClient:
-    def __init__(self, token: str, timeout: float = 30.0):
+    def __init__(self, token: str, timeout: float = 30.0, include_xg: bool = False):
         token = token.strip()
         if not token:
             raise ValueError("SPORTMONKS_API_TOKEN is missing")
         self._token = token
         self.timeout = timeout
+        self.include_xg = include_xg
 
     def _get(self, path: str, params: dict[str, Any]) -> dict[str, Any]:
         query = urllib.parse.urlencode({**params, "api_token": self._token})
@@ -78,20 +82,35 @@ class SportmonksClient:
                 return json.loads(response.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")[:500]
-            raise SportmonksError(f"Sportmonks HTTP {exc.code}: {detail}") from exc
+            raise SportmonksError(
+                f"Sportmonks HTTP {exc.code}: {detail}",
+                status=exc.code,
+                detail=detail,
+            ) from exc
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
             raise SportmonksError(f"Sportmonks request failed: {exc}") from exc
 
     def fixtures_by_date(self, fixture_date: date, max_pages: int = 10) -> list[dict[str, Any]]:
         fixtures: list[dict[str, Any]] = []
         for page in range(1, max_pages + 1):
-            payload = self._get(
-                f"fixtures/date/{fixture_date.isoformat()}",
-                {
-                    "include": "participants;lineups;sidelined.player;xGFixture;metadata",
-                    "page": page,
-                },
-            )
+            base_includes = "participants;lineups;sidelined.player;metadata"
+            includes = f"{base_includes};xGFixture" if self.include_xg else base_includes
+            try:
+                payload = self._get(
+                    f"fixtures/date/{fixture_date.isoformat()}",
+                    {"include": includes, "page": page},
+                )
+            except SportmonksError as exc:
+                # xG is a paid add-on. A valid free-plan token must still be able
+                # to collect the context fields that are included in its plan.
+                xg_denied = exc.status == 403 and "xgfixture" in exc.detail.lower()
+                if not self.include_xg or not xg_denied:
+                    raise
+                self.include_xg = False
+                payload = self._get(
+                    f"fixtures/date/{fixture_date.isoformat()}",
+                    {"include": base_includes, "page": page},
+                )
             data = payload.get("data", [])
             if isinstance(data, dict):
                 data = [data]
@@ -157,4 +176,5 @@ def sync_upcoming_context(
             totals["context_rows_added"] += int(cursor.rowcount == 1)
 
     return SyncSummary(**totals)
+
 
