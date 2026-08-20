@@ -90,6 +90,45 @@ class FootballCLVReconciliationTests(unittest.TestCase):
         self.assertEqual(metrics.closing_odds_samples, 0)
         self.assertEqual(metrics.clv_ready, 0)
 
+    def test_market_metrics_use_real_rows_without_double_counting(self) -> None:
+        event = {
+            "id": "event-market-1",
+            "home_team": "A",
+            "away_team": "B",
+            "commence_time": "2026-08-20T20:00:00+00:00",
+            "bookmakers": [{
+                "title": "Book A",
+                "markets": [{
+                    "key": "h2h",
+                    "outcomes": [
+                        {"name": "A", "price": 2.0},
+                        {"name": "B", "price": 2.1},
+                    ],
+                }],
+            }],
+        }
+        self.assertEqual(self.market.save_event_snapshot(
+            sport_key="soccer_test", league="Test", event=event,
+        ), 2)
+        self.assertEqual(self.market.save_closing_snapshot(
+            sport_key="soccer_test", league="Test", event=event,
+        ), 2)
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "CREATE TABLE football_market_snapshots_v14 (id INTEGER)"
+            )
+            conn.executemany(
+                "INSERT INTO football_market_snapshots_v14 VALUES (?)",
+                [(1,), (2,), (3,)],
+            )
+
+        metrics = self.market.market_metrics()
+        self.assertTrue(metrics.available)
+        self.assertEqual(metrics.live_snapshots, 2)
+        self.assertEqual(metrics.legacy_snapshots, 3)
+        self.assertEqual(metrics.closing_snapshots, 2)
+        self.assertEqual(metrics.total_snapshots, 2)
+
 
 if __name__ == "__main__":
     unittest.main()
