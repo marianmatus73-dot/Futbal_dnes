@@ -479,7 +479,9 @@ class FootballDatasetV15:
 
         columns = self._columns(conn, table_name)
         rating_column = (
-            "rating"
+            "overall_elo"
+            if "overall_elo" in columns
+            else "rating"
             if "rating" in columns
             else "elo"
             if "elo" in columns

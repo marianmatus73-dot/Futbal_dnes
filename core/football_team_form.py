@@ -184,6 +184,18 @@ class FormPrediction:
     reason: str
 
 
+@dataclass
+class FootballFormMetrics:
+    rated_teams: int = 0
+    history_rows: int = 0
+    dataset_samples: int = 0
+    dataset_total: int = 0
+
+    @property
+    def available(self) -> bool:
+        return self.rated_teams >= 2 and self.history_rows > 0
+
+
 class FootballFormDatabase:
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -261,6 +273,40 @@ class FootballFormDatabase:
             )
 
             conn.commit()
+
+    def metrics(self) -> FootballFormMetrics:
+        self.init_db()
+        with self.connect() as conn:
+            rated_teams = int(conn.execute(
+                "SELECT COUNT(*) FROM football_team_form WHERE matches > 0"
+            ).fetchone()[0] or 0)
+            history_rows = int(conn.execute(
+                "SELECT COUNT(*) FROM football_form_history"
+            ).fetchone()[0] or 0)
+            dataset_samples = 0
+            dataset_total = 0
+            if conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='football_dataset_v15'"
+            ).fetchone() is not None:
+                columns = {
+                    str(row[1]) for row in conn.execute(
+                        "PRAGMA table_info(football_dataset_v15)"
+                    ).fetchall()
+                }
+                dataset_total = int(conn.execute(
+                    "SELECT COUNT(*) FROM football_dataset_v15"
+                ).fetchone()[0] or 0)
+                if "has_form" in columns:
+                    dataset_samples = int(conn.execute(
+                        "SELECT COUNT(*) FROM football_dataset_v15 WHERE has_form=1"
+                    ).fetchone()[0] or 0)
+        return FootballFormMetrics(
+            rated_teams=rated_teams,
+            history_rows=history_rows,
+            dataset_samples=dataset_samples,
+            dataset_total=dataset_total,
+        )
 
     def load_team(self, team: str, league: str = "UNKNOWN") -> TeamForm:
         self.init_db()
@@ -753,3 +799,4 @@ def update_football_form(
 ) -> bool:
     database = FootballFormDatabase(settings)
     return database.update_after_match(**kwargs)
+

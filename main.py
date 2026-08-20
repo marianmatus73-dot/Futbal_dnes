@@ -89,8 +89,8 @@ from core.football_result_learning import run_football_result_learning
 from core.football_settlement import settle_football_bets
 from core.football_trainer import ensure_feature_history_table
 from core.football_xg import FootballXGDatabase, FootballXGMetrics
-from core.football_elo import FootballEloDatabase
-from core.football_team_form import FootballFormDatabase
+from core.football_elo import FootballEloDatabase, FootballEloMetrics
+from core.football_team_form import FootballFormDatabase, FootballFormMetrics
 from core.football_league_calibration import (
     FootballLeagueCalibrationDatabase,
     rebuild_football_league_calibrations,
@@ -716,6 +716,8 @@ async def run() -> None:
     football_clv = FootballCLVMetrics()
     football_market = FootballMarketMetrics()
     football_xg = FootballXGMetrics()
+    football_elo = FootballEloMetrics()
+    football_form = FootballFormMetrics()
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             market_db = FootballMarketDatabase(settings)
@@ -1013,6 +1015,25 @@ async def run() -> None:
         except Exception:
             log.exception("Football xG metrics failed")
 
+        try:
+            football_elo = FootballEloDatabase(settings).metrics()
+            football_form = FootballFormDatabase(settings).metrics()
+            log.info(
+                "Football ELO/form state: elo_teams=%s, elo_matches=%s, "
+                "elo_dataset=%s/%s, form_teams=%s, form_matches=%s, "
+                "form_dataset=%s/%s",
+                football_elo.rated_teams,
+                football_elo.history_rows,
+                football_elo.dataset_samples,
+                football_elo.dataset_total,
+                football_form.rated_teams,
+                football_form.history_rows,
+                football_form.dataset_samples,
+                football_form.dataset_total,
+            )
+        except Exception:
+            log.exception("Football ELO/form metrics failed")
+
     if (
         not args.dry_run
         and not args.analytics
@@ -1207,8 +1228,8 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                elo_available=True,
-                form_available=True,
+                elo_available=football_elo.available,
+                form_available=football_form.available,
                 xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
                 market_snapshots_available=football_market.available,
@@ -1250,8 +1271,8 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                elo_available=True,
-                form_available=True,
+                elo_available=football_elo.available,
+                form_available=football_form.available,
                 market_available=football_market.available,
                 xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
@@ -1287,8 +1308,8 @@ async def run() -> None:
     ):
         try:
             data_quality_report = run_data_quality_booster_v15_5(
-                elo_available=True,
-                form_available=True,
+                elo_available=football_elo.available,
+                form_available=football_form.available,
                 market_available=football_market.available,
                 xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
@@ -1389,8 +1410,8 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                elo=True,
-                form=True,
+                elo=football_elo.available,
+                form=football_form.available,
                 market=football_market.available,
                 closing_odds=football_clv.closing_odds_samples > 0,
                 xg=football_xg.available,
@@ -1421,8 +1442,8 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                elo_available=True,
-                form_available=True,
+                elo_available=football_elo.available,
+                form_available=football_form.available,
                 market_available=football_market.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
                 xg_available=football_xg.available,
