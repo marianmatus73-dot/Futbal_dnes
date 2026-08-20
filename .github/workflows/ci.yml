@@ -1,0 +1,45 @@
+name: Production Safety CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - "main.py"
+      - "core/**"
+      - "scripts/**"
+      - "tests/**"
+      - ".github/workflows/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-safety-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_v10.txt
+
+      - name: Compile production entry points
+        run: |
+          python -m py_compile main.py core/tip_card.py core/tip_card_validation.py scripts/validate_tip_card.py
+
+      - name: Run production safety tests
+        run: |
+          python -m unittest tests.test_tip_card tests.test_tip_card_validation -v
