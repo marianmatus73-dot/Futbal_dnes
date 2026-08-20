@@ -84,7 +84,7 @@ from core.football_closing_odds_writer_v15_21 import run_closing_odds_writer_v15
 from core.football_result_learning import run_football_result_learning
 from core.football_settlement import settle_football_bets
 from core.football_trainer import ensure_feature_history_table
-from core.football_xg import FootballXGDatabase
+from core.football_xg import FootballXGDatabase, FootballXGMetrics
 from core.football_elo import FootballEloDatabase
 from core.football_team_form import FootballFormDatabase
 from core.football_league_calibration import (
@@ -710,6 +710,7 @@ async def run() -> None:
     )
 
     football_clv = FootballCLVMetrics()
+    football_xg = FootballXGMetrics()
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             market_db = FootballMarketDatabase(settings)
@@ -986,6 +987,20 @@ async def run() -> None:
                 "Football Dataset v15 failed"
             )
 
+    if not args.dry_run and not args.analytics and not args.backtest:
+        try:
+            football_xg = FootballXGDatabase(settings).metrics()
+            log.info(
+                "Football xG state: history=%s, teams=%s, dataset=%s/%s (%.1f%%)",
+                football_xg.history_rows,
+                football_xg.rated_teams,
+                football_xg.dataset_samples,
+                football_xg.dataset_total,
+                football_xg.dataset_coverage_pct,
+            )
+        except Exception:
+            log.exception("Football xG metrics failed")
+
     if (
         not args.dry_run
         and not args.analytics
@@ -1182,7 +1197,7 @@ async def run() -> None:
                 ),
                 elo_available=True,
                 form_available=True,
-                xg_available=False,
+                xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
                 market_snapshots_available=False,
             )
@@ -1226,7 +1241,7 @@ async def run() -> None:
                 elo_available=True,
                 form_available=True,
                 market_available=True,
-                xg_available=False,
+                xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
             )
 
@@ -1263,7 +1278,7 @@ async def run() -> None:
                 elo_available=True,
                 form_available=True,
                 market_available=True,
-                xg_available=False,
+                xg_available=football_xg.available,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
                 settled_samples=(
                     football_dataset_v15.training_ready
@@ -1333,8 +1348,8 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                xg_samples=0,
-                xg_history_rows=0,
+                xg_samples=football_xg.dataset_samples,
+                xg_history_rows=football_xg.history_rows,
             )
 
             log.info(
@@ -1366,7 +1381,7 @@ async def run() -> None:
                 form=True,
                 market=True,
                 closing_odds=football_clv.closing_odds_samples > 0,
-                xg=False,
+                xg=football_xg.available,
             )
 
             log.info(
@@ -1398,7 +1413,7 @@ async def run() -> None:
                 form_available=True,
                 market_available=True,
                 closing_odds_available=football_clv.closing_odds_samples > 0,
-                xg_available=False,
+                xg_available=football_xg.available,
             )
 
             log.info(
