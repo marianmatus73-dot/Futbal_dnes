@@ -3,6 +3,8 @@ from __future__ import annotations
 import math
 import os
 import sqlite3
+import hashlib
+from datetime import datetime, timezone
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -65,8 +67,36 @@ def apply_professional_risk_controls(
     max_drawdown = float(os.getenv("MAX_BANKROLL_DRAWDOWN_PCT", "0.15"))
     summary.drawdown_paused = peak > 0 and settings.bank < peak * (1.0 - max_drawdown)
     daily_limit = settings.bank * float(os.getenv("MAX_DAILY_EXPOSURE_PCT", "0.05"))
-
-    accepted_daily = 0.0
+    db = Path(settings.db_file or "bets.db")
+    with sqlite3.connect(db) as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS professional_risk_allocations (
+                allocation_key TEXT PRIMARY KEY, allocation_date TEXT NOT NULL,
+                sport TEXT NOT NULL, league TEXT, event TEXT, selection TEXT,
+                stake REAL NOT NULL, created_at TEXT NOT NULL
+            )
+            """
+        )
+        today = datetime.now(timezone.utc).date().isoformat()
+        accepted_daily = float(conn.execute(
+            "SELECT COALESCE(SUM(stake), 0) FROM professional_risk_allocations "
+            "WHERE allocation_date=?", (today,)
+        ).fetchone()[0] or 0.0)
+        allocated_events = {
+            (str(row[0]), str(row[1]), str(row[2]))
+            for row in conn.execute(
+                "SELECT sport, league, event FROM professional_risk_allocations "
+                "WHERE allocation_date=?", (today,)
+            ).fetchall()
+        }
+        sport_allocations = {
+            str(row[0]): float(row[1] or 0.0)
+            for row in conn.execute(
+                "SELECT sport, SUM(stake) FROM professional_risk_allocations "
+                "WHERE allocation_date=? GROUP BY sport", (today,)
+            ).fetchall()
+        }
     context_db = SportContextDatabase(settings)
     for output in outputs:
         result = output.get("result")
@@ -75,7 +105,7 @@ def apply_professional_risk_controls(
         policy = sport_policy(result.sport)
         samples, hit_rate = _settled_profile(settings, result.sport)
         sport_limit = settings.bank * policy.max_sport_exposure_pct
-        sport_exposure = 0.0
+        sport_exposure = sport_allocations.get(result.sport, 0.0)
         accepted: list[Bet] = []
         seen_events: set[tuple[str, str]] = set()
 
@@ -95,6 +125,7 @@ def apply_professional_risk_controls(
             lower = conservative_probability(calibrated, samples)
             conservative_edge = lower * bet.odds - 1.0
             event_key = (bet.league, bet.event)
+            daily_event_key = (result.sport, bet.league, bet.event)
             confidence = int(round(bet.score))
             stake_cap = settings.bank * policy.max_stake_pct
             stake = min(float(bet.stake), stake_cap)
@@ -105,6 +136,7 @@ def apply_professional_risk_controls(
                 and policy.min_edge <= conservative_edge <= policy.max_edge
                 and confidence >= policy.min_confidence
                 and event_key not in seen_events
+                and daily_event_key not in allocated_events
                 and len(accepted) < policy.max_tips
                 and accepted_daily + stake <= daily_limit
                 and sport_exposure + stake <= sport_limit
@@ -120,7 +152,26 @@ def apply_professional_risk_controls(
             seen_events.add(event_key)
             accepted_daily += stake
             sport_exposure += stake
+            sport_allocations[result.sport] = sport_exposure
             summary.accepted += 1
+            allocation_key = hashlib.sha256(
+                "|".join((result.sport, bet.league, bet.event, bet.selection, bet.start_time)).encode()
+            ).hexdigest()[:32]
+            with sqlite3.connect(db) as conn:
+                conn.execute(
+                    """
+                    INSERT OR IGNORE INTO professional_risk_allocations (
+                        allocation_key, allocation_date, sport, league, event,
+                        selection, stake, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        allocation_key, today, result.sport, bet.league, bet.event,
+                        bet.selection, bet.stake,
+                        datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                    ),
+                )
+            allocated_events.add(daily_event_key)
 
         result.bets = accepted
 

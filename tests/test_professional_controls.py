@@ -58,6 +58,12 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertEqual(summary.accepted, 1)
         self.assertLessEqual(output["result"].bets[0].stake, 7.50)
 
+        # Re-running on the same day must not allocate the same event again.
+        output["result"].bets = [bet]
+        repeated = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(repeated.accepted, 0)
+        self.assertGreater(repeated.daily_exposure, 0)
+
         os.environ["BANKROLL_PEAK"] = "1200"
         bet.stake = 5
         output["result"].bets = [bet]
