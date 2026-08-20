@@ -19,6 +19,7 @@ class Bet:
     bookmaker: str
     start_time: str
     score: float = 0.0
+    external_event_id: str = ""
 
 
 @dataclass
