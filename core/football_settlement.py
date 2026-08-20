@@ -83,6 +83,7 @@ class OpenFootballBet:
     start_time: str
     home_team: str
     away_team: str
+    external_event_id: str = ""
 
 
 @dataclass
@@ -338,6 +339,11 @@ class FootballSettlementEngine:
                         start_time=normalize_text(row["start_time"]),
                         home_team=home_team,
                         away_team=away_team,
+                        external_event_id=(
+                            normalize_text(row["external_event_id"])
+                            if "external_event_id" in bet_columns
+                            else ""
+                        ),
                     )
                 )
 
@@ -462,6 +468,11 @@ class FootballSettlementEngine:
         bet: OpenFootballBet,
         games: list[CompletedFootballGame],
     ) -> CompletedFootballGame | None:
+        if bet.external_event_id:
+            for game in games:
+                if game.event_id and game.event_id == bet.external_event_id:
+                    return game
+
         exact_candidates = [
             game
             for game in games

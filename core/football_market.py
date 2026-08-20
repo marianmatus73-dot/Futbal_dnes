@@ -12,6 +12,7 @@ from typing import Any, Dict, Iterable
 from core.config import Settings
 from core.market import consensus_h2h
 from core.odds_api import fetch_odds
+from core.event_time import is_closing_window
 
 
 def now_utc() -> str:
@@ -318,6 +319,27 @@ class FootballMarketDatabase:
 
             conn.commit()
             return conn.total_changes - before
+
+    def save_closing_snapshot_if_due(
+        self,
+        *,
+        sport_key: str,
+        league: str,
+        event: dict,
+        window_hours: float = 12.0,
+        captured_at: datetime | None = None,
+    ) -> int:
+        if not is_closing_window(
+            event.get("commence_time"),
+            captured_at=captured_at,
+            window_hours=window_hours,
+        ):
+            return 0
+        return self.save_closing_snapshot(
+            sport_key=sport_key,
+            league=league,
+            event=event,
+        )
 
     def save_closing_snapshot(
         self,
