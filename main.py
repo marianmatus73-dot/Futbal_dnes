@@ -91,6 +91,10 @@ from core.football_trainer import ensure_feature_history_table
 from core.football_xg import FootballXGDatabase, FootballXGMetrics
 from core.football_elo import FootballEloDatabase, FootballEloMetrics
 from core.football_team_form import FootballFormDatabase, FootballFormMetrics
+from core.football_pipeline_metrics import (
+    FootballPipelineMetrics,
+    load_football_pipeline_metrics,
+)
 from core.football_league_calibration import (
     FootballLeagueCalibrationDatabase,
     rebuild_football_league_calibrations,
@@ -718,6 +722,7 @@ async def run() -> None:
     football_xg = FootballXGMetrics()
     football_elo = FootballEloMetrics()
     football_form = FootballFormMetrics()
+    football_pipeline = FootballPipelineMetrics()
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             market_db = FootballMarketDatabase(settings)
@@ -1034,6 +1039,22 @@ async def run() -> None:
         except Exception:
             log.exception("Football ELO/form metrics failed")
 
+        try:
+            football_pipeline = load_football_pipeline_metrics(settings)
+            log.info(
+                "Football pipeline state: matches=%s, resolved=%s, keys=%s, "
+                "joins=%s, closing=%s, clv=%s, explainability=%s",
+                football_pipeline.matches,
+                football_pipeline.resolved_matches,
+                football_pipeline.keys_created,
+                football_pipeline.joins_completed,
+                football_pipeline.closing_written,
+                football_pipeline.clv_ready,
+                football_pipeline.explainability_rows,
+            )
+        except Exception:
+            log.exception("Football pipeline metrics failed")
+
     if (
         not args.dry_run
         and not args.analytics
@@ -1147,7 +1168,7 @@ async def run() -> None:
                     if "football_feature_importance" in locals()
                     else {}
                 ),
-                explainability_rows=0,
+                explainability_rows=football_pipeline.explainability_rows,
             )
 
             log.info(
@@ -1188,8 +1209,12 @@ async def run() -> None:
                     if "football_dataset_v15" in locals()
                     else 0
                 ),
-                meta_samples=0,
-                explainability_rows=0,
+                meta_samples=(
+                    football_meta_v14.samples
+                    if "football_meta_v14" in locals()
+                    else 0
+                ),
+                explainability_rows=football_pipeline.explainability_rows,
                 top_feature=top_feature,
                 missing_features=(
                     football_feature_importance.get(
@@ -1405,11 +1430,7 @@ async def run() -> None:
     ):
         try:
             readiness_report = run_data_readiness_v15_8(
-                samples=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                samples=football_pipeline.matches,
                 elo=football_elo.available,
                 form=football_form.available,
                 market=football_market.available,
@@ -1470,17 +1491,9 @@ async def run() -> None:
     ):
         try:
             closing_capture = run_closing_odds_capture_v15_10(
-                samples=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
-                opening_odds_samples=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
-                closing_odds_samples=football_clv.closing_odds_samples,
+                samples=football_pipeline.matches,
+                opening_odds_samples=football_pipeline.matches,
+                closing_odds_samples=football_pipeline.closing_written,
                 market_snapshots=football_market.total_snapshots,
             )
 
@@ -1510,18 +1523,10 @@ async def run() -> None:
     ):
         try:
             closing_line_report = run_closing_line_resolver_v15_11(
-                samples=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
-                opening_odds=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                samples=football_pipeline.matches,
+                opening_odds=football_pipeline.matches,
                 market_snapshots=football_market.total_snapshots,
-                closing_odds_found=football_clv.closing_odds_samples,
+                closing_odds_found=football_pipeline.closing_written,
             )
 
             log.info(
@@ -1544,13 +1549,9 @@ async def run() -> None:
     ):
         try:
             closing_storage_report = run_closing_storage_clv_v15_12(
-                samples=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                samples=football_pipeline.matches,
                 market_snapshots=football_market.total_snapshots,
-                closing_written=football_clv.closing_odds_samples,
+                closing_written=football_pipeline.closing_written,
                 avg_clv=football_clv.average_clv,
             )
 
@@ -1575,13 +1576,9 @@ async def run() -> None:
     ):
         try:
             backfill_report = run_closing_backfill_v15_13(
-                postmatch_samples=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                postmatch_samples=football_pipeline.matches,
                 market_snapshots=football_market.total_snapshots,
-                closing_recovered=football_clv.closing_odds_samples,
+                closing_recovered=football_pipeline.closing_written,
             )
 
             log.info(
@@ -1603,13 +1600,9 @@ async def run() -> None:
     ):
         try:
             snapshot_match_report = run_snapshot_matcher_v15_14(
-                matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                matches=football_pipeline.matches,
                 snapshots=football_market.total_snapshots,
-                closing_matched=football_clv.closing_odds_samples,
+                closing_matched=football_pipeline.joins_completed,
             )
 
             log.info(
@@ -1633,14 +1626,10 @@ async def run() -> None:
     ):
         try:
             closing_extractor_report = run_real_closing_snapshot_extractor_v15_15(
-                matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                matches=football_pipeline.matches,
                 snapshots=football_market.total_snapshots,
-                closing_extracted=football_clv.closing_odds_samples,
-                clv_ready=football_clv.clv_ready,
+                closing_extracted=football_pipeline.closing_written,
+                clv_ready=football_pipeline.clv_ready,
             )
 
             log.info(
@@ -1664,14 +1653,10 @@ async def run() -> None:
     ):
         try:
             match_id_report = run_match_id_resolver_v15_16(
-                postmatch_matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                postmatch_matches=football_pipeline.matches,
                 market_snapshots=football_market.total_snapshots,
-                matches_resolved=0,
-                closing_recovered=football_clv.closing_odds_samples,
+                matches_resolved=football_pipeline.resolved_matches,
+                closing_recovered=football_pipeline.closing_written,
             )
 
             log.info(
@@ -1696,14 +1681,10 @@ async def run() -> None:
     ):
         try:
             match_key_report = run_universal_match_key_builder_v15_17(
-                matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                matches=football_pipeline.matches,
                 snapshots=football_market.total_snapshots,
-                keys_created=0,
-                joins_completed=0,
+                keys_created=football_pipeline.keys_created,
+                joins_completed=football_pipeline.joins_completed,
             )
 
             log.info(
@@ -1728,15 +1709,11 @@ async def run() -> None:
     ):
         try:
             join_report = run_universal_join_executor_v15_18(
-                matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                matches=football_pipeline.matches,
                 snapshots=football_market.total_snapshots,
-                keys_created=0,
-                joins_completed=0,
-                closing_written=football_clv.closing_odds_samples,
+                keys_created=football_pipeline.keys_created,
+                joins_completed=football_pipeline.joins_completed,
+                closing_written=football_pipeline.closing_written,
             )
 
             log.info(
@@ -1759,12 +1736,10 @@ async def run() -> None:
     ):
         try:
             snapshot_schema_report = run_snapshot_schema_extractor_v15_20(
-                snapshots=(
-                    67
-                ),
-                parsed_snapshots=football_market.total_snapshots,
-                fingerprints_created=0,
-                join_ready=0,
+                snapshots=football_market.total_snapshots,
+                parsed_snapshots=football_market.parsed_snapshots,
+                fingerprints_created=football_market.fingerprinted_snapshots,
+                join_ready=football_market.join_ready_snapshots,
             )
 
             log.info(
@@ -1788,14 +1763,10 @@ async def run() -> None:
     ):
         try:
             closing_writer_report = run_closing_odds_writer_v15_21(
-                matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                matches=football_pipeline.matches,
                 snapshots=football_market.total_snapshots,
-                closing_written=football_clv.closing_odds_samples,
-                clv_ready=football_clv.clv_ready,
+                closing_written=football_pipeline.closing_written,
+                clv_ready=football_pipeline.clv_ready,
             )
 
             log.info(
@@ -1819,15 +1790,11 @@ async def run() -> None:
     ):
         try:
             closing_db_report = run_closing_odds_database_join_engine_v15_19(
-                matches=(
-                    football_dataset_v15.training_ready
-                    if "football_dataset_v15" in locals()
-                    else 0
-                ),
+                matches=football_pipeline.matches,
                 snapshots=football_market.total_snapshots,
-                joins_executed=0,
-                closing_written=football_clv.closing_odds_samples,
-                clv_calculated=football_clv.clv_ready,
+                joins_executed=football_pipeline.joins_completed,
+                closing_written=football_pipeline.closing_written,
+                clv_calculated=football_pipeline.clv_ready,
             )
 
             log.info(
