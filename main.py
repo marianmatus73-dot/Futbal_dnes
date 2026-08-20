@@ -95,6 +95,9 @@ from core.football_pipeline_metrics import (
     FootballPipelineMetrics,
     load_football_pipeline_metrics,
 )
+from core.sport_policy import settings_for_sport
+from core.professional_risk import apply_professional_risk_controls
+from core.sport_walkforward import walkforward_report
 from core.football_league_calibration import (
     FootballLeagueCalibrationDatabase,
     rebuild_football_league_calibrations,
@@ -442,18 +445,19 @@ async def run_sport_module(
 
     try:
         log.info("Running sport module: %s", sport.name)
+        sport_settings = settings_for_sport(settings, sport.name)
 
         if args.analytics:
-            result = await sport.analytics(settings)
+            result = await sport.analytics(sport_settings)
 
         elif args.backtest:
             result = await sport.backtest(
-                settings,
+                sport_settings,
                 days=args.backtest_days,
             )
 
         else:
-            result = await sport.scan(settings)
+            result = await sport.scan(sport_settings)
 
         duration = (datetime.now() - started).total_seconds()
 
@@ -716,6 +720,30 @@ async def run() -> None:
     module_outputs = await asyncio.gather(
         *(guarded_run(sport) for sport in selected)
     )
+
+    if not args.analytics and not args.backtest:
+        risk_summary = apply_professional_risk_controls(module_outputs, settings)
+        log.info(
+            "Professional risk controls: candidates=%s, accepted=%s, "
+            "rejected=%s, exposure=%.2f, drawdown_paused=%s",
+            risk_summary.candidates,
+            risk_summary.accepted,
+            risk_summary.rejected,
+            risk_summary.daily_exposure,
+            risk_summary.drawdown_paused,
+        )
+        try:
+            calibration_report = walkforward_report(settings)
+            ready = sum(
+                1 for value in calibration_report.values()
+                if value.get("status") == "READY"
+            )
+            log.info(
+                "Chronological sport calibration: sports=%s, ready=%s",
+                len(calibration_report), ready,
+            )
+        except Exception:
+            log.exception("Chronological sport calibration failed")
 
     football_clv = FootballCLVMetrics()
     football_market = FootballMarketMetrics()
