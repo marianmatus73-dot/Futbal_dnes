@@ -181,6 +181,23 @@ class FootballPostmatchDatasetV14:
         selection: str,
         commence_time: str,
     ) -> sqlite3.Row | None:
+        if self._table_exists(conn, "football_market_closing"):
+            closing = conn.execute(
+                """
+                SELECT closing_odds AS selected_odds,
+                       closing_probability AS market_selection_probability,
+                       captured_at
+                FROM football_market_closing
+                WHERE sport_key=? AND event=? AND selection=?
+                  AND commence_time=? AND captured_at <= commence_time
+                ORDER BY captured_at DESC, id DESC
+                LIMIT 1
+                """,
+                (sport_key, event, selection, commence_time),
+            ).fetchone()
+            if closing is not None:
+                return closing
+
         if not self._table_exists(
             conn,
             "football_market_snapshots_v14",
@@ -618,3 +635,4 @@ if __name__ == "__main__":
         f"missing_closing={summary.missing_closing_line}, "
         f"total={summary.total_rows}"
     )
+
