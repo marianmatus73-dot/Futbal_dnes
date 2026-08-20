@@ -38,8 +38,8 @@ jobs:
 
       - name: Compile production entry points
         run: |
-          python -m py_compile main.py core/tip_card.py core/tip_card_validation.py scripts/validate_tip_card.py
+          python -m py_compile main.py core/tip_card.py core/tip_card_validation.py core/event_time.py core/football_market.py core/football_settlement.py sports/football.py scripts/validate_tip_card.py
 
       - name: Run production safety tests
         run: |
-          python -m unittest tests.test_tip_card tests.test_tip_card_validation -v
+          python -m unittest tests.test_tip_card tests.test_tip_card_validation tests.test_football_event_identity -v
