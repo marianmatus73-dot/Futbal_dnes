@@ -1154,6 +1154,9 @@ class FootballModule(SportModule):
                     )
 
         bets = dedupe_best_bets(bets)
+        # Closing snapshots are captured during this scan. Reconcile once more
+        # afterwards so the current production run can use them immediately.
+        updated_clv += football_market_db.reconcile_closing_lines()
         analytics = sport_analytics_report(settings, self.name)
 
         return SportResult(
@@ -1174,3 +1177,4 @@ class FootballModule(SportModule):
                 f"{analytics}"
             ),
         )
+
