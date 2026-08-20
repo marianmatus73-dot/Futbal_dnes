@@ -1,5 +1,13 @@
 # Multisport Learning V2.1 Production Edition
 
+## Oprava dennej tipovej karty (20. 8. 2026)
+
+Bežný produkčný cyklus teraz pri každom úspešnom skene atómovo obnoví
+`exports/latest_tip_card.json`. Vybrané aj odmietnuté položky obsahujú všetky
+polia potrebné pre shadow kontrolu Engine 2.0. Ak cyklus nenájde žiadny tip,
+zapíše čerstvú prázdnu kartu, takže sa už nemôže omylom použiť starý výstup.
+Dry-run, analytics a backtest kartu nemenia.
+
 Samostatný produkčný modul pre:
 
 - baseball
