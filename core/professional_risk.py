@@ -1,0 +1,117 @@
+from __future__ import annotations
+
+import math
+import os
+import sqlite3
+from dataclasses import dataclass
+from pathlib import Path
+
+from core.config import Settings
+from core.sport_policy import sport_policy
+from core.types import Bet, SportResult
+
+
+@dataclass
+class RiskSummary:
+    candidates: int = 0
+    accepted: int = 0
+    rejected: int = 0
+    daily_exposure: float = 0.0
+    drawdown_paused: bool = False
+
+
+def _settled_profile(settings: Settings, sport: str) -> tuple[int, float]:
+    db = Path(settings.db_file or "bets.db")
+    if not db.exists():
+        return 0, .50
+    with sqlite3.connect(db) as conn:
+        if conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
+        ).fetchone() is None:
+            return 0, .50
+        row = conn.execute(
+            """
+            SELECT COUNT(*), SUM(CASE WHEN UPPER(result) IN ('WON','WIN','V') THEN 1 ELSE 0 END)
+            FROM sport_bets
+            WHERE sport=? AND UPPER(COALESCE(result,'')) IN ('WON','WIN','V','LOST','LOSS','P')
+            """,
+            (sport,),
+        ).fetchone()
+    samples = int(row[0] or 0)
+    return samples, float(row[1] or 0) / samples if samples else .50
+
+
+def calibrated_probability(probability: float, samples: int, hit_rate: float) -> float:
+    probability = max(.01, min(.99, float(probability)))
+    # Historical evidence is learned only from settled rows. Young sports are
+    # strongly shrunk towards a neutral prior instead of receiving fake trust.
+    evidence = samples / (samples + 150.0)
+    baseline = (hit_rate * samples + .50 * 50.0) / (samples + 50.0)
+    return max(.01, min(.99, probability * evidence + baseline * (1.0 - evidence)))
+
+
+def conservative_probability(probability: float, samples: int, z: float = 1.28) -> float:
+    effective_samples = max(20, samples)
+    uncertainty = z * math.sqrt(probability * (1.0 - probability) / effective_samples)
+    return max(.01, probability - uncertainty)
+
+
+def apply_professional_risk_controls(
+    outputs: list[dict], settings: Settings
+) -> RiskSummary:
+    summary = RiskSummary()
+    peak = float(os.getenv("BANKROLL_PEAK", str(settings.bank)) or settings.bank)
+    max_drawdown = float(os.getenv("MAX_BANKROLL_DRAWDOWN_PCT", "0.15"))
+    summary.drawdown_paused = peak > 0 and settings.bank < peak * (1.0 - max_drawdown)
+    daily_limit = settings.bank * float(os.getenv("MAX_DAILY_EXPOSURE_PCT", "0.05"))
+
+    accepted_daily = 0.0
+    for output in outputs:
+        result = output.get("result")
+        if not isinstance(result, SportResult):
+            continue
+        policy = sport_policy(result.sport)
+        samples, hit_rate = _settled_profile(settings, result.sport)
+        sport_limit = settings.bank * policy.max_sport_exposure_pct
+        sport_exposure = 0.0
+        accepted: list[Bet] = []
+        seen_events: set[tuple[str, str]] = set()
+
+        for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
+            summary.candidates += 1
+            calibrated = calibrated_probability(bet.prob_final, samples, hit_rate)
+            lower = conservative_probability(calibrated, samples)
+            conservative_edge = lower * bet.odds - 1.0
+            event_key = (bet.league, bet.event)
+            confidence = int(round(bet.score))
+            stake_cap = settings.bank * policy.max_stake_pct
+            stake = min(float(bet.stake), stake_cap)
+
+            allowed = (
+                not summary.drawdown_paused
+                and policy.min_odds <= bet.odds <= policy.max_odds
+                and policy.min_edge <= conservative_edge <= policy.max_edge
+                and confidence >= policy.min_confidence
+                and event_key not in seen_events
+                and len(accepted) < policy.max_tips
+                and accepted_daily + stake <= daily_limit
+                and sport_exposure + stake <= sport_limit
+            )
+            if not allowed:
+                summary.rejected += 1
+                continue
+
+            bet.prob_final = calibrated
+            bet.edge = conservative_edge
+            bet.stake = round(stake, 2)
+            accepted.append(bet)
+            seen_events.add(event_key)
+            accepted_daily += stake
+            sport_exposure += stake
+            summary.accepted += 1
+
+        result.bets = accepted
+
+    summary.daily_exposure = round(accepted_daily, 2)
+    return summary
+
