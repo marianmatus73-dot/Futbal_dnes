@@ -11,7 +11,6 @@ from typing import Any, Dict, Iterable
 
 from core.config import Settings
 from core.market import consensus_h2h
-from core.odds_api import fetch_odds
 from core.event_time import is_closing_window
 
 
@@ -135,6 +134,14 @@ class CLVResult:
     positive: bool
 
 
+@dataclass
+class FootballCLVMetrics:
+    eligible_bets: int = 0
+    closing_odds_samples: int = 0
+    clv_ready: int = 0
+    average_clv: float = 0.0
+
+
 class FootballMarketDatabase:
     def __init__(self, settings: Settings):
         self.settings = settings
@@ -197,6 +204,7 @@ class FootballMarketDatabase:
                     home_team TEXT NOT NULL,
                     away_team TEXT NOT NULL,
                     commence_time TEXT NOT NULL,
+                    external_event_id TEXT,
 
                     selection TEXT NOT NULL,
                     bookmaker TEXT NOT NULL,
@@ -206,6 +214,35 @@ class FootballMarketDatabase:
                     captured_at TEXT NOT NULL,
                     source_hash TEXT UNIQUE,
                     created_at TEXT NOT NULL
+                )
+                """
+            )
+
+            closing_columns = {
+                str(row[1])
+                for row in conn.execute(
+                    "PRAGMA table_info(football_market_closing)"
+                ).fetchall()
+            }
+            if "external_event_id" not in closing_columns:
+                conn.execute(
+                    "ALTER TABLE football_market_closing "
+                    "ADD COLUMN external_event_id TEXT"
+                )
+
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS football_clv_audit (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    bet_id INTEGER NOT NULL,
+                    external_event_id TEXT,
+                    opening_odds REAL NOT NULL,
+                    closing_odds REAL NOT NULL,
+                    clv_pct REAL NOT NULL,
+                    bookmaker TEXT,
+                    closing_source_hash TEXT,
+                    calculated_at TEXT NOT NULL,
+                    UNIQUE(bet_id, closing_source_hash)
                 )
                 """
             )
@@ -354,6 +391,7 @@ class FootballMarketDatabase:
         away_team = normalize_text(event.get("away_team"))
         commence_time = normalize_text(event.get("commence_time"))
         event_name = f"{home_team} vs {away_team}"
+        external_event_id = normalize_text(event.get("id"))
         captured_at = now_utc()
 
         rows: list[tuple[Any, ...]] = []
@@ -389,6 +427,7 @@ class FootballMarketDatabase:
                             home_team,
                             away_team,
                             commence_time,
+                            external_event_id,
                             selection,
                             bookmaker_name,
                             odds,
@@ -414,6 +453,7 @@ class FootballMarketDatabase:
                     home_team,
                     away_team,
                     commence_time,
+                    external_event_id,
                     selection,
                     bookmaker,
                     closing_odds,
@@ -422,13 +462,124 @@ class FootballMarketDatabase:
                     source_hash,
                     created_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 rows,
             )
 
             conn.commit()
             return conn.total_changes - before
+
+    def reconcile_closing_lines(self) -> int:
+        """Attach captured pre-kickoff closing prices without changing bet odds."""
+        self.init_db()
+        updated = 0
+
+        with self.connect() as conn:
+            bet_columns = {
+                str(row[1])
+                for row in conn.execute("PRAGMA table_info(sport_bets)").fetchall()
+            }
+            if not bet_columns:
+                return 0
+
+            event_id_expr = (
+                "COALESCE(external_event_id, '')"
+                if "external_event_id" in bet_columns
+                else "''"
+            )
+            bets = conn.execute(
+                f"""
+                SELECT id, league, event, selection, bookmaker, odds,
+                       start_time, {event_id_expr} AS external_event_id
+                FROM sport_bets
+                WHERE sport='football'
+                  AND odds > 1.01
+                  AND (closing_odds IS NULL OR clv_pct IS NULL)
+                """
+            ).fetchall()
+
+            for bet in bets:
+                params = {
+                    "event_id": normalize_text(bet["external_event_id"]),
+                    "event": normalize_text(bet["event"]),
+                    "selection": normalize_text(bet["selection"]),
+                    "bookmaker": normalize_text(bet["bookmaker"]),
+                    "start_time": normalize_text(bet["start_time"]),
+                }
+                identity = (
+                    "external_event_id=:event_id"
+                    if params["event_id"]
+                    else "event=:event"
+                )
+                closing = conn.execute(
+                    f"""
+                    SELECT closing_odds, bookmaker, source_hash
+                    FROM football_market_closing
+                    WHERE {identity}
+                      AND selection=:selection
+                      AND closing_odds > 1.01
+                      AND captured_at <= :start_time
+                    ORDER BY (bookmaker=:bookmaker) DESC,
+                             captured_at DESC, id DESC
+                    LIMIT 1
+                    """,
+                    params,
+                ).fetchone()
+                if closing is None:
+                    continue
+
+                opening = safe_float(bet["odds"], 0.0)
+                closing_odds = safe_float(closing["closing_odds"], 0.0)
+                if opening <= 1.01 or closing_odds <= 1.01:
+                    continue
+
+                clv_pct = opening / closing_odds - 1.0
+                conn.execute(
+                    "UPDATE sport_bets SET closing_odds=?, clv_pct=? WHERE id=?",
+                    (round(closing_odds, 4), round(clv_pct, 5), int(bet["id"])),
+                )
+                conn.execute(
+                    """
+                    INSERT OR IGNORE INTO football_clv_audit (
+                        bet_id, external_event_id, opening_odds, closing_odds,
+                        clv_pct, bookmaker, closing_source_hash, calculated_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        int(bet["id"]), params["event_id"], opening,
+                        round(closing_odds, 4), round(clv_pct, 5),
+                        closing["bookmaker"], closing["source_hash"], now_utc(),
+                    ),
+                )
+                updated += 1
+
+            conn.commit()
+        return updated
+
+    def clv_metrics(self) -> FootballCLVMetrics:
+        self.init_db()
+        with self.connect() as conn:
+            if conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
+            ).fetchone() is None:
+                return FootballCLVMetrics()
+            row = conn.execute(
+                """
+                SELECT COUNT(*) AS eligible,
+                       SUM(CASE WHEN closing_odds > 1.01 THEN 1 ELSE 0 END) AS closing_count,
+                       SUM(CASE WHEN clv_pct IS NOT NULL THEN 1 ELSE 0 END) AS clv_count,
+                       AVG(clv_pct) AS average_clv
+                FROM sport_bets
+                WHERE sport='football' AND odds > 1.01
+                """
+            ).fetchone()
+        return FootballCLVMetrics(
+            eligible_bets=int(row["eligible"] or 0),
+            closing_odds_samples=int(row["closing_count"] or 0),
+            clv_ready=int(row["clv_count"] or 0),
+            average_clv=float(row["average_clv"] or 0.0),
+        )
 
     def opening_odds(
         self,
@@ -756,6 +907,8 @@ async def fetch_football_market(
     min_books: int = 3,
     save_snapshots: bool = True,
 ) -> list[FootballMarketSnapshot]:
+    from core.odds_api import fetch_odds
+
     data = await fetch_odds(
         settings.odds_api_key,
         sport_key,
@@ -787,3 +940,4 @@ async def fetch_football_market(
             results.append(snapshot)
 
     return results
+
