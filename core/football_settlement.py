@@ -9,7 +9,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -83,6 +83,8 @@ class OpenFootballBet:
     start_time: str
     home_team: str
     away_team: str
+    odds: float = 0.0
+    stake: float = 0.0
     external_event_id: str = ""
 
 
@@ -189,6 +191,8 @@ class FootballSettlementEngine:
                 "settled_at": "TEXT",
                 "settlement_source": "TEXT",
                 "external_event_id": "TEXT",
+                "profit": "REAL DEFAULT 0",
+                "profit_units": "REAL DEFAULT 0",
             }
 
             for column, sql_type in additions.items():
@@ -339,6 +343,16 @@ class FootballSettlementEngine:
                         start_time=normalize_text(row["start_time"]),
                         home_team=home_team,
                         away_team=away_team,
+                        odds=(
+                            float(row["odds"] or 0.0)
+                            if "odds" in bet_columns
+                            else 0.0
+                        ),
+                        stake=(
+                            float(row["stake"] or 0.0)
+                            if "stake" in bet_columns
+                            else 0.0
+                        ),
                         external_event_id=(
                             normalize_text(row["external_event_id"])
                             if "external_event_id" in bet_columns
@@ -568,6 +582,14 @@ class FootballSettlementEngine:
         result: str,
     ) -> bool:
         settled_at = game.last_update or now_utc()
+        profit = 0.0
+        profit_units = 0.0
+        if result == "WON":
+            profit = round((bet.odds - 1.0) * bet.stake, 4)
+            profit_units = round(bet.odds - 1.0, 4)
+        elif result == "LOST":
+            profit = round(-bet.stake, 4)
+            profit_units = -1.0
 
         with self.connect() as conn:
             before = conn.total_changes
@@ -582,7 +604,9 @@ class FootballSettlementEngine:
                     final_score=?,
                     settled_at=?,
                     settlement_source='the_odds_api_scores',
-                    external_event_id=?
+                    external_event_id=?,
+                    profit=?,
+                    profit_units=?
                 WHERE id=?
                   AND UPPER(COALESCE(result, 'OPEN'))='OPEN'
                 """,
@@ -593,6 +617,8 @@ class FootballSettlementEngine:
                     f"{game.home_goals}-{game.away_goals}",
                     settled_at,
                     game.event_id,
+                    profit,
+                    profit_units,
                     bet.bet_id,
                 ),
             )
@@ -674,6 +700,66 @@ class FootballSettlementEngine:
             conn.commit()
 
         return updated
+
+    def _expire_stale_unmatched(
+        self,
+        bets: list[OpenFootballBet],
+        successful_sport_keys: set[str],
+    ) -> int:
+        """Void unresolved old fixtures without teaching the model a result."""
+        try:
+            timeout_days = max(
+                3,
+                int(os.getenv("FOOTBALL_UNMATCHED_VOID_DAYS", "7")),
+            )
+        except ValueError:
+            timeout_days = 7
+
+        cutoff = datetime.now(timezone.utc) - timedelta(days=timeout_days)
+        expired = 0
+        settled_at = now_utc()
+
+        with self.connect() as conn:
+            for bet in bets:
+                start = parse_datetime(bet.start_time)
+                if bet.sport_key not in successful_sport_keys or start is None:
+                    continue
+                if start.tzinfo is None:
+                    start = start.replace(tzinfo=timezone.utc)
+                if start.astimezone(timezone.utc) > cutoff:
+                    continue
+
+                cursor = conn.execute(
+                    """
+                    UPDATE sport_bets
+                    SET result='VOID', profit=0.0, profit_units=0.0,
+                        settled_at=?,
+                        settlement_source='historical_unresolved_timeout'
+                    WHERE id=?
+                      AND UPPER(COALESCE(result, 'OPEN'))='OPEN'
+                    """,
+                    (settled_at, bet.bet_id),
+                )
+                if cursor.rowcount <= 0:
+                    continue
+                expired += 1
+
+                if (
+                    bet.source_hash
+                    and self._table_exists(conn, "football_feature_history")
+                ):
+                    conn.execute(
+                        """
+                        UPDATE football_feature_history
+                        SET result='VOID', settled_at=?
+                        WHERE source_hash=? AND result='OPEN'
+                        """,
+                        (settled_at, bet.source_hash),
+                    )
+
+            conn.commit()
+
+        return expired
 
     def _split_eligible_bets(
         self,
@@ -906,6 +992,7 @@ class FootballSettlementEngine:
         )
 
         scores_by_key: dict[str, list[CompletedFootballGame]] = {}
+        successful_sport_keys: set[str] = set()
         api_errors = 0
 
         for sport_key in sport_keys:
@@ -913,6 +1000,7 @@ class FootballSettlementEngine:
                 scores_by_key[sport_key] = await self.fetch_scores(
                     sport_key
                 )
+                successful_sport_keys.add(sport_key)
             except Exception as exc:
                 api_errors += 1
                 log.warning(
@@ -936,6 +1024,7 @@ class FootballSettlementEngine:
         lost = 0
         void = 0
         unmatched = 0
+        unmatched_rows: list[OpenFootballBet] = []
 
         for bet in eligible_bets:
             game = self._match_game(
@@ -945,6 +1034,7 @@ class FootballSettlementEngine:
 
             if game is None:
                 unmatched += 1
+                unmatched_rows.append(bet)
                 continue
 
             result = self._settle_result(bet, game)
@@ -964,6 +1054,13 @@ class FootballSettlementEngine:
                 lost += 1
             else:
                 void += 1
+
+        expired = self._expire_stale_unmatched(
+            unmatched_rows,
+            successful_sport_keys,
+        )
+        void += expired
+        unmatched -= expired
 
         return FootballSettlementSummary(
             open_bets=len(open_bets),

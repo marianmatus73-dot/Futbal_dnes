@@ -514,8 +514,11 @@ class FootballMarketDatabase:
                        start_time, {event_id_expr} AS external_event_id
                 FROM sport_bets
                 WHERE sport='football'
-                  AND odds > 1.01
-                  AND (closing_odds IS NULL OR clv_pct IS NULL)
+                  AND CAST(odds AS REAL) > 1.01
+                  AND (
+                        NULLIF(TRIM(CAST(closing_odds AS TEXT)), '') IS NULL
+                        OR NULLIF(TRIM(CAST(clv_pct AS TEXT)), '') IS NULL
+                      )
                 """
             ).fetchall()
 
@@ -587,11 +590,15 @@ class FootballMarketDatabase:
             row = conn.execute(
                 """
                 SELECT COUNT(*) AS eligible,
-                       SUM(CASE WHEN closing_odds > 1.01 THEN 1 ELSE 0 END) AS closing_count,
-                       SUM(CASE WHEN clv_pct IS NOT NULL THEN 1 ELSE 0 END) AS clv_count,
-                       AVG(clv_pct) AS average_clv
+                       SUM(CASE WHEN NULLIF(TRIM(CAST(closing_odds AS TEXT)), '') IS NOT NULL
+                                     AND CAST(closing_odds AS REAL) > 1.01
+                                THEN 1 ELSE 0 END) AS closing_count,
+                       SUM(CASE WHEN NULLIF(TRIM(CAST(clv_pct AS TEXT)), '') IS NOT NULL
+                                THEN 1 ELSE 0 END) AS clv_count,
+                       AVG(CASE WHEN NULLIF(TRIM(CAST(clv_pct AS TEXT)), '') IS NOT NULL
+                                THEN CAST(clv_pct AS REAL) END) AS average_clv
                 FROM sport_bets
-                WHERE sport='football' AND odds > 1.01
+                WHERE sport='football' AND CAST(odds AS REAL) > 1.01
                 """
             ).fetchone()
         return FootballCLVMetrics(

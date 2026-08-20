@@ -90,6 +90,23 @@ class FootballCLVReconciliationTests(unittest.TestCase):
         self.assertEqual(metrics.closing_odds_samples, 0)
         self.assertEqual(metrics.clv_ready, 0)
 
+    def test_blank_csv_values_are_not_counted_as_clv(self) -> None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "UPDATE sport_bets SET closing_odds='', clv_pct='' WHERE id=1"
+            )
+
+        metrics = self.market.clv_metrics()
+        self.assertEqual(metrics.closing_odds_samples, 0)
+        self.assertEqual(metrics.clv_ready, 0)
+
+        self._insert_closing(
+            odds=1.95,
+            captured_at="2026-08-20T19:55:00+00:00",
+            source="closing-for-blank",
+        )
+        self.assertEqual(self.market.reconcile_closing_lines(), 1)
+
     def test_market_metrics_use_real_rows_without_double_counting(self) -> None:
         event = {
             "id": "event-market-1",
