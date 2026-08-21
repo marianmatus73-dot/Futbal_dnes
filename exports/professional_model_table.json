@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T06:23:57.409329+00:00",
+  "generated_at": "2026-08-21T16:18:52.942430+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -16,15 +16,15 @@
       },
       "periods": {
         "30": {
-          "settled": 595,
-          "stake": 610.13,
-          "profit": 42.1621,
-          "yield_pct": 6.91,
+          "settled": 594,
+          "stake": 609.6,
+          "profit": 42.6921,
+          "yield_pct": 7.003,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.24963,
-          "calibration_error": 0.057299,
-          "probability_samples": 595,
+          "brier_score": 0.249502,
+          "calibration_error": 0.058356,
+          "probability_samples": 594,
           "max_drawdown": 21.4735
         },
         "90": {
@@ -276,15 +276,15 @@
       },
       "periods": {
         "30": {
-          "settled": 338,
-          "stake": 74.47,
-          "profit": 13.936,
-          "yield_pct": 18.714,
+          "settled": 337,
+          "stake": 74.11,
+          "profit": 12.7336,
+          "yield_pct": 17.182,
           "average_clv_pct": 22.099,
           "clv_samples": 1,
-          "brier_score": 0.211449,
-          "calibration_error": 0.034362,
-          "probability_samples": 338,
+          "brier_score": 0.210485,
+          "calibration_error": 0.032291,
+          "probability_samples": 337,
           "max_drawdown": 2.726
         },
         "90": {
