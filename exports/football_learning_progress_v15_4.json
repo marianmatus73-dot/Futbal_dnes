@@ -1,9 +1,9 @@
 {
   "version": "v15.4",
-  "created_at": "2026-08-20T16:20:30+00:00",
-  "settled_samples": 372,
-  "meta_ai_progress": 100,
-  "weight_optimizer_progress": 100,
+  "created_at": "2026-08-21T06:23:57+00:00",
+  "settled_samples": 0,
+  "meta_ai_progress": 0.0,
+  "weight_optimizer_progress": 0.0,
   "data_quality": {
     "elo": {
       "available": true,
@@ -27,8 +27,9 @@
     }
   },
   "data_quality_score": 80,
-  "learning_readiness": "READY",
+  "learning_readiness": "EARLY",
   "blockers": [
+    "Small sample size",
     "Missing xG history"
   ]
 }

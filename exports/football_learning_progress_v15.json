@@ -1,16 +1,16 @@
 {
   "version": "v15.3",
-  "created_at": "2026-08-20T16:20:30+00:00",
-  "settled_samples": 372,
+  "created_at": "2026-08-21T06:23:57+00:00",
+  "settled_samples": 0,
   "meta_ai": {
-    "progress_percent": 100,
+    "progress_percent": 0.0,
     "milestone": 20,
-    "status": "READY_FOR_TRAINING"
+    "status": "LOCKED"
   },
   "weight_optimizer": {
-    "progress_percent": 100,
+    "progress_percent": 0.0,
     "milestone": 100,
-    "status": "READY_FOR_REVIEW"
+    "status": "LOCKED"
   },
   "data_quality": {
     "elo": true,
@@ -19,5 +19,5 @@
     "closing_odds": true,
     "market_snapshots": true
   },
-  "learning_readiness": "READY"
+  "learning_readiness": "EARLY"
 }

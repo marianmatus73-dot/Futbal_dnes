@@ -1,19 +1,19 @@
 {
   "version": "v15.2",
-  "created_at": "2026-08-20T16:20:30+00:00",
-  "model_maturity": "READY",
-  "training_samples": 372,
+  "created_at": "2026-08-21T06:23:57+00:00",
+  "model_maturity": "EARLY",
+  "training_samples": 0,
   "meta_ai": {
-    "samples": 372,
+    "samples": 373,
     "milestone": 20,
     "status": "UNLOCKED"
   },
   "weight_tuning": {
-    "enabled": true,
-    "reason": null
+    "enabled": false,
+    "reason": "Need 100+ settled samples"
   },
-  "explainability_records": 942,
-  "top_feature": "Consensus safety",
+  "explainability_records": 993,
+  "top_feature": "n/a",
   "current_weights": {
     "elo": 0.25,
     "xg": 0.25,
@@ -22,7 +22,13 @@
     "context": 0.1
   },
   "warnings": [
-    null,
-    "Missing feature: market_model_gap"
+    "Small sample size",
+    "Missing feature: consensus_safety",
+    "Missing feature: raw_edge",
+    "Missing feature: market_model_gap",
+    "Missing feature: elo_difference",
+    "Missing feature: form_difference",
+    "Missing feature: competition_importance",
+    "Missing feature: context_reliability"
   ]
 }
