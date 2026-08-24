@@ -1,5 +1,25 @@
 id,bet_id,source_hash,sport_key,event,selection,home_goals,away_goals,result,external_event_id,settled_at,created_at
-1,35588,37dfc6d1be3bf6b56cec9784,soccer_netherlands_eredivisie,Go Ahead Eagles vs ADO Den Haag,ADO Den Haag,3,1,LOST,c9c9af28f18102a573f7accbea612c77,2026-08-23T16:11:05Z,2026-08-23T16:11:22+00:00
-2,35595,c0407f392fb44d0f2bfc1135,soccer_denmark_superliga,SonderjyskE vs FC Nordsjaelland,SonderjyskE,0,3,LOST,1732c45e8db6c75b709075cbb0373c9f,2026-08-23T16:11:17Z,2026-08-23T16:11:22+00:00
-3,37037,255f7deecc0e0b8f0cd31e22,soccer_denmark_superliga,AGF Aarhus vs OB Odense BK,OB Odense BK,2,2,LOST,f552d78bc22d86a009b612714c96649c,2026-08-23T16:11:17Z,2026-08-23T16:11:22+00:00
-4,42119,7c731b01076bd746eb27ac03,soccer_denmark_superliga,AC Horsens vs Lyngby,AC Horsens,2,1,WON,39a6d3d0dd1be9d318d424175f926f4d,2026-08-23T16:11:17Z,2026-08-23T16:11:22+00:00
+1,1,42d2cccca41ca195f04c0c05,soccer_epl,Newcastle United vs Liverpool,Newcastle United,2,2,LOST,ea0bacc4c23f813c6af97ec9b306a850,2026-08-23T22:53:00Z,2026-08-24T06:32:25+00:00
+2,414,dcc4f8b369daa0ebba2977e4,soccer_italy_serie_a,Torino vs AC Milan,Torino,1,2,LOST,fbea45a1e53e07faac0027ac5d233587,2026-08-24T02:07:50Z,2026-08-24T06:32:25+00:00
+3,429,dead4ad31b7d122e19937022,soccer_france_ligue_one,Le Havre vs AS Monaco,Le Havre,0,1,LOST,38b23d1127eb086d775f97b935bbf992,2026-08-24T02:05:57Z,2026-08-24T06:32:25+00:00
+4,448,c08ae368da47d801388263c7,soccer_france_ligue_one,Le Havre vs AS Monaco,Le Havre,0,1,LOST,38b23d1127eb086d775f97b935bbf992,2026-08-24T02:05:57Z,2026-08-24T06:32:25+00:00
+5,10650,f562bbf95a3dc9ce718bb5d6,soccer_france_ligue_one,Le Havre vs AS Monaco,Le Havre,0,1,LOST,38b23d1127eb086d775f97b935bbf992,2026-08-24T02:05:57Z,2026-08-24T06:32:25+00:00
+6,27965,4880337fde20816969bbe8c4,soccer_spain_la_liga,Atlético Madrid vs Villarreal,Draw,2,2,WON,4290b7b558285b2ec3a5ed42feca310d,2026-08-24T02:56:23Z,2026-08-24T06:32:25+00:00
+7,30630,3027b0e693b96c31837f244c,soccer_spain_la_liga,Atlético Madrid vs Villarreal,Villarreal,2,2,LOST,4290b7b558285b2ec3a5ed42feca310d,2026-08-24T02:56:23Z,2026-08-24T06:32:25+00:00
+8,31002,dc05f7df66c18b1b27123d88,soccer_argentina_primera_division,Sarmiento de Junin vs Estudiantes,Sarmiento de Junin,2,0,WON,afd9f94e9b2bbc289d28d61f98898ec9,2026-08-24T06:32:14Z,2026-08-24T06:32:25+00:00
+9,33710,5250e3ec8b6ff9567456f279,soccer_usa_mls,Atlanta United FC vs Sporting Kansas City,Sporting Kansas City,2,1,LOST,2f9249fe6c4d11d6aa89a85dc63d9581,2026-08-24T06:32:19Z,2026-08-24T06:32:25+00:00
+10,35599,d51b2b14ecc76fae5ac4543e,soccer_sweden_allsvenskan,IF Brommapojkarna vs Degerfors IF,Degerfors IF,2,0,LOST,7d1d5d6b8e678e7614d80617a1b5fe7b,2026-08-23T21:49:14Z,2026-08-24T06:32:25+00:00
+11,35619,6d36c623032335a1784bc694,soccer_brazil_campeonato,Chapecoense vs Sao Paulo,Chapecoense,1,0,WON,78ca56174779e66665543752d1db98b4,2026-08-24T05:59:48Z,2026-08-24T06:32:25+00:00
+12,35884,aa395b09f031248181c391a6,soccer_turkey_super_league,Eyüpspor vs Gazişehir Gaziantep,Draw,0,1,LOST,2a7535a558efe98980b624846e8d7703,2026-08-24T01:55:11Z,2026-08-24T06:32:25+00:00
+13,35885,3864b126926d4ff6d4319157,soccer_turkey_super_league,Alanyaspor vs Besiktas JK,Alanyaspor,1,0,WON,6b3b41cc7aa2f7ce5b45065e9cf2a78f,2026-08-24T01:55:11Z,2026-08-24T06:32:25+00:00
+14,35906,af54153ff7f3ce322eecdb02,soccer_brazil_campeonato,Santos vs Mirassol,Mirassol,1,1,LOST,be4f706ec3ccec0ddabaf38a68ae4a9b,2026-08-24T05:59:48Z,2026-08-24T06:32:25+00:00
+15,36231,3b386b1fab2a355857bfbdf6,soccer_spain_segunda_division,SD Eibar vs Real Valladolid CF,Real Valladolid CF,1,0,LOST,cfca7a3230c57c0697f6c39096211af1,2026-08-24T02:42:38Z,2026-08-24T06:32:25+00:00
+16,36609,458d3ee31b61a22b04250357,soccer_italy_serie_a,Venezia vs Lecce,Lecce,0,2,WON,120c61563f0b7119d87522da76fcaa33,2026-08-24T02:07:50Z,2026-08-24T06:32:25+00:00
+17,37022,855406ced1cbf6c9f3902608,soccer_spain_la_liga,Getafe vs Real Racing Club de Santander,Real Racing Club de Santander,1,0,LOST,8ef1d272900aafd279fdb80f7d75e36e,2026-08-24T02:56:23Z,2026-08-24T06:32:25+00:00
+18,41095,2fbe535e2a56bfb60867bebf,soccer_argentina_primera_division,Racing Club vs Boca Juniors,Racing Club,1,1,LOST,e7382a34d78205406d3ec528e3e1194a,2026-08-24T06:32:14Z,2026-08-24T06:32:25+00:00
+19,42117,2e61964fe0f824fe15234ea9,soccer_turkey_super_league,Trabzonspor vs Basaksehir,Basaksehir,2,1,LOST,f74f411258dfcb663805768c6225fd0e,2026-08-24T01:55:11Z,2026-08-24T06:32:25+00:00
+20,42125,54880a6b03fdf7f67a96ba4c,soccer_spain_segunda_division,Sporting Gijón vs Burgos CF,Burgos CF,1,0,LOST,eea1b11233961a38172522dc11b0523d,2026-08-24T02:42:38Z,2026-08-24T06:32:25+00:00
+21,42126,2890abea58fd6bb3ecec44d1,soccer_spain_segunda_division,Tenerife vs Almería,Tenerife,1,0,WON,1d3d5a9221190e68ff43d9d81e4c7fd0,2026-08-24T02:42:38Z,2026-08-24T06:32:25+00:00
+22,42561,8dcffd376da59b4304fe1815,soccer_epl,Newcastle United vs Liverpool,Liverpool,2,2,LOST,ea0bacc4c23f813c6af97ec9b306a850,2026-08-23T22:53:00Z,2026-08-24T06:32:25+00:00
+23,42569,f51f75f6b5b4b9155bd7efd0,soccer_portugal_primeira_liga,Santa Clara vs Famalicão,Santa Clara,1,0,WON,cd69dc990e387d5c96551c389e92a4db,2026-08-24T03:00:10Z,2026-08-24T06:32:25+00:00
+24,42570,91a15b50f162feb93594bbda,soccer_turkey_super_league,Trabzonspor vs Basaksehir,Trabzonspor,2,1,WON,f74f411258dfcb663805768c6225fd0e,2026-08-24T01:55:11Z,2026-08-24T06:32:25+00:00
