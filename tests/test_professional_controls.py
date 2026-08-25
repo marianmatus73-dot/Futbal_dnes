@@ -4,11 +4,15 @@ import os
 import sqlite3
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 
 from core.config import Settings
 from core.market import no_vig_probs
-from core.professional_risk import apply_professional_risk_controls
+from core.professional_risk import (
+    apply_professional_risk_controls,
+    calibrated_probability,
+)
 from core.sport_policy import settings_for_sport, sport_policy
 from core.sport_walkforward import walkforward_report
 from core.sport_context import SportContextDatabase
@@ -37,6 +41,16 @@ class ProfessionalControlsTests(unittest.TestCase):
         mma = settings_for_sport(self.settings, "mma")
         self.assertLess(baseball.min_edge, mma.min_edge)
         self.assertGreater(baseball.max_stake_pct, mma.max_stake_pct)
+
+    def test_calibration_uses_event_market_not_mixed_price_hit_rate(self) -> None:
+        calibrated = calibrated_probability(
+            .62,
+            samples=500,
+            hit_rate=.30,
+            market_probability=.50,
+        )
+        self.assertGreater(calibrated, .58)
+        self.assertLess(calibrated, .62)
 
     def test_risk_engine_caps_stake_and_drawdown_pauses(self) -> None:
         with sqlite3.connect(self.db_path) as conn:
@@ -107,8 +121,9 @@ class ProfessionalControlsTests(unittest.TestCase):
                 INSERT INTO sport_context_features (
                     sport, event, injury_impact, source, captured_at, source_hash
                 ) VALUES ('football', 'A vs B', .12, 'verified-provider',
-                          '2026-08-20T10:00:00Z', 'ctx-1')
-                """
+                          ?, 'ctx-1')
+                """,
+                (datetime.now(timezone.utc).isoformat(),),
             )
         bet = Bet(
             sport="football", league="L", event="A vs B", market="h2h",

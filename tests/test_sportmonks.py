@@ -12,6 +12,7 @@ from core.sport_context import SportContextDatabase
 from core.sportmonks import (
     SportmonksClient,
     SportmonksError,
+    _complete_starting_lineups,
     _explicit_lineup_confirmation,
     sync_upcoming_context,
 )
@@ -70,6 +71,22 @@ class SportmonksTests(unittest.TestCase):
         self.assertTrue(_explicit_lineup_confirmation([
             {"type": {"developer_name": "LINEUP_CONFIRMED"}, "value": True}
         ]))
+
+    def test_two_complete_starting_elevens_confirm_lineup(self) -> None:
+        fixture = {
+            "participants": [
+                {"id": 10, "meta": {"location": "home"}},
+                {"id": 20, "meta": {"location": "away"}},
+            ],
+            "lineups": [
+                {"id": team * 100 + player, "team_id": team,
+                 "player_id": team * 100 + player, "type_id": 11}
+                for team in (10, 20) for player in range(1, 12)
+            ],
+        }
+        self.assertTrue(_complete_starting_lineups(fixture))
+        fixture["lineups"].pop()
+        self.assertFalse(_complete_starting_lineups(fixture))
 
     def test_sync_persists_raw_snapshot_and_safe_context(self) -> None:
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:

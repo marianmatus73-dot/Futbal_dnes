@@ -65,6 +65,27 @@ def _explicit_lineup_confirmation(metadata: Any) -> bool:
     return any(_explicit_lineup_confirmation(value) for value in metadata.values())
 
 
+def _complete_starting_lineups(fixture: dict[str, Any]) -> bool:
+    """Recognize two complete official starting XIs from the lineup feed."""
+    _, _, home_id, away_id = _fixture_teams(fixture)
+    if not home_id or not away_id:
+        return False
+    starters = {home_id: set(), away_id: set()}
+    for item in fixture.get("lineups") or []:
+        if not isinstance(item, dict):
+            continue
+        team_id = str(item.get("participant_id") or item.get("team_id") or "")
+        try:
+            is_starter = int(item.get("type_id") or 0) == 11
+        except (TypeError, ValueError):
+            is_starter = False
+        if team_id in starters and is_starter:
+            player_id = str(item.get("player_id") or item.get("id") or "")
+            if player_id:
+                starters[team_id].add(player_id)
+    return all(len(starters[team_id]) >= 11 for team_id in (home_id, away_id))
+
+
 def _fixture_teams(fixture: dict[str, Any]) -> tuple[str, str, str, str]:
     home_name = away_name = home_id = away_id = ""
     for participant in fixture.get("participants") or []:
@@ -338,7 +359,10 @@ def sync_upcoming_context(
             ):
                 totals["snapshots_added"] += 1
 
-            lineup_confirmed = _explicit_lineup_confirmation(fixture.get("metadata", []))
+            lineup_confirmed = (
+                _explicit_lineup_confirmation(fixture.get("metadata", []))
+                or _complete_starting_lineups(fixture)
+            )
             home_team, away_team, _, _ = _fixture_teams(fixture)
             absence = _absence_impacts(fixture)
             home_impact, away_impact = absence["home"], absence["away"]

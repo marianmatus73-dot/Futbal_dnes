@@ -1101,7 +1101,9 @@ class FootballModule(SportModule):
                         stake=stake,
                         bookmaker=bookmaker,
                         start_time=start,
-                        score=adjusted_edge * 100,
+                        # Bet.score is the cross-sport confidence scale used
+                        # by professional_risk (0-100), not an edge score.
+                        score=features.confidence_input * 100,
                         external_event_id=str(event.get("id", "")),
                     )
 

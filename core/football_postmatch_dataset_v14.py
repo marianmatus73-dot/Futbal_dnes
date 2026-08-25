@@ -187,7 +187,8 @@ class FootballPostmatchDatasetV14:
                 SELECT closing_odds AS selected_odds,
                        closing_probability AS market_selection_probability,
                        1 AS is_closing_window,
-                       captured_at
+                       captured_at,
+                       bookmaker
                 FROM football_market_closing
                 WHERE sport_key=? AND event=? AND selection=?
                   AND commence_time=? AND captured_at <= commence_time

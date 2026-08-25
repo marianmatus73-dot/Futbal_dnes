@@ -63,8 +63,14 @@ from core.football_market import (
     FootballMarketDatabase,
     FootballMarketMetrics,
 )
-from core.football_postmatch_dataset_v14 import rebuild_football_postmatch_dataset_v14
-from core.football_dataset_v15 import rebuild_football_dataset_v15
+from core.football_postmatch_dataset_v14 import (
+    FootballPostmatchDatasetV14,
+    rebuild_football_postmatch_dataset_v14,
+)
+from core.football_dataset_v15 import (
+    FootballDatasetV15,
+    rebuild_football_dataset_v15,
+)
 from core.football_evaluation_dashboard_v15 import run_football_evaluation_dashboard_v15
 from core.football_feature_importance_v15 import run_feature_importance_v15
 from core.football_insights_v15 import run_football_insights_v15
@@ -303,6 +309,10 @@ def init_football_v13_learning_tables(settings: Settings) -> None:
     FootballTeamXGV14Database(settings).init_db()
     FootballTeamEloV14Database(settings).init_db()
     FootballMarketDatabase(settings).init_db()
+    # Actions starts with a new SQLite file on every run. These durable
+    # dataset tables must exist before their CSV exports can be restored.
+    FootballPostmatchDatasetV14(settings)
+    FootballDatasetV15(settings)
 
 
 def ensure_football_settlement_columns(settings: Settings) -> None:
