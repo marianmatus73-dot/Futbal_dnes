@@ -44,12 +44,25 @@ def _settled_profile(settings: Settings, sport: str) -> tuple[int, float]:
     return samples, float(row[1] or 0) / samples if samples else .50
 
 
-def calibrated_probability(probability: float, samples: int, hit_rate: float) -> float:
+def calibrated_probability(
+    probability: float,
+    samples: int,
+    hit_rate: float,
+    market_probability: float | None = None,
+) -> float:
     probability = max(.01, min(.99, float(probability)))
-    # Historical evidence is learned only from settled rows. Young sports are
-    # strongly shrunk towards a neutral prior instead of receiving fake trust.
+    # A sport-wide hit rate is not a valid calibration target when selections
+    # have different prices. For young models, shrink towards the event's
+    # vig-free market probability. Fall back to a neutral prior only when the
+    # market probability is unavailable. Keep hit_rate in the API for backward
+    # compatibility with callers and older tests.
     evidence = samples / (samples + 150.0)
-    baseline = (hit_rate * samples + .50 * 50.0) / (samples + 50.0)
+    del hit_rate
+    baseline = (
+        max(.01, min(.99, float(market_probability)))
+        if market_probability is not None
+        else .50
+    )
     return max(.01, min(.99, probability * evidence + baseline * (1.0 - evidence)))
 
 
@@ -111,7 +124,12 @@ def apply_professional_risk_controls(
 
         for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
             summary.candidates += 1
-            calibrated = calibrated_probability(bet.prob_final, samples, hit_rate)
+            calibrated = calibrated_probability(
+                bet.prob_final,
+                samples,
+                hit_rate,
+                bet.prob_market,
+            )
             context = context_db.latest(
                 result.sport, bet.event, bet.external_event_id, bet.start_time
             )
