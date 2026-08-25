@@ -83,6 +83,23 @@ def bookmaker_weight(bookmaker: str) -> float:
     )
 
 
+def bookmaker_profile(bookmaker: str) -> dict:
+    """Return a transparent, display-only summary of historical calibration."""
+    stats = load_model_stats()
+    item = stats.get("by_bookmaker", {}).get(bookmaker) or {}
+    samples = _safe_int(item.get("total"))
+    weight = bookmaker_weight(bookmaker)
+    if samples < 25:
+        label = "NEOVERENÝ"
+    elif weight >= 1.02:
+        label = "SILNÝ"
+    elif weight <= 0.98:
+        label = "SLABŠÍ"
+    else:
+        label = "NEUTRÁLNY"
+    return {"weight": weight, "samples": samples, "label": label}
+
+
 def league_weight(league: str) -> float:
     stats = load_model_stats()
     item = stats.get("by_league", {}).get(league)
