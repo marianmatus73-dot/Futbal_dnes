@@ -29,6 +29,7 @@ class TipCardTests(unittest.TestCase):
                     "sport", "event", "selection", "odds",
                     "model_probability", "market_probability", "edge",
                     "confidence",
+                    "bookmaker_weight", "bookmaker_samples", "bookmaker_label",
                 ):
                     self.assertNotIn(candidate.get(field), (None, ""))
 
