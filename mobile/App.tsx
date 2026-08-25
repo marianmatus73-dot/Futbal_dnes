@@ -87,11 +87,19 @@ function TipItem({ tip }: { tip: Tip }) {
         <Metric label="Confidence" value={`${Math.round(tip.confidence)}/100`} />
       </View>
       <View style={styles.tipFooter}>
-        <Text style={styles.bookmaker}>{tip.bookmaker}</Text>
+        <View><Text style={styles.bookmaker}>{tip.bookmaker}</Text><BookmakerWeight tip={tip} /></View>
         <View style={styles.footerRight}><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>{tip.risk?.toUpperCase()}</Text><Text style={styles.stake}>Vklad {formatNumber(tip.stake_amount)}</Text></View>
       </View>
     </View>
   );
+}
+
+function BookmakerWeight({ tip }: { tip: Tip }) {
+  const weight = tip.bookmaker_weight ?? 1;
+  const samples = tip.bookmaker_samples ?? 0;
+  const label = tip.bookmaker_label ?? "NEOVERENÝ";
+  const color = label === "SILNÝ" ? colors.primary : label === "SLABŠÍ" ? colors.danger : colors.muted;
+  return <Text style={[styles.bookmakerWeight, { color }]}>Váha {weight.toFixed(2)}× · {label} · {samples} vzoriek</Text>;
 }
 
 function Metric({ label, value, positive = false }: { label: string; value: string; positive?: boolean }) {
@@ -138,7 +146,7 @@ function CandidateItem({ tip }: { tip: Tip }) {
         <Metric label="Consensus edge" value={formatPercent(tip.edge)} />
         <Metric label="Confidence" value={`${Math.round(tip.confidence)}/100`} />
       </View>
-      <View style={styles.candidateFooter}><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>RIZIKO {tip.risk?.toUpperCase()}</Text><Pressable onPress={() => setExpanded((value) => !value)} hitSlop={10}><Text style={styles.detailButton}>{expanded ? "Skryť detail" : "Prečo neprešiel?"}</Text></Pressable></View>
+      <View style={styles.candidateFooter}><View><Text style={styles.bookmaker}>{tip.bookmaker}</Text><BookmakerWeight tip={tip} /><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>RIZIKO {tip.risk?.toUpperCase()}</Text></View><Pressable onPress={() => setExpanded((value) => !value)} hitSlop={10}><Text style={styles.detailButton}>{expanded ? "Skryť detail" : "Prečo neprešiel?"}</Text></Pressable></View>
       {expanded ? <View style={styles.rejectionBox}><Text style={styles.rejectionTitle}>Rozhodnutie profesionálneho filtra</Text>{reasons.map((reason, index) => <Text key={`${reason}-${index}`} style={styles.rejectionText}>• {reason}</Text>)}{tip.reason ? <Text style={styles.modelReason}>{tip.reason}</Text> : null}</View> : null}
     </View>
   );
@@ -337,7 +345,7 @@ const styles = StyleSheet.create({
   tipCard: { backgroundColor: colors.surface, borderRadius: 22, borderWidth: 1, borderColor: colors.border, padding: 17, marginBottom: 14 }, tipHeader: { flexDirection: "row", alignItems: "center" }, sportIcon: { width: 43, height: 43, borderRadius: 14, alignItems: "center", justifyContent: "center" }, sportEmoji: { fontSize: 21 }, tipHeading: { flex: 1, marginHorizontal: 11 }, league: { color: colors.muted, fontSize: 11, textTransform: "uppercase", fontWeight: "800" }, match: { color: colors.text, fontSize: 15, fontWeight: "800", marginTop: 3 }, startTime: { color: colors.accent, fontSize: 10, fontWeight: "700", marginTop: 4 },
   stage: { backgroundColor: "#263751", paddingHorizontal: 9, paddingVertical: 6, borderRadius: 9 }, stageFinal: { backgroundColor: colors.primary }, stageText: { color: colors.muted, fontSize: 9, fontWeight: "900" }, stageFinalText: { color: colors.background },
   pickRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 21, marginBottom: 18 }, label: { color: colors.muted, fontSize: 9, fontWeight: "900", letterSpacing: 1 }, pick: { color: colors.text, fontSize: 20, fontWeight: "900", marginTop: 4, maxWidth: 245 }, oddsBox: { alignItems: "flex-end" }, odds: { color: colors.warning, fontSize: 24, fontWeight: "900", marginTop: 2 },
-  metrics: { flexDirection: "row", backgroundColor: colors.surfaceAlt, borderRadius: 15, padding: 12 }, metric: { flex: 1 }, metricLabel: { color: colors.muted, fontSize: 9, marginBottom: 4 }, metricValue: { color: colors.text, fontWeight: "800", fontSize: 14 }, tipFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13 }, bookmaker: { color: colors.muted, fontSize: 12 }, footerRight: { flexDirection: "row", gap: 10, alignItems: "center" }, riskText: { fontWeight: "900", fontSize: 9, letterSpacing: .5 }, stake: { color: colors.accent, fontWeight: "800", fontSize: 12 },
+  metrics: { flexDirection: "row", backgroundColor: colors.surfaceAlt, borderRadius: 15, padding: 12 }, metric: { flex: 1 }, metricLabel: { color: colors.muted, fontSize: 9, marginBottom: 4 }, metricValue: { color: colors.text, fontWeight: "800", fontSize: 14 }, tipFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13 }, bookmaker: { color: colors.text, fontSize: 12, fontWeight: "800" }, bookmakerWeight: { fontSize: 9, marginTop: 3 }, footerRight: { flexDirection: "row", gap: 10, alignItems: "center" }, riskText: { fontWeight: "900", fontSize: 9, letterSpacing: .5, marginTop: 5 }, stake: { color: colors.accent, fontWeight: "800", fontSize: 12 },
   emptyCard: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 22, padding: 28, alignItems: "center" }, emptyIcon: { fontSize: 32 }, emptyTitle: { color: colors.text, fontWeight: "900", fontSize: 18, marginTop: 12 }, emptyText: { color: colors.muted, textAlign: "center", lineHeight: 21, marginTop: 8 },
   counters: { flexDirection: "row", gap: 8, marginBottom: 12 }, filters: { flexDirection: "row", gap: 8, marginBottom: 16 }, filterChip: { borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 13, paddingVertical: 8, backgroundColor: colors.surface }, filterChipActive: { borderColor: colors.primary, backgroundColor: colors.primaryDark }, filterText: { color: colors.muted, fontWeight: "800", fontSize: 11 }, filterTextActive: { color: colors.primary },
   candidatesSection: { marginTop: 22 }, candidatesTitle: { color: colors.warning, fontSize: 21, fontWeight: "900" }, candidatesSubtitle: { color: colors.muted, lineHeight: 19, marginTop: 5, marginBottom: 13 }, candidateCard: { backgroundColor: "#171C2B", borderRadius: 22, borderWidth: 1, borderColor: "#664D24", padding: 17, marginBottom: 14 }, rejectedBadge: { backgroundColor: "#4A2B20", borderWidth: 1, borderColor: colors.warning, borderRadius: 9, paddingHorizontal: 8, paddingVertical: 6 }, rejectedBadgeText: { color: colors.warning, fontSize: 8, fontWeight: "900" }, candidateFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 }, detailButton: { color: colors.accent, fontSize: 11, fontWeight: "900" }, rejectionBox: { backgroundColor: "#251F1D", borderRadius: 14, padding: 12, marginTop: 12 }, rejectionTitle: { color: colors.warning, fontWeight: "900", fontSize: 11, marginBottom: 5 }, rejectionText: { color: "#D7C7B0", fontSize: 11, lineHeight: 17 }, modelReason: { color: colors.muted, fontSize: 10, lineHeight: 15, marginTop: 8 },
