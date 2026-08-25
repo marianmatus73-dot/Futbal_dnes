@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 from core.bankroll import kelly_stake_amount, load_bankroll
+from core.adaptive_weights import bookmaker_profile
 
 
 @dataclass
@@ -29,6 +30,9 @@ class ProTip:
     created_at: str = ""
     release_stage: str = ""
     lineup_verified: bool = False
+    bookmaker_weight: float = 1.0
+    bookmaker_samples: int = 0
+    bookmaker_label: str = "NEOVERENÝ"
 
 
 def _safe_float(
@@ -212,6 +216,7 @@ def build_pro_tip(
         kelly_fraction=bankroll.kelly_fraction,
         max_stake_percent=bankroll.max_stake_percent,
     )
+    book_profile = bookmaker_profile(bookmaker)
 
     return ProTip(
         sport=sport,
@@ -234,6 +239,9 @@ def build_pro_tip(
         ),
         release_stage=release_stage,
         lineup_verified=lineup_verified,
+        bookmaker_weight=float(book_profile["weight"]),
+        bookmaker_samples=int(book_profile["samples"]),
+        bookmaker_label=str(book_profile["label"]),
     )
 
 
