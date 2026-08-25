@@ -1,8 +1,8 @@
 === FOOTBALL MODEL INSIGHTS V15.1 ===
 
-Training samples: 0
-Model status: EARLY
-Explainability rows: 1092
+Training samples: 489
+Model status: READY_FOR_REVIEW
+Explainability rows: 1125
 
 Current weights:
 - elo: 0.25
@@ -10,6 +10,3 @@ Current weights:
 - form: 0.20
 - market: 0.20
 - context: 0.10
-
-Weight tuning locked:
-Need 100+ settled football samples

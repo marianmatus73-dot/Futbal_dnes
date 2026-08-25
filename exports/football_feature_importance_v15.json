@@ -1,17 +1,73 @@
 {
   "version": "v15",
-  "training_samples": 0,
-  "features_used": [],
-  "missing_features": [
+  "training_samples": 489,
+  "features_used": [
     "consensus_safety",
     "raw_edge",
-    "market_model_gap",
     "elo_difference",
     "form_difference",
     "competition_importance",
     "context_reliability"
   ],
-  "feature_ranking": [],
-  "warning": "Small sample size - information only",
-  "weight_update_allowed": false
+  "missing_features": [
+    "market_model_gap"
+  ],
+  "feature_ranking": [
+    {
+      "feature": "Consensus safety",
+      "column": "consensus_safety",
+      "samples": 489,
+      "wins": 146,
+      "losses": 343,
+      "winrate": 0.2986,
+      "average_value": 0.7942
+    },
+    {
+      "feature": "Raw edge",
+      "column": "raw_edge",
+      "samples": 489,
+      "wins": 146,
+      "losses": 343,
+      "winrate": 0.2986,
+      "average_value": 0.1296
+    },
+    {
+      "feature": "ELO separation",
+      "column": "elo_difference",
+      "samples": 489,
+      "wins": 146,
+      "losses": 343,
+      "winrate": 0.2986,
+      "average_value": -9.7148
+    },
+    {
+      "feature": "Form separation",
+      "column": "form_difference",
+      "samples": 489,
+      "wins": 146,
+      "losses": 343,
+      "winrate": 0.2986,
+      "average_value": -0.001
+    },
+    {
+      "feature": "Competition importance",
+      "column": "competition_importance",
+      "samples": 489,
+      "wins": 146,
+      "losses": 343,
+      "winrate": 0.2986,
+      "average_value": 0.6357
+    },
+    {
+      "feature": "Context reliability",
+      "column": "context_reliability",
+      "samples": 489,
+      "wins": 146,
+      "losses": 343,
+      "winrate": 0.2986,
+      "average_value": 0.4915
+    }
+  ],
+  "warning": null,
+  "weight_update_allowed": true
 }
