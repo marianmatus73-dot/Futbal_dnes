@@ -4,12 +4,12 @@ import {
   ActivityIndicator,
   Pressable,
   RefreshControl,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { loadAppData } from "./src/api";
 import { REFRESH_INTERVAL_MS } from "./src/config";
@@ -208,7 +208,8 @@ function StatusRow({ label, value, ok }: { label: string; value: string; ok: boo
   return <View style={styles.statusRow}><View style={[styles.statusDot, { backgroundColor: ok ? colors.primary : colors.warning }]} /><View style={styles.statusText}><Text style={styles.statusLabel}>{label}</Text><Text style={styles.statusValue}>{value}</Text></View></View>;
 }
 
-export default function App() {
+function AppContent() {
+  const insets = useSafeAreaInsets();
   const [screen, setScreen] = useState<Screen>("today");
   const [sport, setSport] = useState<Sport>("football");
   const [data, setData] = useState<AppData | null>(null);
@@ -241,7 +242,7 @@ export default function App() {
 
   const usable = data ?? { tipCard: emptyCard, modelRows: [], source: "live" as const, refreshedAt: "" };
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <StatusBar style="light" />
       <View style={styles.topBar}><View><Text style={styles.brand}>MBE</Text><Text style={styles.topTitle}>{title}</Text></View><View style={styles.liveBadge}><View style={styles.liveDot} /><Text style={styles.liveText}>{usable.source === "live" ? "LIVE" : "OFFLINE"}</Text></View></View>
       <ScrollView style={styles.content} contentContainerStyle={styles.contentInner} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => refresh()} tintColor={colors.primary} colors={[colors.primary]} />}>
@@ -251,7 +252,7 @@ export default function App() {
         {screen === "performance" && <Performance rows={usable.modelRows} />}
         {screen === "system" && <System data={usable} />}
       </ScrollView>
-      <View style={styles.nav}>
+      <View style={[styles.nav, { paddingBottom: Math.max(insets.bottom, 12) }]}>
         <NavItem icon="⌂" label="Dnes" active={screen === "today"} onPress={() => setScreen("today")} />
         <NavItem icon="◉" label="Športy" active={screen === "sports"} onPress={() => setScreen("sports")} />
         <NavItem icon="↗" label="Výkon" active={screen === "performance"} onPress={() => setScreen("performance")} />
@@ -259,6 +260,10 @@ export default function App() {
       </View>
     </SafeAreaView>
   );
+}
+
+export default function App() {
+  return <SafeAreaProvider><AppContent /></SafeAreaProvider>;
 }
 
 function NavItem({ icon, label, active, onPress }: { icon: string; label: string; active: boolean; onPress: () => void }) {
@@ -282,4 +287,3 @@ const styles = StyleSheet.create({
   statusRow: { flexDirection: "row", alignItems: "center", backgroundColor: colors.surface, borderBottomWidth: 1, borderColor: colors.border, padding: 16 }, statusDot: { width: 10, height: 10, borderRadius: 5, marginRight: 13 }, statusText: { flex: 1 }, statusLabel: { color: colors.text, fontWeight: "800" }, statusValue: { color: colors.muted, marginTop: 3, fontSize: 12 }, infoCard: { backgroundColor: "#102844", borderRadius: 20, padding: 18, marginTop: 16 }, infoTitle: { color: colors.accent, fontWeight: "900", fontSize: 16 }, infoText: { color: "#B5C9E6", lineHeight: 21, marginTop: 8 },
   nav: { flexDirection: "row", borderTopWidth: 1, borderColor: colors.border, backgroundColor: "#0B1727", paddingVertical: 9, paddingBottom: 12 }, navItem: { flex: 1, alignItems: "center" }, navIcon: { color: colors.muted, fontSize: 20, fontWeight: "900" }, navLabel: { color: colors.muted, fontSize: 10, fontWeight: "700", marginTop: 3 }, navActive: { color: colors.primary },
 });
-
