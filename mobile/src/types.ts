@@ -26,6 +26,10 @@ export type Tip = {
   release_stage?: "EARLY" | "FINAL" | string;
   lineup_verified?: boolean;
   reason?: string;
+  raw_edge?: number;
+  rejected_reasons?: string[];
+  decision?: "ACCEPT" | "REJECT" | string;
+  start_time?: string;
 };
 
 export type TipCard = {
@@ -33,6 +37,7 @@ export type TipCard = {
   generated_at: string;
   publishable: boolean;
   selected: Tip[];
+  rejected_sample?: Tip[];
 };
 
 export type ModelRow = {
@@ -61,4 +66,3 @@ export type AppData = {
   source: "live" | "cache";
   refreshedAt: string;
 };
-
