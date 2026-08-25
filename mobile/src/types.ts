@@ -30,6 +30,9 @@ export type Tip = {
   rejected_reasons?: string[];
   decision?: "ACCEPT" | "REJECT" | string;
   start_time?: string;
+  bookmaker_weight?: number;
+  bookmaker_samples?: number;
+  bookmaker_label?: string;
 };
 
 export type TipCard = {
