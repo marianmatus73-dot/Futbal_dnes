@@ -66,9 +66,30 @@ export type ModelTable = {
   rows?: ModelRow[];
 };
 
+export type HistoryTip = {
+  sport: Sport | string;
+  league: string;
+  match: string;
+  pick: string;
+  market: string;
+  odds: number;
+  result: "OPEN" | "WON" | "LOST" | "VOID" | string;
+  final_score?: string | null;
+  start_time?: string | null;
+  created_at?: string | null;
+  settled_at?: string | null;
+};
+
+export type MobileHistory = {
+  schema_version: number;
+  generated_at: string;
+  sports?: Record<string, HistoryTip[]>;
+};
+
 export type AppData = {
   tipCard: TipCard;
   modelRows: ModelRow[];
+  historyBySport: Record<string, HistoryTip[]>;
   source: "live" | "cache";
   refreshedAt: string;
 };

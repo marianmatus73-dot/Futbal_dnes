@@ -47,11 +47,13 @@ from core.pro_tipper import (
     save_tip_audit_log,
     format_pro_report,
     rejected_tips,
+    rejected_tips_by_sport,
     format_rejected_report,
 )
 from core.top_tips import select_top_tips, select_telegram_tips
 from core.tip_card import save_latest_tip_card
 from core.tip_card_validation import validate_tip_card
+from core.mobile_history import export_mobile_tip_history
 from core.learning_model import retrain_from_results
 from core.consensus_engine import ConsensusInput, build_consensus
 from core.football_learning import run_football_learning
@@ -681,7 +683,7 @@ def build_report(
     min_telegram_conf = int(os.getenv("TELEGRAM_MIN_CONFIDENCE", "80"))
 
     top_tips = select_top_tips(pro_tips, limit=top_limit)
-    rejected = rejected_tips(all_tips, top_tips, limit=10)
+    rejected = rejected_tips_by_sport(all_tips, top_tips, limit_per_sport=5)
     telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
 
     if write_tip_card:
@@ -2104,6 +2106,17 @@ async def run() -> None:
             log.exception("V16 integrated autonomous cycle failed")
 
     save_learning_history(settings)
+
+    if not args.dry_run and not args.analytics and not args.backtest:
+        try:
+            history_path = export_mobile_tip_history(
+                settings,
+                export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+                limit_per_sport=5,
+            )
+            log.info("Saved mobile tip history: %s", history_path)
+        except Exception:
+            log.exception("Mobile tip history export failed")
 
     successful_results = [
         item["result"]

@@ -301,6 +301,24 @@ def rejected_tips(
     return sort_tips(rejected)[:limit]
 
 
+def rejected_tips_by_sport(
+    tips: list[ProTip],
+    accepted: list[ProTip],
+    limit_per_sport: int = 5,
+) -> list[ProTip]:
+    """Keep a useful, bounded sample for every sport with real candidates."""
+    rejected = rejected_tips(tips, accepted, limit=len(tips))
+    counts: dict[str, int] = {}
+    selected: list[ProTip] = []
+    for tip in rejected:
+        sport = str(tip.sport).strip().lower()
+        if counts.get(sport, 0) >= limit_per_sport:
+            continue
+        selected.append(tip)
+        counts[sport] = counts.get(sport, 0) + 1
+    return selected
+
+
 def sort_tips(
     tips: list[ProTip],
 ) -> list[ProTip]:

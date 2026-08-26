@@ -20,7 +20,7 @@ def now_utc() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _winner_from_scores(event: dict[str, Any]) -> str | None:
+def _score_result(event: dict[str, Any]) -> tuple[str, int, int] | None:
     scores = event.get("scores") or []
 
     if len(scores) < 2:
@@ -42,13 +42,21 @@ def _winner_from_scores(event: dict[str, Any]) -> str | None:
 
         parsed.append((name, score))
 
-    if parsed[0][1] > parsed[1][1]:
-        return parsed[0][0]
+    home_name = str(event.get("home_team", ""))
+    away_name = str(event.get("away_team", ""))
+    score_map = {norm(name): score for name, score in parsed}
+    home_score = score_map.get(norm(home_name))
+    away_score = score_map.get(norm(away_name))
+    if home_score is None or away_score is None:
+        home_score, away_score = parsed[0][1], parsed[1][1]
+        home_name, away_name = parsed[0][0], parsed[1][0]
+    winner = home_name if home_score > away_score else away_name if away_score > home_score else "DRAW"
+    return winner, home_score, away_score
 
-    if parsed[1][1] > parsed[0][1]:
-        return parsed[1][0]
 
-    return "DRAW"
+def _winner_from_scores(event: dict[str, Any]) -> str | None:
+    result = _score_result(event)
+    return result[0] if result else None
 
 
 def _profit_for_result(result: str, odds: float, stake: float) -> float:
@@ -112,6 +120,15 @@ def ensure_settlement_columns(settings: Settings) -> None:
                 "ALTER TABLE sport_bets ADD COLUMN profit_units REAL DEFAULT 0"
             )
 
+        for name, definition in {
+            "home_goals": "INTEGER",
+            "away_goals": "INTEGER",
+            "final_score": "TEXT",
+            "settlement_source": "TEXT",
+        }.items():
+            if name not in columns:
+                conn.execute(f"ALTER TABLE sport_bets ADD COLUMN {name} {definition}")
+
 
 def backfill_settled_profit(settings: Settings) -> int:
     """Repair legacy settled rows whose accounting fields were never written."""
@@ -165,10 +182,10 @@ async def settle_sport_bets(
         open_rows = conn.execute(
             """
             SELECT id, league, event, home_team, away_team,
-                   selection, odds, stake
+                   selection, odds, stake, market
             FROM sport_bets
             WHERE sport=?
-              AND market='h2h'
+              AND market IN ('h2h', 'totals_2.5')
               AND (
                     result IS NULL
                     OR result=''
@@ -205,10 +222,12 @@ async def settle_sport_bets(
 
             home = str(event.get("home_team", ""))
             away = str(event.get("away_team", ""))
-            winner = _winner_from_scores(event)
+            score_result = _score_result(event)
 
-            if not winner:
+            if not score_result:
                 continue
+
+            winner, home_score, away_score = score_result
 
             score_events.append(
                 {
@@ -216,13 +235,15 @@ async def settle_sport_bets(
                     "away": away,
                     "event": f"{home} vs {away}",
                     "winner": winner,
+                    "home_score": home_score,
+                    "away_score": away_score,
                 }
             )
 
         if not score_events:
             continue
 
-        updates: list[tuple[str, str, float, float, int]] = []
+        updates: list[tuple[Any, ...]] = []
         elo_updates: list[tuple[str, str, str]] = []
 
         for row in rows_by_league.get(sport_key, []):
@@ -235,6 +256,7 @@ async def settle_sport_bets(
                 selection,
                 odds,
                 stake,
+                market,
             ) = row
 
             bet_home = norm(home_team or "")
@@ -267,8 +289,13 @@ async def settle_sport_bets(
 
             winner = str(matched["winner"])
 
-            if winner == "DRAW":
-                result = "VOID"
+            if str(market) == "totals_2.5":
+                total = int(matched["home_score"]) + int(matched["away_score"])
+                is_over = "over" in bet_selection
+                is_under = "under" in bet_selection
+                result = "WON" if (is_over and total > 2.5) or (is_under and total < 2.5) else "LOST"
+            elif winner == "DRAW":
+                result = "WON" if bet_selection in {"draw", "x", "remiza"} else "LOST"
             else:
                 result = "WON" if norm(winner) == bet_selection else "LOST"
 
@@ -292,11 +319,15 @@ async def settle_sport_bets(
                     now_utc(),
                     profit,
                     profit_units,
+                    int(matched["home_score"]),
+                    int(matched["away_score"]),
+                    f'{matched["home_score"]}-{matched["away_score"]}',
+                    "the_odds_api_scores",
                     int(bet_id),
                 )
             )
 
-            if result in {"WON", "LOST"}:
+            if str(market) == "h2h" and result in {"WON", "LOST"}:
                 elo_updates.append(
                     (
                         str(matched["home"]),
@@ -314,6 +345,10 @@ async def settle_sport_bets(
                         settled_at=?,
                         profit=?,
                         profit_units=?
+                        ,home_goals=?
+                        ,away_goals=?
+                        ,final_score=?
+                        ,settlement_source=?
                     WHERE id=?
                     """,
                     updates,
