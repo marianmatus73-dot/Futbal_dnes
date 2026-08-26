@@ -88,6 +88,7 @@ jobs:
         run: |
           mkdir -p cache
           mkdir -p exports
+          mkdir -p models
 
       - name: Run engine
         env:
@@ -134,6 +135,12 @@ jobs:
           LEARNING_ENABLED: "1"
           LEARNING_MIN_SAMPLES: "20"
           LEARNING_RETRAIN_AFTER_SCAN: "1"
+          FOOTBALL_LEARNING_ENABLED: "1"
+          FOOTBALL_RESULT_LEARNING_ENABLED: "1"
+          FOOTBALL_META_MIN_VALIDATION: "0.55"
+          FOOTBALL_TOTALS_ENABLED: "1"
+          FOOTBALL_TOTALS_MIN_EDGE: "0.07"
+          FOOTBALL_TOTALS_MAX_EDGE: "0.16"
 
           V16_INTEGRATED_CYCLE_ENABLED: "1"
           V16_LEAGUE_PROFILE_ENABLED: "1"
@@ -214,6 +221,9 @@ jobs:
           git rm --cached bets.db-shm 2>/dev/null || true
 
           git add exports/*.csv exports/*.json exports/*.txt exports/*.html 2>/dev/null || true
+          # Persist the trained football model so the next isolated Actions
+          # runner can actually use what the previous run learned.
+          git add models/football_meta_model.pkl models/football_meta_model.json 2>/dev/null || true
 
           if git diff --staged --quiet; then
             echo "No changes"
