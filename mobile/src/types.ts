@@ -33,6 +33,9 @@ export type Tip = {
   bookmaker_weight?: number;
   bookmaker_samples?: number;
   bookmaker_label?: string;
+  opening_odds?: number | null;
+  final_odds?: number | null;
+  created_at?: string;
 };
 
 export type TipCard = {
