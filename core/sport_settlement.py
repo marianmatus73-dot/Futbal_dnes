@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import aiohttp
@@ -163,6 +163,32 @@ def backfill_settled_profit(settings: Settings) -> int:
             """
         )
         return conn.total_changes - before
+
+
+def expire_historical_unresolved(
+    settings: Settings,
+    *,
+    older_than_days: int = 7,
+) -> int:
+    """Close irrecoverable old rows without teaching the model a fake result."""
+    ensure_settlement_columns(settings)
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=max(3, older_than_days))).isoformat()
+    with connect(settings) as conn:
+        cursor = conn.execute(
+            """
+            UPDATE sport_bets
+            SET result='UNRESOLVED',
+                settled_at=?,
+                profit=0.0,
+                profit_units=0.0,
+                settlement_source='historical_result_unavailable'
+            WHERE UPPER(TRIM(COALESCE(result, 'OPEN'))) IN ('', 'OPEN')
+              AND TRIM(COALESCE(start_time, '')) <> ''
+              AND datetime(start_time) < datetime(?)
+            """,
+            (now_utc(), cutoff),
+        )
+        return max(cursor.rowcount, 0)
 
 
 async def settle_sport_bets(

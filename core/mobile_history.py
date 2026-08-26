@@ -17,7 +17,7 @@ def _result(value: object) -> str:
         "P": "LOST",
         "WIN": "WON",
         "LOSS": "LOST",
-    }.get(normalized, normalized if normalized in {"WON", "LOST", "VOID"} else "OPEN")
+    }.get(normalized, normalized if normalized in {"WON", "LOST", "VOID", "UNRESOLVED"} else "OPEN")
 
 
 def export_mobile_tip_history(
@@ -51,6 +51,10 @@ def export_mobile_tip_history(
                     SELECT id, sport, league, event, selection, odds,
                            {field('market', "'h2h'")},
                            {field('result', "'OPEN'")},
+                           {field('bookmaker')}, {field('prob_final')},
+                           {field('edge')}, {field('stake')},
+                           {field('closing_odds')}, {field('clv_pct')},
+                           {field('settlement_source')},
                            {field('start_time')}, {field('created_at')},
                            {field('settled_at')}, {field('final_score')},
                            {field('home_goals')}, {field('away_goals')}
@@ -86,6 +90,13 @@ def export_mobile_tip_history(
                             "pick": str(row["selection"] or ""),
                             "market": str(row["market"] or "h2h"),
                             "odds": float(row["odds"] or 0),
+                            "bookmaker": str(row["bookmaker"] or ""),
+                            "model_probability": float(row["prob_final"] or 0),
+                            "edge": float(row["edge"] or 0),
+                            "stake": float(row["stake"] or 0),
+                            "closing_odds": float(row["closing_odds"]) if row["closing_odds"] not in (None, "") else None,
+                            "clv_pct": float(row["clv_pct"]) if row["clv_pct"] not in (None, "") else None,
+                            "settlement_source": str(row["settlement_source"] or ""),
                             "result": _result(row["result"]),
                             "final_score": final_score or None,
                             "start_time": row["start_time"],

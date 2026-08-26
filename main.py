@@ -35,6 +35,7 @@ from core.reporting import print_report
 from core.sport_settlement import (
     backfill_settled_profit,
     ensure_settlement_columns,
+    expire_historical_unresolved,
 )
 from core.audit_summary import audit_block_summary
 from core.performance_summary import performance_report
@@ -2106,6 +2107,20 @@ async def run() -> None:
             log.exception("V16 integrated autonomous cycle failed")
 
     save_learning_history(settings)
+
+    if not args.dry_run and not args.analytics and not args.backtest:
+        try:
+            unresolved = expire_historical_unresolved(
+                settings,
+                older_than_days=int(os.getenv("HISTORICAL_UNRESOLVED_DAYS", "7")),
+            )
+            if unresolved:
+                log.warning(
+                    "Closed %s historical rows as UNRESOLVED; excluded from learning",
+                    unresolved,
+                )
+        except Exception:
+            log.exception("Historical unresolved cleanup failed")
 
     if not args.dry_run and not args.analytics and not args.backtest:
         try:

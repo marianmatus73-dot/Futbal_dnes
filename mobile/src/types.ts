@@ -73,7 +73,14 @@ export type HistoryTip = {
   pick: string;
   market: string;
   odds: number;
-  result: "OPEN" | "WON" | "LOST" | "VOID" | string;
+  bookmaker?: string;
+  model_probability?: number;
+  edge?: number;
+  stake?: number;
+  closing_odds?: number | null;
+  clv_pct?: number | null;
+  settlement_source?: string;
+  result: "OPEN" | "WON" | "LOST" | "VOID" | "UNRESOLVED" | string;
   final_score?: string | null;
   start_time?: string | null;
   created_at?: string | null;
