@@ -1,22 +1,22 @@
 {
-  "total_bets": 1449,
-  "wins": 661,
+  "total_bets": 1450,
+  "wins": 662,
   "losses": 788,
-  "winrate": 45.62,
-  "yield": 8.73,
-  "profit": 91.41,
-  "stake_sum": 1046.68,
-  "open_bets": 438,
-  "settled_bets": 1449,
+  "winrate": 45.66,
+  "yield": 8.76,
+  "profit": 91.72,
+  "stake_sum": 1046.94,
+  "open_bets": 450,
+  "settled_bets": 1450,
   "by_sport": {
     "baseball": {
-      "total": 916,
-      "wins": 500,
+      "total": 917,
+      "wins": 501,
       "losses": 416,
-      "winrate": 54.59,
-      "profit": 72.49,
-      "stake_sum": 907.56,
-      "yield": 7.99
+      "winrate": 54.63,
+      "profit": 72.8,
+      "stake_sum": 907.82,
+      "yield": 8.02
     },
     "football": {
       "total": 489,
@@ -191,6 +191,15 @@
       "stake_sum": 1.02,
       "yield": -12.06
     },
+    "Betfair": {
+      "total": 171,
+      "wins": 55,
+      "losses": 116,
+      "winrate": 32.16,
+      "profit": -0.42,
+      "stake_sum": 50.14,
+      "yield": -0.83
+    },
     "Marathon Bet": {
       "total": 9,
       "wins": 2,
@@ -199,15 +208,6 @@
       "profit": -0.64,
       "stake_sum": 5.19,
       "yield": -12.41
-    },
-    "Betfair": {
-      "total": 170,
-      "wins": 54,
-      "losses": 116,
-      "winrate": 31.76,
-      "profit": -0.73,
-      "stake_sum": 49.88,
-      "yield": -1.46
     },
     "Unibet (SE)": {
       "total": 35,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 916,
-      "wins": 500,
+      "total": 917,
+      "wins": 501,
       "losses": 416,
-      "winrate": 54.59,
-      "profit": 72.49,
-      "stake_sum": 907.56,
-      "yield": 7.99
+      "winrate": 54.63,
+      "profit": 72.8,
+      "stake_sum": 907.82,
+      "yield": 8.02
     },
     "Argentina Primera Division": {
       "total": 52,
@@ -554,5 +554,5 @@
       "yield": -76.61
     }
   },
-  "last_update": "2026-08-26T13:16:26.045652+00:00"
+  "last_update": "2026-08-26T16:42:09.261378+00:00"
 }
