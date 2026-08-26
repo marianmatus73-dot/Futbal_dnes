@@ -46,18 +46,28 @@ class TennisModule(SportModule):
         init_sport_db(settings)
 
         # Oficiálne kľúče podľa dokumentácie The Odds API
-        configured_keys = os.getenv(
-            "TENNIS_SPORT_KEYS",
-            "tennis_atp_aus_open_singles,tennis_wta_aus_open_singles,tennis_atp_french_open,tennis_wta_french_open,tennis_atp_wimbledon,tennis_wta_wimbledon,tennis_atp_us_open,tennis_wta_us_open,tennis_atp_indian_wells,tennis_atp_miami_open,tennis_atp_monte_carlo_masters,tennis_atp_madrid_open,tennis_atp_italian_open,tennis_atp_canadian_open,tennis_atp_cincinnati_open,tennis_atp_shanghai_masters,tennis_atp_paris_masters"
-        ).split(",")
+        configured_value = os.getenv("TENNIS_SPORT_KEYS", "").strip()
+        configured_keys = configured_value.split(",") if configured_value else []
 
         clean_sport_keys = [k.strip() for k in configured_keys if k.strip()]
 
         if os.getenv("SPORT_KEY_AUTO_DISCOVERY", "1") == "1":
-            active_keys = await discover_active_sport_keys(settings.odds_api_key, ["Tennis"])
-            
-            # Táto riadka je kľúčová - filtruje iba kľúče, ktoré sú naozaj v sezóne
-            clean_sport_keys = [k for k in clean_sport_keys if k in active_keys]
+            active_keys = await discover_active_sport_keys(
+                settings.odds_api_key,
+                ["Tennis"],
+            )
+
+            # The Odds API adds short-lived ATP/WTA tournament keys during
+            # the season.  A hard-coded allow-list silently removed all of
+            # them and made tennis look inactive.  Use every active tennis
+            # key unless the operator explicitly configured a restriction.
+            if configured_value:
+                clean_sport_keys = filter_active_keys(
+                    clean_sport_keys,
+                    active_keys,
+                )
+            elif active_keys:
+                clean_sport_keys = sorted(active_keys)
             
             log.info("Tennis: Skenujem kľúče v sezóne: %s", clean_sport_keys)
         else:

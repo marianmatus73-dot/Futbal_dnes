@@ -8,7 +8,12 @@ from pathlib import Path
 from typing import Any, Dict
 
 from core.config import Settings
-from core.market import best_outlier_prices, dedupe_best_bets
+from core.market import (
+    best_outlier_prices,
+    best_total_prices,
+    consensus_totals,
+    dedupe_best_bets,
+)
 from core.odds_api import fetch_odds
 from core.sport_quant import (
     bookmaker_grade,
@@ -25,7 +30,7 @@ from core.staking import kelly_stake
 from core.types import Bet, SportResult
 from sports.base import SportModule
 from core.football_feature_store import save_football_features
-from core.football_features import build_football_features
+from core.football_features import build_football_features, build_model_bundle
 from core.football_market import (
     FootballMarketDatabase,
     build_market_snapshot,
@@ -746,7 +751,7 @@ class FootballModule(SportModule):
             data = await fetch_odds(
                 settings.odds_api_key,
                 sport_key,
-                markets="h2h",
+                markets="h2h,totals",
             )
 
             if not data:
@@ -1154,6 +1159,97 @@ class FootballModule(SportModule):
                         "PASS",
                         audit_context,
                     )
+
+                if os.getenv("FOOTBALL_TOTALS_ENABLED", "1") == "1":
+                    totals_market = consensus_totals(
+                        bookmakers,
+                        point=2.5,
+                        min_books=min_books,
+                    )
+                    totals_prices = best_total_prices(bookmakers, point=2.5)
+                    if totals_market and totals_prices:
+                        bundle = build_model_bundle(
+                            settings,
+                            market=market_snapshot,
+                            league_average_xg=league_average_xg,
+                            home_advantage_xg=home_advantage_xg,
+                            home_advantage_elo=home_advantage_elo,
+                            dixon_rho=dixon_rho,
+                        )
+                        total_reliability = max(
+                            0.0,
+                            min(
+                                1.0,
+                                (
+                                    bundle.xg.home_reliability
+                                    + bundle.xg.away_reliability
+                                ) / 2.0,
+                            ),
+                        )
+                        for total_name, model_probability in {
+                            "Over": bundle.dixon_coles.over_25,
+                            "Under": bundle.dixon_coles.under_25,
+                        }.items():
+                            if total_name not in totals_market or total_name not in totals_prices:
+                                continue
+                            bookmaker, odds = totals_prices[total_name]
+                            market_probability = totals_market[total_name]
+                            edge = model_probability * odds - 1.0
+                            minimum_edge = float(os.getenv("FOOTBALL_TOTALS_MIN_EDGE", "0.07"))
+                            maximum_edge = float(os.getenv("FOOTBALL_TOTALS_MAX_EDGE", "0.16"))
+                            if not (minimum_edge <= edge <= maximum_edge):
+                                continue
+                            grade = bookmaker_grade(
+                                settings,
+                                self.name,
+                                bookmaker,
+                                min_samples=grade_min_samples,
+                            )
+                            stake = round(
+                                kelly_stake(model_probability, odds, settings)
+                                * grade
+                                * max(0.50, total_reliability),
+                                2,
+                            )
+                            if stake <= 0:
+                                continue
+                            selection = f"{total_name} 2.5 gólu"
+                            total_bet = Bet(
+                                sport=self.name,
+                                league=league,
+                                event=event_name,
+                                market="totals_2.5",
+                                selection=selection,
+                                odds=odds,
+                                prob_model=model_probability,
+                                prob_market=market_probability,
+                                prob_final=model_probability,
+                                edge=edge,
+                                stake=stake,
+                                bookmaker=bookmaker,
+                                start_time=start,
+                                score=max(0.0, min(100.0, (60.0 + edge * 100.0) * total_reliability)),
+                                external_event_id=str(event.get("id", "")),
+                            )
+                            bets.append(total_bet)
+                            self._save_bet(settings, total_bet)
+                            self._audit(
+                                settings,
+                                sport_key,
+                                event_name,
+                                selection,
+                                bookmaker,
+                                odds,
+                                market_probability,
+                                edge,
+                                "PASS",
+                                (
+                                    "Dixon-Coles totals 2.5; "
+                                    f"xg={bundle.xg.home_expected_goals:.2f}-"
+                                    f"{bundle.xg.away_expected_goals:.2f}; "
+                                    f"reliability={total_reliability:.3f}"
+                                ),
+                            )
 
         bets = dedupe_best_bets(bets)
         # Closing snapshots are captured during this scan. Reconcile once more
