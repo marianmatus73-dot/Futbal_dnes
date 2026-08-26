@@ -643,6 +643,9 @@ def extract_pro_tips(module_outputs: list[dict]) -> tuple[list, list]:
     model_score=tip.get("model_score"),
     release_stage=str(tip.get("release_stage", "")),
     lineup_verified=bool(tip.get("lineup_verified", False)),
+    start_time=str(tip.get("start_time", "")),
+    opening_odds=to_float_or_none(tip.get("opening_odds")),
+    final_odds=to_float_or_none(tip.get("final_odds")),
 )
 
                 raw_tips.append(pro_tip)
