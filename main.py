@@ -2106,8 +2106,6 @@ async def run() -> None:
         except Exception:
             log.exception("V16 integrated autonomous cycle failed")
 
-    save_learning_history(settings)
-
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             unresolved = expire_historical_unresolved(
@@ -2121,6 +2119,10 @@ async def run() -> None:
                 )
         except Exception:
             log.exception("Historical unresolved cleanup failed")
+
+    # Persist history only after maintenance, otherwise the CSV would restore
+    # stale OPEN rows on the next isolated GitHub Actions runner.
+    save_learning_history(settings)
 
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
