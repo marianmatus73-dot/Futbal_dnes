@@ -4,14 +4,15 @@
     "slug": "moj-multisport",
     "version": "0.1.0",
     "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#08111F",
     "android": {
       "package": "sk.marian.multisport",
       "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#08111F"
       }
     }
   }
 }
-

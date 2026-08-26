@@ -47,9 +47,39 @@ const formatStartTime = (iso?: string) => {
   return value.toLocaleString("sk-SK", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 };
 
+const startTimeWithCountdown = (iso?: string) => {
+  const formatted = formatStartTime(iso);
+  if (!iso || !formatted) return "Čas zatiaľ nie je dostupný";
+  const minutes = Math.round((new Date(iso).getTime() - Date.now()) / 60000);
+  if (minutes < -180) return `${formatted} · ukončené`;
+  if (minutes < 0) return `${formatted} · prebieha`;
+  if (minutes < 60) return `${formatted} · o ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return `${formatted} · o ${hours} h${rest ? ` ${rest} min` : ""}`;
+};
+
+const stageLabel = (tip: Tip, rejected = false) => {
+  if (rejected) return "ZAMIETNUTÝ";
+  if (tip.release_stage === "FINAL") return "FINAL";
+  if (tip.release_stage === "AWAITING_LINEUP") return "ČAKÁ NA ZOSTAVY";
+  return tip.release_stage || "EARLY";
+};
+
+const nextDecision = (tips: Tip[]) => {
+  const upcoming = tips
+    .filter((tip) => tip.start_time && tip.release_stage !== "FINAL")
+    .map((tip) => ({ tip, time: new Date(tip.start_time as string).getTime() - 60 * 60000 }))
+    .filter((item) => Number.isFinite(item.time) && item.time > Date.now())
+    .sort((a, b) => a.time - b.time)[0];
+  if (!upcoming) return "Pri najbližšom automatickom behu";
+  return `${upcoming.tip.match} · kontrola ${new Date(upcoming.time).toLocaleString("sk-SK", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}`;
+};
+
 const riskColor = (risk?: string) => risk === "high" ? colors.danger : risk === "low" ? colors.primary : colors.warning;
 
 function TipItem({ tip }: { tip: Tip }) {
+  const [expanded, setExpanded] = useState(false);
   const meta = sportMeta[(tip.sport as Sport)] ?? sportMeta.football;
   const isFinal = tip.release_stage === "FINAL";
   return (
@@ -61,11 +91,11 @@ function TipItem({ tip }: { tip: Tip }) {
         <View style={styles.tipHeading}>
           <Text style={styles.league}>{tip.league}</Text>
           <Text style={styles.match}>{tip.match}</Text>
-          {tip.start_time ? <Text style={styles.startTime}>{formatStartTime(tip.start_time)}</Text> : null}
+          <Text style={styles.startTime}>{startTimeWithCountdown(tip.start_time)}</Text>
         </View>
         <View style={[styles.stage, isFinal && styles.stageFinal]}>
           <Text style={[styles.stageText, isFinal && styles.stageFinalText]}>
-            {isFinal ? "FINAL" : tip.release_stage || "EARLY"}
+            {stageLabel(tip)}
           </Text>
         </View>
       </View>
@@ -86,12 +116,23 @@ function TipItem({ tip }: { tip: Tip }) {
         <Metric label="Edge" value={formatPercent(tip.edge)} positive />
         <Metric label="Confidence" value={`${Math.round(tip.confidence)}/100`} />
       </View>
+      <OddsMovement tip={tip} />
       <View style={styles.tipFooter}>
         <View><Text style={styles.bookmaker}>{tip.bookmaker}</Text><BookmakerWeight tip={tip} /></View>
-        <View style={styles.footerRight}><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>{tip.risk?.toUpperCase()}</Text><Text style={styles.stake}>Vklad {formatNumber(tip.stake_amount)}</Text></View>
+        <View style={styles.footerRight}><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>RIZIKO {tip.risk?.toUpperCase()}</Text><Text style={styles.stake}>Vklad {formatNumber(tip.stake_amount)}</Text></View>
       </View>
+      <View style={styles.cardMetaRow}><Text style={styles.updatedText}>Aktualizované {relativeTime(tip.created_at || "")}</Text><Pressable onPress={() => setExpanded((value) => !value)}><Text style={styles.detailButton}>{expanded ? "Skryť detail" : "Prečo bol prijatý?"}</Text></Pressable></View>
+      {expanded ? <View style={styles.acceptBox}><Text style={styles.acceptTitle}>Rozhodnutie modelu</Text><Text style={styles.rejectionText}>• Stav: {stageLabel(tip)}</Text><Text style={styles.rejectionText}>• Zostavy: {tip.lineup_verified ? "potvrdené" : "zatiaľ nepotvrdené"}</Text><Text style={styles.rejectionText}>• Edge: {formatPercent(tip.edge)}, confidence: {Math.round(tip.confidence)}/100</Text>{tip.reason ? <Text style={styles.modelReason}>{tip.reason}</Text> : null}</View> : null}
     </View>
   );
+}
+
+function OddsMovement({ tip }: { tip: Tip }) {
+  const opening = tip.opening_odds;
+  const current = tip.final_odds ?? tip.odds;
+  if (!opening || opening <= 1 || !current || current <= 1) return null;
+  const change = (current / opening - 1) * 100;
+  return <View style={styles.oddsMovement}><Text style={styles.oddsMovementLabel}>POHYB KURZU</Text><Text style={styles.oddsMovementValue}>{opening.toFixed(2)} → {current.toFixed(2)} · {change >= 0 ? "+" : ""}{change.toFixed(1)} %</Text></View>;
 }
 
 function BookmakerWeight({ tip }: { tip: Tip }) {
@@ -135,7 +176,7 @@ function CandidateItem({ tip }: { tip: Tip }) {
       <View style={styles.tipHeader}>
         <View style={[styles.sportIcon, { backgroundColor: `${meta.color}22` }]}><Text style={styles.sportEmoji}>{meta.icon}</Text></View>
         <View style={styles.tipHeading}><Text style={styles.league}>{tip.league}</Text><Text style={styles.match}>{tip.match}</Text>{tip.start_time ? <Text style={styles.startTime}>{formatStartTime(tip.start_time)}</Text> : null}</View>
-        <View style={styles.rejectedBadge}><Text style={styles.rejectedBadgeText}>NEVKLADAŤ</Text></View>
+        <View style={styles.rejectedBadge}><Text style={styles.rejectedBadgeText}>{stageLabel(tip, true)}</Text></View>
       </View>
       <View style={styles.pickRow}>
         <View><Text style={styles.label}>KANDIDÁT</Text><Text style={styles.pick}>{tip.pick}</Text></View>
@@ -146,8 +187,10 @@ function CandidateItem({ tip }: { tip: Tip }) {
         <Metric label="Consensus edge" value={formatPercent(tip.edge)} />
         <Metric label="Confidence" value={`${Math.round(tip.confidence)}/100`} />
       </View>
+      <OddsMovement tip={tip} />
       <View style={styles.candidateFooter}><View><Text style={styles.bookmaker}>{tip.bookmaker}</Text><BookmakerWeight tip={tip} /><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>RIZIKO {tip.risk?.toUpperCase()}</Text></View><Pressable onPress={() => setExpanded((value) => !value)} hitSlop={10}><Text style={styles.detailButton}>{expanded ? "Skryť detail" : "Prečo neprešiel?"}</Text></Pressable></View>
       {expanded ? <View style={styles.rejectionBox}><Text style={styles.rejectionTitle}>Rozhodnutie profesionálneho filtra</Text>{reasons.map((reason, index) => <Text key={`${reason}-${index}`} style={styles.rejectionText}>• {reason}</Text>)}{tip.reason ? <Text style={styles.modelReason}>{tip.reason}</Text> : null}</View> : null}
+      <Text style={styles.updatedText}>Aktualizované {relativeTime(tip.created_at || "")}</Text>
     </View>
   );
 }
@@ -165,8 +208,11 @@ function Candidates({ tips }: { tips: Tip[] }) {
 
 function Today({ data }: { data: AppData }) {
   const [filter, setFilter] = useState<"all" | "confirmed" | "candidates">("all");
-  const tips = data.tipCard.selected ?? [];
-  const candidates = data.tipCard.rejected_sample ?? [];
+  const [sort, setSort] = useState<"time" | "confidence" | "edge">("time");
+  const sorter = (a: Tip, b: Tip) => sort === "confidence" ? b.confidence - a.confidence : sort === "edge" ? b.edge - a.edge : (new Date(a.start_time || "9999").getTime() - new Date(b.start_time || "9999").getTime());
+  const tips = [...(data.tipCard.selected ?? [])].sort(sorter);
+  const candidates = [...(data.tipCard.rejected_sample ?? [])].sort(sorter);
+  const allTips = [...tips, ...candidates];
   return (
     <>
       <View style={styles.hero}>
@@ -178,6 +224,8 @@ function Today({ data }: { data: AppData }) {
       <View style={styles.filters}>
         {([['all', 'Všetko'], ['confirmed', 'Potvrdené'], ['candidates', 'Kandidáti']] as const).map(([value, label]) => <Pressable key={value} onPress={() => setFilter(value)} style={[styles.filterChip, filter === value && styles.filterChipActive]}><Text style={[styles.filterText, filter === value && styles.filterTextActive]}>{label}</Text></Pressable>)}
       </View>
+      <View style={styles.sortRow}><Text style={styles.sortLabel}>Zoradiť:</Text>{([['time', 'Čas'], ['confidence', 'Confidence'], ['edge', 'Edge']] as const).map(([value, label]) => <Pressable key={value} onPress={() => setSort(value)} style={[styles.sortChip, sort === value && styles.sortChipActive]}><Text style={[styles.sortText, sort === value && styles.sortTextActive]}>{label}</Text></Pressable>)}</View>
+      <View style={styles.nextDecision}><Text style={styles.nextDecisionLabel}>NAJBLIŽŠIE ROZHODNUTIE</Text><Text style={styles.nextDecisionValue}>{nextDecision(allTips)}</Text></View>
       {filter !== "candidates" ? (tips.length ? tips.map((tip, index) => <TipItem key={`${tip.sport}-${tip.match}-${index}`} tip={tip} />) : <EmptyTips />) : null}
       {filter !== "confirmed" ? <Candidates tips={candidates} /> : null}
     </>
@@ -245,6 +293,7 @@ function Performance({ rows }: { rows: ModelRow[] }) {
             </View>
             <View style={styles.performanceMetric}><Text style={styles.label}>YIELD</Text><Text style={{ color: colors.primary, fontWeight: "800" }}>{formatPercent(row?.yield_pct ?? row?.yield)}</Text></View>
             <View style={styles.performanceMetric}><Text style={styles.label}>ZISK</Text><Text style={styles.performanceValue}>{formatNumber(row?.net_profit ?? row?.profit)}</Text></View>
+            <View style={styles.performanceMetric}><Text style={styles.label}>CLV</Text><Text style={styles.performanceValue}>{formatPercent(row?.average_clv_pct ?? row?.average_clv)}</Text></View>
           </View>
         );
       })}
@@ -310,7 +359,7 @@ function AppContent() {
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <StatusBar style="light" />
-      <View style={styles.topBar}><View><Text style={styles.brand}>MBE</Text><Text style={styles.topTitle}>{title}</Text></View><View style={styles.liveBadge}><View style={styles.liveDot} /><Text style={styles.liveText}>{usable.source === "live" ? "LIVE" : "OFFLINE"}</Text></View></View>
+      <View style={styles.topBar}><View><Text style={styles.brand}>MBE</Text><Text style={styles.topTitle}>{title}</Text></View><View style={styles.topActions}><Pressable onPress={() => refresh()} style={styles.refreshButton}><Text style={styles.refreshText}>{refreshing ? "…" : "↻ Obnoviť"}</Text></Pressable><View style={styles.liveBadge}><View style={styles.liveDot} /><Text style={styles.liveText}>{usable.source === "live" ? "LIVE" : "OFFLINE"}</Text></View></View></View>
       <ScrollView style={styles.content} contentContainerStyle={styles.contentInner} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => refresh()} tintColor={colors.primary} colors={[colors.primary]} />}>
         {error ? <Text style={styles.error}>{error}</Text> : null}
         {screen === "today" && <Today data={usable} />}
@@ -340,14 +389,17 @@ const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: colors.background }, loading: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center", gap: 16 }, loadingText: { color: colors.muted, fontSize: 15 },
   topBar: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 14, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }, brand: { color: colors.primary, fontWeight: "900", letterSpacing: 2, fontSize: 12 }, topTitle: { color: colors.text, fontWeight: "900", fontSize: 26, marginTop: 2 },
   liveBadge: { flexDirection: "row", alignItems: "center", borderWidth: 1, borderColor: colors.border, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 10, gap: 7 }, liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.primary }, liveText: { color: colors.muted, fontWeight: "800", fontSize: 10, letterSpacing: 1 },
+  topActions: { flexDirection: "row", alignItems: "center", gap: 7 }, refreshButton: { borderWidth: 1, borderColor: colors.primary, borderRadius: 18, paddingVertical: 7, paddingHorizontal: 10 }, refreshText: { color: colors.primary, fontSize: 10, fontWeight: "900" },
   content: { flex: 1 }, contentInner: { paddingHorizontal: 16, paddingBottom: 30 }, error: { color: colors.danger, backgroundColor: "#3B1D2A", padding: 12, borderRadius: 12, marginBottom: 12 },
   hero: { backgroundColor: colors.primaryDark, borderWidth: 1, borderColor: "#24594D", borderRadius: 24, padding: 22, marginBottom: 16 }, eyebrow: { color: colors.primary, fontWeight: "900", fontSize: 11, letterSpacing: 1.8 }, heroTitle: { color: colors.text, fontWeight: "900", fontSize: 25, marginTop: 8 }, heroText: { color: "#A8CFC3", marginTop: 8, fontSize: 14 },
   tipCard: { backgroundColor: colors.surface, borderRadius: 22, borderWidth: 1, borderColor: colors.border, padding: 17, marginBottom: 14 }, tipHeader: { flexDirection: "row", alignItems: "center" }, sportIcon: { width: 43, height: 43, borderRadius: 14, alignItems: "center", justifyContent: "center" }, sportEmoji: { fontSize: 21 }, tipHeading: { flex: 1, marginHorizontal: 11 }, league: { color: colors.muted, fontSize: 11, textTransform: "uppercase", fontWeight: "800" }, match: { color: colors.text, fontSize: 15, fontWeight: "800", marginTop: 3 }, startTime: { color: colors.accent, fontSize: 10, fontWeight: "700", marginTop: 4 },
   stage: { backgroundColor: "#263751", paddingHorizontal: 9, paddingVertical: 6, borderRadius: 9 }, stageFinal: { backgroundColor: colors.primary }, stageText: { color: colors.muted, fontSize: 9, fontWeight: "900" }, stageFinalText: { color: colors.background },
   pickRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", marginTop: 21, marginBottom: 18 }, label: { color: colors.muted, fontSize: 9, fontWeight: "900", letterSpacing: 1 }, pick: { color: colors.text, fontSize: 20, fontWeight: "900", marginTop: 4, maxWidth: 245 }, oddsBox: { alignItems: "flex-end" }, odds: { color: colors.warning, fontSize: 24, fontWeight: "900", marginTop: 2 },
   metrics: { flexDirection: "row", backgroundColor: colors.surfaceAlt, borderRadius: 15, padding: 12 }, metric: { flex: 1 }, metricLabel: { color: colors.muted, fontSize: 9, marginBottom: 4 }, metricValue: { color: colors.text, fontWeight: "800", fontSize: 14 }, tipFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13 }, bookmaker: { color: colors.text, fontSize: 12, fontWeight: "800" }, bookmakerWeight: { fontSize: 9, marginTop: 3 }, footerRight: { flexDirection: "row", gap: 10, alignItems: "center" }, riskText: { fontWeight: "900", fontSize: 9, letterSpacing: .5, marginTop: 5 }, stake: { color: colors.accent, fontWeight: "800", fontSize: 12 },
+  oddsMovement: { flexDirection: "row", justifyContent: "space-between", marginTop: 10, paddingHorizontal: 4 }, oddsMovementLabel: { color: colors.muted, fontSize: 9, fontWeight: "900" }, oddsMovementValue: { color: colors.accent, fontSize: 11, fontWeight: "800" }, cardMetaRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 }, updatedText: { color: colors.muted, fontSize: 9, marginTop: 9 }, acceptBox: { backgroundColor: colors.primaryDark, borderRadius: 14, padding: 12, marginTop: 12 }, acceptTitle: { color: colors.primary, fontWeight: "900", fontSize: 11, marginBottom: 5 },
   emptyCard: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 22, padding: 28, alignItems: "center" }, emptyIcon: { fontSize: 32 }, emptyTitle: { color: colors.text, fontWeight: "900", fontSize: 18, marginTop: 12 }, emptyText: { color: colors.muted, textAlign: "center", lineHeight: 21, marginTop: 8 },
   counters: { flexDirection: "row", gap: 8, marginBottom: 12 }, filters: { flexDirection: "row", gap: 8, marginBottom: 16 }, filterChip: { borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 13, paddingVertical: 8, backgroundColor: colors.surface }, filterChipActive: { borderColor: colors.primary, backgroundColor: colors.primaryDark }, filterText: { color: colors.muted, fontWeight: "800", fontSize: 11 }, filterTextActive: { color: colors.primary },
+  sortRow: { flexDirection: "row", alignItems: "center", gap: 7, marginBottom: 12 }, sortLabel: { color: colors.muted, fontSize: 10, marginRight: 2 }, sortChip: { borderRadius: 12, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 6 }, sortChipActive: { backgroundColor: "#243C39" }, sortText: { color: colors.muted, fontSize: 9, fontWeight: "800" }, sortTextActive: { color: colors.primary }, nextDecision: { backgroundColor: "#102844", borderRadius: 15, padding: 13, marginBottom: 14 }, nextDecisionLabel: { color: colors.accent, fontSize: 9, fontWeight: "900", letterSpacing: 1 }, nextDecisionValue: { color: colors.text, fontSize: 12, fontWeight: "700", marginTop: 5 },
   candidatesSection: { marginTop: 22 }, candidatesTitle: { color: colors.warning, fontSize: 21, fontWeight: "900" }, candidatesSubtitle: { color: colors.muted, lineHeight: 19, marginTop: 5, marginBottom: 13 }, candidateCard: { backgroundColor: "#171C2B", borderRadius: 22, borderWidth: 1, borderColor: "#664D24", padding: 17, marginBottom: 14 }, rejectedBadge: { backgroundColor: "#4A2B20", borderWidth: 1, borderColor: colors.warning, borderRadius: 9, paddingHorizontal: 8, paddingVertical: 6 }, rejectedBadgeText: { color: colors.warning, fontSize: 8, fontWeight: "900" }, candidateFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 }, detailButton: { color: colors.accent, fontSize: 11, fontWeight: "900" }, rejectionBox: { backgroundColor: "#251F1D", borderRadius: 14, padding: 12, marginTop: 12 }, rejectionTitle: { color: colors.warning, fontWeight: "900", fontSize: 11, marginBottom: 5 }, rejectionText: { color: "#D7C7B0", fontSize: 11, lineHeight: 17 }, modelReason: { color: colors.muted, fontSize: 10, lineHeight: 15, marginTop: 8 },
   sportTabs: { gap: 9, paddingVertical: 6, paddingRight: 18, marginBottom: 16 }, sportTab: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, borderRadius: 15, alignItems: "center", paddingVertical: 10, paddingHorizontal: 13, minWidth: 78 }, tabEmoji: { fontSize: 20 }, sportTabText: { color: colors.muted, fontSize: 11, fontWeight: "800", marginTop: 4 },
   sectionHeader: { marginVertical: 14 }, sectionTitle: { color: colors.text, fontWeight: "900", fontSize: 23 }, sectionSubtitle: { color: colors.muted, marginTop: 4 }, summaryGrid: { flexDirection: "row", gap: 8, marginBottom: 14 }, summary: { flex: 1, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 16, padding: 13 }, summaryLabel: { color: colors.muted, fontSize: 10 }, summaryValue: { color: colors.text, fontSize: 17, fontWeight: "900", marginTop: 5 },
