@@ -55,6 +55,7 @@ from core.top_tips import select_top_tips, select_telegram_tips
 from core.tip_card import save_latest_tip_card
 from core.tip_card_validation import validate_tip_card
 from core.mobile_history import export_mobile_tip_history
+from core.mobile_performance import export_mobile_performance
 from core.learning_model import retrain_from_results
 from core.consensus_engine import ConsensusInput, build_consensus
 from core.football_learning import run_football_learning
@@ -2132,6 +2133,11 @@ async def run() -> None:
                 limit_per_sport=5,
             )
             log.info("Saved mobile tip history: %s", history_path)
+            performance_path = export_mobile_performance(
+                settings,
+                export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+            )
+            log.info("Saved mobile performance history: %s", performance_path)
         except Exception:
             log.exception("Mobile tip history export failed")
 

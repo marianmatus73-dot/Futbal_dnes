@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { DATA_BASE_URL } from "./config";
-import type { AppData, MobileHistory, ModelTable, TipCard } from "./types";
+import type { AppData, MobileHistory, MobilePerformance, ModelTable, TipCard } from "./types";
 
 const CACHE_KEY = "multisport:last-data:v1";
 
@@ -37,7 +37,7 @@ function rowsFrom(table: ModelTable) {
 
 export async function loadAppData(): Promise<AppData> {
   try {
-    const [tipCard, table, history] = await Promise.all([
+    const [tipCard, table, history, performance] = await Promise.all([
       fetchJson<TipCard>("latest_tip_card.json"),
       fetchJson<ModelTable>("professional_model_table.json"),
       fetchOptionalJson<MobileHistory>("mobile_tip_history.json", {
@@ -45,11 +45,16 @@ export async function loadAppData(): Promise<AppData> {
         generated_at: "",
         sports: {},
       }),
+      fetchOptionalJson<MobilePerformance>("mobile_performance.json", {
+        schema_version: 1, generated_at: "", starting_bankroll: 1000,
+        current_bankroll: 1000, points: [],
+      }),
     ]);
     const value: AppData = {
       tipCard,
       modelRows: rowsFrom(table),
       historyBySport: history.sports ?? {},
+      performance,
       source: "live",
       refreshedAt: new Date().toISOString(),
     };
@@ -59,7 +64,7 @@ export async function loadAppData(): Promise<AppData> {
     const cached = await AsyncStorage.getItem(CACHE_KEY);
     if (cached) {
       const value = JSON.parse(cached) as AppData;
-      return { ...value, historyBySport: value.historyBySport ?? {}, source: "cache" };
+      return { ...value, historyBySport: value.historyBySport ?? {}, performance: value.performance ?? { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "cache" };
     }
     throw error;
   }

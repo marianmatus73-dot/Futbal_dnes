@@ -93,10 +93,29 @@ export type MobileHistory = {
   sports?: Record<string, HistoryTip[]>;
 };
 
+export type PerformancePoint = {
+  settled_at: string;
+  sport: string;
+  result: string;
+  profit: number;
+  bankroll: number;
+  drawdown_pct: number;
+  clv_pct?: number | null;
+};
+
+export type MobilePerformance = {
+  schema_version: number;
+  generated_at: string;
+  starting_bankroll: number;
+  current_bankroll: number;
+  points: PerformancePoint[];
+};
+
 export type AppData = {
   tipCard: TipCard;
   modelRows: ModelRow[];
   historyBySport: Record<string, HistoryTip[]>;
+  performance: MobilePerformance;
   source: "live" | "cache";
   refreshedAt: string;
 };

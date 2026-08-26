@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { loadAppData } from "./src/api";
 import { REFRESH_INTERVAL_MS } from "./src/config";
@@ -276,25 +277,35 @@ function Today({ data }: { data: AppData }) {
 }
 
 function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; onSelect: (sport: Sport) => void }) {
+  const [historyFilter, setHistoryFilter] = useState<"all" | "open" | "won" | "lost">("all");
+  const [favorites, setFavorites] = useState<Sport[]>([]);
+  useEffect(() => { AsyncStorage.getItem("multisport:favorites").then((value) => { if (value) setFavorites(JSON.parse(value)); }).catch(() => undefined); }, []);
+  const toggleFavorite = (sport: Sport) => {
+    const next = favorites.includes(sport) ? favorites.filter((item) => item !== sport) : [...favorites, sport];
+    setFavorites(next);
+    AsyncStorage.setItem("multisport:favorites", JSON.stringify(next)).catch(() => undefined);
+  };
+  const orderedSports = [...SPORTS].sort((a, b) => Number(favorites.includes(b)) - Number(favorites.includes(a)));
   const tips = data.tipCard.selected.filter((tip) => tip.sport === selected);
   const candidates = (data.tipCard.rejected_sample ?? []).filter((tip) => tip.sport === selected);
   const row = data.modelRows.find((item) => item.sport === selected);
+  const history = (data.historyBySport[selected] ?? []).filter((tip) => historyFilter === "all" || (historyFilter === "open" && tip.result === "OPEN") || (historyFilter === "won" && tip.result === "WON") || (historyFilter === "lost" && tip.result === "LOST"));
   return (
     <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.sportTabs}>
-        {SPORTS.map((sport) => {
+        {orderedSports.map((sport) => {
           const meta = sportMeta[sport];
           const active = sport === selected;
           return (
             <Pressable key={sport} onPress={() => onSelect(sport)} style={[styles.sportTab, active && { borderColor: meta.color, backgroundColor: `${meta.color}18` }]}>
-              <Text style={styles.tabEmoji}>{meta.icon}</Text>
+              <Text style={styles.tabEmoji}>{meta.icon}{favorites.includes(sport) ? " ★" : ""}</Text>
               <Text style={[styles.sportTabText, active && { color: meta.color }]}>{meta.label}</Text>
             </Pressable>
           );
         })}
       </ScrollView>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>{sportMeta[selected].label}</Text>
+        <View style={styles.favoriteTitleRow}><Text style={styles.sectionTitle}>{sportMeta[selected].label}</Text><Pressable onPress={() => toggleFavorite(selected)} style={styles.favoriteButton}><Text style={styles.favoriteButtonText}>{favorites.includes(selected) ? "★ Obľúbený" : "☆ Pridať"}</Text></Pressable></View>
         <Text style={styles.sectionSubtitle}>Model a dnešné rozhodnutia</Text>
       </View>
       <View style={styles.summaryGrid}>
@@ -304,7 +315,8 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
       </View>
       {tips.length ? tips.map((tip, index) => <TipItem key={`${tip.match}-${index}`} tip={tip} />) : <EmptyTips sport={selected} />}
       <Candidates tips={candidates} />
-      <RecentAnalyses tips={(data.historyBySport[selected] ?? []).slice(0, 5)} />
+      <View style={styles.historyFilters}>{([['all','Všetky'],['open','Čakajú'],['won','Vyšli'],['lost','Nevyšli']] as const).map(([value,label]) => <Pressable key={value} onPress={() => setHistoryFilter(value)} style={[styles.sortChip, historyFilter === value && styles.sortChipActive]}><Text style={[styles.sortText, historyFilter === value && styles.sortTextActive]}>{label}</Text></Pressable>)}</View>
+      <RecentAnalyses tips={history.slice(0, 5)} />
     </>
   );
 }
@@ -318,13 +330,28 @@ function Summary({ label, value, positive = false }: { label: string; value: str
   );
 }
 
-function Performance({ rows }: { rows: ModelRow[] }) {
+function TrendChart({ values, color }: { values: number[]; color: string }) {
+  if (!values.length) return <Text style={styles.historyEmpty}>Graf sa zobrazí po uzavretí prvých tipov.</Text>;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = Math.max(max - min, 0.01);
+  return <View style={styles.chart}>{values.slice(-40).map((value, index) => <View key={index} style={[styles.chartBar, { backgroundColor: color, height: 8 + ((value - min) / range) * 72 }]} />)}</View>;
+}
+
+function Performance({ data }: { data: AppData }) {
+  const rows = data.modelRows;
+  const points = data.performance.points ?? [];
+  const clv = points.map((point) => point.clv_pct).filter((value): value is number => value != null);
+  const worstDrawdown = points.length ? Math.min(...points.map((point) => point.drawdown_pct)) : 0;
   return (
     <>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Výkon modelov</Text>
         <Text style={styles.sectionSubtitle}>Iba uzavreté tipy a skutočné výsledky</Text>
       </View>
+      <View style={styles.summaryGrid}><Summary label="Bankroll" value={formatNumber(data.performance.current_bankroll)} positive /><Summary label="Zmena" value={formatNumber(data.performance.current_bankroll - data.performance.starting_bankroll)} /><Summary label="Max. drawdown" value={`${worstDrawdown.toFixed(1)} %`} /></View>
+      <View style={styles.graphCard}><Text style={styles.graphTitle}>Vývoj bankrollu</Text><TrendChart values={points.map((point) => point.bankroll)} color={colors.primary} /></View>
+      <View style={styles.graphCard}><Text style={styles.graphTitle}>Vývoj CLV</Text><TrendChart values={clv} color={colors.accent} /></View>
       {SPORTS.map((sport) => {
         const row = rows.find((item) => item.sport === sport);
         const meta = sportMeta[sport];
@@ -399,7 +426,7 @@ function AppContent() {
 
   if (loading) return <SafeAreaView style={styles.loading}><StatusBar style="light" /><ActivityIndicator color={colors.primary} size="large" /><Text style={styles.loadingText}>Načítavam najnovšiu analýzu…</Text></SafeAreaView>;
 
-  const usable = data ?? { tipCard: emptyCard, modelRows: [], historyBySport: {}, source: "live" as const, refreshedAt: "" };
+  const usable = data ?? { tipCard: emptyCard, modelRows: [], historyBySport: {}, performance: { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "live" as const, refreshedAt: "" };
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <StatusBar style="light" />
@@ -408,7 +435,7 @@ function AppContent() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
         {screen === "today" && <Today data={usable} />}
         {screen === "sports" && <Sports data={usable} selected={sport} onSelect={setSport} />}
-        {screen === "performance" && <Performance rows={usable.modelRows} />}
+        {screen === "performance" && <Performance data={usable} />}
         {screen === "system" && <System data={usable} />}
       </ScrollView>
       <View style={[styles.nav, { paddingBottom: Math.max(insets.bottom, 12) }]}>
@@ -446,9 +473,12 @@ const styles = StyleSheet.create({
   sortRow: { flexDirection: "row", alignItems: "center", gap: 7, marginBottom: 12 }, sortLabel: { color: colors.muted, fontSize: 10, marginRight: 2 }, sortChip: { borderRadius: 12, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 6 }, sortChipActive: { backgroundColor: "#243C39" }, sortText: { color: colors.muted, fontSize: 9, fontWeight: "800" }, sortTextActive: { color: colors.primary }, nextDecision: { backgroundColor: "#102844", borderRadius: 15, padding: 13, marginBottom: 14 }, nextDecisionLabel: { color: colors.accent, fontSize: 9, fontWeight: "900", letterSpacing: 1 }, nextDecisionValue: { color: colors.text, fontSize: 12, fontWeight: "700", marginTop: 5 },
   candidatesSection: { marginTop: 22 }, candidatesTitle: { color: colors.warning, fontSize: 21, fontWeight: "900" }, candidatesSubtitle: { color: colors.muted, lineHeight: 19, marginTop: 5, marginBottom: 13 }, candidateCard: { backgroundColor: "#171C2B", borderRadius: 22, borderWidth: 1, borderColor: "#664D24", padding: 17, marginBottom: 14 }, rejectedBadge: { backgroundColor: "#4A2B20", borderWidth: 1, borderColor: colors.warning, borderRadius: 9, paddingHorizontal: 8, paddingVertical: 6 }, rejectedBadgeText: { color: colors.warning, fontSize: 8, fontWeight: "900" }, candidateFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 }, detailButton: { color: colors.accent, fontSize: 11, fontWeight: "900" }, rejectionBox: { backgroundColor: "#251F1D", borderRadius: 14, padding: 12, marginTop: 12 }, rejectionTitle: { color: colors.warning, fontWeight: "900", fontSize: 11, marginBottom: 5 }, rejectionText: { color: "#D7C7B0", fontSize: 11, lineHeight: 17 }, modelReason: { color: colors.muted, fontSize: 10, lineHeight: 15, marginTop: 8 },
   historySection: { marginTop: 24, marginBottom: 8 }, historyTitle: { color: colors.text, fontSize: 21, fontWeight: "900" }, historySubtitle: { color: colors.muted, lineHeight: 18, fontSize: 12, marginTop: 5, marginBottom: 12 }, historyEmpty: { color: colors.muted, backgroundColor: colors.surface, borderRadius: 16, padding: 16, marginTop: 18, marginBottom: 8 }, historyCard: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: 14, marginBottom: 10 }, historyTop: { flexDirection: "row", alignItems: "center" }, historyHeading: { flex: 1, paddingRight: 8 }, historyMatch: { color: colors.text, fontWeight: "800", fontSize: 14, marginTop: 3 }, historyBadge: { borderWidth: 1, borderRadius: 10, paddingHorizontal: 9, paddingVertical: 6 }, historyBadgeText: { fontSize: 9, fontWeight: "900" }, historyBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", borderTopWidth: 1, borderColor: colors.border, marginTop: 12, paddingTop: 12 }, historyPick: { color: colors.text, fontWeight: "800", fontSize: 14, marginTop: 4 }, historyMarket: { color: colors.muted, fontSize: 10, marginTop: 3 }, scoreBox: { alignItems: "flex-end" }, finalScore: { fontSize: 20, fontWeight: "900", marginTop: 3 }, historyDetailLink: { color: colors.accent, fontSize: 10, fontWeight: "800", marginTop: 12 }, historyDetail: { backgroundColor: colors.surfaceAlt, borderRadius: 12, padding: 11, marginTop: 9 }, unresolvedNote: { color: colors.warning, fontSize: 10, lineHeight: 15, marginTop: 8 },
+  historyFilters: { flexDirection: "row", flexWrap: "wrap", gap: 7, marginTop: 22, marginBottom: -10 },
   sportTabs: { gap: 9, paddingVertical: 6, paddingRight: 18, marginBottom: 16 }, sportTab: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, borderRadius: 15, alignItems: "center", paddingVertical: 10, paddingHorizontal: 13, minWidth: 78 }, tabEmoji: { fontSize: 20 }, sportTabText: { color: colors.muted, fontSize: 11, fontWeight: "800", marginTop: 4 },
   sectionHeader: { marginVertical: 14 }, sectionTitle: { color: colors.text, fontWeight: "900", fontSize: 23 }, sectionSubtitle: { color: colors.muted, marginTop: 4 }, summaryGrid: { flexDirection: "row", gap: 8, marginBottom: 14 }, summary: { flex: 1, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 16, padding: 13 }, summaryLabel: { color: colors.muted, fontSize: 10 }, summaryValue: { color: colors.text, fontSize: 17, fontWeight: "900", marginTop: 5 },
+  favoriteTitleRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" }, favoriteButton: { borderWidth: 1, borderColor: colors.warning, borderRadius: 14, paddingHorizontal: 10, paddingVertical: 6 }, favoriteButtonText: { color: colors.warning, fontSize: 10, fontWeight: "900" },
   performanceRow: { flexDirection: "row", alignItems: "center", backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: 13, marginBottom: 9 }, performanceName: { flex: 1, marginLeft: 10 }, performanceTitle: { color: colors.text, fontWeight: "800", fontSize: 15 }, performanceSub: { color: colors.muted, fontSize: 11, marginTop: 3 }, performanceMetric: { alignItems: "flex-end", minWidth: 62, marginLeft: 8 }, performanceValue: { color: colors.text, fontWeight: "800" },
+  graphCard: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: 15, marginBottom: 13 }, graphTitle: { color: colors.text, fontWeight: "900", fontSize: 15, marginBottom: 12 }, chart: { height: 82, flexDirection: "row", alignItems: "flex-end", gap: 2 }, chartBar: { flex: 1, minWidth: 2, borderRadius: 2, opacity: .85 },
   statusRow: { flexDirection: "row", alignItems: "center", backgroundColor: colors.surface, borderBottomWidth: 1, borderColor: colors.border, padding: 16 }, statusDot: { width: 10, height: 10, borderRadius: 5, marginRight: 13 }, statusText: { flex: 1 }, statusLabel: { color: colors.text, fontWeight: "800" }, statusValue: { color: colors.muted, marginTop: 3, fontSize: 12 }, infoCard: { backgroundColor: "#102844", borderRadius: 20, padding: 18, marginTop: 16 }, infoTitle: { color: colors.accent, fontWeight: "900", fontSize: 16 }, infoText: { color: "#B5C9E6", lineHeight: 21, marginTop: 8 },
   nav: { flexDirection: "row", borderTopWidth: 1, borderColor: colors.border, backgroundColor: "#0B1727", paddingVertical: 9, paddingBottom: 12 }, navItem: { flex: 1, alignItems: "center" }, navIcon: { color: colors.muted, fontSize: 20, fontWeight: "900" }, navLabel: { color: colors.muted, fontSize: 10, fontWeight: "700", marginTop: 3 }, navActive: { color: colors.primary },
 });
