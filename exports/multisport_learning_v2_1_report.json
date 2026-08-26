@@ -1,17 +1,17 @@
 {
   "version": "V2.1",
-  "generated_at": "2026-08-26T06:26:25.529479+00:00",
+  "generated_at": "2026-08-26T08:07:19.276654+00:00",
   "sports": {
     "baseball": {
-      "total_bets": 1194,
-      "settled_bets": 887,
-      "open_bets": 307,
-      "wins": 486,
-      "losses": 401,
-      "win_rate": 0.5479,
-      "profit": 69.9836,
-      "stake_sum": 1062.92,
-      "yield": 0.0658,
+      "total_bets": 1197,
+      "settled_bets": 914,
+      "open_bets": 283,
+      "wins": 499,
+      "losses": 415,
+      "win_rate": 0.546,
+      "profit": 72.477,
+      "stake_sum": 1064.04,
+      "yield": 0.0681,
       "probability_samples": 0,
       "brier_score": null,
       "log_loss": null,
@@ -130,8 +130,8 @@
     }
   },
   "adaptive_weights": {
-    "baseball": 0.4362,
-    "basketball": 0.1596,
+    "baseball": 0.4364,
+    "basketball": 0.1595,
     "tennis": 0.1016,
     "hockey": 0.1016,
     "mma": 0.1097,
