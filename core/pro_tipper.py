@@ -33,6 +33,9 @@ class ProTip:
     bookmaker_weight: float = 1.0
     bookmaker_samples: int = 0
     bookmaker_label: str = "NEOVERENÝ"
+    start_time: str = ""
+    opening_odds: float | None = None
+    final_odds: float | None = None
 
 
 def _safe_float(
@@ -181,6 +184,9 @@ def build_pro_tip(
     model_score: float | int | None = None,
     release_stage: str = "",
     lineup_verified: bool = False,
+    start_time: str = "",
+    opening_odds: float | None = None,
+    final_odds: float | None = None,
 ) -> ProTip:
     odds = float(odds)
     model_probability = max(
@@ -242,6 +248,9 @@ def build_pro_tip(
         bookmaker_weight=float(book_profile["weight"]),
         bookmaker_samples=int(book_profile["samples"]),
         bookmaker_label=str(book_profile["label"]),
+        start_time=str(start_time or ""),
+        opening_odds=opening_odds,
+        final_odds=final_odds,
     )
 
 

@@ -111,5 +111,8 @@ def bet_to_tip_dict(bet: Any, fallback_sport: str = "") -> dict | None:
         "bookmaker": data.get("bookmaker", ""),
         "release_stage": data.get("release_stage", ""),
         "lineup_verified": bool(data.get("lineup_verified", False)),
+        "start_time": data.get("start_time", ""),
+        "opening_odds": to_float_or_none(data.get("opening_odds")),
+        "final_odds": to_float_or_none(data.get("final_odds")),
         "reason": " | ".join(reason_parts),
     }

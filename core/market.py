@@ -62,6 +62,62 @@ def best_outlier_prices(bookmakers: list[dict]) -> list[tuple[str, str, float]]:
     return rows
 
 
+def consensus_totals(
+    bookmakers: list[dict],
+    *,
+    point: float = 2.5,
+    min_books: int = 3,
+) -> dict[str, float]:
+    """No-vig market consensus for a specific football goals line."""
+    buckets: dict[str, list[float]] = defaultdict(list)
+    for book in bookmakers:
+        prices: dict[str, float] = {}
+        for market in book.get("markets", []):
+            if market.get("key") != "totals":
+                continue
+            for outcome in market.get("outcomes", []):
+                try:
+                    outcome_point = float(outcome.get("point"))
+                    price = float(outcome.get("price", 0) or 0)
+                except (TypeError, ValueError):
+                    continue
+                name = str(outcome.get("name", "")).title()
+                if abs(outcome_point - point) < 0.01 and name in {"Over", "Under"} and price > 1.01:
+                    prices[name] = price
+        for name, probability in no_vig_probs(prices).items():
+            buckets[name].append(probability)
+    return {
+        name: sum(values) / len(values)
+        for name, values in buckets.items()
+        if len(values) >= min_books
+    }
+
+
+def best_total_prices(
+    bookmakers: list[dict],
+    *,
+    point: float = 2.5,
+) -> dict[str, tuple[str, float]]:
+    best: dict[str, tuple[str, float]] = {}
+    for book in bookmakers:
+        bookmaker = str(book.get("title", ""))
+        for market in book.get("markets", []):
+            if market.get("key") != "totals":
+                continue
+            for outcome in market.get("outcomes", []):
+                try:
+                    outcome_point = float(outcome.get("point"))
+                    price = float(outcome.get("price", 0) or 0)
+                except (TypeError, ValueError):
+                    continue
+                name = str(outcome.get("name", "")).title()
+                if abs(outcome_point - point) >= 0.01 or name not in {"Over", "Under"} or price <= 1.01:
+                    continue
+                if name not in best or price > best[name][1]:
+                    best[name] = (bookmaker, price)
+    return best
+
+
 def dedupe_best_bets(bets):
     """
     Keep only one strongest bet per event + market.

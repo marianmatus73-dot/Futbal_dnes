@@ -22,6 +22,8 @@ class Bet:
     external_event_id: str = ""
     release_stage: str = ""
     lineup_verified: bool = False
+    opening_odds: float | None = None
+    final_odds: float | None = None
 
 
 @dataclass

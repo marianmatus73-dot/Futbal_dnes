@@ -268,6 +268,31 @@ class FootballMetaModel:
                 reason=reason,
             )
 
+        minimum_validation = clamp(
+            safe_float(
+                os.getenv("FOOTBALL_META_MIN_VALIDATION", "0.55"),
+                0.55,
+            ),
+            0.0,
+            1.0,
+        )
+        if self.metadata.validation_score < minimum_validation:
+            return FootballMetaPrediction(
+                probability=fallback,
+                fallback_probability=fallback,
+                source="FOOTBALL_V13_FALLBACK",
+                model_loaded=True,
+                model_path=str(self.model_path),
+                confidence=confidence,
+                reliability=reliability,
+                reason=(
+                    "meta=fallback_quality_guard; model keeps learning; "
+                    f"validation={self.metadata.validation_score:.3f}; "
+                    f"minimum={minimum_validation:.3f}; "
+                    f"fallback={fallback:.4f}"
+                ),
+            )
+
         try:
             raw_probability = clamp(
                 self._predict_with_model(features),

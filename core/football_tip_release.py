@@ -103,6 +103,25 @@ def apply_football_release_policy(
                 awaiting += 1
 
             with sqlite3.connect(database) as conn:
+                previous = conn.execute(
+                    """
+                    SELECT opening_odds, final_odds
+                    FROM sport_bets
+                    WHERE sport='football' AND league=? AND event=?
+                      AND selection=? AND start_time=?
+                    ORDER BY id DESC LIMIT 1
+                    """,
+                    (bet.league, bet.event, bet.selection, bet.start_time),
+                ).fetchone()
+                bet.opening_odds = (
+                    float(previous[0])
+                    if previous and previous[0] not in (None, "")
+                    else float(bet.odds)
+                )
+                if stage == "FINAL":
+                    bet.final_odds = float(bet.odds)
+                elif previous and previous[1] not in (None, ""):
+                    bet.final_odds = float(previous[1])
                 conn.execute(
                     """
                     UPDATE sport_bets
