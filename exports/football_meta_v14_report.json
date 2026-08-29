@@ -1,41 +1,41 @@
 {
-  "trained_at": "2026-08-26T08:07:19+00:00",
-  "samples": 489,
-  "wins": 146,
-  "losses": 343,
-  "positive_rate": 0.2985685071574642,
+  "trained_at": "2026-08-29T18:58:52+00:00",
+  "samples": 522,
+  "wins": 157,
+  "losses": 365,
+  "positive_rate": 0.3007662835249042,
   "milestone": 500,
-  "selected_model": "random_forest",
-  "selected_validation_score": 0.31198493625262064,
+  "selected_model": "logistic_regression",
+  "selected_validation_score": 0.3069163205591299,
   "selected_metrics": {
-    "accuracy": 0.6122448979591837,
-    "brier_score": 0.23230639869074732,
-    "log_loss": 0.6554168365773568
+    "accuracy": 0.6476190476190476,
+    "brier_score": 0.24222263155320942,
+    "log_loss": 0.6790809234950725
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
-      "accuracy": 0.6224489795918368,
-      "brier_score": 0.2570548686965305,
-      "log_loss": 0.7547259582319426,
-      "validation_score": 0.28010204081632656
+      "accuracy": 0.6476190476190476,
+      "brier_score": 0.24222263155320942,
+      "log_loss": 0.6790809234950725,
+      "validation_score": 0.3069163205591299
     },
     {
       "model_type": "random_forest",
-      "accuracy": 0.6122448979591837,
-      "brier_score": 0.23230639869074732,
-      "log_loss": 0.6554168365773568,
-      "validation_score": 0.31198493625262064
+      "accuracy": 0.580952380952381,
+      "brier_score": 0.23252780139939067,
+      "log_loss": 0.6578051554490779,
+      "validation_score": 0.29703221676225217
     },
     {
       "model_type": "hist_gradient_boosting",
-      "accuracy": 0.6632653061224489,
-      "brier_score": 0.265131616226249,
-      "log_loss": 0.8592838028907429,
-      "validation_score": 0.298469387755102
+      "accuracy": 0.6571428571428571,
+      "brier_score": 0.26048958173264075,
+      "log_loss": 0.8265582668285729,
+      "validation_score": 0.2957142857142857
     }
   ],
-  "next_milestone": 500,
+  "next_milestone": 750,
   "model_path": "models/football_meta_model.pkl",
   "metadata_path": "models/football_meta_model.json",
   "importance_path": "exports/football_meta_v14_feature_importance.json"

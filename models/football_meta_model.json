@@ -1,10 +1,10 @@
 {
-  "model_type": "football_meta_v14_random_forest",
-  "trained_at": "2026-08-26T08:07:19+00:00",
-  "samples": 489,
+  "model_type": "football_meta_v14_logistic_regression",
+  "trained_at": "2026-08-29T18:58:52+00:00",
+  "samples": 522,
   "feature_count": 55,
-  "positive_rate": 0.2985685071574642,
-  "validation_score": 0.31198493625262064,
+  "positive_rate": 0.3007662835249042,
+  "validation_score": 0.3069163205591299,
   "version": "v14",
   "feature_order": [
     "odds",
