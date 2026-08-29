@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-08-28T17:48:15+00:00",
+  "generated_at": "2026-08-29T11:52:39+00:00",
   "version": "v15",
-  "total_rows": 490,
-  "training_ready_rows": 490,
-  "wins": 147,
-  "losses": 343,
-  "hit_rate": 0.3,
-  "brier_score": 0.2023558703684081,
-  "log_loss": 0.5938969308722756,
-  "average_clv_probability": 0.0023702156710470007,
-  "average_consensus_safety": 0.7944693877551022,
+  "total_rows": 498,
+  "training_ready_rows": 498,
+  "wins": 151,
+  "losses": 347,
+  "hit_rate": 0.3032128514056225,
+  "brier_score": 0.203830799046588,
+  "log_loss": 0.5970563680953519,
+  "average_clv_probability": 0.0029961762004861313,
+  "average_consensus_safety": 0.7962931726907633,
   "by_league": [
     {
       "league": "MLS",
@@ -63,13 +63,13 @@
     },
     {
       "league": "Liga MX",
-      "samples": 25,
+      "samples": 26,
       "wins": 10,
-      "losses": 15,
-      "hit_rate": 0.4,
-      "brier_score": 0.24442814335163338,
-      "log_loss": 0.6834149463757949,
-      "average_clv_probability": 0.008124482291373506
+      "losses": 16,
+      "hit_rate": 0.38461538461538464,
+      "brier_score": 0.2386953733740777,
+      "log_loss": 0.671336287990963,
+      "average_clv_probability": 0.008871139496307912
     },
     {
       "league": "Danish Superliga",
@@ -92,6 +92,16 @@
       "average_clv_probability": -0.01074767469013955
     },
     {
+      "league": "La Liga",
+      "samples": 17,
+      "wins": 4,
+      "losses": 13,
+      "hit_rate": 0.23529411764705882,
+      "brier_score": 0.18414311433299924,
+      "log_loss": 0.5565623606800955,
+      "average_clv_probability": 0.020043344710589942
+    },
+    {
       "league": "Swiss Super League",
       "samples": 16,
       "wins": 6,
@@ -102,44 +112,44 @@
       "average_clv_probability": 0.0032101677148846652
     },
     {
-      "league": "La Liga",
-      "samples": 15,
-      "wins": 3,
-      "losses": 12,
-      "hit_rate": 0.2,
-      "brier_score": 0.17468666765785662,
-      "log_loss": 0.5372711052078968,
-      "average_clv_probability": 0.023439166788423556
-    },
-    {
       "league": "Championship",
-      "samples": 14,
-      "wins": 5,
+      "samples": 15,
+      "wins": 6,
       "losses": 9,
-      "hit_rate": 0.35714285714285715,
-      "brier_score": 0.2034028778395867,
-      "log_loss": 0.5960671485595826,
-      "average_clv_probability": -0.011931803375052771
+      "hit_rate": 0.4,
+      "brier_score": 0.22232616124869392,
+      "log_loss": 0.6361588336812029,
+      "average_clv_probability": -0.005114088244314966
     },
     {
       "league": "2. Bundesliga",
-      "samples": 13,
+      "samples": 14,
       "wins": 4,
-      "losses": 9,
-      "hit_rate": 0.3076923076923077,
-      "brier_score": 0.21046806550910466,
-      "log_loss": 0.6114204640863465,
+      "losses": 10,
+      "hit_rate": 0.2857142857142857,
+      "brier_score": 0.20564162918830248,
+      "log_loss": 0.6016650643009107,
       "average_clv_probability": null
     },
     {
       "league": "Ligue 2",
-      "samples": 13,
-      "wins": 2,
+      "samples": 14,
+      "wins": 3,
       "losses": 11,
-      "hit_rate": 0.15384615384615385,
-      "brier_score": 0.14544675805887586,
-      "log_loss": 0.47198853638261756,
-      "average_clv_probability": -0.02651450163587153
+      "hit_rate": 0.21428571428571427,
+      "brier_score": 0.1722689873659553,
+      "log_loss": 0.5296552263885517,
+      "average_clv_probability": -0.019885876226903645
+    },
+    {
+      "league": "J-League",
+      "samples": 12,
+      "wins": 1,
+      "losses": 11,
+      "hit_rate": 0.08333333333333333,
+      "brier_score": 0.11401373396426089,
+      "log_loss": 0.4045833423461355,
+      "average_clv_probability": 0.0013082155939299067
     },
     {
       "league": "Belgian Pro League",
@@ -152,14 +162,14 @@
       "average_clv_probability": 0.002577272768123066
     },
     {
-      "league": "J-League",
+      "league": "Segunda Division",
       "samples": 11,
-      "wins": 1,
-      "losses": 10,
-      "hit_rate": 0.09090909090909091,
-      "brier_score": 0.11640561118124432,
-      "log_loss": 0.4094376602939587,
-      "average_clv_probability": 0.0013082155939299067
+      "wins": 5,
+      "losses": 6,
+      "hit_rate": 0.45454545454545453,
+      "brier_score": 0.27194606059080584,
+      "log_loss": 0.743475168292883,
+      "average_clv_probability": 0.025741580043751114
     },
     {
       "league": "Turkish Super Lig",
@@ -190,16 +200,6 @@
       "brier_score": 0.25503250107568104,
       "log_loss": 0.7092960262030599,
       "average_clv_probability": 0.004631058968817506
-    },
-    {
-      "league": "Segunda Division",
-      "samples": 10,
-      "wins": 4,
-      "losses": 6,
-      "hit_rate": 0.4,
-      "brier_score": 0.24823654134758363,
-      "log_loss": 0.6928310382824813,
-      "average_clv_probability": 0.026842160330355833
     },
     {
       "league": "Eredivisie",
@@ -295,13 +295,13 @@
   "by_bookmaker": [
     {
       "bookmaker": "Betfair",
-      "samples": 121,
-      "wins": 34,
-      "losses": 87,
-      "hit_rate": 0.2809917355371901,
-      "brier_score": 0.20009103707730605,
-      "log_loss": 0.5890095054657053,
-      "average_clv_probability": 0.007885859485692492
+      "samples": 124,
+      "wins": 36,
+      "losses": 88,
+      "hit_rate": 0.2903225806451613,
+      "brier_score": 0.2042638531638104,
+      "log_loss": 0.5979885054123631,
+      "average_clv_probability": 0.007958949778148396
     },
     {
       "bookmaker": "1xBet",
@@ -325,43 +325,43 @@
     },
     {
       "bookmaker": "Tipico",
-      "samples": 41,
+      "samples": 42,
       "wins": 12,
-      "losses": 29,
-      "hit_rate": 0.2926829268292683,
-      "brier_score": 0.20433951008490672,
-      "log_loss": 0.5986680175996076,
+      "losses": 30,
+      "hit_rate": 0.2857142857142857,
+      "brier_score": 0.2028766159642631,
+      "log_loss": 0.5957198473493847,
       "average_clv_probability": -0.004148074524090782
     },
     {
       "bookmaker": "Coolbet",
-      "samples": 33,
+      "samples": 35,
       "wins": 9,
-      "losses": 24,
-      "hit_rate": 0.2727272727272727,
-      "brier_score": 0.19690536250988994,
-      "log_loss": 0.5813083889375403,
-      "average_clv_probability": 0.03462052442865448
+      "losses": 26,
+      "hit_rate": 0.2571428571428571,
+      "brier_score": 0.19114964969316586,
+      "log_loss": 0.5693050185742792,
+      "average_clv_probability": 0.03070228887573059
     },
     {
       "bookmaker": "Unibet (SE)",
-      "samples": 33,
-      "wins": 7,
+      "samples": 34,
+      "wins": 8,
       "losses": 26,
-      "hit_rate": 0.21212121212121213,
-      "brier_score": 0.16671466864964504,
-      "log_loss": 0.5167461264561044,
-      "average_clv_probability": 0.013896933058586707
+      "hit_rate": 0.23529411764705882,
+      "brier_score": 0.17396271593329918,
+      "log_loss": 0.5318231394030544,
+      "average_clv_probability": 0.011269412437253497
     },
     {
       "bookmaker": "Matchbook",
-      "samples": 26,
-      "wins": 15,
+      "samples": 27,
+      "wins": 16,
       "losses": 11,
-      "hit_rate": 0.5769230769230769,
-      "brier_score": 0.3244840881819039,
-      "log_loss": 0.8555146275779167,
-      "average_clv_probability": 0.03271103099243771
+      "hit_rate": 0.5925925925925926,
+      "brier_score": 0.330512534137248,
+      "log_loss": 0.868178620089249,
+      "average_clv_probability": 0.03574623419950025
     },
     {
       "bookmaker": "LeoVegas (SE)",
@@ -497,12 +497,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 490,
-      "wins": 147,
-      "losses": 343,
-      "hit_rate": 0.3,
-      "brier_score": 0.2023558703684081,
-      "log_loss": 0.5938969308722756
+      "samples": 498,
+      "wins": 151,
+      "losses": 347,
+      "hit_rate": 0.3032128514056225,
+      "brier_score": 0.203830799046588,
+      "log_loss": 0.5970563680953519
     }
   ],
   "by_consensus_safety": [
@@ -517,30 +517,30 @@
     },
     {
       "bucket": "0.70-0.84",
-      "samples": 89,
+      "samples": 91,
       "wins": 22,
-      "losses": 67,
-      "hit_rate": 0.24719101123595505,
-      "brier_score": 0.18189497529836482,
-      "log_loss": 0.5506174378891547
+      "losses": 69,
+      "hit_rate": 0.24175824175824176,
+      "brier_score": 0.17990914296777033,
+      "log_loss": 0.5464341499497256
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 244,
-      "wins": 78,
+      "samples": 248,
+      "wins": 82,
       "losses": 166,
-      "hit_rate": 0.319672131147541,
-      "brier_score": 0.21475664851659299,
-      "log_loss": 0.620139018177624
+      "hit_rate": 0.33064516129032256,
+      "brier_score": 0.21907670106733787,
+      "log_loss": 0.6293143794041899
     },
     {
       "bucket": "0.95+",
-      "samples": 97,
+      "samples": 99,
       "wins": 29,
-      "losses": 68,
-      "hit_rate": 0.29896907216494845,
-      "brier_score": 0.21122302954604275,
-      "log_loss": 0.6139292637274695
+      "losses": 70,
+      "hit_rate": 0.29292929292929293,
+      "brier_score": 0.2093789542978108,
+      "log_loss": 0.6100920448024804
     },
     {
       "bucket": "<0.50",
@@ -600,12 +600,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 478,
-      "wins": 137,
-      "losses": 341,
-      "hit_rate": 0.28661087866108786,
-      "brier_score": 0.20271274899891328,
-      "log_loss": 0.594809574910273
+      "samples": 486,
+      "wins": 141,
+      "losses": 345,
+      "hit_rate": 0.29012345679012347,
+      "brier_score": 0.20421822112378887,
+      "log_loss": 0.5980319999818532
     }
   ],
   "metrics_reliable": true
