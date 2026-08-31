@@ -54,6 +54,7 @@ export async function loadAppData(): Promise<AppData> {
       tipCard,
       modelRows: rowsFrom(table),
       historyBySport: history.sports ?? {},
+      resultsBySport: history.results_sports ?? {},
       performance,
       source: "live",
       refreshedAt: new Date().toISOString(),
@@ -64,8 +65,9 @@ export async function loadAppData(): Promise<AppData> {
     const cached = await AsyncStorage.getItem(CACHE_KEY);
     if (cached) {
       const value = JSON.parse(cached) as AppData;
-      return { ...value, historyBySport: value.historyBySport ?? {}, performance: value.performance ?? { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "cache" };
+      return { ...value, historyBySport: value.historyBySport ?? {}, resultsBySport: value.resultsBySport ?? {}, performance: value.performance ?? { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "cache" };
     }
     throw error;
   }
 }
+
