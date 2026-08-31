@@ -239,12 +239,12 @@ function HistoryItem({ tip }: { tip: HistoryTip }) {
   );
 }
 
-function RecentAnalyses({ tips }: { tips: HistoryTip[] }) {
-  if (!tips.length) return <Text style={styles.historyEmpty}>Zatiaľ nie sú uložené analyzované zápasy pre tento šport.</Text>;
+function RecentAnalyses({ tips, title = `Dnešné analýzy (${tips.length})`, subtitle = "Každý zápas je zobrazený iba raz s najsilnejšou stranou modelu. Ide o analýzu, nie automaticky o potvrdený tip." }: { tips: HistoryTip[]; title?: string; subtitle?: string }) {
+  if (!tips.length) return <Text style={styles.historyEmpty}>Pre tento šport zatiaľ nie sú dostupné zápasy.</Text>;
   return (
     <View style={styles.historySection}>
-      <Text style={styles.historyTitle}>Posledných {tips.length} analýz</Text>
-      <Text style={styles.historySubtitle}>Každý zápas je zobrazený iba raz s najsilnejšou stranou modelu. Ide o analýzu, nie automaticky o potvrdený tip. Stav VYŠIEL/NEVYŠIEL hodnotí tento pôvodný výber.</Text>
+      <Text style={styles.historyTitle}>{title}</Text>
+      <Text style={styles.historySubtitle}>{subtitle}</Text>
       {tips.map((tip, index) => <HistoryItem key={`${tip.match}-${tip.market}-${tip.pick}-${index}`} tip={tip} />)}
     </View>
   );
@@ -290,6 +290,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
   const candidates = (data.tipCard.rejected_sample ?? []).filter((tip) => tip.sport === selected);
   const row = data.modelRows.find((item) => item.sport === selected);
   const history = (data.historyBySport[selected] ?? []).filter((tip) => historyFilter === "all" || (historyFilter === "open" && tip.result === "OPEN") || (historyFilter === "won" && tip.result === "WON") || (historyFilter === "lost" && tip.result === "LOST"));
+  const recentResults = data.resultsBySport[selected] ?? [];
   return (
     <>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.sportTabs}>
@@ -317,6 +318,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
       <Candidates tips={candidates} />
       <View style={styles.historyFilters}>{([['all','Všetky'],['open','Čakajú'],['won','Vyšli'],['lost','Nevyšli']] as const).map(([value,label]) => <Pressable key={value} onPress={() => setHistoryFilter(value)} style={[styles.sortChip, historyFilter === value && styles.sortChipActive]}><Text style={[styles.sortText, historyFilter === value && styles.sortTextActive]}>{label}</Text></Pressable>)}</View>
       <RecentAnalyses tips={history.slice(0, 5)} />
+      <RecentAnalyses tips={recentResults.slice(0, 5)} title="Výsledky za posledných 7 dní" subtitle="Zobrazené sú iba uzavreté zápasy. VYŠIEL/NEVYŠIEL hodnotí pôvodný výber modelu; nevyhodnotené staré zápasy sú skryté." />
     </>
   );
 }
@@ -426,7 +428,7 @@ function AppContent() {
 
   if (loading) return <SafeAreaView style={styles.loading}><StatusBar style="light" /><ActivityIndicator color={colors.primary} size="large" /><Text style={styles.loadingText}>Načítavam najnovšiu analýzu…</Text></SafeAreaView>;
 
-  const usable = data ?? { tipCard: emptyCard, modelRows: [], historyBySport: {}, performance: { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "live" as const, refreshedAt: "" };
+  const usable = data ?? { tipCard: emptyCard, modelRows: [], historyBySport: {}, resultsBySport: {}, performance: { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "live" as const, refreshedAt: "" };
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <StatusBar style="light" />
