@@ -65,45 +65,70 @@ def export_mobile_tip_history(
                     """
                 ).fetchall()
 
-                seen: dict[str, set[tuple[str, str, str]]] = {}
+                # sport_bets stores every evaluated selection before the
+                # professional filter.  A two-way market can therefore contain
+                # both teams from the same match.  The mobile screen must show
+                # one model choice per event + market, not two apparent tips
+                # against each other.
+                grouped: dict[str, dict[tuple[str, str], sqlite3.Row]] = {}
                 for row in rows:
                     sport = str(row["sport"]).strip().lower()
-                    items = sports.setdefault(sport, [])
-                    if len(items) >= limit_per_sport:
-                        continue
                     key = (
-                        str(row["event"]),
-                        str(row["market"] or "h2h"),
-                        str(row["selection"]),
+                        str(row["event"]).strip().casefold(),
+                        str(row["market"] or "h2h").strip().casefold(),
                     )
-                    if key in seen.setdefault(sport, set()):
-                        continue
-                    seen[sport].add(key)
-                    final_score = str(row["final_score"] or "").strip()
-                    if not final_score and row["home_goals"] is not None and row["away_goals"] is not None:
-                        final_score = f'{row["home_goals"]}-{row["away_goals"]}'
-                    items.append(
-                        {
-                            "sport": sport,
-                            "league": str(row["league"] or ""),
-                            "match": str(row["event"]),
-                            "pick": str(row["selection"] or ""),
-                            "market": str(row["market"] or "h2h"),
-                            "odds": float(row["odds"] or 0),
-                            "bookmaker": str(row["bookmaker"] or ""),
-                            "model_probability": float(row["prob_final"] or 0),
-                            "edge": float(row["edge"] or 0),
-                            "stake": float(row["stake"] or 0),
-                            "closing_odds": float(row["closing_odds"]) if row["closing_odds"] not in (None, "") else None,
-                            "clv_pct": float(row["clv_pct"]) if row["clv_pct"] not in (None, "") else None,
-                            "settlement_source": str(row["settlement_source"] or ""),
-                            "result": _result(row["result"]),
-                            "final_score": final_score or None,
-                            "start_time": row["start_time"],
-                            "created_at": row["created_at"],
-                            "settled_at": row["settled_at"],
-                        }
+                    current = grouped.setdefault(sport, {}).get(key)
+                    rank = (
+                        float(row["edge"] or 0),
+                        float(row["prob_final"] or 0),
+                        float(row["stake"] or 0),
+                        int(row["id"] or 0),
                     )
+                    current_rank = (
+                        float(current["edge"] or 0),
+                        float(current["prob_final"] or 0),
+                        float(current["stake"] or 0),
+                        int(current["id"] or 0),
+                    ) if current is not None else None
+                    if current_rank is None or rank > current_rank:
+                        grouped[sport][key] = row
+
+                for sport, event_rows in grouped.items():
+                    selected_rows = sorted(
+                        event_rows.values(),
+                        key=lambda row: (
+                            str(row["start_time"] or row["created_at"] or ""),
+                            int(row["id"] or 0),
+                        ),
+                        reverse=True,
+                    )[:limit_per_sport]
+                    items = sports.setdefault(sport, [])
+                    for row in selected_rows:
+                        final_score = str(row["final_score"] or "").strip()
+                        if not final_score and row["home_goals"] is not None and row["away_goals"] is not None:
+                            final_score = f'{row["home_goals"]}-{row["away_goals"]}'
+                        items.append(
+                            {
+                                "sport": sport,
+                                "league": str(row["league"] or ""),
+                                "match": str(row["event"]),
+                                "pick": str(row["selection"] or ""),
+                                "market": str(row["market"] or "h2h"),
+                                "odds": float(row["odds"] or 0),
+                                "bookmaker": str(row["bookmaker"] or ""),
+                                "model_probability": float(row["prob_final"] or 0),
+                                "edge": float(row["edge"] or 0),
+                                "stake": float(row["stake"] or 0),
+                                "closing_odds": float(row["closing_odds"]) if row["closing_odds"] not in (None, "") else None,
+                                "clv_pct": float(row["clv_pct"]) if row["clv_pct"] not in (None, "") else None,
+                                "settlement_source": str(row["settlement_source"] or ""),
+                                "result": _result(row["result"]),
+                                "final_score": final_score or None,
+                                "start_time": row["start_time"],
+                                "created_at": row["created_at"],
+                                "settled_at": row["settled_at"],
+                            }
+                        )
 
     payload = {
         "schema_version": 1,
@@ -126,3 +151,4 @@ def export_mobile_tip_history(
         if temporary.exists():
             temporary.unlink()
     return destination
+
