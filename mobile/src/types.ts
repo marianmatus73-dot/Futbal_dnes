@@ -91,6 +91,7 @@ export type MobileHistory = {
   schema_version: number;
   generated_at: string;
   sports?: Record<string, HistoryTip[]>;
+  results_sports?: Record<string, HistoryTip[]>;
 };
 
 export type PerformancePoint = {
@@ -115,7 +116,9 @@ export type AppData = {
   tipCard: TipCard;
   modelRows: ModelRow[];
   historyBySport: Record<string, HistoryTip[]>;
+  resultsBySport: Record<string, HistoryTip[]>;
   performance: MobilePerformance;
   source: "live" | "cache";
   refreshedAt: string;
 };
+
