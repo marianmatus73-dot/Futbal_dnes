@@ -1259,7 +1259,7 @@ class FootballModule(SportModule):
         # the final per-sport tip limit.
         risk_pool_size = max(
             top_n,
-            int(os.getenv("FOOTBALL_RISK_POOL_SIZE", "25")),
+            int(os.getenv("FOOTBALL_RISK_POOL_SIZE", "200")),
         )
         # Closing snapshots are captured during this scan. Reconcile once more
         # afterwards so the current production run can use them immediately.

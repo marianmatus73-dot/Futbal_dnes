@@ -167,8 +167,10 @@ def apply_professional_risk_controls(
                 reason = "drawdown pause"
             elif not policy.min_odds <= bet.odds <= policy.max_odds:
                 reason = "odds outside sport limits"
-            elif not policy.min_edge <= conservative_edge <= policy.max_edge:
-                reason = "conservative edge outside sport limits"
+            elif conservative_edge < policy.min_edge:
+                reason = "conservative edge below sport minimum"
+            elif conservative_edge > policy.max_edge:
+                reason = "conservative edge above sport maximum"
             elif confidence < policy.min_confidence:
                 reason = "confidence below sport minimum"
             elif event_key in seen_events:
