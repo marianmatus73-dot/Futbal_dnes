@@ -66,6 +66,8 @@ class MobileHistoryTests(unittest.TestCase):
             self.assertEqual(len(payload["sports"]["baseball"]), 1)
             self.assertEqual(payload["sports"]["baseball"][0]["pick"], "B")
             self.assertNotIn("football", payload["sports"])
+            self.assertEqual(len(payload["results_sports"]["tennis"]), 5)
+            self.assertTrue(all(item["result"] in {"WON", "LOST", "VOID"} for item in payload["results_sports"]["tennis"]))
 
 
 if __name__ == "__main__":
