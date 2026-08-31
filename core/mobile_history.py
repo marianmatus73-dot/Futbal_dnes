@@ -45,6 +45,7 @@ def export_mobile_tip_history(
     export_dir.mkdir(parents=True, exist_ok=True)
     destination = export_dir / "mobile_tip_history.json"
     sports: dict[str, list[dict]] = {}
+    results_sports: dict[str, list[dict]] = {}
     generated_at = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     open_event_cutoff = generated_at - timedelta(hours=12)
     local_timezone = ZoneInfo("Europe/Bratislava")
@@ -90,80 +91,98 @@ def export_mobile_tip_history(
                 # one model choice per event + market, not two apparent tips
                 # against each other.
                 grouped: dict[str, dict[tuple[str, str], sqlite3.Row]] = {}
+                results_grouped: dict[str, dict[tuple[str, str], sqlite3.Row]] = {}
                 for row in rows:
                     starts_at = _parse_datetime(row["start_time"])
-                    if starts_at is None or starts_at.astimezone(local_timezone).date() != local_today:
+                    if starts_at is None:
+                        continue
+                    event_date = starts_at.astimezone(local_timezone).date()
+                    normalized_result = _result(row["result"])
+                    include_today = event_date == local_today
+                    include_result = (
+                        normalized_result in {"WON", "LOST", "VOID"}
+                        and local_today - timedelta(days=6) <= event_date <= local_today
+                    )
+                    if not include_today and not include_result:
                         continue
                     # An event that already started cannot remain a future
                     # "waiting" card forever. Settlement may still recover it
                     # later, but stale OPEN rows do not belong in the mobile
                     # list of recent actionable analyses.
-                    if _result(row["result"]) == "OPEN":
+                    if normalized_result == "OPEN":
                         if starts_at < open_event_cutoff:
-                            continue
+                            include_today = False
                     sport = str(row["sport"]).strip().lower()
                     key = (
                         str(row["event"]).strip().casefold(),
                         str(row["market"] or "h2h").strip().casefold(),
                     )
-                    current = grouped.setdefault(sport, {}).get(key)
                     rank = (
                         float(row["edge"] or 0),
                         float(row["prob_final"] or 0),
                         float(row["stake"] or 0),
                         int(row["id"] or 0),
                     )
-                    current_rank = (
-                        float(current["edge"] or 0),
-                        float(current["prob_final"] or 0),
-                        float(current["stake"] or 0),
-                        int(current["id"] or 0),
-                    ) if current is not None else None
-                    if current_rank is None or rank > current_rank:
-                        grouped[sport][key] = row
+                    for target, include in ((grouped, include_today), (results_grouped, include_result)):
+                        if not include:
+                            continue
+                        current = target.setdefault(sport, {}).get(key)
+                        current_rank = (
+                            float(current["edge"] or 0),
+                            float(current["prob_final"] or 0),
+                            float(current["stake"] or 0),
+                            int(current["id"] or 0),
+                        ) if current is not None else None
+                        if current_rank is None or rank > current_rank:
+                            target[sport][key] = row
 
-                for sport, event_rows in grouped.items():
-                    selected_rows = sorted(
-                        event_rows.values(),
-                        key=lambda row: (
-                            str(row["start_time"] or row["created_at"] or ""),
-                            int(row["id"] or 0),
-                        ),
-                        reverse=True,
-                    )[:limit_per_sport]
-                    items = sports.setdefault(sport, [])
-                    for row in selected_rows:
-                        final_score = str(row["final_score"] or "").strip()
-                        if not final_score and row["home_goals"] is not None and row["away_goals"] is not None:
-                            final_score = f'{row["home_goals"]}-{row["away_goals"]}'
-                        items.append(
-                            {
-                                "sport": sport,
-                                "league": str(row["league"] or ""),
-                                "match": str(row["event"]),
-                                "pick": str(row["selection"] or ""),
-                                "market": str(row["market"] or "h2h"),
-                                "odds": float(row["odds"] or 0),
-                                "bookmaker": str(row["bookmaker"] or ""),
-                                "model_probability": float(row["prob_final"] or 0),
-                                "edge": float(row["edge"] or 0),
-                                "stake": float(row["stake"] or 0),
-                                "closing_odds": float(row["closing_odds"]) if row["closing_odds"] not in (None, "") else None,
-                                "clv_pct": float(row["clv_pct"]) if row["clv_pct"] not in (None, "") else None,
-                                "settlement_source": str(row["settlement_source"] or ""),
-                                "result": _result(row["result"]),
-                                "final_score": final_score or None,
-                                "start_time": row["start_time"],
-                                "created_at": row["created_at"],
-                                "settled_at": row["settled_at"],
-                            }
-                        )
+                def append_grouped(source: dict[str, dict[tuple[str, str], sqlite3.Row]], destination_sports: dict[str, list[dict]]) -> None:
+                    for sport, event_rows in source.items():
+                        selected_rows = sorted(
+                            event_rows.values(),
+                            key=lambda row: (
+                                str(row["start_time"] or row["created_at"] or ""),
+                                int(row["id"] or 0),
+                            ),
+                            reverse=True,
+                        )[:limit_per_sport]
+                        items = destination_sports.setdefault(sport, [])
+                        for row in selected_rows:
+                            final_score = str(row["final_score"] or "").strip()
+                            if not final_score and row["home_goals"] is not None and row["away_goals"] is not None:
+                                final_score = f'{row["home_goals"]}-{row["away_goals"]}'
+                            items.append(
+                                {
+                                    "sport": sport,
+                                    "league": str(row["league"] or ""),
+                                    "match": str(row["event"]),
+                                    "pick": str(row["selection"] or ""),
+                                    "market": str(row["market"] or "h2h"),
+                                    "odds": float(row["odds"] or 0),
+                                    "bookmaker": str(row["bookmaker"] or ""),
+                                    "model_probability": float(row["prob_final"] or 0),
+                                    "edge": float(row["edge"] or 0),
+                                    "stake": float(row["stake"] or 0),
+                                    "closing_odds": float(row["closing_odds"]) if row["closing_odds"] not in (None, "") else None,
+                                    "clv_pct": float(row["clv_pct"]) if row["clv_pct"] not in (None, "") else None,
+                                    "settlement_source": str(row["settlement_source"] or ""),
+                                    "result": _result(row["result"]),
+                                    "final_score": final_score or None,
+                                    "start_time": row["start_time"],
+                                    "created_at": row["created_at"],
+                                    "settled_at": row["settled_at"],
+                                }
+                            )
+
+                append_grouped(grouped, sports)
+                append_grouped(results_grouped, results_sports)
 
     payload = {
         "schema_version": 1,
         "generated_at": generated_at.isoformat(),
         "limit_per_sport": limit_per_sport,
         "sports": sports,
+        "results_sports": results_sports,
     }
     handle = tempfile.NamedTemporaryFile(
         mode="w", encoding="utf-8", dir=export_dir, suffix=".tmp", delete=False
