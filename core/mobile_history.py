@@ -4,8 +4,9 @@ import json
 import os
 import sqlite3
 import tempfile
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from core.config import Settings
 
@@ -20,16 +21,34 @@ def _result(value: object) -> str:
     }.get(normalized, normalized if normalized in {"WON", "LOST", "VOID", "UNRESOLVED"} else "OPEN")
 
 
+def _parse_datetime(value: object) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
 def export_mobile_tip_history(
     settings: Settings,
     *,
     export_dir: Path,
     limit_per_sport: int = 5,
+    now: datetime | None = None,
 ) -> Path:
     """Export recent real analyses for the mobile sport screens."""
     export_dir.mkdir(parents=True, exist_ok=True)
     destination = export_dir / "mobile_tip_history.json"
     sports: dict[str, list[dict]] = {}
+    generated_at = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    open_event_cutoff = generated_at - timedelta(hours=12)
+    local_timezone = ZoneInfo("Europe/Bratislava")
+    local_today = generated_at.astimezone(local_timezone).date()
     db_file = Path(settings.db_file)
 
     if db_file.exists():
@@ -72,6 +91,16 @@ def export_mobile_tip_history(
                 # against each other.
                 grouped: dict[str, dict[tuple[str, str], sqlite3.Row]] = {}
                 for row in rows:
+                    starts_at = _parse_datetime(row["start_time"])
+                    if starts_at is None or starts_at.astimezone(local_timezone).date() != local_today:
+                        continue
+                    # An event that already started cannot remain a future
+                    # "waiting" card forever. Settlement may still recover it
+                    # later, but stale OPEN rows do not belong in the mobile
+                    # list of recent actionable analyses.
+                    if _result(row["result"]) == "OPEN":
+                        if starts_at < open_event_cutoff:
+                            continue
                     sport = str(row["sport"]).strip().lower()
                     key = (
                         str(row["event"]).strip().casefold(),
@@ -132,7 +161,7 @@ def export_mobile_tip_history(
 
     payload = {
         "schema_version": 1,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": generated_at.isoformat(),
         "limit_per_sport": limit_per_sport,
         "sports": sports,
     }
