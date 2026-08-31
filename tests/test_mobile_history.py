@@ -2,6 +2,7 @@ import json
 import sqlite3
 import tempfile
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 
 from core.config import Settings
@@ -30,27 +31,41 @@ class MobileHistoryTests(unittest.TestCase):
                         home_goals, away_goals, prob_final, edge, stake
                         ) VALUES (?, 'tennis', 'ATP', ?, ?, 1.8, 'h2h', ?, ?, ?,
                                   NULL, ?, NULL, NULL, .60, .08, 1.0)""",
-                        (index + 1, f"A{index} vs B{index}", f"A{index}", "WON" if index == 6 else "OPEN", f"2026-08-{20 + index}T12:00:00Z", f"2026-08-{20 + index}T09:00:00Z", "2-0" if index == 6 else None),
+                        (index + 1, f"A{index} vs B{index}", f"A{index}", "WON" if index == 6 else "LOST", f"2026-08-31T{10 + index:02d}:00:00Z", f"2026-08-31T{7 + index:02d}:00:00Z", "2-0" if index == 6 else None),
                     )
                 conn.executemany(
                     """INSERT INTO sport_bets (
                     id, sport, league, event, selection, odds, market, result,
                     start_time, created_at, prob_final, edge, stake
                     ) VALUES (?, 'baseball', 'MLB', 'A vs B', ?, ?, 'h2h',
-                              'OPEN', '2026-09-01T12:00:00Z',
+                              'OPEN', '2026-08-31T20:00:00Z',
                               '2026-08-31T09:00:00Z', ?, ?, 1.0)""",
                     [
                         (100, "A", 2.10, .51, .04),
                         (101, "B", 1.80, .64, .15),
                     ],
                 )
-            path = export_mobile_tip_history(Settings(db_file=str(db)), export_dir=root / "exports")
+                conn.execute(
+                    """INSERT INTO sport_bets (
+                    id, sport, league, event, selection, odds, market, result,
+                    start_time, created_at, prob_final, edge, stake
+                    ) VALUES (200, 'football', 'Old league', 'Old A vs Old B',
+                              'Old A', 2.0, 'h2h', 'OPEN',
+                              '2024-09-27T18:45:00Z', '2024-09-27T09:00:00Z',
+                              .55, .05, 1.0)"""
+                )
+            path = export_mobile_tip_history(
+                Settings(db_file=str(db)),
+                export_dir=root / "exports",
+                now=datetime(2026, 8, 31, 15, 30, tzinfo=timezone.utc),
+            )
             payload = json.loads(path.read_text(encoding="utf-8"))
             self.assertEqual(len(payload["sports"]["tennis"]), 5)
             self.assertEqual(payload["sports"]["tennis"][0]["result"], "WON")
             self.assertEqual(payload["sports"]["tennis"][0]["final_score"], "2-0")
             self.assertEqual(len(payload["sports"]["baseball"]), 1)
             self.assertEqual(payload["sports"]["baseball"][0]["pick"], "B")
+            self.assertNotIn("football", payload["sports"])
 
 
 if __name__ == "__main__":
