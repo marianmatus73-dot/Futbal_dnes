@@ -5,7 +5,7 @@ import os
 import sqlite3
 import hashlib
 from datetime import datetime, timezone
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.config import Settings
@@ -21,6 +21,14 @@ class RiskSummary:
     rejected: int = 0
     daily_exposure: float = 0.0
     drawdown_paused: bool = False
+    rejected_reasons: dict[str, int] = field(default_factory=dict)
+
+
+def _reject(summary: RiskSummary, reason: str) -> None:
+    summary.rejected += 1
+    summary.rejected_reasons[reason] = (
+        summary.rejected_reasons.get(reason, 0) + 1
+    )
 
 
 def _settled_profile(settings: Settings, sport: str) -> tuple[int, float]:
@@ -154,19 +162,28 @@ def apply_professional_risk_controls(
             stake_cap = settings.bank * policy.max_stake_pct
             stake = min(float(bet.stake), stake_cap)
 
-            allowed = (
-                not summary.drawdown_paused
-                and policy.min_odds <= bet.odds <= policy.max_odds
-                and policy.min_edge <= conservative_edge <= policy.max_edge
-                and confidence >= policy.min_confidence
-                and event_key not in seen_events
-                and daily_event_key not in allocated_events
-                and len(accepted) < policy.max_tips
-                and accepted_daily + stake <= daily_limit
-                and sport_exposure + stake <= sport_limit
-            )
-            if not allowed:
-                summary.rejected += 1
+            reason = ""
+            if summary.drawdown_paused:
+                reason = "drawdown pause"
+            elif not policy.min_odds <= bet.odds <= policy.max_odds:
+                reason = "odds outside sport limits"
+            elif not policy.min_edge <= conservative_edge <= policy.max_edge:
+                reason = "conservative edge outside sport limits"
+            elif confidence < policy.min_confidence:
+                reason = "confidence below sport minimum"
+            elif event_key in seen_events:
+                reason = "duplicate event in current run"
+            elif daily_event_key in allocated_events:
+                reason = "event already allocated today"
+            elif len(accepted) >= policy.max_tips:
+                reason = "daily sport tip limit reached"
+            elif accepted_daily + stake > daily_limit:
+                reason = "daily exposure limit reached"
+            elif sport_exposure + stake > sport_limit:
+                reason = "sport exposure limit reached"
+
+            if reason:
+                _reject(summary, f"{result.sport}: {reason}")
                 continue
 
             bet.prob_final = calibrated
@@ -201,5 +218,6 @@ def apply_professional_risk_controls(
 
     summary.daily_exposure = round(accepted_daily, 2)
     return summary
+
 
 

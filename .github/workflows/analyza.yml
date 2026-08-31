@@ -121,6 +121,7 @@ jobs:
           MIN_STAKE: "1"
 
           TOP_N_REPORT: "3"
+          FOOTBALL_RISK_POOL_SIZE: "25"
           TOP_TIPS_LIMIT: "5"
           MIN_CONFIDENCE: "65"
           MAX_BETS_PER_DAY: "3"
@@ -232,3 +233,4 @@ jobs:
             git pull --rebase origin "${GITHUB_REF_NAME}"
             git push origin HEAD:"${GITHUB_REF_NAME}"
           fi
+

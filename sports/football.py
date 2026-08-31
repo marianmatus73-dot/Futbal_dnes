@@ -1252,6 +1252,15 @@ class FootballModule(SportModule):
                             )
 
         bets = dedupe_best_bets(bets)
+        # TOP_N_REPORT is only a presentation limit. Passing just the first
+        # three candidates to the stricter professional risk layer allowed a
+        # few high-edge long shots to occupy the whole window and then get
+        # rejected. Keep a wider ranked pool; the risk layer still enforces
+        # the final per-sport tip limit.
+        risk_pool_size = max(
+            top_n,
+            int(os.getenv("FOOTBALL_RISK_POOL_SIZE", "25")),
+        )
         # Closing snapshots are captured during this scan. Reconcile once more
         # afterwards so the current production run can use them immediately.
         updated_clv += football_market_db.reconcile_closing_lines()
@@ -1260,7 +1269,7 @@ class FootballModule(SportModule):
         return SportResult(
             sport=self.name,
             mode="scan",
-            bets=bets[:top_n],
+            bets=bets[:risk_pool_size],
             message=(
                 "Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/"
                 "Dixon-Coles/football meta/fallback model. "
@@ -1271,8 +1280,10 @@ class FootballModule(SportModule):
                 f"Candidate rows: {candidate_rows_raw} -> "
                 f"{candidate_rows_optimized}. "
                 f"Blocked: {blocked}. "
-                f"Stored candidates: {len(bets)}.\n"
+                f"Stored candidates: {len(bets)}. "
+                f"Risk pool: {min(len(bets), risk_pool_size)}.\n"
                 f"{analytics}"
             ),
         )
+
 

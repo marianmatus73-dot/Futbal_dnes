@@ -822,12 +822,13 @@ async def run() -> None:
         risk_summary = apply_professional_risk_controls(module_outputs, settings)
         log.info(
             "Professional risk controls: candidates=%s, accepted=%s, "
-            "rejected=%s, exposure=%.2f, drawdown_paused=%s",
+            "rejected=%s, exposure=%.2f, drawdown_paused=%s, reasons=%s",
             risk_summary.candidates,
             risk_summary.accepted,
             risk_summary.rejected,
             risk_summary.daily_exposure,
             risk_summary.drawdown_paused,
+            risk_summary.rejected_reasons,
         )
         try:
             release_summary = apply_football_release_policy(
@@ -2303,5 +2304,6 @@ async def run() -> None:
 
 if __name__ == "__main__":
     asyncio.run(run())
+
 
 

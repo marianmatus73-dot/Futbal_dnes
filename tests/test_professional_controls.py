@@ -135,7 +135,49 @@ class ProfessionalControlsTests(unittest.TestCase):
         summary = apply_professional_risk_controls([output], self.settings)
         self.assertEqual(summary.accepted, 0)
 
+    def test_risk_engine_keeps_searching_after_rejected_longshots(self) -> None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("CREATE TABLE sport_bets (sport TEXT, result TEXT)")
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES ('football', ?)",
+                [("WON",)] * 300 + [("LOST",)] * 276,
+            )
+
+        longshots = [
+            Bet(
+                sport="football", league="L", event=f"Long {index}",
+                market="h2h", selection="Away", odds=4.40,
+                prob_model=.30, prob_market=.23, prob_final=.30, edge=.32,
+                stake=5, bookmaker="Book",
+                start_time=f"2026-09-{index + 1:02d}", score=100,
+            )
+            for index in range(3)
+        ]
+        eligible = Bet(
+            sport="football", league="L", event="Good A vs B",
+            market="h2h", selection="A", odds=2.00,
+            prob_model=.62, prob_market=.50, prob_final=.62, edge=.24,
+            stake=5, bookmaker="Book", start_time="2026-09-10", score=85,
+        )
+        output = {
+            "result": SportResult(
+                sport="football", mode="scan", bets=longshots + [eligible]
+            )
+        }
+
+        summary = apply_professional_risk_controls([output], self.settings)
+
+        self.assertEqual(summary.accepted, 1)
+        self.assertEqual(output["result"].bets[0].event, "Good A vs B")
+        self.assertEqual(
+            summary.rejected_reasons.get(
+                "football: odds outside sport limits"
+            ),
+            3,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
+
 
