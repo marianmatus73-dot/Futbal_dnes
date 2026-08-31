@@ -18,7 +18,11 @@ class SportPolicy:
 
 
 POLICIES: dict[str, SportPolicy] = {
-    "football": SportPolicy(.06, .18, 68, 1.35, 4.00, 5, .0075, .020),
+    # The football module already applies its raw-edge guard.  The risk layer
+    # works with a lower confidence-bound edge after uncertainty is deducted,
+    # so its 4% threshold is aligned with the final professional value filter
+    # instead of applying the same 6% hurdle twice.
+    "football": SportPolicy(.04, .18, 68, 1.35, 4.00, 5, .0075, .020),
     "baseball": SportPolicy(.04, .18, 65, 1.35, 4.50, 5, .0100, .025),
     "basketball": SportPolicy(.06, .16, 68, 1.30, 3.50, 4, .0075, .020),
     "hockey": SportPolicy(.07, .16, 70, 1.35, 4.00, 3, .0060, .015),
@@ -44,4 +48,5 @@ def settings_for_sport(settings: Settings, sport: str) -> Settings:
         max_odds=policy.max_odds,
         max_stake_pct=min(settings.max_stake_pct, policy.max_stake_pct),
     )
+
 
