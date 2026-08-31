@@ -212,7 +212,7 @@ const historyStatus = (result: string) => ({
   LOST: { label: "NEVYŠIEL", color: colors.danger },
   VOID: { label: "VRÁTENÝ", color: colors.warning },
   UNRESOLVED: { label: "NEOVERENÝ", color: colors.muted },
-}[result] ?? { label: "ČAKÁ", color: colors.accent });
+}[result] ?? { label: "ZÁPAS ČAKÁ", color: colors.accent });
 
 function HistoryItem({ tip }: { tip: HistoryTip }) {
   const [expanded, setExpanded] = useState(false);
@@ -223,7 +223,7 @@ function HistoryItem({ tip }: { tip: HistoryTip }) {
         <View style={styles.historyHeading}><Text style={styles.league}>{tip.league}</Text><Text style={styles.historyMatch}>{tip.match}</Text><Text style={styles.startTime}>{formatStartTime(tip.start_time ?? undefined)}</Text></View>
         <View style={[styles.historyBadge, { borderColor: status.color }]}><Text style={[styles.historyBadgeText, { color: status.color }]}>{status.label}</Text></View>
       </View>
-      <View style={styles.historyBottom}><View><Text style={styles.label}>TIP MODELU</Text><Text style={styles.historyPick}>{tip.pick} · {tip.odds > 1 ? tip.odds.toFixed(2) : "—"}</Text><Text style={styles.historyMarket}>{tip.market === "totals_2.5" ? "Góly nad/pod 2,5" : tip.market}</Text></View><View style={styles.scoreBox}><Text style={styles.label}>VÝSLEDOK</Text><Text style={[styles.finalScore, { color: status.color }]}>{tip.final_score || (tip.result === "OPEN" ? "Čaká" : "—")}</Text></View></View>
+      <View style={styles.historyBottom}><View><Text style={styles.label}>NAJSILNEJŠÍ VÝBER MODELU</Text><Text style={styles.historyPick}>{tip.pick} · {tip.odds > 1 ? tip.odds.toFixed(2) : "—"}</Text><Text style={styles.historyMarket}>{tip.market === "totals_2.5" ? "Góly nad/pod 2,5" : tip.market}</Text></View><View style={styles.scoreBox}><Text style={styles.label}>VÝSLEDOK</Text><Text style={[styles.finalScore, { color: status.color }]}>{tip.final_score || (tip.result === "OPEN" ? "Po zápase" : "—")}</Text></View></View>
       <Text style={styles.historyDetailLink}>{expanded ? "Skryť podrobnosti" : "Zobraziť podrobnosti"}</Text>
       {expanded ? <View style={styles.historyDetail}>
         <Text style={styles.rejectionText}>• Bookmaker: {tip.bookmaker || "nezaznamenaný"}</Text>
@@ -244,7 +244,7 @@ function RecentAnalyses({ tips }: { tips: HistoryTip[] }) {
   return (
     <View style={styles.historySection}>
       <Text style={styles.historyTitle}>Posledných {tips.length} analýz</Text>
-      <Text style={styles.historySubtitle}>Zobrazené sú aj zamietnuté možnosti. Stav VYŠIEL/NEVYŠIEL hodnotí pôvodný tip modelu. NEOVERENÝ sa nezapočítava do štatistík.</Text>
+      <Text style={styles.historySubtitle}>Každý zápas je zobrazený iba raz s najsilnejšou stranou modelu. Ide o analýzu, nie automaticky o potvrdený tip. Stav VYŠIEL/NEVYŠIEL hodnotí tento pôvodný výber.</Text>
       {tips.map((tip, index) => <HistoryItem key={`${tip.match}-${tip.market}-${tip.pick}-${index}`} tip={tip} />)}
     </View>
   );
@@ -482,3 +482,4 @@ const styles = StyleSheet.create({
   statusRow: { flexDirection: "row", alignItems: "center", backgroundColor: colors.surface, borderBottomWidth: 1, borderColor: colors.border, padding: 16 }, statusDot: { width: 10, height: 10, borderRadius: 5, marginRight: 13 }, statusText: { flex: 1 }, statusLabel: { color: colors.text, fontWeight: "800" }, statusValue: { color: colors.muted, marginTop: 3, fontSize: 12 }, infoCard: { backgroundColor: "#102844", borderRadius: 20, padding: 18, marginTop: 16 }, infoTitle: { color: colors.accent, fontWeight: "900", fontSize: 16 }, infoText: { color: "#B5C9E6", lineHeight: 21, marginTop: 8 },
   nav: { flexDirection: "row", borderTopWidth: 1, borderColor: colors.border, backgroundColor: "#0B1727", paddingVertical: 9, paddingBottom: 12 }, navItem: { flex: 1, alignItems: "center" }, navIcon: { color: colors.muted, fontSize: 20, fontWeight: "900" }, navLabel: { color: colors.muted, fontSize: 10, fontWeight: "700", marginTop: 3 }, navActive: { color: colors.primary },
 });
+
