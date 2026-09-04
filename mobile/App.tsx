@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
+  Image,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -387,6 +388,9 @@ function System({ data }: { data: AppData }) {
       <StatusRow label="Zdroj v aplikácii" value={data.source === "live" ? "Aktuálne online dáta" : "Posledná uložená verzia"} ok={data.source === "live"} />
       <StatusRow label="Posledný report" value={relativeTime(data.tipCard.generated_at)} ok={healthy} />
       <StatusRow label="Mobilné dáta" value="API kľúče nie sú v telefóne" ok />
+      <View style={styles.signatureCard}>
+        <Image source={require("./assets/matyus-signature.png")} style={styles.signatureImage} resizeMode="contain" accessible accessibilityLabel="Osobný podpis Mátyus s erbom" />
+      </View>
       <View style={styles.infoCard}><Text style={styles.infoTitle}>Ako čítať tipy</Text><Text style={styles.infoText}>EARLY znamená skorý value kurz. FINAL znamená, že tip bol potvrdený blízko výkopu po dostupných zostavách. Ak nie je výhoda dostatočná, aplikácia zobrazí NO BET.</Text></View>
     </>
   );
@@ -459,6 +463,8 @@ function NavItem({ icon, label, active, onPress }: { icon: string; label: string
 }
 
 const styles = StyleSheet.create({
+  signatureCard: { marginTop: 24, padding: 16, alignItems: "center" },
+  signatureImage: { width: "100%", maxWidth: 360, aspectRatio: 1800 / 900 },
   safe: { flex: 1, backgroundColor: colors.background }, loading: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center", gap: 16 }, loadingText: { color: colors.muted, fontSize: 15 },
   topBar: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 14, flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }, brand: { color: colors.primary, fontWeight: "900", letterSpacing: 2, fontSize: 12 }, topTitle: { color: colors.text, fontWeight: "900", fontSize: 26, marginTop: 2 },
   liveBadge: { flexDirection: "row", alignItems: "center", borderWidth: 1, borderColor: colors.border, borderRadius: 20, paddingVertical: 7, paddingHorizontal: 10, gap: 7 }, liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.primary }, liveText: { color: colors.muted, fontWeight: "800", fontSize: 10, letterSpacing: 1 },
