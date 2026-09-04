@@ -1,22 +1,22 @@
 {
-  "total_bets": 1803,
+  "total_bets": 1804,
   "wins": 811,
-  "losses": 992,
-  "winrate": 44.98,
-  "yield": 7.14,
-  "profit": 91.16,
-  "stake_sum": 1276.49,
-  "open_bets": 884,
-  "settled_bets": 1803,
+  "losses": 993,
+  "winrate": 44.96,
+  "yield": 6.97,
+  "profit": 89.13,
+  "stake_sum": 1278.52,
+  "open_bets": 948,
+  "settled_bets": 1804,
   "by_sport": {
     "baseball": {
-      "total": 1127,
+      "total": 1128,
       "wins": 611,
-      "losses": 516,
-      "winrate": 54.21,
-      "profit": 73.13,
-      "stake_sum": 1098.74,
-      "yield": 6.66
+      "losses": 517,
+      "winrate": 54.17,
+      "profit": 71.1,
+      "stake_sum": 1100.77,
+      "yield": 6.46
     },
     "football": {
       "total": 631,
@@ -164,15 +164,6 @@
       "stake_sum": 0.83,
       "yield": 16.39
     },
-    "Unibet (FR)": {
-      "total": 90,
-      "wins": 46,
-      "losses": 44,
-      "winrate": 51.11,
-      "profit": -0.08,
-      "stake_sum": 83.02,
-      "yield": -0.09
-    },
     "BetAnything": {
       "total": 3,
       "wins": 1,
@@ -236,6 +227,15 @@
       "stake_sum": 4.54,
       "yield": -38.79
     },
+    "Unibet (FR)": {
+      "total": 91,
+      "wins": 46,
+      "losses": 45,
+      "winrate": 50.55,
+      "profit": -2.11,
+      "stake_sum": 85.05,
+      "yield": -2.48
+    },
     "Winamax (DE)": {
       "total": 10,
       "wins": 4,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 1127,
+      "total": 1128,
       "wins": 611,
-      "losses": 516,
-      "winrate": 54.21,
-      "profit": 73.13,
-      "stake_sum": 1098.74,
-      "yield": 6.66
+      "losses": 517,
+      "winrate": 54.17,
+      "profit": 71.1,
+      "stake_sum": 1100.77,
+      "yield": 6.46
     },
     "Argentina Primera Division": {
       "total": 57,
@@ -563,5 +563,5 @@
       "yield": -80.49
     }
   },
-  "last_update": "2026-09-04T10:04:27.546835+00:00"
+  "last_update": "2026-09-04T18:39:04.315888+00:00"
 }
