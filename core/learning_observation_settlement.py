@@ -21,6 +21,7 @@ class ObservationSettlementSummary:
     won: int = 0
     lost: int = 0
     void: int = 0
+    candidate_rows: int = 0
 
 
 def _db_path(settings: Settings) -> Path:
@@ -101,6 +102,22 @@ async def settle_learning_observations(
                 (sport,),
             )
         }
+        candidate_table = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' "
+            "AND name='sport_shadow_candidates'"
+        ).fetchone()
+        if candidate_table:
+            open_ids.update(
+                str(row[0])
+                for row in conn.execute(
+                    """
+                    SELECT DISTINCT external_event_id
+                    FROM sport_shadow_candidates
+                    WHERE sport=? AND result='OPEN'
+                    """,
+                    (sport,),
+                )
+            )
     if not open_ids:
         return ObservationSettlementSummary()
 
@@ -111,7 +128,7 @@ async def settle_learning_observations(
             if event_id in open_ids and event.get("completed") is True:
                 completed[event_id] = event
 
-    settled_rows = won = lost = void = matched_events = 0
+    settled_rows = won = lost = void = matched_events = candidate_rows = 0
     settled_at = _now_utc()
     with closing(sqlite3.connect(database)) as conn:
         for event_id, event in completed.items():
@@ -152,6 +169,38 @@ async def settle_learning_observations(
                 lost += result == "LOST"
                 void += result == "VOID"
             matched_events += event_updates > 0
+            candidate_table = conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' "
+                "AND name='sport_shadow_candidates'"
+            ).fetchone()
+            if candidate_table:
+                candidates = conn.execute(
+                    """
+                    SELECT id, market, selection, odds
+                    FROM sport_shadow_candidates
+                    WHERE sport=? AND external_event_id=? AND result='OPEN'
+                    """,
+                    (sport, event_id),
+                ).fetchall()
+                for candidate_id, market, selection, odds in candidates:
+                    result = None
+                    if str(market) == "h2h":
+                        result = _h2h_result(
+                            str(selection), home, away, home_score, away_score
+                        )
+                    if result is None:
+                        continue
+                    profit = float(odds) - 1.0 if result == "WON" else -1.0
+                    conn.execute(
+                        """
+                        UPDATE sport_shadow_candidates
+                        SET result=?, profit_units=?, final_score=?, settled_at=?
+                        WHERE id=? AND result='OPEN'
+                        """,
+                        (result, round(profit, 4), f"{home_score}-{away_score}",
+                         settled_at, candidate_id),
+                    )
+                    candidate_rows += 1
         conn.commit()
 
     return ObservationSettlementSummary(
@@ -161,5 +210,6 @@ async def settle_learning_observations(
         won=won,
         lost=lost,
         void=void,
+        candidate_rows=candidate_rows,
     )
 

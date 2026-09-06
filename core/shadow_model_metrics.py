@@ -45,6 +45,17 @@ def build_shadow_model_metrics(
         "readiness_pct": 0.0,
         "maturity": "EMPTY",
         "publishing_unlocked": False,
+        "benchmark": {
+            "model_version": "market_favourite_v1",
+            "settled": 0,
+            "open": 0,
+            "wins": 0,
+            "losses": 0,
+            "hit_rate": None,
+            "profit_units": 0.0,
+            "yield_pct": None,
+            "brier_score": None,
+        },
     }
     if not database.exists():
         return empty
@@ -68,6 +79,18 @@ def build_shadow_model_metrics(
             """,
             (sport,),
         ).fetchall()
+        candidate_exists = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' "
+            "AND name='sport_shadow_candidates'"
+        ).fetchone()
+        candidates = conn.execute(
+            """
+            SELECT probability, result, profit_units
+            FROM sport_shadow_candidates
+            WHERE LOWER(sport)=LOWER(?) AND model_version='market_favourite_v1'
+            """,
+            (sport,),
+        ).fetchall() if candidate_exists else []
 
     canonical: dict[tuple[str, str, str], sqlite3.Row] = {}
     event_states: dict[str, set[str]] = {}
@@ -124,6 +147,30 @@ def build_shadow_model_metrics(
         if rows
         else "EMPTY"
     )
+    settled_candidates = [
+        row for row in candidates
+        if str(row["result"] or "").upper() in {"WON", "LOST"}
+    ]
+    candidate_wins = sum(str(row["result"]).upper() == "WON" for row in settled_candidates)
+    candidate_losses = len(settled_candidates) - candidate_wins
+    candidate_profit = sum(_number(row["profit_units"]) or 0.0 for row in settled_candidates)
+    candidate_brier_values = []
+    for row in settled_candidates:
+        probability = _number(row["probability"])
+        if probability is not None and 0.0 < probability < 1.0:
+            target = 1 if str(row["result"]).upper() == "WON" else 0
+            candidate_brier_values.append((probability - target) ** 2)
+    benchmark = {
+        "model_version": "market_favourite_v1",
+        "settled": len(settled_candidates),
+        "open": len(candidates) - len(settled_candidates),
+        "wins": candidate_wins,
+        "losses": candidate_losses,
+        "hit_rate": round(candidate_wins / len(settled_candidates), 4) if settled_candidates else None,
+        "profit_units": round(candidate_profit, 4),
+        "yield_pct": round(candidate_profit / len(settled_candidates) * 100.0, 3) if settled_candidates else None,
+        "brier_score": round(sum(candidate_brier_values) / len(candidate_brier_values), 6) if candidate_brier_values else None,
+    }
     return {
         **empty,
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -138,5 +185,6 @@ def build_shadow_model_metrics(
         "average_odds": round(sum(odds_values) / len(odds_values), 4) if odds_values else None,
         "readiness_pct": round(min(settled_events / max(minimum_events, 1), 1.0) * 100.0, 2),
         "maturity": maturity,
+        "benchmark": benchmark,
     }
 

@@ -83,6 +83,32 @@ class HandballModule(SportModule):
                 "CREATE INDEX IF NOT EXISTS idx_learning_observations_lookup "
                 "ON sport_learning_observations(sport, league, external_event_id, result)"
             )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS sport_shadow_candidates (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    created_at TEXT NOT NULL,
+                    sport TEXT NOT NULL,
+                    league TEXT NOT NULL,
+                    external_event_id TEXT NOT NULL,
+                    event TEXT NOT NULL,
+                    home_team TEXT,
+                    away_team TEXT,
+                    market TEXT NOT NULL,
+                    selection TEXT NOT NULL,
+                    bookmaker TEXT,
+                    odds REAL NOT NULL,
+                    probability REAL NOT NULL,
+                    start_time TEXT,
+                    model_version TEXT NOT NULL,
+                    result TEXT NOT NULL DEFAULT 'OPEN',
+                    profit_units REAL,
+                    final_score TEXT,
+                    settled_at TEXT,
+                    UNIQUE(sport, external_event_id, market, model_version)
+                )
+                """
+            )
             conn.commit()
 
     def _save_snapshot_rows(
@@ -127,6 +153,49 @@ class HandballModule(SportModule):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 rows,
+            )
+            conn.commit()
+            return conn.total_changes - before
+
+    def _save_baseline_candidate(
+        self,
+        settings: Settings,
+        sport_key: str,
+        event: dict,
+        consensus: dict[str, float],
+    ) -> int:
+        """Store one transparent market benchmark, never a publishable bet."""
+        external_id = str(event.get("id", "")).strip()
+        if not external_id or not consensus:
+            return 0
+        selection = max(consensus, key=consensus.get)
+        prices = [
+            (bookmaker, odds)
+            for bookmaker, outcome, odds in best_outlier_prices(event.get("bookmakers", []))
+            if outcome == selection
+        ]
+        if not prices:
+            return 0
+        bookmaker, odds = max(prices, key=lambda item: item[1])
+        home = str(event.get("home_team", "")).strip()
+        away = str(event.get("away_team", "")).strip()
+        with closing(self._connect(settings)) as conn:
+            before = conn.total_changes
+            conn.execute(
+                """
+                INSERT OR IGNORE INTO sport_shadow_candidates
+                (created_at, sport, league, external_event_id, event, home_team,
+                 away_team, market, selection, bookmaker, odds, probability,
+                 start_time, model_version, result)
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'h2h', ?, ?, ?, ?, ?,
+                        'market_favourite_v1', 'OPEN')
+                """,
+                (
+                    _now_utc(), self.name, sport_key, external_id,
+                    f"{home} vs {away}", home, away, selection, bookmaker,
+                    float(odds), float(consensus[selection]),
+                    str(event.get("commence_time", "")),
+                ),
             )
             conn.commit()
             return conn.total_changes - before
@@ -194,7 +263,7 @@ class HandballModule(SportModule):
             )
             configured = filter_active_keys(configured, active)
 
-        events_scanned = snapshots_saved = observations_saved = 0
+        events_scanned = snapshots_saved = observations_saved = candidates_saved = 0
         min_books = int(os.getenv("MIN_HANDBALL_BOOKMAKERS", "2"))
         for sport_key in configured:
             data = await fetch_odds(settings.odds_api_key, sport_key, markets="h2h")
@@ -212,6 +281,9 @@ class HandballModule(SportModule):
                     observations_saved += self._save_observations(
                         settings, sport_key, event, consensus
                     )
+                    candidates_saved += self._save_baseline_candidate(
+                        settings, sport_key, event, consensus
+                    )
 
         return SportResult(
             sport=self.name,
@@ -222,6 +294,7 @@ class HandballModule(SportModule):
                 f"Events scanned: {events_scanned}. "
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Learning observations saved: {observations_saved}."
+                f" New benchmark candidates: {candidates_saved}."
                 f" Settled observations: {settlement.settled_rows} "
                 f"({settlement.won} won, {settlement.lost} lost)."
             ),

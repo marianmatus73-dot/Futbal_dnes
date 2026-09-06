@@ -36,6 +36,17 @@ class ShadowModelMetricsTests(unittest.TestCase):
                             (f"2026-09-01T{hour}:00:00Z", selection,
                              probability, result, f"{hour}-{selection}"),
                         )
+                conn.execute(
+                    """
+                    INSERT INTO sport_shadow_candidates
+                    (created_at, sport, league, external_event_id, event,
+                     market, selection, odds, probability, model_version,
+                     result, profit_units)
+                    VALUES ('2026-09-01', 'handball', 'league', 'event-1',
+                            'Berlin vs Kiel', 'h2h', 'Berlin', 2.0, 0.55,
+                            'market_favourite_v1', 'WON', 1.0)
+                    """
+                )
 
             metrics = build_shadow_model_metrics(
                 settings, sport="handball", minimum_events=150
@@ -47,6 +58,9 @@ class ShadowModelMetricsTests(unittest.TestCase):
             self.assertEqual(metrics["probability_samples"], 3)
             self.assertEqual(metrics["readiness_pct"], 0.67)
             self.assertFalse(metrics["publishing_unlocked"])
+            self.assertEqual(metrics["benchmark"]["settled"], 1)
+            self.assertEqual(metrics["benchmark"]["wins"], 1)
+            self.assertEqual(metrics["benchmark"]["yield_pct"], 100.0)
 
 
 if __name__ == "__main__":

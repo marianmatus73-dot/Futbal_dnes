@@ -173,6 +173,7 @@ HISTORY_EXPORTS = {
     "sport_bookmaker_stats": "exports/history_bookmaker_stats.csv",
     "sport_elo_ratings": "exports/history_elo_ratings.csv",
     "sport_learning_observations": "exports/history_learning_observations.csv",
+    "sport_shadow_candidates": "exports/history_shadow_candidates.csv",
 
     # Football v13 persistent learning data.
     "football_feature_history": "exports/history_football_features.csv",

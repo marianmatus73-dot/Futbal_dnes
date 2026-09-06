@@ -71,8 +71,13 @@ class HandballShadowTests(unittest.IsolatedAsyncioTestCase):
                 bets = conn.execute(
                     "SELECT COUNT(*) FROM sport_bets WHERE sport='handball'"
                 ).fetchone()[0]
+                candidate = conn.execute(
+                    "SELECT selection, model_version, result FROM "
+                    "sport_shadow_candidates"
+                ).fetchone()
             self.assertEqual(observations, 3)
             self.assertEqual(bets, 0)
+            self.assertEqual(candidate, ("Berlin", "market_favourite_v1", "OPEN"))
 
 
 if __name__ == "__main__":

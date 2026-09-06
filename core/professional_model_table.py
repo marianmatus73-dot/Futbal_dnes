@@ -253,5 +253,16 @@ def professional_model_report(payload: dict[str, Any]) -> str:
             f"market Brier={brier} | maturity={metric['maturity']} | "
             "publishing=LOCKED"
         )
+        benchmark = metric.get("benchmark", {})
+        yield_text = (
+            "n/a" if benchmark.get("yield_pct") is None
+            else f'{benchmark["yield_pct"]:.2f}%'
+        )
+        lines.append(
+            f"  benchmark {benchmark.get('model_version', 'n/a')}: "
+            f"settled={benchmark.get('settled', 0)} | "
+            f"open={benchmark.get('open', 0)} | "
+            f"yield={yield_text} | Brier={benchmark.get('brier_score')}"
+        )
     return "\n".join(lines) + "\n"
 
