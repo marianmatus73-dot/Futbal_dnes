@@ -43,6 +43,7 @@ from core.football_scan_optimizer_v14 import (
     optimize_h2h_snapshot_rows,
 )
 from core.football_candidate_optimizer_v14 import (
+    is_learning_observation_odds,
     optimize_candidate_prices,
 )
 from core.football_explainability_v15 import (
@@ -948,6 +949,23 @@ class FootballModule(SportModule):
                         f"{meta_prediction.reason}"
                     )
 
+                    # Save short and mid-priced observations before the edge
+                    # gate. They can teach the model after settlement without
+                    # being promoted to a publishable tip.
+                    observation_source_hash = make_hash(
+                        self.name,
+                        league,
+                        event_name,
+                        selection,
+                        start,
+                    )
+                    if is_learning_observation_odds(odds):
+                        save_football_features(
+                            settings,
+                            features,
+                            source_hash=observation_source_hash,
+                        )
+
                     if edge < settings.min_edge:
                         blocked += 1
                         rejection_source_hash = make_hash(
@@ -1112,14 +1130,7 @@ class FootballModule(SportModule):
                         external_event_id=str(event.get("id", "")),
                     )
 
-                    feature_source_hash = make_hash(
-                        bet.sport,
-                        bet.league,
-                        bet.event,
-                        bet.market,
-                        bet.selection,
-                        bet.start_time,
-                    )
+                    feature_source_hash = observation_source_hash
 
                     explain_and_save_football_decision_v15(
                         settings,

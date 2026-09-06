@@ -22,7 +22,9 @@ POLICIES: dict[str, SportPolicy] = {
     # works with a lower confidence-bound edge after uncertainty is deducted,
     # so its 4% threshold is aligned with the final professional value filter
     # instead of applying the same 6% hurdle twice.
-    "football": SportPolicy(.04, .18, 68, 1.35, 4.00, 5, .0075, .020),
+    # Short-priced favourites are valid learning and betting candidates too.
+    # Edge and confidence requirements remain unchanged.
+    "football": SportPolicy(.04, .18, 68, 1.20, 4.00, 5, .0075, .020),
     "baseball": SportPolicy(.04, .18, 65, 1.35, 4.50, 5, .0100, .025),
     "basketball": SportPolicy(.06, .16, 68, 1.30, 3.50, 4, .0075, .020),
     "hockey": SportPolicy(.07, .16, 70, 1.35, 4.00, 3, .0060, .015),

@@ -32,6 +32,12 @@ class CandidateOptimizationStats:
     removed_rows: int
 
 
+def is_learning_observation_odds(odds_value: Any) -> bool:
+    """Return whether a price belongs to the balanced short/mid learning band."""
+    odds = safe_float(odds_value, 0.0)
+    return 1.20 <= odds <= 2.20
+
+
 def optimize_candidate_prices(
     rows: Iterable[tuple[str, str, float]],
 ) -> tuple[list[CandidatePrice], CandidateOptimizationStats]:
@@ -84,3 +90,4 @@ def optimize_candidate_prices(
             ),
         ),
     )
+

@@ -9,6 +9,7 @@ from pathlib import Path
 
 from core.config import Settings
 from core.market import no_vig_probs
+from core.football_candidate_optimizer_v14 import is_learning_observation_odds
 from core.professional_risk import (
     apply_professional_risk_controls,
     calibrated_probability,
@@ -41,6 +42,14 @@ class ProfessionalControlsTests(unittest.TestCase):
         mma = settings_for_sport(self.settings, "mma")
         self.assertLess(baseball.min_edge, mma.min_edge)
         self.assertGreater(baseball.max_stake_pct, mma.max_stake_pct)
+        self.assertEqual(sport_policy("football").min_odds, 1.20)
+
+    def test_football_balanced_learning_includes_lower_odds(self) -> None:
+        self.assertTrue(is_learning_observation_odds(1.20))
+        self.assertTrue(is_learning_observation_odds(1.75))
+        self.assertTrue(is_learning_observation_odds(2.20))
+        self.assertFalse(is_learning_observation_odds(1.19))
+        self.assertFalse(is_learning_observation_odds(2.21))
 
     def test_calibration_uses_event_market_not_mixed_price_hit_rate(self) -> None:
         calibrated = calibrated_probability(
