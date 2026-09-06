@@ -105,6 +105,7 @@ def bet_to_tip_dict(bet: Any, fallback_sport: str = "") -> dict | None:
         "form_probability": prob_final or prob_model or prob_market,
 
         "raw_edge": raw_edge,
+        "model_score": data.get("score") or data.get("model_score"),
         "injury_penalty": data.get("injury_penalty", 0.0),
         "news_penalty": data.get("news_penalty", 0.0),
 
@@ -116,3 +117,4 @@ def bet_to_tip_dict(bet: Any, fallback_sport: str = "") -> dict | None:
         "final_odds": to_float_or_none(data.get("final_odds")),
         "reason": " | ".join(reason_parts),
     }
+

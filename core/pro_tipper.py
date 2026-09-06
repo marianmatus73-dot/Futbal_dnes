@@ -151,7 +151,7 @@ def rejection_reasons(
 ) -> list[str]:
     reasons: list[str] = []
 
-    if tip.edge < min_edge:
+    if tip.model_probability * tip.odds - 1.0 < min_edge:
         reasons.append(
             f"consensus edge below {min_edge:.1%}"
         )
@@ -196,16 +196,17 @@ def build_pro_tip(
 
     imp = implied_probability(odds)
     edge = model_probability - imp
+    expected_return = model_probability * odds - 1.0
 
     confidence = resolve_confidence(
         model_score=model_score,
-        edge=edge,
+        edge=expected_return,
         model_probability=model_probability,
     )
 
     risk = calculate_risk(
         confidence=confidence,
-        edge=edge,
+        edge=expected_return,
     )
 
     stake = calculate_stake_units(
@@ -262,7 +263,7 @@ def filter_value_tips(
     return [
         tip
         for tip in tips
-        if tip.edge >= min_edge
+        if tip.model_probability * tip.odds - 1.0 >= min_edge
         and tip.confidence >= min_confidence
         and tip.stake_units > 0
         and tip.risk != "high"
@@ -455,3 +456,4 @@ def format_tip_block(
         text += "\n"
 
     return text
+

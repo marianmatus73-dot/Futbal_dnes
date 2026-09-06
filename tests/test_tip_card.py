@@ -5,11 +5,25 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from core.pro_tipper import build_pro_tip
+from core.pro_tipper import build_pro_tip, filter_value_tips
 from core.tip_card import save_latest_tip_card
 
 
 class TipCardTests(unittest.TestCase):
+    def test_value_filter_uses_expected_return_for_lower_odds(self) -> None:
+        tip = build_pro_tip(
+            sport="football",
+            league="test",
+            match="A vs B",
+            pick="A",
+            odds=1.50,
+            model_probability=0.70,
+            model_score=75,
+        )
+        self.assertLess(tip.edge, 0.04)
+        self.assertAlmostEqual(tip.model_probability * tip.odds - 1.0, 0.05)
+        self.assertEqual(filter_value_tips([tip]), [tip])
+
     def test_card_contains_complete_candidates(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             tip = build_pro_tip(
@@ -47,3 +61,4 @@ class TipCardTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
