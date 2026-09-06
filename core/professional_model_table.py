@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from core.config import Settings
+from core.shadow_model_metrics import build_shadow_model_metrics
 
 
 @dataclass(frozen=True)
@@ -176,7 +177,18 @@ def build_professional_model_table(
             "by_market": _group(sport_rows, lambda row: row["market"]),
         }
 
-    payload = {"generated_at": now.isoformat(), "sports": sports}
+    shadow_models = {
+        "handball": build_shadow_model_metrics(
+            settings,
+            sport="handball",
+            minimum_events=150,
+        )
+    }
+    payload = {
+        "generated_at": now.isoformat(),
+        "sports": sports,
+        "shadow_models": shadow_models,
+    }
     output = Path(export_dir)
     output.mkdir(parents=True, exist_ok=True)
     (output / "professional_model_table.json").write_text(
@@ -227,4 +239,19 @@ def professional_model_report(payload: dict[str, Any]) -> str:
             f"profit={metric['profit']:.2f} | CLV={clv} ({metric['clv_samples']}) | "
             f"Brier={brier} | max DD={metric['max_drawdown']:.2f}"
         )
+    for sport, metric in payload.get("shadow_models", {}).items():
+        brier = (
+            "n/a"
+            if metric.get("market_brier_score") is None
+            else f'{metric["market_brier_score"]:.4f}'
+        )
+        lines.append(
+            f"- {sport} SHADOW: settled events={metric['settled_events']}/"
+            f"{metric['minimum_events']} | open events={metric['open_events']} | "
+            f"canonical samples={metric['canonical_samples']} | "
+            f"duplicates excluded={metric['duplicate_snapshots_excluded']} | "
+            f"market Brier={brier} | maturity={metric['maturity']} | "
+            "publishing=LOCKED"
+        )
     return "\n".join(lines) + "\n"
+
