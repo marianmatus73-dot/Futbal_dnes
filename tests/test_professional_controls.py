@@ -37,11 +37,11 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertNotAlmostEqual(probabilities["A"], 1 / 1.80)
 
     def test_each_sport_has_independent_limits(self) -> None:
-        self.assertNotEqual(sport_policy("baseball"), sport_policy("mma"))
+        self.assertNotEqual(sport_policy("baseball"), sport_policy("handball"))
         baseball = settings_for_sport(self.settings, "baseball")
-        mma = settings_for_sport(self.settings, "mma")
-        self.assertLess(baseball.min_edge, mma.min_edge)
-        self.assertGreater(baseball.max_stake_pct, mma.max_stake_pct)
+        handball = settings_for_sport(self.settings, "handball")
+        self.assertLess(baseball.min_edge, handball.min_edge)
+        self.assertGreater(baseball.max_stake_pct, handball.max_stake_pct)
         self.assertEqual(sport_policy("football").min_odds, 1.20)
 
     def test_football_balanced_learning_includes_lower_odds(self) -> None:

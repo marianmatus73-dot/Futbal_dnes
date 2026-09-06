@@ -4,7 +4,7 @@ export const SPORTS = [
   "basketball",
   "hockey",
   "baseball",
-  "mma",
+  "handball",
   "nfl",
 ] as const;
 

@@ -34,13 +34,13 @@ SPORT_PROFILES = {
         competition_label="league",
         min_training_samples=120,
     ),
-    "mma": SportProfile(
-        name="mma",
-        rating_system="FIGHTER_ELO",
-        form_window=5,
+    "handball": SportProfile(
+        name="handball",
+        rating_system="ELO_GOAL_ADJUSTED",
+        form_window=10,
         supports_draw=True,
-        competition_label="promotion",
-        min_training_samples=100,
+        competition_label="league",
+        min_training_samples=150,
     ),
     "nfl": SportProfile(
         name="nfl",
@@ -51,3 +51,4 @@ SPORT_PROFILES = {
         min_training_samples=100,
     ),
 }
+

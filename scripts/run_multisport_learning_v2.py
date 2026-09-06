@@ -18,7 +18,7 @@ SUPPORTED_SPORTS = (
     "basketball",
     "tennis",
     "hockey",
-    "mma",
+    "handball",
     "nfl",
 )
 
@@ -434,3 +434,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

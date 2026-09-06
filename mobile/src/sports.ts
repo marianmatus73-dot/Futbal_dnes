@@ -6,7 +6,7 @@ export const sportMeta: Record<Sport, { label: string; icon: string; color: stri
   basketball: { label: "Basketbal", icon: "🏀", color: "#FFAA64" },
   hockey: { label: "Hokej", icon: "🏒", color: "#73D0FF" },
   baseball: { label: "Baseball", icon: "⚾", color: "#FF8796" },
-  mma: { label: "MMA", icon: "🥊", color: "#C59CFF" },
+  handball: { label: "Hádzaná", icon: "🤾", color: "#C59CFF" },
   nfl: { label: "NFL", icon: "🏈", color: "#D7A873" },
 };
 

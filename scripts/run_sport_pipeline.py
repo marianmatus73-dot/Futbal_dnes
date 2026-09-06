@@ -18,7 +18,7 @@ def main() -> None:
     parser.add_argument(
         "--sport",
         required=True,
-        choices=["baseball", "basketball", "tennis", "hockey", "mma", "nfl"],
+        choices=["baseball", "basketball", "tennis", "hockey", "handball", "nfl"],
     )
     parser.add_argument("--database", default="multisport_learning.db")
     args = parser.parse_args()
@@ -30,3 +30,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

@@ -12,7 +12,7 @@ SUPPORTED_SPORTS = (
     "basketball",
     "tennis",
     "hockey",
-    "mma",
+    "handball",
     "nfl",
 )
 
@@ -106,3 +106,4 @@ def detect_schema(database: str | Path) -> SportBetSchema:
             ("bookmaker", "sportsbook", "book"),
         ),
     )
+

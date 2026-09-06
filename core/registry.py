@@ -5,6 +5,7 @@ from sports.football import FootballModule
 from sports.tennis import TennisModule
 from sports.basketball import BasketballModule
 from sports.hockey import HockeyModule
+from sports.handball import HandballModule
 
 
 _SPORTS: dict[str, SportModule] = {
@@ -12,6 +13,7 @@ _SPORTS: dict[str, SportModule] = {
     "tennis": TennisModule(),
     "basketball": BasketballModule(),
     "hockey": HockeyModule(),
+    "handball": HandballModule(),
 }
 
 
@@ -21,3 +23,4 @@ def get_sports() -> dict[str, SportModule]:
 
 def get_sport(name: str) -> SportModule:
     return _SPORTS[name]
+

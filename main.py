@@ -137,7 +137,7 @@ from sports.tennis import TennisModule
 from sports.basketball import BasketballModule
 from sports.hockey import HockeyModule
 from sports.baseball import BaseballModule
-from sports.mma import MMAModule
+from sports.handball import HandballModule
 from sports.nfl import NFLModule
 
 try:
@@ -162,7 +162,7 @@ SPORT_MODULES = [
     BasketballModule(),
     HockeyModule(),
     BaseballModule(),
-    MMAModule(),
+    HandballModule(),
     NFLModule(),
 ]
 
@@ -172,6 +172,7 @@ HISTORY_EXPORTS = {
     "sport_bets": "exports/history_sport_bets.csv",
     "sport_bookmaker_stats": "exports/history_bookmaker_stats.csv",
     "sport_elo_ratings": "exports/history_elo_ratings.csv",
+    "sport_learning_observations": "exports/history_learning_observations.csv",
 
     # Football v13 persistent learning data.
     "football_feature_history": "exports/history_football_features.csv",
