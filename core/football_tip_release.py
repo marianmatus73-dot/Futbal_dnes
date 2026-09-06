@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import sqlite3
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -15,6 +16,7 @@ class ReleaseSummary:
     early: int = 0
     final: int = 0
     awaiting_lineup: int = 0
+    lineup_limited: int = 0
 
 
 def _parse_time(value: str) -> datetime | None:
@@ -56,6 +58,7 @@ def classify_football_release(
     *,
     now: datetime | None = None,
     final_window_minutes: int = 60,
+    strict_lineups: bool = False,
 ) -> str:
     current = now or datetime.now(timezone.utc)
     start = _parse_time(bet.start_time)
@@ -70,6 +73,11 @@ def classify_football_release(
         return "EARLY"
     if minutes >= 0 and bet.lineup_verified:
         return "FINAL"
+    if minutes >= 0 and not strict_lineups:
+        # Free feeds do not guarantee lineups. Keep the qualified selection as
+        # an explicitly unverified EARLY tip instead of silently removing it.
+        # It must never be labelled FINAL without confirmed provider data.
+        return "EARLY"
     return "AWAITING_LINEUP"
 
 
@@ -82,8 +90,11 @@ def apply_football_release_policy(
     ensure_release_columns(settings)
     context_database = SportContextDatabase(settings)
     current = now or datetime.now(timezone.utc)
-    early = final = awaiting = 0
+    early = final = awaiting = lineup_limited = 0
     database = Path(settings.db_file or "bets.db")
+    strict_lineups = str(os.getenv("FOOTBALL_STRICT_LINEUPS", "0")).strip().lower() in {
+        "1", "true", "yes", "on",
+    }
 
     for output in module_outputs:
         result = output.get("result")
@@ -92,11 +103,21 @@ def apply_football_release_policy(
         published: list[Bet] = []
         for bet in result.bets:
             stage = classify_football_release(
-                bet, context_database, now=current,
+                bet,
+                context_database,
+                now=current,
+                strict_lineups=strict_lineups,
             )
             bet.release_stage = stage
             if stage == "EARLY":
                 early += 1
+                start = _parse_time(bet.start_time)
+                if (
+                    start is not None
+                    and 0 <= (start - current).total_seconds() / 60.0 <= 60
+                    and not bet.lineup_verified
+                ):
+                    lineup_limited += 1
             elif stage == "FINAL":
                 final += 1
             else:
@@ -148,4 +169,10 @@ def apply_football_release_policy(
                 published.append(bet)
         result.bets = published
 
-    return ReleaseSummary(early=early, final=final, awaiting_lineup=awaiting)
+    return ReleaseSummary(
+        early=early,
+        final=final,
+        awaiting_lineup=awaiting,
+        lineup_limited=lineup_limited,
+    )
+

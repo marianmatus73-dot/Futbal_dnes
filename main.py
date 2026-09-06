@@ -826,10 +826,12 @@ async def run() -> None:
                 module_outputs, settings
             )
             log.info(
-                "Football release policy: early=%s, final=%s, awaiting_lineup=%s",
+                "Football release policy: early=%s, final=%s, "
+                "awaiting_lineup=%s, lineup_limited=%s",
                 release_summary.early,
                 release_summary.final,
                 release_summary.awaiting_lineup,
+                release_summary.lineup_limited,
             )
         except Exception:
             # A failed lineup/release gate must fail closed: never expose an

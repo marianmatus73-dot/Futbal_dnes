@@ -3,6 +3,7 @@ from __future__ import annotations
 import sqlite3
 import tempfile
 import unittest
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -29,6 +30,7 @@ class FootballTipReleaseTests(unittest.TestCase):
         SportContextDatabase(self.settings).init_db()
 
     def tearDown(self) -> None:
+        os.environ.pop("FOOTBALL_STRICT_LINEUPS", None)
         self.temp.cleanup()
 
     def _bet(self, start: datetime, event: str) -> Bet:
@@ -70,16 +72,32 @@ class FootballTipReleaseTests(unittest.TestCase):
         self.assertEqual(summary.final, 1)
         self.assertEqual([bet.release_stage for bet in result.bets], ["EARLY", "FINAL"])
 
-    def test_unverified_close_tip_is_held(self) -> None:
+    def test_unverified_close_tip_stays_early_when_feed_has_no_lineup(self) -> None:
         now = datetime.now(timezone.utc)
         bet = self._bet(now + timedelta(minutes=40), "held")
         result = SportResult(sport="football", mode="scan", bets=[bet])
         summary = apply_football_release_policy(
             [{"result": result}], self.settings, now=now
         )
+        self.assertEqual(summary.early, 1)
+        self.assertEqual(summary.lineup_limited, 1)
+        self.assertEqual(result.bets, [bet])
+        self.assertEqual(bet.release_stage, "EARLY")
+        self.assertFalse(bet.lineup_verified)
+
+    def test_strict_mode_holds_unverified_close_tip(self) -> None:
+        os.environ["FOOTBALL_STRICT_LINEUPS"] = "1"
+        now = datetime.now(timezone.utc)
+        bet = self._bet(now + timedelta(minutes=40), "strict-held")
+        result = SportResult(sport="football", mode="scan", bets=[bet])
+        summary = apply_football_release_policy(
+            [{"result": result}], self.settings, now=now
+        )
         self.assertEqual(summary.awaiting_lineup, 1)
+        self.assertEqual(summary.lineup_limited, 0)
         self.assertEqual(result.bets, [])
 
 
 if __name__ == "__main__":
     unittest.main()
+
