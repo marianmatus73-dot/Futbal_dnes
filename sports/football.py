@@ -582,26 +582,27 @@ class FootballModule(SportModule):
 
             return conn.total_changes - before
 
-    def _save_bet(self, settings: Settings, bet: Bet) -> None:
+    def _save_bet(self, settings: Settings, bet: Bet) -> bool:
         source_hash = make_hash(
             bet.sport,
-            bet.league,
-            bet.event,
+            bet.external_event_id or bet.event,
             bet.market,
-            bet.selection,
-            bet.start_time,
         )
 
         with self._connect(settings) as conn:
+            before = conn.total_changes
             conn.execute("""
                 INSERT OR IGNORE INTO sport_bets
                 (
                     sport, league, event, home_team, away_team, market,
                     selection, odds, prob_model, prob_market, prob_final,
                     edge, stake, bookmaker, start_time, score, source_hash,
-                    result, external_event_id
+                    result, external_event_id, release_stage, lineup_verified,
+                    opening_odds, final_odds, early_released_at,
+                    final_confirmed_at
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                        ?, ?, ?, ?, ?, ?, ?)
             """, (
                 bet.sport,
                 bet.league,
@@ -622,7 +623,22 @@ class FootballModule(SportModule):
                 source_hash,
                 "OPEN",
                 bet.external_event_id,
+                bet.release_stage,
+                int(bet.lineup_verified),
+                bet.opening_odds if bet.opening_odds is not None else bet.odds,
+                bet.final_odds,
+                now_utc() if bet.release_stage == "EARLY" else None,
+                now_utc() if bet.release_stage == "FINAL" else None,
             ))
+            return conn.total_changes > before
+
+    def persist_released_bets(
+        self,
+        settings: Settings,
+        bets: list[Bet],
+    ) -> int:
+        """Persist only tips that survived risk and release controls."""
+        return sum(self._save_bet(settings, bet) for bet in bets)
 
     def _audit(
         self,
@@ -1156,7 +1172,6 @@ class FootballModule(SportModule):
                     )
 
                     bets.append(bet)
-                    self._save_bet(settings, bet)
 
                     self._audit(
                         settings,
@@ -1243,7 +1258,6 @@ class FootballModule(SportModule):
                                 external_event_id=str(event.get("id", "")),
                             )
                             bets.append(total_bet)
-                            self._save_bet(settings, total_bet)
                             self._audit(
                                 settings,
                                 sport_key,

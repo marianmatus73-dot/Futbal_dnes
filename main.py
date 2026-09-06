@@ -842,6 +842,19 @@ async def run() -> None:
                 release_summary.final,
                 release_summary.awaiting_lineup,
             )
+            persisted_football = 0
+            football_module = FootballModule()
+            for output in module_outputs:
+                result = output.get("result")
+                if isinstance(result, SportResult) and result.sport == "football":
+                    persisted_football += football_module.persist_released_bets(
+                        settings,
+                        result.bets,
+                    )
+            log.info(
+                "Persisted %s newly released football tips after all gates",
+                persisted_football,
+            )
         except Exception:
             log.exception("Football two-stage release policy failed")
         try:
