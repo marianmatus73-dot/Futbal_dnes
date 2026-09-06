@@ -15,6 +15,51 @@ from core.sport_settlement import settle_sport_bets
 
 
 class SportSettlementTotalsTests(unittest.TestCase):
+    def test_inactive_tournament_key_and_exact_event_id_are_used(self):
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            db = Path(tmp) / "bets.db"
+            settings = Settings(db_file=str(db), odds_api_key="test")
+            init_sport_db(settings)
+            with sqlite3.connect(db) as conn:
+                conn.execute("ALTER TABLE sport_bets ADD COLUMN external_event_id TEXT")
+                for source_hash, event_id in (("right", "event-123"), ("wrong", "event-999")):
+                    conn.execute(
+                        """INSERT INTO sport_bets
+                        (sport, league, event, home_team, away_team, market,
+                         selection, odds, stake, result, source_hash,
+                         external_event_id)
+                        VALUES ('tennis', 'tennis_atp_finished',
+                                'Player A vs Player B', 'Player A', 'Player B',
+                                'h2h', 'Player A', 1.8, 1, 'OPEN', ?, ?)""",
+                        (source_hash, event_id),
+                    )
+            scores = [{
+                "id": "event-123", "completed": True,
+                "home_team": "Player A", "away_team": "Player B",
+                "scores": [
+                    {"name": "Player A", "score": "2"},
+                    {"name": "Player B", "score": "0"},
+                ],
+            }]
+            with (
+                patch(
+                    "core.sport_settlement.fetch_scores",
+                    AsyncMock(return_value=scores),
+                ) as fetch,
+                patch("core.sport_settlement.update_closing_lines"),
+                patch("core.sport_settlement.refresh_bookmaker_stats"),
+            ):
+                settled = asyncio.run(
+                    settle_sport_bets(settings, "tennis", [])
+                )
+            self.assertEqual(settled, 1)
+            self.assertEqual(fetch.await_args.args[1], "tennis_atp_finished")
+            with sqlite3.connect(db) as conn:
+                results = conn.execute(
+                    "SELECT source_hash, result FROM sport_bets ORDER BY source_hash"
+                ).fetchall()
+            self.assertEqual(results, [("right", "WON"), ("wrong", "OPEN")])
+
     def test_totals_result_and_score_are_persisted(self):
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             db = Path(tmp) / "bets.db"
@@ -42,3 +87,4 @@ class SportSettlementTotalsTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

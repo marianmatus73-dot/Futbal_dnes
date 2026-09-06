@@ -3,6 +3,7 @@ import os
 import sqlite3
 import hashlib
 import logging
+from contextlib import closing
 from pathlib import Path
 from typing import Any
 
@@ -36,11 +37,28 @@ class TennisModule(SportModule):
         return conn
 
     def _save_bet(self, settings: Settings, bet: Bet) -> None:
-        with self._connect(settings) as conn:
+        home, separator, away = bet.event.partition(" vs ")
+        source_hash = hashlib.sha256(
+            f"tennis|{bet.external_event_id}|{bet.market}|{bet.selection}".encode("utf-8")
+        ).hexdigest()[:32]
+        with closing(self._connect(settings)) as conn:
             conn.execute(
-                "INSERT OR IGNORE INTO sport_bets (sport, league, event, selection, odds, stake, bookmaker, result) VALUES (?, ?, ?, ?, ?, ?, ?, 'OPEN')",
-                (bet.sport, bet.league, bet.event, bet.selection, bet.odds, bet.stake, bet.bookmaker)
+                """INSERT OR IGNORE INTO sport_bets
+                   (sport, league, event, home_team, away_team, market,
+                    selection, odds, prob_model, prob_market, prob_final,
+                    edge, stake, bookmaker, start_time, score,
+                    external_event_id, source_hash, result)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                           ?, ?, 'OPEN')""",
+                (
+                    bet.sport, bet.league, bet.event, home if separator else "",
+                    away if separator else "", bet.market, bet.selection,
+                    bet.odds, bet.prob_model, bet.prob_market, bet.prob_final,
+                    bet.edge, bet.stake, bet.bookmaker, bet.start_time,
+                    bet.score, bet.external_event_id, source_hash,
+                ),
             )
+            conn.commit()
 
     async def scan(self, settings: Settings) -> SportResult:
         init_sport_db(settings)
@@ -73,11 +91,20 @@ class TennisModule(SportModule):
         else:
             log.info("Tennis: Skenujem všetky nakonfigurované kľúče (auto-discovery vypnuté)")
 
+        settled = await settle_sport_bets(
+            settings=settings,
+            sport=self.name,
+            sport_keys=clean_sport_keys,
+        )
         if not clean_sport_keys:
             log.info("Tennis: Žiadne turnaje práve teraz nie sú v sezóne.")
-            return SportResult(sport=self.name, mode="scan", bets=[], message="Tennis: No active events.")
+            return SportResult(
+                sport=self.name,
+                mode="scan",
+                bets=[],
+                message=f"Tennis: No active events. Settled: {settled}.",
+            )
 
-        settled = await settle_sport_bets(settings=settings, sport=self.name, sport_keys=clean_sport_keys)
         updated_clv = update_closing_lines(settings, self.name)
         refresh_bookmaker_stats(settings, self.name)
 
@@ -114,12 +141,18 @@ class TennisModule(SportModule):
                         if settings.min_edge <= edge <= settings.max_edge and stake > 0:
                             bet = Bet(
                                 sport=self.name, league=league, event=event_name, market="h2h", selection=selection, 
-                                odds=odds, prob_model=prob_market, prob_market=prob_market, prob_final=prob_market, 
-                                edge=edge, stake=stake, bookmaker=bookmaker, start_time=str(event.get("commence_time")), score=float(edge*100)
+                                odds=odds, prob_model=prob_market, prob_market=prob_market, prob_final=prob_market,
+                                edge=edge, stake=stake, bookmaker=bookmaker,
+                                start_time=str(event.get("commence_time")),
+                                score=float(edge * 100),
+                                external_event_id=str(event.get("id", "")),
                             )
                             bets.append(bet)
-                            self._save_bet(settings, bet)
             except Exception as e:
                 log.warning("Tennis: Chyba pri spracovaní kľúča %s: %s", sport_key, e)
 
+        bets = dedupe_best_bets(bets)
+        for bet in bets:
+            self._save_bet(settings, bet)
         return SportResult(sport=self.name, mode="scan", bets=bets[:top_n], message=f"Tennis scan hotový. Events: {scanned_events}, Stored: {len(bets)}")
+

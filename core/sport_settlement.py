@@ -121,6 +121,7 @@ def ensure_settlement_columns(settings: Settings) -> None:
             )
 
         for name, definition in {
+            "external_event_id": "TEXT",
             "home_goals": "INTEGER",
             "away_goals": "INTEGER",
             "final_score": "TEXT",
@@ -208,7 +209,7 @@ async def settle_sport_bets(
         open_rows = conn.execute(
             """
             SELECT id, league, event, home_team, away_team,
-                   selection, odds, stake, market
+                   selection, odds, stake, market, external_event_id
             FROM sport_bets
             WHERE sport=?
               AND market IN ('h2h', 'totals_2.5')
@@ -233,8 +234,15 @@ async def settle_sport_bets(
         rows_by_league.setdefault(str(row[1]), []).append(row)
 
     settled = 0
+    # Tournament keys may disappear from the active sports endpoint shortly
+    # after their last match. Keep fetching keys referenced by open history so
+    # those bets can still be settled during the provider's score window.
+    settlement_keys = list(dict.fromkeys(
+        [s.strip() for s in sport_keys if s.strip()]
+        + [key for key in rows_by_league if key]
+    ))
 
-    for sport_key in [s.strip() for s in sport_keys if s.strip()]:
+    for sport_key in settlement_keys:
         scores = await fetch_scores(api_key, sport_key, days_from=3)
 
         if not scores:
@@ -261,6 +269,7 @@ async def settle_sport_bets(
                     "away": away,
                     "event": f"{home} vs {away}",
                     "winner": winner,
+                    "external_event_id": str(event.get("id", "")).strip(),
                     "home_score": home_score,
                     "away_score": away_score,
                 }
@@ -283,6 +292,7 @@ async def settle_sport_bets(
                 odds,
                 stake,
                 market,
+                external_event_id,
             ) = row
 
             bet_home = norm(home_team or "")
@@ -293,6 +303,11 @@ async def settle_sport_bets(
             matched = None
 
             for score_event in score_events:
+                if external_event_id:
+                    if score_event["external_event_id"] == str(external_event_id):
+                        matched = score_event
+                        break
+                    continue
                 score_home = norm(score_event["home"])
                 score_away = norm(score_event["away"])
                 score_event_name = norm(score_event["event"])
@@ -404,3 +419,4 @@ async def settle_sport_bets(
     refresh_bookmaker_stats(settings, sport)
 
     return settled
+
