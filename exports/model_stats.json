@@ -1,13 +1,13 @@
 {
-  "total_bets": 1983,
+  "total_bets": 1984,
   "wins": 875,
-  "losses": 1108,
-  "winrate": 44.13,
-  "yield": 7.27,
-  "profit": 99.88,
-  "stake_sum": 1373.21,
-  "open_bets": 876,
-  "settled_bets": 1983,
+  "losses": 1109,
+  "winrate": 44.1,
+  "yield": 7.25,
+  "profit": 99.54,
+  "stake_sum": 1373.55,
+  "open_bets": 866,
+  "settled_bets": 1984,
   "by_sport": {
     "baseball": {
       "total": 1206,
@@ -19,13 +19,13 @@
       "yield": 7.34
     },
     "football": {
-      "total": 732,
+      "total": 733,
       "wins": 207,
-      "losses": 525,
-      "winrate": 28.28,
-      "profit": 13.53,
-      "stake_sum": 176.69,
-      "yield": 7.66
+      "losses": 526,
+      "winrate": 28.24,
+      "profit": 13.19,
+      "stake_sum": 177.03,
+      "yield": 7.45
     },
     "basketball": {
       "total": 25,
@@ -156,13 +156,13 @@
       "yield": -12.06
     },
     "Unibet (SE)": {
-      "total": 48,
+      "total": 49,
       "wins": 14,
-      "losses": 34,
-      "winrate": 29.17,
-      "profit": -0.2,
-      "stake_sum": 11.69,
-      "yield": -1.73
+      "losses": 35,
+      "winrate": 28.57,
+      "profit": -0.54,
+      "stake_sum": 12.03,
+      "yield": -4.51
     },
     "Tipico": {
       "total": 70,
@@ -373,15 +373,6 @@
       "stake_sum": 2.44,
       "yield": 61.74
     },
-    "Eliteserien": {
-      "total": 36,
-      "wins": 11,
-      "losses": 25,
-      "winrate": 30.56,
-      "profit": 1.49,
-      "stake_sum": 9.57,
-      "yield": 15.61
-    },
     "Austrian Bundesliga": {
       "total": 20,
       "wins": 6,
@@ -390,6 +381,15 @@
       "profit": 1.37,
       "stake_sum": 5.41,
       "yield": 25.41
+    },
+    "Eliteserien": {
+      "total": 37,
+      "wins": 11,
+      "losses": 26,
+      "winrate": 29.73,
+      "profit": 1.15,
+      "stake_sum": 9.91,
+      "yield": 11.64
     },
     "MLS": {
       "total": 121,
@@ -563,5 +563,5 @@
       "yield": -69.46
     }
   },
-  "last_update": "2026-09-06T16:51:10.702390+00:00"
+  "last_update": "2026-09-06T17:18:01.029268+00:00"
 }

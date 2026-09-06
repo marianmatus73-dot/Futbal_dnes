@@ -1,14 +1,15 @@
 {
   "version": "v15.17",
-  "created_at": "2026-09-06T16:51:09+00:00",
-  "matches": 732,
-  "snapshots": 28878,
-  "keys_created": 732,
-  "joins_completed": 331,
+  "created_at": "2026-09-06T17:18:00+00:00",
+  "matches": 733,
+  "snapshots": 0,
+  "keys_created": 733,
+  "joins_completed": 332,
   "key_coverage_percent": 100.0,
-  "join_coverage_percent": 45.2,
+  "join_coverage_percent": 45.3,
   "status": "BUILDING",
   "blockers": [
-    "Market snapshot joins incomplete"
+    "Market snapshot joins incomplete",
+    "No market snapshots"
   ]
 }
