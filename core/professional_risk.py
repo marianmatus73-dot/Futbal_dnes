@@ -40,12 +40,20 @@ def _settled_profile(settings: Settings, sport: str) -> tuple[int, float]:
             "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
         ).fetchone() is None:
             return 0, .50
+        columns = {
+            str(column[1]) for column in conn.execute("PRAGMA table_info(sport_bets)")
+        }
+        version_filter = (
+            " AND engine_version='football-2.0'"
+            if sport == "football" and "engine_version" in columns
+            else ""
+        )
         row = conn.execute(
             """
             SELECT COUNT(*), SUM(CASE WHEN UPPER(result) IN ('WON','WIN','V') THEN 1 ELSE 0 END)
             FROM sport_bets
             WHERE sport=? AND UPPER(COALESCE(result,'')) IN ('WON','WIN','V','LOST','LOSS','P')
-            """,
+            """ + version_filter,
             (sport,),
         ).fetchone()
     samples = int(row[0] or 0)

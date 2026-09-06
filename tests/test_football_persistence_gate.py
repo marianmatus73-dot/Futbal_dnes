@@ -45,10 +45,10 @@ class FootballPersistenceGateTests(unittest.TestCase):
             with sqlite3.connect(database) as conn:
                 rows = conn.execute(
                     "SELECT external_event_id, selection, release_stage, "
-                    "opening_odds FROM sport_bets"
+                    "opening_odds, engine_version FROM sport_bets"
                 ).fetchall()
             self.assertEqual(rows, [
-                ("football-event-1", "Arsenal", "EARLY", 1.8)
+                ("football-event-1", "Arsenal", "EARLY", 1.8, "football-2.0")
             ])
             self.assertNotEqual(rejected.external_event_id, rows[0][0])
 

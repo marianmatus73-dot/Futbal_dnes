@@ -12,6 +12,7 @@ from core.config import Settings
 from core.market import no_vig_probs
 from core.football_candidate_optimizer_v14 import is_learning_observation_odds
 from core.professional_risk import (
+    _settled_profile,
     apply_professional_risk_controls,
     calibrated_probability,
 )
@@ -61,6 +62,21 @@ class ProfessionalControlsTests(unittest.TestCase):
         )
         self.assertGreater(calibrated, .58)
         self.assertLess(calibrated, .62)
+
+    def test_football_v2_calibration_ignores_legacy_candidate_history(self) -> None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "CREATE TABLE sport_bets (sport TEXT, result TEXT, engine_version TEXT)"
+            )
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES ('football', ?, '')",
+                [("WON",)] * 90 + [("LOST",)] * 10,
+            )
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES ('football', ?, 'football-2.0')",
+                [("WON",)] * 2 + [("LOST",)] * 3,
+            )
+        self.assertEqual(_settled_profile(self.settings, "football"), (5, .40))
 
     def test_risk_engine_caps_stake_and_drawdown_pauses(self) -> None:
         with sqlite3.connect(self.db_path) as conn:

@@ -56,6 +56,9 @@ from core.adaptive_weights import (
 )
 
 
+FOOTBALL_ENGINE_VERSION = "football-2.0"
+
+
 
 
 
@@ -599,10 +602,10 @@ class FootballModule(SportModule):
                     edge, stake, bookmaker, start_time, score, source_hash,
                     result, external_event_id, release_stage, lineup_verified,
                     opening_odds, final_odds, early_released_at,
-                    final_confirmed_at
+                    final_confirmed_at, engine_version
                 )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                        ?, ?, ?, ?, ?, ?, ?)
+                        ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 bet.sport,
                 bet.league,
@@ -629,6 +632,7 @@ class FootballModule(SportModule):
                 bet.final_odds,
                 now_utc() if bet.release_stage == "EARLY" else None,
                 now_utc() if bet.release_stage == "FINAL" else None,
+                FOOTBALL_ENGINE_VERSION,
             ))
             return conn.total_changes > before
 

@@ -47,6 +47,7 @@ def ensure_release_columns(settings: Settings) -> None:
             "early_released_at": "TEXT",
             "final_confirmed_at": "TEXT",
             "lineup_verified": "INTEGER NOT NULL DEFAULT 0",
+            "engine_version": "TEXT NOT NULL DEFAULT ''",
         }.items():
             if name not in columns:
                 conn.execute(f"ALTER TABLE sport_bets ADD COLUMN {name} {definition}")
