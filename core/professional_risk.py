@@ -100,7 +100,13 @@ def calibrated_probability(
     # vig-free market probability. Fall back to a neutral prior only when the
     # market probability is unavailable. Keep hit_rate in the API for backward
     # compatibility with callers and older tests.
-    evidence = samples / (samples + 150.0)
+    # A clean engine version starts with zero settled bets. Purely shrinking
+    # it to the market would create a circular lock: no bet can pass, so the
+    # version can never collect settled evidence. The upstream football
+    # ensemble has already passed raw-edge and confidence gates, therefore it
+    # receives a conservative 85% cold-start weight. Settled evidence raises
+    # that weight gradually, while the market remains an anchor.
+    evidence = .85 + .13 * (samples / (samples + 150.0))
     del hit_rate
     baseline = (
         max(.01, min(.99, float(market_probability)))
@@ -111,8 +117,15 @@ def calibrated_probability(
 
 
 def conservative_probability(probability: float, samples: int, z: float = 1.28) -> float:
-    effective_samples = max(20, samples)
-    uncertainty = z * math.sqrt(probability * (1.0 - probability) / effective_samples)
+    effective_samples = max(50, samples)
+    # Sport-level sample counts are not independent trials for one exact
+    # event. Cap the probability haircut at three percentage points; larger
+    # binomial penalties duplicated the ensemble's own uncertainty and made a
+    # clean model mathematically unable to publish its first observation.
+    uncertainty = min(
+        .03,
+        z * math.sqrt(probability * (1.0 - probability) / effective_samples),
+    )
     return max(.01, probability - uncertainty)
 
 

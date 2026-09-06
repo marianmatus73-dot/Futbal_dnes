@@ -63,6 +63,25 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertGreater(calibrated, .58)
         self.assertLess(calibrated, .62)
 
+    def test_clean_football_engine_can_publish_strong_lower_odds_candidate(self) -> None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "CREATE TABLE sport_bets (sport TEXT, result TEXT, engine_version TEXT, "
+                "market TEXT, odds REAL)"
+            )
+        bet = Bet(
+            sport="football", league="L", event="Favourite vs Visitor",
+            market="h2h", selection="Favourite", odds=1.50,
+            prob_model=.75, prob_market=2 / 3, prob_final=.75,
+            edge=.125, stake=5, bookmaker="Book",
+            start_time="2026-09-10T18:00:00Z", score=80,
+        )
+        output = {"result": SportResult(sport="football", mode="scan", bets=[bet])}
+        summary = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(summary.accepted, 1)
+        self.assertEqual(len(output["result"].bets), 1)
+        self.assertGreaterEqual(output["result"].bets[0].edge, .04)
+
     def test_football_v2_calibration_ignores_legacy_candidate_history(self) -> None:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
@@ -104,8 +123,8 @@ class ProfessionalControlsTests(unittest.TestCase):
             )
         bet = Bet(
             sport="football", league="L", event="A vs B", market="h2h",
-            selection="A", odds=1.90, prob_model=.70, prob_market=.53,
-            prob_final=.70, edge=.33, stake=30, bookmaker="Book",
+            selection="A", odds=1.90, prob_model=.62, prob_market=.53,
+            prob_final=.62, edge=.178, stake=30, bookmaker="Book",
             start_time="2026-08-20T20:00:00Z", score=85,
         )
         output = {"result": SportResult(sport="football", mode="scan", bets=[bet])}
@@ -115,7 +134,7 @@ class ProfessionalControlsTests(unittest.TestCase):
 
         # Re-running the same selection may confirm/update it, but must not
         # allocate the stake a second time.
-        repeated_bet = replace(bet, prob_final=.70, edge=.33, stake=30)
+        repeated_bet = replace(bet, prob_final=.62, edge=.178, stake=30)
         output["result"].bets = [repeated_bet]
         repeated = apply_professional_risk_controls([output], self.settings)
         self.assertEqual(repeated.accepted, 1)
@@ -128,8 +147,8 @@ class ProfessionalControlsTests(unittest.TestCase):
 
         opposite = Bet(
             sport="football", league="L", event="A vs B", market="h2h",
-            selection="B", odds=2.10, prob_model=.70, prob_market=.47,
-            prob_final=.70, edge=.47, stake=5, bookmaker="Book",
+            selection="B", odds=2.10, prob_model=.55, prob_market=.47,
+            prob_final=.55, edge=.155, stake=5, bookmaker="Book",
             start_time="2026-08-20T20:00:00Z", score=85,
         )
         output["result"].bets = [opposite]
