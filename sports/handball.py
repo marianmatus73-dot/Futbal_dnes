@@ -4,12 +4,14 @@ import hashlib
 import logging
 import os
 import sqlite3
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from core.config import Settings
 from core.market import best_outlier_prices, consensus_h2h
+from core.learning_observation_settlement import settle_learning_observations
 from core.odds_api import fetch_odds
 from core.sport_quant import (
     discover_active_sport_keys,
@@ -51,7 +53,7 @@ class HandballModule(SportModule):
         return conn
 
     def _ensure_tables(self, settings: Settings) -> None:
-        with self._connect(settings) as conn:
+        with closing(self._connect(settings)) as conn:
             conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS sport_learning_observations (
@@ -81,6 +83,7 @@ class HandballModule(SportModule):
                 "CREATE INDEX IF NOT EXISTS idx_learning_observations_lookup "
                 "ON sport_learning_observations(sport, league, external_event_id, result)"
             )
+            conn.commit()
 
     def _save_snapshot_rows(
         self,
@@ -114,7 +117,7 @@ class HandballModule(SportModule):
                     ))
         if not rows:
             return 0
-        with self._connect(settings) as conn:
+        with closing(self._connect(settings)) as conn:
             before = conn.total_changes
             conn.executemany(
                 """
@@ -125,6 +128,7 @@ class HandballModule(SportModule):
                 """,
                 rows,
             )
+            conn.commit()
             return conn.total_changes - before
 
     def _save_observations(
@@ -154,7 +158,7 @@ class HandballModule(SportModule):
             ))
         if not rows:
             return 0
-        with self._connect(settings) as conn:
+        with closing(self._connect(settings)) as conn:
             before = conn.total_changes
             conn.executemany(
                 """
@@ -166,6 +170,7 @@ class HandballModule(SportModule):
                 """,
                 rows,
             )
+            conn.commit()
             return conn.total_changes - before
 
     async def scan(self, settings: Settings) -> SportResult:
@@ -178,6 +183,11 @@ class HandballModule(SportModule):
             ).split(",")
             if value.strip()
         ]
+        settlement = await settle_learning_observations(
+            settings,
+            sport=self.name,
+            sport_keys=configured,
+        )
         if os.getenv("SPORT_KEY_AUTO_DISCOVERY", "1") == "1":
             active = await discover_active_sport_keys(
                 settings.odds_api_key, ["Handball"]
@@ -212,6 +222,8 @@ class HandballModule(SportModule):
                 f"Events scanned: {events_scanned}. "
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Learning observations saved: {observations_saved}."
+                f" Settled observations: {settlement.settled_rows} "
+                f"({settlement.won} won, {settlement.lost} lost)."
             ),
         )
 

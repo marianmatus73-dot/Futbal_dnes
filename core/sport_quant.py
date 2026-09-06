@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -37,7 +38,7 @@ def env_float(name: str, default: float) -> float:
 
 
 def init_sport_db(settings: Settings) -> None:
-    with connect(settings) as conn:
+    with closing(connect(settings)) as conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS sport_bets (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -130,6 +131,7 @@ def init_sport_db(settings: Settings) -> None:
         conn.execute("CREATE INDEX IF NOT EXISTS idx_sport_bets_result ON sport_bets(result)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_sport_snapshots_event ON sport_odds_snapshots(sport, league, event, selection)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_sport_snapshots_clv ON sport_odds_snapshots(sport, league, event, selection, captured_at)")
+        conn.commit()
 
 
 async def discover_active_sport_keys(api_key: str, groups: list[str]) -> set[str]:
@@ -427,3 +429,4 @@ def tennis_surface_adjustment(league: str) -> float:
     if "wimbledon" in lower:
         return env_float("TENNIS_GRASS_EDGE_BONUS", 0.0)
     return env_float("TENNIS_HARD_EDGE_BONUS", 0.0)
+

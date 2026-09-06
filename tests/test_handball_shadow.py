@@ -3,6 +3,7 @@ from __future__ import annotations
 import sqlite3
 import tempfile
 import unittest
+from contextlib import closing
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
@@ -51,12 +52,18 @@ class HandballShadowTests(unittest.IsolatedAsyncioTestCase):
                     AsyncMock(return_value={"handball_germany_bundesliga"}),
                 ),
                 patch("sports.handball.fetch_odds", AsyncMock(return_value=[event])),
+                patch(
+                    "sports.handball.settle_learning_observations",
+                    AsyncMock(),
+                ) as settlement,
             ):
+                from core.learning_observation_settlement import ObservationSettlementSummary
+                settlement.return_value = ObservationSettlementSummary()
                 result = await HandballModule().scan(settings)
 
             self.assertEqual(result.mode, "shadow")
             self.assertEqual(result.bets, [])
-            with sqlite3.connect(database) as conn:
+            with closing(sqlite3.connect(database)) as conn:
                 observations = conn.execute(
                     "SELECT COUNT(*) FROM sport_learning_observations "
                     "WHERE sport='handball' AND mode='SHADOW'"
