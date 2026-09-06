@@ -36,6 +36,7 @@ jobs:
           SPORTMONKS_API_TOKEN: ${{ secrets.SPORTMONKS_API_TOKEN }}
           DB_FILE: sportmonks_test.db
           HTTP_TIMEOUT: "30"
+          SPORTMONKS_INCLUDE_XG: "1"
         run: python -m scripts.sync_sportmonks_context --days "${{ inputs.days }}"
       - name: Upload test result
         if: always()
@@ -44,4 +45,5 @@ jobs:
           name: sportmonks-context-test-${{ github.run_number }}
           if-no-files-found: warn
           path: exports/sportmonks_sync_summary.json
+
 

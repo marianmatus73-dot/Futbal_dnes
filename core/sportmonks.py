@@ -32,6 +32,8 @@ class SyncSummary:
     xg_records: int = 0
     home_absence_impact: float = 0.0
     away_absence_impact: float = 0.0
+    xg_requested: bool = False
+    xg_access_granted: bool = False
 
 
 def _explicit_lineup_confirmation(metadata: Any) -> bool:
@@ -274,6 +276,8 @@ class SportmonksClient:
         self._token = token
         self.timeout = timeout
         self.include_xg = include_xg
+        self.xg_requested = include_xg
+        self.xg_access_denied = False
 
     def _get(self, path: str, params: dict[str, Any]) -> dict[str, Any]:
         query = urllib.parse.urlencode({**params, "api_token": self._token})
@@ -310,6 +314,7 @@ class SportmonksClient:
                 xg_denied = exc.status == 403 and "xgfixture" in exc.detail.lower()
                 if not self.include_xg or not xg_denied:
                     raise
+                self.xg_access_denied = True
                 self.include_xg = False
                 payload = self._get(
                     f"fixtures/date/{fixture_date.isoformat()}",
@@ -419,6 +424,12 @@ def sync_upcoming_context(
                 )
             totals["context_rows_added"] += int(cursor.rowcount == 1)
 
+    totals["xg_requested"] = bool(getattr(client, "xg_requested", False))
+    totals["xg_access_granted"] = bool(
+        totals["xg_requested"]
+        and not bool(getattr(client, "xg_access_denied", False))
+    )
     return SyncSummary(**totals)
+
 
 

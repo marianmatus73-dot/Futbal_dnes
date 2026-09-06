@@ -64,6 +64,8 @@ class SportmonksTests(unittest.TestCase):
         self.assertIn("xGFixture", client.includes[0])
         self.assertNotIn("xGFixture", client.includes[1])
         self.assertFalse(client.include_xg)
+        self.assertTrue(client.xg_requested)
+        self.assertTrue(client.xg_access_denied)
 
     def test_confirmation_requires_explicit_true_metadata(self) -> None:
         self.assertFalse(_explicit_lineup_confirmation([]))
@@ -151,5 +153,6 @@ class SportmonksTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
 
 
