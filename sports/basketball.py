@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import os
 import sqlite3
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -135,24 +136,21 @@ class BasketballModule(SportModule):
 
     def _save_bet(self, settings: Settings, bet: Bet) -> None:
         source_hash = make_hash(
-    bet.sport,
-    bet.league,
-    bet.event,
-    bet.market,
-    bet.selection,
-    bet.start_time,
-)
+            bet.sport,
+            bet.external_event_id or bet.event,
+            bet.market,
+        )
 
-        with self._connect(settings) as conn:
+        with closing(self._connect(settings)) as conn:
             conn.execute("""
                 INSERT OR IGNORE INTO sport_bets
                 (
                     sport, league, event, home_team, away_team, market,
                     selection, odds, prob_model, prob_market, prob_final,
-                    edge, stake, bookmaker, start_time, score, source_hash,
-                    result
+                    edge, stake, bookmaker, start_time, score,
+                    external_event_id, source_hash, result
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 bet.sport,
                 bet.league,
@@ -170,9 +168,11 @@ class BasketballModule(SportModule):
                 bet.bookmaker,
                 bet.start_time,
                 bet.score,
+                bet.external_event_id,
                 source_hash,
-                "",
+                "OPEN",
             ))
+            conn.commit()
 
     def _audit(
         self,
@@ -477,10 +477,10 @@ class BasketballModule(SportModule):
                         bookmaker=bookmaker,
                         start_time=start,
                         score=adjusted_edge * 100,
+                        external_event_id=str(event.get("id", "")),
                     )
 
                     bets.append(bet)
-                    self._save_bet(settings, bet)
 
                     self._audit(
                         settings,
@@ -496,6 +496,8 @@ class BasketballModule(SportModule):
                     )
 
         bets = dedupe_best_bets(bets)
+        for bet in bets:
+            self._save_bet(settings, bet)
         analytics = sport_analytics_report(settings, self.name)
 
         return SportResult(
@@ -513,3 +515,4 @@ class BasketballModule(SportModule):
                 f"{analytics}"
             ),
         )
+
