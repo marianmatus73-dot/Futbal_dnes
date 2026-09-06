@@ -1,27 +1,23 @@
 id,bet_id,source_hash,sport_key,event,selection,home_goals,away_goals,result,external_event_id,settled_at,created_at
-1,42582,a449584b7916fb12c365b3f3,soccer_usa_mls,Seattle Sounders FC vs New York Red Bulls,New York Red Bulls,0,0,LOST,82dd9475d4b2b9b7f3a396a7be2547f3,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-2,42583,2361e9bf645ffcaf24f642a9,soccer_usa_mls,LA Galaxy vs New England Revolution,New England Revolution,2,1,LOST,0ed5e9f3a90677d12a8bfb38e67764ee,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-3,45876,f5c7655a67a02095cdde11c3,soccer_usa_mls,Columbus Crew SC vs Colorado Rapids,Draw,3,0,LOST,1bf99ef423ec499aeec556ee713180f2,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-4,47909,16889f595a2d40c50118c782,soccer_usa_mls,Charlotte FC vs Houston Dynamo,Draw,0,0,WON,fc4aa19aff79092d0ac992f2bef43250,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-5,47910,b39d94427925fb76b4905d62,soccer_usa_mls,Columbus Crew SC vs Colorado Rapids,Colorado Rapids,3,0,LOST,1bf99ef423ec499aeec556ee713180f2,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-6,47911,7b5fdbe0eb513e4169b7d060,soccer_usa_mls,Orlando City SC vs San Diego FC,San Diego FC,1,0,LOST,c94c876e6c11d7f95c01612bfa4e70c6,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-7,47922,667c7460b1c971117a0fcbf2,soccer_brazil_campeonato,Bragantino-SP vs Bahia,Bahia,2,3,WON,680fb82d1e89227777d143deebb6a885,2026-09-06T07:29:08Z,2026-09-06T09:48:23+00:00
-8,47923,04dc8c7a8cf0b9f49910afa1,soccer_brazil_campeonato,Sao Paulo vs Atletico Mineiro,Atletico Mineiro,2,0,LOST,60cca6c92ff326c89ba6240b10ee03da,2026-09-06T07:29:08Z,2026-09-06T09:48:23+00:00
-9,50294,0987409d538fc303c592a800,soccer_spain_la_liga,Rayo Vallecano vs Real Racing Club de Santander,Real Racing Club de Santander,3,2,LOST,d824443a97dfe00630e64d166b01493c,2026-09-06T02:24:49Z,2026-09-06T09:48:23+00:00
-10,51721,73a718b6b8f844d20e93c384,soccer_norway_eliteserien,SK Brann vs Lillestrom,Lillestrom,1,2,WON,96fdeef63d7d4c273b6ce28a5a3a5d80,2026-09-05T23:34:20Z,2026-09-06T09:48:23+00:00
-11,51750,0685b6d67aa02e41aaca4964,soccer_usa_mls,Austin FC vs San Jose Earthquakes,Austin FC,1,1,LOST,f5db8bb9519e7aadef08603be700267b,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-12,54115,4dd1566eafcedfb3a2134746,soccer_netherlands_eredivisie,Willem II vs Excelsior,Willem II,0,3,LOST,88c8073d902ca413208dbe5e2b7c89f1,2026-09-06T02:19:53Z,2026-09-06T09:48:23+00:00
-13,54189,e93c437831bbb9821554d0ec,soccer_spain_segunda_division,AD Ceuta FC vs Celta Fortuna,Celta Fortuna,0,2,WON,b5799c1159d2e91e50de2e730d13b4d7,2026-09-06T04:58:50Z,2026-09-06T09:48:23+00:00
-14,54190,0a08b1a96f9911b1d4012df8,soccer_spain_segunda_division,CD Eldense vs Mallorca,CD Eldense,0,0,LOST,1d25d88529d3b251e74b8077c9813916,2026-09-06T04:58:50Z,2026-09-06T09:48:23+00:00
-15,54221,4db95d202fa28a321617683c,soccer_argentina_primera_division,Gimnasia La Plata vs CA Tigre BA,CA Tigre BA,2,1,LOST,4232fca6aadf6a807673f0443ba9964d,2026-09-06T07:36:49Z,2026-09-06T09:48:23+00:00
-16,54892,e8b0cc6e9104ffbc91a89d77,soccer_switzerland_superleague,FC Vaduz vs FC Lausanne-Sport,Draw,3,1,LOST,7fbe7f90170d86be17e7d42fe10ad8a1,2026-09-06T04:36:28Z,2026-09-06T09:48:23+00:00
-17,57526,08ff560dc60aceb478458789,soccer_argentina_primera_division,Gimnasia Mendoza vs Boca Juniors,Gimnasia Mendoza,2,2,LOST,fe463400a4171d396f273a3f7051b15e,2026-09-06T07:36:49Z,2026-09-06T09:48:23+00:00
-18,58078,0e7f39e34ff6b1ac8bacd343,soccer_usa_mls,Portland Timbers vs Minnesota United FC,Minnesota United FC,5,4,LOST,5866122c8f843a48da441b82a2a5f8e1,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-19,58091,16c3b5e64678b1efe8f45778,soccer_brazil_campeonato,Fluminense vs Vasco da Gama,Vasco da Gama,1,0,LOST,54be9f9e0137b2e0b479d430a643a7b7,2026-09-06T07:29:08Z,2026-09-06T09:48:23+00:00
-20,58760,b1860bd8aacb85562cf38bb9,soccer_usa_mls,Real Salt Lake vs Los Angeles FC,Draw,2,2,WON,8289ab720fb9bbc036bf0cdf52516ce2,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-21,58801,f6f433db1a6f56f537beee8b,soccer_mexico_ligamx,Atlas vs Atlante FC,Atlante FC,1,1,LOST,502528f6753a47b3042bb4ade4db361c,2026-09-06T09:48:04Z,2026-09-06T09:48:23+00:00
-22,60059,f7f72aa36629788d5515a020,soccer_belgium_first_div,KV Mechelen vs Westerlo,Westerlo,0,4,WON,e10ca5320e5b6bdd188ebcbe4f743fc7,2026-09-06T02:09:22Z,2026-09-06T09:48:23+00:00
-23,60091,9784d4ee8d39d81e27427c39,soccer_spain_segunda_division,Real Valladolid CF vs Andorra CF,Andorra CF,1,0,LOST,6f6a2a15c7e70823265d61521a490dac,2026-09-06T04:58:50Z,2026-09-06T09:48:23+00:00
-24,60694,51ee93835f1716c79b18b7c6,soccer_turkey_super_league,Fenerbahce vs Besiktas JK,Fenerbahce,1,2,LOST,2afb041e6eb2b2ab9c477c777a09c49e,2026-09-06T02:32:08Z,2026-09-06T09:48:23+00:00
-25,60725,26c58056e88844491c7753e5,soccer_usa_mls,Toronto FC vs Chicago Fire,Toronto FC,4,4,LOST,27d8f9c28008a780744c181925da2d4f,2026-09-06T09:48:02Z,2026-09-06T09:48:23+00:00
-26,60753,1a9bfb5444fef774e6f61883,soccer_argentina_primera_division,San Lorenzo vs Talleres,Talleres,1,0,LOST,daa6fa75b4b828d189fc5c13735bce21,2026-09-06T07:36:49Z,2026-09-06T09:48:23+00:00
+1,43223,67573417acf796b86c186d47,soccer_epl,Everton vs Manchester United,Everton,2,2,LOST,8ea6c863f1852654399073b518b0a1f8,2026-09-06T16:50:40Z,2026-09-06T16:51:00+00:00
+2,50759,ec8df148a2918f624e21c381,soccer_france_ligue_one,Troyes vs Strasbourg,Troyes,2,6,LOST,b292d9e6b90eb73e0547ace2a44728e8,2026-09-06T16:50:52Z,2026-09-06T16:51:00+00:00
+3,50766,b085a5fcf47754d9ba0fb0a1,soccer_netherlands_eredivisie,Groningen vs FC Twente Enschede,Groningen,2,2,LOST,1adc363118b3cddfe83b06131e04d6c3,2026-09-06T16:50:49Z,2026-09-06T16:51:00+00:00
+4,51610,b76bd74b87e982b41befc003,soccer_italy_serie_b,Virtus Entella vs Vicenza,Vicenza,2,2,LOST,2e2f595680f8fad06aab85b15438e36a,2026-09-06T16:50:55Z,2026-09-06T16:51:00+00:00
+5,51732,cd63450467561f2fac66df5c,soccer_germany_bundesliga2,Hertha Berlin vs 1. FC Magdeburg,1. FC Magdeburg,2,1,LOST,d7cb876c43c3140a21cd585588c4272a,2026-09-06T16:50:43Z,2026-09-06T16:51:00+00:00
+6,52312,41daa46dedd8fb2c9b4095b6,soccer_spain_segunda_division,Oviedo vs Burgos CF,Burgos CF,0,0,LOST,08919e6c5e7314de04bd05cd6d7440f4,2026-09-06T16:50:55Z,2026-09-06T16:51:00+00:00
+7,52752,6c97f8d24c3d7797250a0d4e,soccer_germany_bundesliga,Hamburger SV vs FSV Mainz 05,Hamburger SV,0,5,LOST,72559dd3c8eb2ae348c8d13e784e25b0,2026-09-06T16:50:51Z,2026-09-06T16:51:00+00:00
+8,54179,8be920be8c0ffe3e6aa8b430,soccer_sweden_allsvenskan,IF Brommapojkarna vs IF Elfsborg,IF Brommapojkarna,2,1,WON,79aba40194a33a7d4198479952cf8623,2026-09-06T16:50:40Z,2026-09-06T16:51:00+00:00
+9,55694,0dee47c77406741d950259b3,soccer_switzerland_superleague,Servette vs FC St Gallen,Draw,0,2,LOST,4fb8fc5b2a13bc567289a986c94e49d6,2026-09-06T16:50:48Z,2026-09-06T16:51:00+00:00
+10,57047,8d6ffbea7f4e5ca276708e76,soccer_japan_j_league,Nagoya Grampus vs FC Machida Zelvia,Nagoya Grampus,1,3,LOST,0e5955d0728c2164236942c03afa89e3,2026-09-06T16:50:52Z,2026-09-06T16:51:00+00:00
+11,57048,ade51236c4a0e8a84429da26,soccer_japan_j_league,Fagiano Okayama vs Hiroshima Sanfrecce FC,Fagiano Okayama,3,2,WON,4ea63d936f9db7316f7d9b5d73d9e9da,2026-09-06T16:50:52Z,2026-09-06T16:51:00+00:00
+12,57473,d994e8531ba18e388c2bcdba,soccer_denmark_superliga,SonderjyskE vs AC Horsens,AC Horsens,2,5,WON,715576a8f2fc3ba456905030d9fe92fb,2026-09-06T16:50:39Z,2026-09-06T16:51:00+00:00
+13,58711,f7c369332f6108394a1d8654,soccer_turkey_super_league,Kasimpasa SK vs Amed SK,Amed SK,2,2,LOST,936e4b829c2060dd4d5fe495408f6bc3,2026-09-06T16:50:59Z,2026-09-06T16:51:00+00:00
+14,58741,af6d5a18d24befdcf1ade4d4,soccer_spain_segunda_division,SD Eibar vs Granada CF,Granada CF,3,0,LOST,006293093a6cd1929676944f0e710df1,2026-09-06T16:50:55Z,2026-09-06T16:51:00+00:00
+15,59482,8d4b93d8fea4e991aad80af8,soccer_belgium_first_div,KV Kortrijk vs SV Zulte-Waregem,KV Kortrijk,0,2,LOST,aef380a5d856b7110642054ccddfa63b,2026-09-06T16:50:42Z,2026-09-06T16:51:00+00:00
+16,60742,57fb3b8f3d484b22deadbffb,soccer_brazil_campeonato,Coritiba vs Mirassol,Mirassol,1,2,WON,86753a7cda5d3f19c64685d1729d5062,2026-09-06T16:50:43Z,2026-09-06T16:51:00+00:00
+17,61216,bcc8a093526941bbd288258b,soccer_italy_serie_a,Parma vs Monza,Parma,1,1,LOST,238eaabc2b2e492f6cce5bcfeaa09405,2026-09-06T16:50:43Z,2026-09-06T16:51:00+00:00
+18,61233,5919b1ca8b1ab32fbeecbd32,soccer_netherlands_eredivisie,Heerenveen vs AZ Alkmaar,Heerenveen,2,3,LOST,4ddfdc79d355bf681101866b450eee60,2026-09-06T16:50:49Z,2026-09-06T16:51:00+00:00
+19,61251,560782718f8d9af2f5e2fdd9,soccer_spl,St Johnstone vs Hibernian,St Johnstone,2,1,WON,8cd24095c140086b1c82bc5c9a0d648b,2026-09-06T16:50:51Z,2026-09-06T16:51:00+00:00
+20,61292,32a5ad1cd7a7708a8f1e16ad,soccer_italy_serie_b,Cesena FC vs Mantova,Cesena FC,1,1,LOST,9d2c1a6ad2c15add60cb52397bd5f603,2026-09-06T16:50:55Z,2026-09-06T16:51:00+00:00
+21,61293,e0920075d8a0d9e52308ba55,soccer_italy_serie_b,Juve Stabia vs Pisa,Juve Stabia,0,3,LOST,a3b98ac31571ac64baf248347f64be8a,2026-09-06T16:50:55Z,2026-09-06T16:51:00+00:00
+22,61334,c90cd6e3a6807248c4c09f15,soccer_japan_j_league,JEF United Chiba vs Gamba Osaka,Draw,2,0,LOST,5364f5c71883b6ea0b62a0363fd1733f,2026-09-06T16:50:52Z,2026-09-06T16:51:00+00:00
