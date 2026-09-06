@@ -31,7 +31,23 @@ def _reject(summary: RiskSummary, reason: str) -> None:
     )
 
 
-def _settled_profile(settings: Settings, sport: str) -> tuple[int, float]:
+def _odds_band(odds: float) -> tuple[float, float | None]:
+    value = float(odds)
+    if value < 1.60:
+        return (1.0, 1.60)
+    if value < 2.20:
+        return (1.60, 2.20)
+    if value < 3.00:
+        return (2.20, 3.00)
+    return (3.00, None)
+
+
+def _settled_profile(
+    settings: Settings,
+    sport: str,
+    market: str = "",
+    odds: float | None = None,
+) -> tuple[int, float]:
     db = Path(settings.db_file or "bets.db")
     if not db.exists():
         return 0, .50
@@ -43,18 +59,30 @@ def _settled_profile(settings: Settings, sport: str) -> tuple[int, float]:
         columns = {
             str(column[1]) for column in conn.execute("PRAGMA table_info(sport_bets)")
         }
-        version_filter = (
-            " AND engine_version='football-2.0'"
-            if sport == "football" and "engine_version" in columns
-            else ""
-        )
+        filters = [
+            "sport=?",
+            "UPPER(COALESCE(result,'')) IN ('WON','WIN','V','LOST','LOSS','P')",
+        ]
+        parameters: list[str | float] = [sport]
+        if sport == "football" and "engine_version" in columns:
+            filters.append("engine_version='football-2.0'")
+        if market and "market" in columns:
+            filters.append("market=?")
+            parameters.append(market)
+        if odds is not None and "odds" in columns:
+            lower, upper = _odds_band(odds)
+            filters.append("odds>=?")
+            parameters.append(lower)
+            if upper is not None:
+                filters.append("odds<?")
+                parameters.append(upper)
         row = conn.execute(
-            """
+            f"""
             SELECT COUNT(*), SUM(CASE WHEN UPPER(result) IN ('WON','WIN','V') THEN 1 ELSE 0 END)
             FROM sport_bets
-            WHERE sport=? AND UPPER(COALESCE(result,'')) IN ('WON','WIN','V','LOST','LOSS','P')
-            """ + version_filter,
-            (sport,),
+            WHERE {' AND '.join(filters)}
+            """,
+            parameters,
         ).fetchone()
     samples = int(row[0] or 0)
     return samples, float(row[1] or 0) / samples if samples else .50
@@ -130,12 +158,12 @@ def apply_professional_risk_controls(
             ).fetchall()
         }
     context_db = SportContextDatabase(settings)
+    profile_cache: dict[tuple[str, str, tuple[float, float | None]], tuple[int, float]] = {}
     for output in outputs:
         result = output.get("result")
         if not isinstance(result, SportResult):
             continue
         policy = sport_policy(result.sport)
-        samples, hit_rate = _settled_profile(settings, result.sport)
         sport_limit = settings.bank * policy.max_sport_exposure_pct
         sport_exposure = sport_allocations.get(result.sport, 0.0)
         accepted: list[Bet] = []
@@ -143,6 +171,15 @@ def apply_professional_risk_controls(
 
         for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
             summary.candidates += 1
+            profile_key = (result.sport, bet.market, _odds_band(bet.odds))
+            if profile_key not in profile_cache:
+                profile_cache[profile_key] = _settled_profile(
+                    settings,
+                    result.sport,
+                    bet.market,
+                    bet.odds,
+                )
+            samples, hit_rate = profile_cache[profile_key]
             calibrated = calibrated_probability(
                 bet.prob_final,
                 samples,

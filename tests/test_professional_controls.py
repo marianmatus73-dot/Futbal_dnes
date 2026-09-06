@@ -66,17 +66,32 @@ class ProfessionalControlsTests(unittest.TestCase):
     def test_football_v2_calibration_ignores_legacy_candidate_history(self) -> None:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute(
-                "CREATE TABLE sport_bets (sport TEXT, result TEXT, engine_version TEXT)"
+                "CREATE TABLE sport_bets (sport TEXT, result TEXT, engine_version TEXT, "
+                "market TEXT, odds REAL)"
             )
             conn.executemany(
-                "INSERT INTO sport_bets VALUES ('football', ?, '')",
+                "INSERT INTO sport_bets VALUES ('football', ?, '', 'h2h', 1.50)",
                 [("WON",)] * 90 + [("LOST",)] * 10,
             )
             conn.executemany(
-                "INSERT INTO sport_bets VALUES ('football', ?, 'football-2.0')",
+                "INSERT INTO sport_bets VALUES "
+                "('football', ?, 'football-2.0', 'h2h', 1.50)",
                 [("WON",)] * 2 + [("LOST",)] * 3,
             )
-        self.assertEqual(_settled_profile(self.settings, "football"), (5, .40))
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES "
+                "('football', ?, 'football-2.0', 'totals_2.5', 1.50)",
+                [("WON",)] * 8,
+            )
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES "
+                "('football', ?, 'football-2.0', 'h2h', 3.50)",
+                [("WON",)] * 7,
+            )
+        self.assertEqual(
+            _settled_profile(self.settings, "football", "h2h", 1.50),
+            (5, .40),
+        )
 
     def test_risk_engine_caps_stake_and_drawdown_pauses(self) -> None:
         with sqlite3.connect(self.db_path) as conn:
