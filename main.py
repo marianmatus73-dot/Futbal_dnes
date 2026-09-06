@@ -112,6 +112,7 @@ from core.sport_policy import settings_for_sport
 from core.professional_risk import apply_professional_risk_controls
 from core.sport_walkforward import walkforward_report
 from core.sport_context import SportContextDatabase
+from core.types import SportResult
 from core.football_tip_release import (
     apply_football_release_policy,
     ensure_release_columns,

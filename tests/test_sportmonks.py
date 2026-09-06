@@ -150,6 +150,32 @@ class SportmonksTests(unittest.TestCase):
                 ).fetchone()
             self.assertEqual(link[0], "sm-10")
 
+    def test_legacy_empty_numeric_context_is_treated_as_missing(self) -> None:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
+            db_path = Path(folder) / "bets.db"
+            database = SportContextDatabase(Settings(db_file=str(db_path)))
+            database.init_db()
+            captured = datetime.now(timezone.utc).isoformat()
+            with database.connect() as conn:
+                conn.execute(
+                    """
+                    INSERT INTO sport_context_features (
+                        sport, event, external_event_id, rest_days, travel_km,
+                        home_xg, away_xg, source, captured_at, source_hash
+                    ) VALUES ('football', 'A vs B', 'legacy-empty', '', '',
+                              '', '', 'history-csv', ?, 'legacy-empty-row')
+                    """,
+                    (captured,),
+                )
+            context = database.latest(
+                "football", "A vs B", "legacy-empty", ""
+            )
+            self.assertTrue(context.verified)
+            self.assertIsNone(context.rest_days)
+            self.assertIsNone(context.travel_km)
+            self.assertIsNone(context.home_xg)
+            self.assertIsNone(context.away_xg)
+
 
 if __name__ == "__main__":
     unittest.main()

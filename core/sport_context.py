@@ -13,6 +13,16 @@ from core.config import Settings
 from core.football_team_aliases import team_similarity, teams_match
 
 
+def _optional_float(value: Any) -> float | None:
+    """Treat empty legacy CSV cells as missing numeric context."""
+    if value is None or str(value).strip() == "":
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
 @dataclass
 class SportContext:
     lineup_confirmed: bool = False
@@ -274,8 +284,8 @@ class SportContextDatabase:
             lineup_confirmed=bool(row["lineup_confirmed"]),
             injury_impact=max(0.0, min(.25, float(row["injury_impact"] or 0))),
             suspension_impact=max(0.0, min(.25, float(row["suspension_impact"] or 0))),
-            rest_days=float(row["rest_days"]) if row["rest_days"] is not None else None,
-            travel_km=float(row["travel_km"]) if row["travel_km"] is not None else None,
+            rest_days=_optional_float(row["rest_days"]),
+            travel_km=_optional_float(row["travel_km"]),
             starting_pitcher_confirmed=bool(row["starting_pitcher_confirmed"]),
             starting_pitcher_edge=max(-.15, min(.15, float(row["starting_pitcher_edge"] or 0))),
             home_team=str(row["home_team"] or ""),
@@ -286,13 +296,13 @@ class SportContextDatabase:
             away_injury_impact=max(0.0, min(.05, float(row["away_injury_impact"] or 0))),
             home_suspension_impact=max(0.0, min(.05, float(row["home_suspension_impact"] or 0))),
             away_suspension_impact=max(0.0, min(.05, float(row["away_suspension_impact"] or 0))),
-            home_lineup_strength=(float(row["home_lineup_strength"]) if row["home_lineup_strength"] is not None else None),
-            away_lineup_strength=(float(row["away_lineup_strength"]) if row["away_lineup_strength"] is not None else None),
-            home_xg=float(row["home_xg"]) if row["home_xg"] is not None else None,
-            away_xg=float(row["away_xg"]) if row["away_xg"] is not None else None,
-            home_rest_days=float(row["home_rest_days"]) if row["home_rest_days"] is not None else None,
-            away_rest_days=float(row["away_rest_days"]) if row["away_rest_days"] is not None else None,
-            schedule_congestion=float(row["schedule_congestion"]) if row["schedule_congestion"] is not None else None,
+            home_lineup_strength=_optional_float(row["home_lineup_strength"]),
+            away_lineup_strength=_optional_float(row["away_lineup_strength"]),
+            home_xg=_optional_float(row["home_xg"]),
+            away_xg=_optional_float(row["away_xg"]),
+            home_rest_days=_optional_float(row["home_rest_days"]),
+            away_rest_days=_optional_float(row["away_rest_days"]),
+            schedule_congestion=_optional_float(row["schedule_congestion"]),
             source=str(row["source"]), captured_at=str(row["captured_at"]),
         )
 
@@ -318,6 +328,7 @@ class SportContextDatabase:
                 - lineup_edge - rest_edge
             )
         return 0.0
+
 
 
 
