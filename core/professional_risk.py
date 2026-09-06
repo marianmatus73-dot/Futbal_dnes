@@ -116,14 +116,24 @@ def calibrated_probability(
     return max(.01, min(.99, probability * evidence + baseline * (1.0 - evidence)))
 
 
-def conservative_probability(probability: float, samples: int, z: float = 1.28) -> float:
+def conservative_probability(
+    probability: float,
+    samples: int,
+    z: float = 1.28,
+    odds: float | None = None,
+) -> float:
     effective_samples = max(50, samples)
-    # Sport-level sample counts are not independent trials for one exact
-    # event. Cap the probability haircut at three percentage points; larger
-    # binomial penalties duplicated the ensemble's own uncertainty and made a
-    # clean model mathematically unable to publish its first observation.
+    # Sport-level sample counts are not independent trials for one exact event.
+    # Cap uncertainty in edge space so a three-way long price is not punished
+    # several times more than a favourite for the same model uncertainty.
+    edge_haircut = .02
+    probability_cap = (
+        edge_haircut / float(odds)
+        if odds is not None and float(odds) > 1.0
+        else .03
+    )
     uncertainty = min(
-        .03,
+        probability_cap,
         z * math.sqrt(probability * (1.0 - probability) / effective_samples),
     )
     return max(.01, probability - uncertainty)
@@ -215,7 +225,7 @@ def apply_professional_risk_controls(
                 if result.sport == "baseball" and context.starting_pitcher_confirmed:
                     calibrated += context.starting_pitcher_edge
                 calibrated = max(.01, min(.99, calibrated))
-            lower = conservative_probability(calibrated, samples)
+            lower = conservative_probability(calibrated, samples, odds=bet.odds)
             conservative_edge = lower * bet.odds - 1.0
             event_key = (bet.league, bet.event)
             daily_event_key = (result.sport, bet.league, bet.event)

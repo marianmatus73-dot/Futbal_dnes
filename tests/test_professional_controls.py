@@ -15,6 +15,7 @@ from core.professional_risk import (
     _settled_profile,
     apply_professional_risk_controls,
     calibrated_probability,
+    conservative_probability,
 )
 from core.sport_policy import settings_for_sport, sport_policy
 from core.sport_walkforward import walkforward_report
@@ -81,6 +82,24 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertEqual(summary.accepted, 1)
         self.assertEqual(len(output["result"].bets), 1)
         self.assertGreaterEqual(output["result"].bets[0].edge, .04)
+
+    def test_uncertainty_haircut_is_equal_in_edge_space(self) -> None:
+        short_probability = .75
+        long_probability = .40
+        short_lower = conservative_probability(
+            short_probability, 0, odds=1.50
+        )
+        long_lower = conservative_probability(
+            long_probability, 0, odds=3.00
+        )
+        self.assertAlmostEqual(
+            (short_probability - short_lower) * 1.50,
+            .02,
+        )
+        self.assertAlmostEqual(
+            (long_probability - long_lower) * 3.00,
+            .02,
+        )
 
     def test_football_v2_calibration_ignores_legacy_candidate_history(self) -> None:
         with sqlite3.connect(self.db_path) as conn:
@@ -210,8 +229,8 @@ class ProfessionalControlsTests(unittest.TestCase):
             )
         bet = Bet(
             sport="football", league="L", event="A vs B", market="h2h",
-            selection="A", odds=1.90, prob_model=.70, prob_market=.53,
-            prob_final=.70, edge=.33, stake=5, bookmaker="Book",
+            selection="A", odds=1.90, prob_model=.65, prob_market=.53,
+            prob_final=.65, edge=.235, stake=5, bookmaker="Book",
             start_time="2026-08-20T20:00:00Z", score=85,
         )
         output = {"result": SportResult(sport="football", mode="scan", bets=[bet])}
@@ -239,7 +258,7 @@ class ProfessionalControlsTests(unittest.TestCase):
         eligible = Bet(
             sport="football", league="L", event="Good A vs B",
             market="h2h", selection="A", odds=2.00,
-            prob_model=.62, prob_market=.50, prob_final=.62, edge=.24,
+            prob_model=.604, prob_market=.50, prob_final=.604, edge=.208,
             stake=5, bookmaker="Book", start_time="2026-09-10", score=85,
         )
         output = {
