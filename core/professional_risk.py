@@ -105,9 +105,12 @@ def apply_professional_risk_controls(
             "WHERE allocation_date=?", (today,)
         ).fetchone()[0] or 0.0)
         allocated_events = {
-            (str(row[0]), str(row[1]), str(row[2]))
+            (str(row[0]), str(row[1]), str(row[2])): (
+                str(row[3]), float(row[4] or 0.0)
+            )
             for row in conn.execute(
-                "SELECT sport, league, event FROM professional_risk_allocations "
+                "SELECT sport, league, event, selection, stake "
+                "FROM professional_risk_allocations "
                 "WHERE allocation_date=?", (today,)
             ).fetchall()
         }
@@ -158,9 +161,18 @@ def apply_professional_risk_controls(
             conservative_edge = lower * bet.odds - 1.0
             event_key = (bet.league, bet.event)
             daily_event_key = (result.sport, bet.league, bet.event)
+            existing_allocation = allocated_events.get(daily_event_key)
+            repeats_same_selection = bool(
+                existing_allocation
+                and existing_allocation[0] == bet.selection
+            )
             confidence = int(round(bet.score))
             stake_cap = settings.bank * policy.max_stake_pct
-            stake = min(float(bet.stake), stake_cap)
+            stake = (
+                existing_allocation[1]
+                if repeats_same_selection
+                else min(float(bet.stake), stake_cap)
+            )
 
             reason = ""
             if summary.drawdown_paused:
@@ -175,13 +187,13 @@ def apply_professional_risk_controls(
                 reason = "confidence below sport minimum"
             elif event_key in seen_events:
                 reason = "duplicate event in current run"
-            elif daily_event_key in allocated_events:
-                reason = "event already allocated today"
+            elif existing_allocation and not repeats_same_selection:
+                reason = "opposite selection already allocated today"
             elif len(accepted) >= policy.max_tips:
                 reason = "daily sport tip limit reached"
-            elif accepted_daily + stake > daily_limit:
+            elif not repeats_same_selection and accepted_daily + stake > daily_limit:
                 reason = "daily exposure limit reached"
-            elif sport_exposure + stake > sport_limit:
+            elif not repeats_same_selection and sport_exposure + stake > sport_limit:
                 reason = "sport exposure limit reached"
 
             if reason:
@@ -193,28 +205,30 @@ def apply_professional_risk_controls(
             bet.stake = round(stake, 2)
             accepted.append(bet)
             seen_events.add(event_key)
-            accepted_daily += stake
-            sport_exposure += stake
-            sport_allocations[result.sport] = sport_exposure
+            if not repeats_same_selection:
+                accepted_daily += stake
+                sport_exposure += stake
+                sport_allocations[result.sport] = sport_exposure
             summary.accepted += 1
             allocation_key = hashlib.sha256(
                 "|".join((result.sport, bet.league, bet.event, bet.selection, bet.start_time)).encode()
             ).hexdigest()[:32]
-            with sqlite3.connect(db) as conn:
-                conn.execute(
-                    """
-                    INSERT OR IGNORE INTO professional_risk_allocations (
-                        allocation_key, allocation_date, sport, league, event,
-                        selection, stake, created_at
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    (
-                        allocation_key, today, result.sport, bet.league, bet.event,
-                        bet.selection, bet.stake,
-                        datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                    ),
-                )
-            allocated_events.add(daily_event_key)
+            if not repeats_same_selection:
+                with sqlite3.connect(db) as conn:
+                    conn.execute(
+                        """
+                        INSERT OR IGNORE INTO professional_risk_allocations (
+                            allocation_key, allocation_date, sport, league, event,
+                            selection, stake, created_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                        (
+                            allocation_key, today, result.sport, bet.league, bet.event,
+                            bet.selection, bet.stake,
+                            datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                        ),
+                    )
+                allocated_events[daily_event_key] = (bet.selection, bet.stake)
 
         result.bets = accepted
 

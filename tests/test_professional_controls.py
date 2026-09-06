@@ -4,6 +4,7 @@ import os
 import sqlite3
 import tempfile
 import unittest
+from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -81,11 +82,34 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertEqual(summary.accepted, 1)
         self.assertLessEqual(output["result"].bets[0].stake, 7.50)
 
-        # Re-running on the same day must not allocate the same event again.
-        output["result"].bets = [bet]
+        # Re-running the same selection may confirm/update it, but must not
+        # allocate the stake a second time.
+        repeated_bet = replace(bet, prob_final=.70, edge=.33, stake=30)
+        output["result"].bets = [repeated_bet]
         repeated = apply_professional_risk_controls([output], self.settings)
-        self.assertEqual(repeated.accepted, 0)
-        self.assertGreater(repeated.daily_exposure, 0)
+        self.assertEqual(repeated.accepted, 1)
+        self.assertEqual(repeated.daily_exposure, summary.daily_exposure)
+        with sqlite3.connect(self.db_path) as conn:
+            allocations = conn.execute(
+                "SELECT COUNT(*), SUM(stake) FROM professional_risk_allocations"
+            ).fetchone()
+        self.assertEqual(allocations, (1, output["result"].bets[0].stake))
+
+        opposite = Bet(
+            sport="football", league="L", event="A vs B", market="h2h",
+            selection="B", odds=2.10, prob_model=.70, prob_market=.47,
+            prob_final=.70, edge=.47, stake=5, bookmaker="Book",
+            start_time="2026-08-20T20:00:00Z", score=85,
+        )
+        output["result"].bets = [opposite]
+        conflicting = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(conflicting.accepted, 0)
+        self.assertEqual(
+            conflicting.rejected_reasons.get(
+                "football: opposite selection already allocated today"
+            ),
+            1,
+        )
 
         os.environ["BANKROLL_PEAK"] = "1200"
         bet.stake = 5

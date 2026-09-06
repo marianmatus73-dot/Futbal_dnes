@@ -821,6 +821,25 @@ async def run() -> None:
     )
 
     if not args.dry_run and not args.analytics and not args.backtest:
+        try:
+            release_summary = apply_football_release_policy(
+                module_outputs, settings
+            )
+            log.info(
+                "Football release policy: early=%s, final=%s, awaiting_lineup=%s",
+                release_summary.early,
+                release_summary.final,
+                release_summary.awaiting_lineup,
+            )
+        except Exception:
+            # A failed lineup/release gate must fail closed: never expose an
+            # unclassified football candidate as a published tip.
+            log.exception("Football two-stage release policy failed")
+            for output in module_outputs:
+                result = output.get("result")
+                if isinstance(result, SportResult) and result.sport == "football":
+                    result.bets = []
+
         risk_summary = apply_professional_risk_controls(module_outputs, settings)
         log.info(
             "Professional risk controls: candidates=%s, accepted=%s, "
@@ -833,15 +852,6 @@ async def run() -> None:
             risk_summary.rejected_reasons,
         )
         try:
-            release_summary = apply_football_release_policy(
-                module_outputs, settings
-            )
-            log.info(
-                "Football release policy: early=%s, final=%s, awaiting_lineup=%s",
-                release_summary.early,
-                release_summary.final,
-                release_summary.awaiting_lineup,
-            )
             persisted_football = 0
             football_module = FootballModule()
             for output in module_outputs:
@@ -856,7 +866,7 @@ async def run() -> None:
                 persisted_football,
             )
         except Exception:
-            log.exception("Football two-stage release policy failed")
+            log.exception("Released football tip persistence failed")
         try:
             calibration_report = walkforward_report(settings)
             ready = sum(
