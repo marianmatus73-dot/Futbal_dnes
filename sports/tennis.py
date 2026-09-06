@@ -39,7 +39,7 @@ class TennisModule(SportModule):
     def _save_bet(self, settings: Settings, bet: Bet) -> None:
         home, separator, away = bet.event.partition(" vs ")
         source_hash = hashlib.sha256(
-            f"tennis|{bet.external_event_id}|{bet.market}|{bet.selection}".encode("utf-8")
+            f"tennis|{bet.external_event_id or bet.event}|{bet.market}".encode("utf-8")
         ).hexdigest()[:32]
         with closing(self._connect(settings)) as conn:
             conn.execute(

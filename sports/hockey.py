@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import os
 import sqlite3
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -97,20 +98,27 @@ class HockeyModule(SportModule):
             return conn.total_changes - before
 
     def _save_bet(self, settings: Settings, bet: Bet) -> None:
-        source_hash = make_hash(bet.sport, bet.league, bet.event, bet.market, bet.selection, bet.odds, bet.bookmaker, bet.start_time)
-        with self._connect(settings) as conn:
+        source_hash = make_hash(
+            bet.sport,
+            bet.external_event_id or bet.event,
+            bet.market,
+        )
+        with closing(self._connect(settings)) as conn:
             conn.execute("""
                 INSERT OR IGNORE INTO sport_bets
                 (sport, league, event, home_team, away_team, market, selection, odds, prob_model, prob_market, prob_final,
-                 edge, stake, bookmaker, start_time, score, source_hash, result)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                 edge, stake, bookmaker, start_time, score, external_event_id,
+                 source_hash, result)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 bet.sport, bet.league, bet.event,
                 bet.event.split(" vs ")[0] if " vs " in bet.event else "",
                 bet.event.split(" vs ")[1] if " vs " in bet.event else "",
                 bet.market, bet.selection, bet.odds, bet.prob_model, bet.prob_market, bet.prob_final,
-                bet.edge, bet.stake, bet.bookmaker, bet.start_time, bet.score, source_hash, "",
+                bet.edge, bet.stake, bet.bookmaker, bet.start_time, bet.score,
+                bet.external_event_id, source_hash, "OPEN",
             ))
+            conn.commit()
 
     def _audit(self, settings: Settings, sport_key: str, event_name: str, selection: str, bookmaker: str, odds: float,
                prob_market: float | None, edge: float | None, decision: str, reason: str) -> None:
@@ -235,14 +243,17 @@ class HockeyModule(SportModule):
                     bet = Bet(
                         sport=self.name, league=league, event=event_name, market="h2h", selection=selection,
                         odds=odds, prob_model=prob_market, prob_market=prob_market, prob_final=prob_final,
-                        edge=edge, stake=stake, bookmaker=bookmaker, start_time=start, score=adjusted_edge * 100,
+                        edge=edge, stake=stake, bookmaker=bookmaker,
+                        start_time=start, score=adjusted_edge * 100,
+                        external_event_id=str(event.get("id", "")),
                     )
                     bets.append(bet)
-                    self._save_bet(settings, bet)
                     self._audit(settings, sport_key, event_name, selection, bookmaker, odds, prob_market, edge, "PASS",
                                 f"bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, probability_source={probability_source}, probability_reason={probability_reason}")
 
         bets = dedupe_best_bets(bets)
+        for bet in bets:
+            self._save_bet(settings, bet)
         analytics = sport_analytics_report(settings, self.name)
 
         return SportResult(
@@ -260,3 +271,4 @@ class HockeyModule(SportModule):
                 f"{analytics}"
             ),
         )
+
