@@ -1,15 +1,14 @@
 {
   "version": "v15.11",
-  "created_at": "2026-09-06T17:18:00+00:00",
-  "samples": 733,
-  "opening_odds": 733,
-  "market_snapshots": 0,
-  "closing_odds_found": 332,
-  "closing_coverage_percent": 45.3,
+  "created_at": "2026-09-06T17:51:04+00:00",
+  "samples": 736,
+  "opening_odds": 736,
+  "market_snapshots": 29492,
+  "closing_odds_found": 335,
+  "closing_coverage_percent": 45.5,
   "clv_ready": true,
   "status": "BUILDING",
   "blockers": [
-    "Closing line not resolved for all matches",
-    "No market snapshots"
+    "Closing line not resolved for all matches"
   ]
 }

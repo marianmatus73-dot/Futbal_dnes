@@ -1,31 +1,31 @@
 {
-  "total_bets": 1984,
-  "wins": 875,
-  "losses": 1109,
-  "winrate": 44.1,
-  "yield": 7.25,
-  "profit": 99.54,
-  "stake_sum": 1373.55,
-  "open_bets": 866,
-  "settled_bets": 1984,
+  "total_bets": 1990,
+  "wins": 877,
+  "losses": 1113,
+  "winrate": 44.07,
+  "yield": 7.17,
+  "profit": 98.67,
+  "stake_sum": 1376.64,
+  "open_bets": 891,
+  "settled_bets": 1990,
   "by_sport": {
     "baseball": {
-      "total": 1206,
-      "wins": 653,
-      "losses": 553,
-      "winrate": 54.15,
-      "profit": 86.32,
-      "stake_sum": 1175.38,
-      "yield": 7.34
+      "total": 1210,
+      "wins": 654,
+      "losses": 556,
+      "winrate": 54.05,
+      "profit": 85.34,
+      "stake_sum": 1178.21,
+      "yield": 7.24
     },
     "football": {
-      "total": 733,
-      "wins": 207,
-      "losses": 526,
-      "winrate": 28.24,
-      "profit": 13.19,
-      "stake_sum": 177.03,
-      "yield": 7.45
+      "total": 735,
+      "wins": 208,
+      "losses": 527,
+      "winrate": 28.3,
+      "profit": 13.3,
+      "stake_sum": 177.29,
+      "yield": 7.5
     },
     "basketball": {
       "total": 25,
@@ -92,24 +92,6 @@
       "stake_sum": 13.21,
       "yield": 49.01
     },
-    "Matchbook": {
-      "total": 106,
-      "wins": 42,
-      "losses": 64,
-      "winrate": 39.62,
-      "profit": 2.76,
-      "stake_sum": 31.89,
-      "yield": 8.66
-    },
-    "Pinnacle": {
-      "total": 77,
-      "wins": 24,
-      "losses": 53,
-      "winrate": 31.17,
-      "profit": 2.68,
-      "stake_sum": 34.93,
-      "yield": 7.68
-    },
     "William Hill": {
       "total": 8,
       "wins": 5,
@@ -118,6 +100,15 @@
       "profit": 2.58,
       "stake_sum": 5.88,
       "yield": 43.85
+    },
+    "Matchbook": {
+      "total": 107,
+      "wins": 42,
+      "losses": 65,
+      "winrate": 39.25,
+      "profit": 2.45,
+      "stake_sum": 32.2,
+      "yield": 7.61
     },
     "Codere (IT)": {
       "total": 27,
@@ -136,6 +127,24 @@
       "profit": 1.0,
       "stake_sum": 7.53,
       "yield": 13.3
+    },
+    "Pinnacle": {
+      "total": 78,
+      "wins": 24,
+      "losses": 54,
+      "winrate": 30.77,
+      "profit": 0.94,
+      "stake_sum": 36.67,
+      "yield": 2.57
+    },
+    "Winamax (FR)": {
+      "total": 10,
+      "wins": 5,
+      "losses": 5,
+      "winrate": 50.0,
+      "profit": 0.42,
+      "stake_sum": 8.84,
+      "yield": 4.79
     },
     "Coolbet": {
       "total": 61,
@@ -156,22 +165,13 @@
       "yield": -12.06
     },
     "Unibet (SE)": {
-      "total": 49,
-      "wins": 14,
+      "total": 50,
+      "wins": 15,
       "losses": 35,
-      "winrate": 28.57,
-      "profit": -0.54,
-      "stake_sum": 12.03,
-      "yield": -4.51
-    },
-    "Tipico": {
-      "total": 70,
-      "wins": 18,
-      "losses": 52,
-      "winrate": 25.71,
-      "profit": -0.55,
-      "stake_sum": 15.91,
-      "yield": -3.43
+      "winrate": 30.0,
+      "profit": -0.27,
+      "stake_sum": 12.13,
+      "yield": -2.24
     },
     "PMU (FR)": {
       "total": 3,
@@ -182,6 +182,15 @@
       "stake_sum": 1.52,
       "yield": -36.45
     },
+    "Tipico": {
+      "total": 71,
+      "wins": 18,
+      "losses": 53,
+      "winrate": 25.35,
+      "profit": -0.71,
+      "stake_sum": 16.07,
+      "yield": -4.39
+    },
     "Marathon Bet": {
       "total": 13,
       "wins": 3,
@@ -190,15 +199,6 @@
       "profit": -0.76,
       "stake_sum": 6.02,
       "yield": -12.62
-    },
-    "Winamax (FR)": {
-      "total": 9,
-      "wins": 4,
-      "losses": 5,
-      "winrate": 44.44,
-      "profit": -0.86,
-      "stake_sum": 8.28,
-      "yield": -10.44
     },
     "Unibet (NL)": {
       "total": 15,
@@ -246,13 +246,13 @@
       "yield": -17.2
     },
     "Betfair": {
-      "total": 243,
+      "total": 244,
       "wins": 73,
-      "losses": 170,
-      "winrate": 30.04,
-      "profit": -3.52,
-      "stake_sum": 70.21,
-      "yield": -5.02
+      "losses": 171,
+      "winrate": 29.92,
+      "profit": -3.74,
+      "stake_sum": 70.43,
+      "yield": -5.31
     },
     "MyBookie.ag": {
       "total": 30,
@@ -275,13 +275,13 @@
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 1206,
-      "wins": 653,
-      "losses": 553,
-      "winrate": 54.15,
-      "profit": 86.32,
-      "stake_sum": 1175.38,
-      "yield": 7.34
+      "total": 1210,
+      "wins": 654,
+      "losses": 556,
+      "winrate": 54.05,
+      "profit": 85.34,
+      "stake_sum": 1178.21,
+      "yield": 7.24
     },
     "Argentina Primera Division": {
       "total": 62,
@@ -409,6 +409,15 @@
       "stake_sum": 0.55,
       "yield": 158.73
     },
+    "Bundesliga": {
+      "total": 9,
+      "wins": 3,
+      "losses": 6,
+      "winrate": 33.33,
+      "profit": 0.18,
+      "stake_sum": 1.54,
+      "yield": 11.44
+    },
     "Serie B": {
       "total": 13,
       "wins": 3,
@@ -426,15 +435,6 @@
       "profit": 0.1,
       "stake_sum": 2.84,
       "yield": 3.52
-    },
-    "Bundesliga": {
-      "total": 8,
-      "wins": 2,
-      "losses": 6,
-      "winrate": 25.0,
-      "profit": -0.09,
-      "stake_sum": 1.44,
-      "yield": -6.51
     },
     "Serie A": {
       "total": 7,
@@ -508,15 +508,6 @@
       "stake_sum": 4.22,
       "yield": -21.72
     },
-    "Premier League": {
-      "total": 13,
-      "wins": 2,
-      "losses": 11,
-      "winrate": 15.38,
-      "profit": -1.19,
-      "stake_sum": 2.75,
-      "yield": -43.43
-    },
     "2. Bundesliga": {
       "total": 23,
       "wins": 5,
@@ -525,6 +516,15 @@
       "profit": -1.27,
       "stake_sum": 5.16,
       "yield": -24.54
+    },
+    "Premier League": {
+      "total": 14,
+      "wins": 2,
+      "losses": 12,
+      "winrate": 14.29,
+      "profit": -1.35,
+      "stake_sum": 2.91,
+      "yield": -46.54
     },
     "Ligue 1": {
       "total": 13,
@@ -563,5 +563,5 @@
       "yield": -69.46
     }
   },
-  "last_update": "2026-09-06T17:18:01.029268+00:00"
+  "last_update": "2026-09-06T17:51:05.553836+00:00"
 }

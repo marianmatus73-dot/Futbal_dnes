@@ -1,7 +1,7 @@
 {
   "version": "v15.4",
-  "created_at": "2026-09-06T17:18:00+00:00",
-  "settled_samples": 733,
+  "created_at": "2026-09-06T17:51:04+00:00",
+  "settled_samples": 736,
   "meta_ai_progress": 100,
   "weight_optimizer_progress": 100,
   "data_quality": {
@@ -14,8 +14,8 @@
       "score": 20
     },
     "market": {
-      "available": false,
-      "score": 0
+      "available": true,
+      "score": 20
     },
     "xg": {
       "available": false,
@@ -26,8 +26,8 @@
       "score": 20
     }
   },
-  "data_quality_score": 60,
-  "learning_readiness": "EARLY",
+  "data_quality_score": 80,
+  "learning_readiness": "READY",
   "blockers": [
     "Missing xG history"
   ]

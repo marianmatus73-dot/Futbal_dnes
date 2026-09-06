@@ -1,15 +1,14 @@
 {
   "version": "v15.10",
-  "created_at": "2026-09-06T17:18:00+00:00",
-  "samples": 733,
-  "opening_odds_samples": 733,
-  "closing_odds_samples": 332,
-  "market_snapshots": 0,
-  "closing_coverage_percent": 45.3,
+  "created_at": "2026-09-06T17:51:04+00:00",
+  "samples": 736,
+  "opening_odds_samples": 736,
+  "closing_odds_samples": 335,
+  "market_snapshots": 29492,
+  "closing_coverage_percent": 45.5,
   "clv_available": true,
   "status": "BUILDING",
   "blockers": [
-    "Missing closing odds history",
-    "Missing market snapshots"
+    "Missing closing odds history"
   ]
 }

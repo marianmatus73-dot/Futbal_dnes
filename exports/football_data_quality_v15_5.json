@@ -1,18 +1,18 @@
 {
   "version": "v15.5",
-  "created_at": "2026-09-06T17:18:00+00:00",
-  "quality_score": 60,
+  "created_at": "2026-09-06T17:51:04+00:00",
+  "quality_score": 80,
   "features": {
     "elo": true,
     "form": true,
-    "market": false,
+    "market": true,
     "xg": false,
     "closing_odds": true
   },
   "blockers": [
     "Missing xG history"
   ],
-  "settled_samples": 733,
-  "meta_ai_training_ready": false,
-  "status": "BUILDING"
+  "settled_samples": 736,
+  "meta_ai_training_ready": true,
+  "status": "READY"
 }
