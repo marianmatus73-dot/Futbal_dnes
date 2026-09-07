@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-06T20:13:59+00:00",
+  "generated_at": "2026-09-07T10:53:02+00:00",
   "version": "v14.1",
-  "settled_samples": 749,
-  "valid_probability_samples": 749,
-  "open_samples": 532,
-  "wins": 212,
-  "losses": 537,
-  "hit_rate": 0.28304405874499333,
-  "threshold_accuracy": 0.7303070761014686,
-  "brier_score": 0.1978595757242439,
-  "log_loss": 0.5847204878996,
+  "settled_samples": 762,
+  "valid_probability_samples": 762,
+  "open_samples": 548,
+  "wins": 216,
+  "losses": 546,
+  "hit_rate": 0.28346456692913385,
+  "threshold_accuracy": 0.7296587926509186,
+  "brier_score": 0.19772492571703285,
+  "log_loss": 0.5844258099464507,
   "average_clv": null,
   "meta_model_exists": true,
   "metrics_reliable": true,
@@ -20,23 +20,23 @@
     {
       "lower": 0.2,
       "upper": 0.30000000000000004,
-      "samples": 451,
-      "mean_probability": 0.27391910932019575,
-      "actual_win_rate": 0.2549889135254989
+      "samples": 460,
+      "mean_probability": 0.2742045602754219,
+      "actual_win_rate": 0.2543478260869565
     },
     {
       "lower": 0.3,
       "upper": 0.4,
-      "samples": 275,
-      "mean_probability": 0.32893160521828047,
-      "actual_win_rate": 0.29818181818181816
+      "samples": 278,
+      "mean_probability": 0.3290503336417514,
+      "actual_win_rate": 0.29856115107913667
     },
     {
       "lower": 0.4,
       "upper": 0.5,
-      "samples": 5,
-      "mean_probability": 0.45131030654378207,
-      "actual_win_rate": 0.2
+      "samples": 6,
+      "mean_probability": 0.4532278601913173,
+      "actual_win_rate": 0.3333333333333333
     },
     {
       "lower": 0.5,
@@ -67,7 +67,7 @@
       "actual_win_rate": 1.0
     }
   ],
-  "market_snapshots": 520,
-  "closing_snapshots": 7,
-  "events_with_closing_snapshot": 5
+  "market_snapshots": 511,
+  "closing_snapshots": 27,
+  "events_with_closing_snapshot": 17
 }
