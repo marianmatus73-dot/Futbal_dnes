@@ -1,11 +1,11 @@
 {
   "baseball": {
-    "samples": 1217,
-    "train_samples": 851,
+    "samples": 1218,
+    "train_samples": 852,
     "test_samples": 366,
     "split": "chronological_70_30",
-    "raw_brier": 0.247859,
-    "calibrated_brier": 0.241141,
+    "raw_brier": 0.247809,
+    "calibrated_brier": 0.240849,
     "status": "READY"
   },
   "basketball": {
@@ -13,12 +13,12 @@
     "status": "BUILDING"
   },
   "football": {
-    "samples": 745,
-    "train_samples": 521,
-    "test_samples": 224,
+    "samples": 753,
+    "train_samples": 527,
+    "test_samples": 226,
     "split": "chronological_70_30",
-    "raw_brier": 0.186427,
-    "calibrated_brier": 0.192022,
+    "raw_brier": 0.187042,
+    "calibrated_brier": 0.192372,
     "status": "READY"
   },
   "hockey": {
