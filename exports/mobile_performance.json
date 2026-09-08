@@ -1,187 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-07T19:29:09.883305+00:00",
+  "generated_at": "2026-09-08T10:12:13.048536+00:00",
   "starting_bankroll": 1000.0,
-  "current_bankroll": 994.7,
+  "current_bankroll": 991.5,
   "points": [
-    {
-      "settled_at": "2026-09-01T10:37:11.217159+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 1.0439,
-      "bankroll": 1001.04,
-      "drawdown_pct": 0.0,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217251+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 0.98,
-      "bankroll": 1002.02,
-      "drawdown_pct": 0.0,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.216675+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 1.001,
-      "bankroll": 1003.02,
-      "drawdown_pct": 0.0,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.216719+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.58,
-      "bankroll": 1002.44,
-      "drawdown_pct": -0.06,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.216845+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 0.37,
-      "bankroll": 1002.81,
-      "drawdown_pct": -0.02,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217327+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -1.43,
-      "bankroll": 1001.38,
-      "drawdown_pct": -0.16,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217363+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 0.32,
-      "bankroll": 1001.7,
-      "drawdown_pct": -0.13,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217397+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.75,
-      "bankroll": 1000.95,
-      "drawdown_pct": -0.21,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217432+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 0.4368,
-      "bankroll": 1001.39,
-      "drawdown_pct": -0.16,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217204+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.25,
-      "bankroll": 1001.14,
-      "drawdown_pct": -0.19,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217122+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.16,
-      "bankroll": 1000.98,
-      "drawdown_pct": -0.2,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217293+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.29,
-      "bankroll": 1000.69,
-      "drawdown_pct": -0.23,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217459+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.84,
-      "bankroll": 999.85,
-      "drawdown_pct": -0.32,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217486+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 0.3182,
-      "bankroll": 1000.17,
-      "drawdown_pct": -0.28,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217582+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -1.65,
-      "bankroll": 998.52,
-      "drawdown_pct": -0.45,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217717+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 1.1645,
-      "bankroll": 999.68,
-      "drawdown_pct": -0.33,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217751+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.37,
-      "bankroll": 999.31,
-      "drawdown_pct": -0.37,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217787+00:00",
-      "sport": "baseball",
-      "result": "WON",
-      "profit": 0.465,
-      "bankroll": 999.78,
-      "drawdown_pct": -0.32,
-      "clv_pct": null
-    },
-    {
-      "settled_at": "2026-09-01T10:37:11.217818+00:00",
-      "sport": "baseball",
-      "result": "LOST",
-      "profit": -0.43,
-      "bankroll": 999.35,
-      "drawdown_pct": -0.37,
-      "clv_pct": null
-    },
     {
       "settled_at": "2026-09-01T10:37:11.217851+00:00",
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.7,
-      "bankroll": 998.65,
-      "drawdown_pct": -0.44,
+      "bankroll": 999.3,
+      "drawdown_pct": -0.07,
       "clv_pct": null
     },
     {
@@ -189,8 +18,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.5,
-      "bankroll": 999.15,
-      "drawdown_pct": -0.39,
+      "bankroll": 999.8,
+      "drawdown_pct": -0.02,
       "clv_pct": null
     },
     {
@@ -198,8 +27,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.855,
-      "bankroll": 1000.0,
-      "drawdown_pct": -0.3,
+      "bankroll": 1000.65,
+      "drawdown_pct": 0.0,
       "clv_pct": null
     },
     {
@@ -207,8 +36,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.19,
-      "bankroll": 999.81,
-      "drawdown_pct": -0.32,
+      "bankroll": 1000.46,
+      "drawdown_pct": -0.02,
       "clv_pct": null
     },
     {
@@ -216,8 +45,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -2.02,
-      "bankroll": 997.79,
-      "drawdown_pct": -0.52,
+      "bankroll": 998.44,
+      "drawdown_pct": -0.22,
       "clv_pct": null
     },
     {
@@ -225,8 +54,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.71,
-      "bankroll": 997.08,
-      "drawdown_pct": -0.59,
+      "bankroll": 997.73,
+      "drawdown_pct": -0.29,
       "clv_pct": null
     },
     {
@@ -234,8 +63,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.4189,
-      "bankroll": 997.5,
-      "drawdown_pct": -0.55,
+      "bankroll": 998.15,
+      "drawdown_pct": -0.25,
       "clv_pct": null
     },
     {
@@ -243,8 +72,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6844,
-      "bankroll": 998.19,
-      "drawdown_pct": -0.48,
+      "bankroll": 998.84,
+      "drawdown_pct": -0.18,
       "clv_pct": null
     },
     {
@@ -252,8 +81,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.9191,
-      "bankroll": 999.11,
-      "drawdown_pct": -0.39,
+      "bankroll": 999.76,
+      "drawdown_pct": -0.09,
       "clv_pct": null
     },
     {
@@ -261,8 +90,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.38,
-      "bankroll": 998.73,
-      "drawdown_pct": -0.43,
+      "bankroll": 999.38,
+      "drawdown_pct": -0.13,
       "clv_pct": null
     },
     {
@@ -270,8 +99,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1147,
-      "bankroll": 999.84,
-      "drawdown_pct": -0.32,
+      "bankroll": 1000.49,
+      "drawdown_pct": -0.02,
       "clv_pct": null
     },
     {
@@ -279,8 +108,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 999.6,
-      "drawdown_pct": -0.34,
+      "bankroll": 1000.25,
+      "drawdown_pct": -0.04,
       "clv_pct": null
     },
     {
@@ -288,8 +117,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.391,
-      "bankroll": 999.99,
-      "drawdown_pct": -0.3,
+      "bankroll": 1000.64,
+      "drawdown_pct": -0.0,
       "clv_pct": null
     },
     {
@@ -297,8 +126,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 999.82,
-      "drawdown_pct": -0.32,
+      "bankroll": 1000.47,
+      "drawdown_pct": -0.02,
       "clv_pct": 0.085
     },
     {
@@ -306,8 +135,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 999.68,
-      "drawdown_pct": -0.33,
+      "bankroll": 1000.33,
+      "drawdown_pct": -0.03,
       "clv_pct": 0.015
     },
     {
@@ -315,8 +144,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3825,
-      "bankroll": 1000.07,
-      "drawdown_pct": -0.3,
+      "bankroll": 1000.72,
+      "drawdown_pct": 0.0,
       "clv_pct": -0.085
     },
     {
@@ -324,8 +153,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 1.179,
-      "bankroll": 1001.24,
-      "drawdown_pct": -0.18,
+      "bankroll": 1001.89,
+      "drawdown_pct": 0.0,
       "clv_pct": 0.0
     },
     {
@@ -333,8 +162,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 1001.01,
-      "drawdown_pct": -0.2,
+      "bankroll": 1001.66,
+      "drawdown_pct": -0.02,
       "clv_pct": 0.0
     },
     {
@@ -342,8 +171,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 1000.83,
-      "drawdown_pct": -0.22,
+      "bankroll": 1001.48,
+      "drawdown_pct": -0.04,
       "clv_pct": 0.167
     },
     {
@@ -351,8 +180,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 1000.66,
-      "drawdown_pct": -0.24,
+      "bankroll": 1001.31,
+      "drawdown_pct": -0.06,
       "clv_pct": 0.013
     },
     {
@@ -360,8 +189,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 1000.43,
-      "drawdown_pct": -0.26,
+      "bankroll": 1001.08,
+      "drawdown_pct": -0.08,
       "clv_pct": 0.078
     },
     {
@@ -369,8 +198,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 1000.2,
-      "drawdown_pct": -0.28,
+      "bankroll": 1000.85,
+      "drawdown_pct": -0.1,
       "clv_pct": 0.382
     },
     {
@@ -378,8 +207,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.85,
-      "bankroll": 999.35,
-      "drawdown_pct": -0.37,
+      "bankroll": 1000.0,
+      "drawdown_pct": -0.19,
       "clv_pct": -0.057
     },
     {
@@ -387,8 +216,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.5244,
-      "bankroll": 999.88,
-      "drawdown_pct": -0.31,
+      "bankroll": 1000.53,
+      "drawdown_pct": -0.14,
       "clv_pct": 0.0
     },
     {
@@ -396,8 +225,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 999.7,
-      "drawdown_pct": -0.33,
+      "bankroll": 1000.35,
+      "drawdown_pct": -0.15,
       "clv_pct": 0.083
     },
     {
@@ -405,8 +234,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 999.55,
-      "drawdown_pct": -0.35,
+      "bankroll": 1000.2,
+      "drawdown_pct": -0.17,
       "clv_pct": -0.139
     },
     {
@@ -414,8 +243,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.392,
-      "bankroll": 999.94,
-      "drawdown_pct": -0.31,
+      "bankroll": 1000.59,
+      "drawdown_pct": -0.13,
       "clv_pct": -0.142
     },
     {
@@ -423,8 +252,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 999.78,
-      "drawdown_pct": -0.32,
+      "bankroll": 1000.43,
+      "drawdown_pct": -0.15,
       "clv_pct": 0.0
     },
     {
@@ -432,8 +261,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -1.04,
-      "bankroll": 998.74,
-      "drawdown_pct": -0.43,
+      "bankroll": 999.39,
+      "drawdown_pct": -0.25,
       "clv_pct": 0.015
     },
     {
@@ -441,8 +270,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 998.57,
-      "drawdown_pct": -0.44,
+      "bankroll": 999.22,
+      "drawdown_pct": -0.27,
       "clv_pct": 0.14
     },
     {
@@ -450,8 +279,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -1.08,
-      "bankroll": 997.49,
-      "drawdown_pct": -0.55,
+      "bankroll": 998.14,
+      "drawdown_pct": -0.37,
       "clv_pct": 0.083
     },
     {
@@ -459,8 +288,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3762,
-      "bankroll": 997.87,
-      "drawdown_pct": -0.51,
+      "bankroll": 998.52,
+      "drawdown_pct": -0.34,
       "clv_pct": null
     },
     {
@@ -468,8 +297,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.77,
-      "bankroll": 997.1,
-      "drawdown_pct": -0.59,
+      "bankroll": 997.75,
+      "drawdown_pct": -0.41,
       "clv_pct": null
     },
     {
@@ -477,8 +306,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.0,
-      "bankroll": 996.1,
-      "drawdown_pct": -0.69,
+      "bankroll": 996.75,
+      "drawdown_pct": -0.51,
       "clv_pct": null
     },
     {
@@ -486,8 +315,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.71,
-      "bankroll": 994.39,
-      "drawdown_pct": -0.86,
+      "bankroll": 995.04,
+      "drawdown_pct": -0.68,
       "clv_pct": null
     },
     {
@@ -495,8 +324,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.4023,
-      "bankroll": 994.79,
-      "drawdown_pct": -0.82,
+      "bankroll": 995.44,
+      "drawdown_pct": -0.64,
       "clv_pct": null
     },
     {
@@ -504,8 +333,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.31,
-      "bankroll": 993.48,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.13,
+      "drawdown_pct": -0.78,
       "clv_pct": null
     },
     {
@@ -513,8 +342,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.4173,
-      "bankroll": 993.9,
-      "drawdown_pct": -0.91,
+      "bankroll": 994.55,
+      "drawdown_pct": -0.73,
       "clv_pct": null
     },
     {
@@ -522,8 +351,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.83,
-      "bankroll": 993.07,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.72,
+      "drawdown_pct": -0.82,
       "clv_pct": null
     },
     {
@@ -531,8 +360,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.2324,
-      "bankroll": 994.3,
-      "drawdown_pct": -0.87,
+      "bankroll": 994.95,
+      "drawdown_pct": -0.69,
       "clv_pct": null
     },
     {
@@ -540,8 +369,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3087,
-      "bankroll": 994.61,
-      "drawdown_pct": -0.84,
+      "bankroll": 995.26,
+      "drawdown_pct": -0.66,
       "clv_pct": null
     },
     {
@@ -549,8 +378,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.57,
-      "bankroll": 994.04,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.69,
+      "drawdown_pct": -0.72,
       "clv_pct": null
     },
     {
@@ -558,8 +387,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.4686,
-      "bankroll": 994.51,
-      "drawdown_pct": -0.85,
+      "bankroll": 995.16,
+      "drawdown_pct": -0.67,
       "clv_pct": null
     },
     {
@@ -567,8 +396,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.2,
-      "bankroll": 993.31,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.96,
+      "drawdown_pct": -0.79,
       "clv_pct": null
     },
     {
@@ -576,8 +405,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.5244,
-      "bankroll": 993.83,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.48,
+      "drawdown_pct": -0.74,
       "clv_pct": null
     },
     {
@@ -585,8 +414,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.134,
-      "bankroll": 994.96,
-      "drawdown_pct": -0.8,
+      "bankroll": 995.61,
+      "drawdown_pct": -0.63,
       "clv_pct": null
     },
     {
@@ -594,8 +423,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.054,
-      "bankroll": 996.02,
-      "drawdown_pct": -0.7,
+      "bankroll": 996.67,
+      "drawdown_pct": -0.52,
       "clv_pct": null
     },
     {
@@ -603,8 +432,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.13,
-      "bankroll": 994.89,
-      "drawdown_pct": -0.81,
+      "bankroll": 995.54,
+      "drawdown_pct": -0.63,
       "clv_pct": null
     },
     {
@@ -612,8 +441,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3959,
-      "bankroll": 995.28,
-      "drawdown_pct": -0.77,
+      "bankroll": 995.93,
+      "drawdown_pct": -0.59,
       "clv_pct": null
     },
     {
@@ -621,8 +450,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.08,
-      "bankroll": 994.2,
-      "drawdown_pct": -0.88,
+      "bankroll": 994.85,
+      "drawdown_pct": -0.7,
       "clv_pct": null
     },
     {
@@ -630,8 +459,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.274,
-      "bankroll": 995.48,
-      "drawdown_pct": -0.75,
+      "bankroll": 996.13,
+      "drawdown_pct": -0.58,
       "clv_pct": null
     },
     {
@@ -639,8 +468,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.63,
-      "bankroll": 994.85,
-      "drawdown_pct": -0.82,
+      "bankroll": 995.5,
+      "drawdown_pct": -0.64,
       "clv_pct": null
     },
     {
@@ -648,8 +477,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.697,
-      "bankroll": 995.55,
-      "drawdown_pct": -0.75,
+      "bankroll": 996.2,
+      "drawdown_pct": -0.57,
       "clv_pct": null
     },
     {
@@ -657,8 +486,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.45,
-      "bankroll": 995.1,
-      "drawdown_pct": -0.79,
+      "bankroll": 995.75,
+      "drawdown_pct": -0.61,
       "clv_pct": null
     },
     {
@@ -666,8 +495,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.11,
-      "bankroll": 993.99,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.64,
+      "drawdown_pct": -0.72,
       "clv_pct": null
     },
     {
@@ -675,8 +504,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.79,
-      "bankroll": 992.2,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.85,
+      "drawdown_pct": -0.9,
       "clv_pct": null
     },
     {
@@ -684,8 +513,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.35,
-      "bankroll": 991.85,
-      "drawdown_pct": -1.11,
+      "bankroll": 992.5,
+      "drawdown_pct": -0.94,
       "clv_pct": null
     },
     {
@@ -693,8 +522,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 991.69,
-      "drawdown_pct": -1.13,
+      "bankroll": 992.34,
+      "drawdown_pct": -0.95,
       "clv_pct": null
     },
     {
@@ -702,8 +531,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.493,
-      "bankroll": 992.18,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.83,
+      "drawdown_pct": -0.9,
       "clv_pct": null
     },
     {
@@ -711,8 +540,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 991.95,
-      "drawdown_pct": -1.1,
+      "bankroll": 992.6,
+      "drawdown_pct": -0.93,
       "clv_pct": null
     },
     {
@@ -720,8 +549,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.352,
-      "bankroll": 992.3,
-      "drawdown_pct": -1.07,
+      "bankroll": 992.95,
+      "drawdown_pct": -0.89,
       "clv_pct": null
     },
     {
@@ -729,8 +558,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 992.15,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.8,
+      "drawdown_pct": -0.91,
       "clv_pct": null
     },
     {
@@ -738,8 +567,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 991.88,
-      "drawdown_pct": -1.11,
+      "bankroll": 992.53,
+      "drawdown_pct": -0.93,
       "clv_pct": null
     },
     {
@@ -747,8 +576,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 991.62,
-      "drawdown_pct": -1.14,
+      "bankroll": 992.27,
+      "drawdown_pct": -0.96,
       "clv_pct": null
     },
     {
@@ -756,8 +585,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.57,
-      "bankroll": 991.05,
-      "drawdown_pct": -1.19,
+      "bankroll": 991.7,
+      "drawdown_pct": -1.02,
       "clv_pct": null
     },
     {
@@ -765,8 +594,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0695,
-      "bankroll": 992.12,
-      "drawdown_pct": -1.09,
+      "bankroll": 992.77,
+      "drawdown_pct": -0.91,
       "clv_pct": null
     },
     {
@@ -774,8 +603,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0579,
-      "bankroll": 993.18,
-      "drawdown_pct": -0.98,
+      "bankroll": 993.83,
+      "drawdown_pct": -0.81,
       "clv_pct": null
     },
     {
@@ -783,8 +612,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 992.92,
-      "drawdown_pct": -1.01,
+      "bankroll": 993.57,
+      "drawdown_pct": -0.83,
       "clv_pct": null
     },
     {
@@ -792,8 +621,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.432,
-      "bankroll": 993.35,
-      "drawdown_pct": -0.96,
+      "bankroll": 994.0,
+      "drawdown_pct": -0.79,
       "clv_pct": null
     },
     {
@@ -801,8 +630,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.12,
-      "bankroll": 992.23,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.88,
+      "drawdown_pct": -0.9,
       "clv_pct": null
     },
     {
@@ -810,8 +639,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3105,
-      "bankroll": 992.54,
-      "drawdown_pct": -1.05,
+      "bankroll": 993.19,
+      "drawdown_pct": -0.87,
       "clv_pct": null
     },
     {
@@ -819,8 +648,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.825,
-      "bankroll": 993.37,
-      "drawdown_pct": -0.96,
+      "bankroll": 994.02,
+      "drawdown_pct": -0.79,
       "clv_pct": null
     },
     {
@@ -828,8 +657,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3696,
-      "bankroll": 993.73,
-      "drawdown_pct": -0.93,
+      "bankroll": 994.39,
+      "drawdown_pct": -0.75,
       "clv_pct": null
     },
     {
@@ -837,8 +666,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.2285,
-      "bankroll": 994.96,
-      "drawdown_pct": -0.8,
+      "bankroll": 995.61,
+      "drawdown_pct": -0.63,
       "clv_pct": null
     },
     {
@@ -846,8 +675,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.3,
-      "bankroll": 993.66,
-      "drawdown_pct": -0.93,
+      "bankroll": 994.31,
+      "drawdown_pct": -0.76,
       "clv_pct": null
     },
     {
@@ -855,8 +684,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.464,
-      "bankroll": 994.13,
-      "drawdown_pct": -0.89,
+      "bankroll": 994.78,
+      "drawdown_pct": -0.71,
       "clv_pct": 0.054
     },
     {
@@ -864,8 +693,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 993.98,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.63,
+      "drawdown_pct": -0.73,
       "clv_pct": 0.0
     },
     {
@@ -873,8 +702,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 993.75,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.4,
+      "drawdown_pct": -0.75,
       "clv_pct": -0.046
     },
     {
@@ -882,8 +711,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 993.59,
-      "drawdown_pct": -0.94,
+      "bankroll": 994.24,
+      "drawdown_pct": -0.76,
       "clv_pct": -0.144
     },
     {
@@ -891,8 +720,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 993.42,
-      "drawdown_pct": -0.96,
+      "bankroll": 994.07,
+      "drawdown_pct": -0.78,
       "clv_pct": 0.003
     },
     {
@@ -900,8 +729,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.11,
-      "bankroll": 993.31,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.96,
+      "drawdown_pct": -0.79,
       "clv_pct": -0.094
     },
     {
@@ -909,8 +738,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 993.08,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.73,
+      "drawdown_pct": -0.82,
       "clv_pct": 0.021
     },
     {
@@ -918,8 +747,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 992.87,
-      "drawdown_pct": -1.01,
+      "bankroll": 993.52,
+      "drawdown_pct": -0.84,
       "clv_pct": 0.069
     },
     {
@@ -927,8 +756,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.45,
-      "bankroll": 993.32,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.97,
+      "drawdown_pct": -0.79,
       "clv_pct": 0.061
     },
     {
@@ -936,8 +765,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 993.15,
-      "drawdown_pct": -0.98,
+      "bankroll": 993.8,
+      "drawdown_pct": -0.81,
       "clv_pct": -0.041
     },
     {
@@ -945,8 +774,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.29,
-      "bankroll": 992.86,
-      "drawdown_pct": -1.01,
+      "bankroll": 993.51,
+      "drawdown_pct": -0.84,
       "clv_pct": 0.211
     },
     {
@@ -954,8 +783,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.33,
-      "bankroll": 993.19,
-      "drawdown_pct": -0.98,
+      "bankroll": 993.84,
+      "drawdown_pct": -0.8,
       "clv_pct": 0.081
     },
     {
@@ -963,8 +792,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 993.02,
-      "drawdown_pct": -1.0,
+      "bankroll": 993.67,
+      "drawdown_pct": -0.82,
       "clv_pct": -0.037
     },
     {
@@ -972,8 +801,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 992.9,
-      "drawdown_pct": -1.01,
+      "bankroll": 993.55,
+      "drawdown_pct": -0.83,
       "clv_pct": 0.014
     },
     {
@@ -981,8 +810,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3822,
-      "bankroll": 993.28,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.93,
+      "drawdown_pct": -0.79,
       "clv_pct": 0.216
     },
     {
@@ -990,8 +819,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.4136,
-      "bankroll": 993.69,
-      "drawdown_pct": -0.93,
+      "bankroll": 994.34,
+      "drawdown_pct": -0.75,
       "clv_pct": 0.371
     },
     {
@@ -999,8 +828,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 993.51,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.16,
+      "drawdown_pct": -0.77,
       "clv_pct": -0.048
     },
     {
@@ -1008,8 +837,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 993.25,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.9,
+      "drawdown_pct": -0.8,
       "clv_pct": 0.156
     },
     {
@@ -1017,8 +846,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.06,
-      "bankroll": 992.19,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.84,
+      "drawdown_pct": -0.9,
       "clv_pct": null
     },
     {
@@ -1026,8 +855,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6,
-      "bankroll": 992.79,
-      "drawdown_pct": -1.02,
+      "bankroll": 993.44,
+      "drawdown_pct": -0.84,
       "clv_pct": null
     },
     {
@@ -1035,8 +864,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3162,
-      "bankroll": 993.11,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.76,
+      "drawdown_pct": -0.81,
       "clv_pct": null
     },
     {
@@ -1044,8 +873,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.846,
-      "bankroll": 993.96,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.61,
+      "drawdown_pct": -0.73,
       "clv_pct": null
     },
     {
@@ -1053,8 +882,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.75,
-      "bankroll": 993.21,
-      "drawdown_pct": -0.98,
+      "bankroll": 993.86,
+      "drawdown_pct": -0.8,
       "clv_pct": null
     },
     {
@@ -1062,8 +891,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.2998,
-      "bankroll": 994.51,
-      "drawdown_pct": -0.85,
+      "bankroll": 995.16,
+      "drawdown_pct": -0.67,
       "clv_pct": null
     },
     {
@@ -1071,8 +900,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.9646,
-      "bankroll": 995.47,
-      "drawdown_pct": -0.75,
+      "bankroll": 996.12,
+      "drawdown_pct": -0.58,
       "clv_pct": null
     },
     {
@@ -1080,8 +909,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.06,
-      "bankroll": 994.41,
-      "drawdown_pct": -0.86,
+      "bankroll": 995.06,
+      "drawdown_pct": -0.68,
       "clv_pct": null
     },
     {
@@ -1089,8 +918,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3268,
-      "bankroll": 994.74,
-      "drawdown_pct": -0.83,
+      "bankroll": 995.39,
+      "drawdown_pct": -0.65,
       "clv_pct": null
     },
     {
@@ -1098,8 +927,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.79,
-      "bankroll": 993.95,
-      "drawdown_pct": -0.91,
+      "bankroll": 994.6,
+      "drawdown_pct": -0.73,
       "clv_pct": null
     },
     {
@@ -1107,8 +936,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.78,
-      "bankroll": 994.73,
-      "drawdown_pct": -0.83,
+      "bankroll": 995.38,
+      "drawdown_pct": -0.65,
       "clv_pct": null
     },
     {
@@ -1116,8 +945,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.9,
-      "bankroll": 993.83,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.48,
+      "drawdown_pct": -0.74,
       "clv_pct": null
     },
     {
@@ -1125,8 +954,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.51,
-      "bankroll": 994.34,
-      "drawdown_pct": -0.87,
+      "bankroll": 994.99,
+      "drawdown_pct": -0.69,
       "clv_pct": null
     },
     {
@@ -1134,8 +963,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 994.16,
-      "drawdown_pct": -0.88,
+      "bankroll": 994.81,
+      "drawdown_pct": -0.71,
       "clv_pct": -0.228
     },
     {
@@ -1143,8 +972,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.22,
-      "bankroll": 993.94,
-      "drawdown_pct": -0.91,
+      "bankroll": 994.59,
+      "drawdown_pct": -0.73,
       "clv_pct": 0.267
     },
     {
@@ -1152,8 +981,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 993.79,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.44,
+      "drawdown_pct": -0.74,
       "clv_pct": 0.0
     },
     {
@@ -1161,8 +990,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 993.54,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.19,
+      "drawdown_pct": -0.77,
       "clv_pct": -0.114
     },
     {
@@ -1170,8 +999,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 993.36,
-      "drawdown_pct": -0.96,
+      "bankroll": 994.01,
+      "drawdown_pct": -0.79,
       "clv_pct": 0.0
     },
     {
@@ -1179,8 +1008,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.19,
-      "bankroll": 993.17,
-      "drawdown_pct": -0.98,
+      "bankroll": 993.82,
+      "drawdown_pct": -0.81,
       "clv_pct": -0.189
     },
     {
@@ -1188,8 +1017,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.57,
-      "bankroll": 992.6,
-      "drawdown_pct": -1.04,
+      "bankroll": 993.25,
+      "drawdown_pct": -0.86,
       "clv_pct": null
     },
     {
@@ -1197,8 +1026,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.4672,
-      "bankroll": 993.06,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.71,
+      "drawdown_pct": -0.82,
       "clv_pct": null
     },
     {
@@ -1206,8 +1035,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.8925,
-      "bankroll": 993.96,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.61,
+      "drawdown_pct": -0.73,
       "clv_pct": null
     },
     {
@@ -1215,8 +1044,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.5,
-      "bankroll": 993.46,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.11,
+      "drawdown_pct": -0.78,
       "clv_pct": null
     },
     {
@@ -1224,8 +1053,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -2.03,
-      "bankroll": 991.43,
-      "drawdown_pct": -1.16,
+      "bankroll": 992.08,
+      "drawdown_pct": -0.98,
       "clv_pct": null
     },
     {
@@ -1233,8 +1062,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3294,
-      "bankroll": 991.76,
-      "drawdown_pct": -1.12,
+      "bankroll": 992.41,
+      "drawdown_pct": -0.95,
       "clv_pct": null
     },
     {
@@ -1242,8 +1071,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -5.0,
-      "bankroll": 986.76,
-      "drawdown_pct": -1.62,
+      "bankroll": 987.41,
+      "drawdown_pct": -1.45,
       "clv_pct": null
     },
     {
@@ -1251,8 +1080,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.66,
-      "bankroll": 985.1,
-      "drawdown_pct": -1.79,
+      "bankroll": 985.75,
+      "drawdown_pct": -1.61,
       "clv_pct": null
     },
     {
@@ -1260,8 +1089,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.481,
-      "bankroll": 985.58,
-      "drawdown_pct": -1.74,
+      "bankroll": 986.23,
+      "drawdown_pct": -1.56,
       "clv_pct": null
     },
     {
@@ -1269,8 +1098,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3115,
-      "bankroll": 985.89,
-      "drawdown_pct": -1.71,
+      "bankroll": 986.54,
+      "drawdown_pct": -1.53,
       "clv_pct": null
     },
     {
@@ -1278,8 +1107,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.65,
-      "bankroll": 985.24,
-      "drawdown_pct": -1.77,
+      "bankroll": 985.89,
+      "drawdown_pct": -1.6,
       "clv_pct": null
     },
     {
@@ -1287,8 +1116,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.424,
-      "bankroll": 985.66,
-      "drawdown_pct": -1.73,
+      "bankroll": 986.31,
+      "drawdown_pct": -1.56,
       "clv_pct": null
     },
     {
@@ -1296,8 +1125,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.55,
-      "bankroll": 985.11,
-      "drawdown_pct": -1.79,
+      "bankroll": 985.76,
+      "drawdown_pct": -1.61,
       "clv_pct": null
     },
     {
@@ -1305,8 +1134,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.21,
-      "bankroll": 986.32,
-      "drawdown_pct": -1.67,
+      "bankroll": 986.97,
+      "drawdown_pct": -1.49,
       "clv_pct": null
     },
     {
@@ -1314,8 +1143,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -2.03,
-      "bankroll": 984.29,
-      "drawdown_pct": -1.87,
+      "bankroll": 984.94,
+      "drawdown_pct": -1.69,
       "clv_pct": null
     },
     {
@@ -1323,8 +1152,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.295,
-      "bankroll": 984.59,
-      "drawdown_pct": -1.84,
+      "bankroll": 985.24,
+      "drawdown_pct": -1.66,
       "clv_pct": -0.013
     },
     {
@@ -1332,8 +1161,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 1.075,
-      "bankroll": 985.66,
-      "drawdown_pct": -1.73,
+      "bankroll": 986.31,
+      "drawdown_pct": -1.56,
       "clv_pct": 0.969
     },
     {
@@ -1341,8 +1170,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.11,
-      "bankroll": 985.55,
-      "drawdown_pct": -1.74,
+      "bankroll": 986.2,
+      "drawdown_pct": -1.57,
       "clv_pct": 0.053
     },
     {
@@ -1350,8 +1179,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.598,
-      "bankroll": 986.15,
-      "drawdown_pct": -1.68,
+      "bankroll": 986.8,
+      "drawdown_pct": -1.51,
       "clv_pct": -0.027
     },
     {
@@ -1359,8 +1188,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 985.98,
-      "drawdown_pct": -1.7,
+      "bankroll": 986.63,
+      "drawdown_pct": -1.52,
       "clv_pct": -0.016
     },
     {
@@ -1368,8 +1197,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 985.85,
-      "drawdown_pct": -1.71,
+      "bankroll": 986.5,
+      "drawdown_pct": -1.54,
       "clv_pct": 0.09
     },
     {
@@ -1377,8 +1206,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 985.61,
-      "drawdown_pct": -1.74,
+      "bankroll": 986.26,
+      "drawdown_pct": -1.56,
       "clv_pct": -0.033
     },
     {
@@ -1386,8 +1215,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.644,
-      "bankroll": 986.25,
-      "drawdown_pct": -1.67,
+      "bankroll": 986.9,
+      "drawdown_pct": -1.5,
       "clv_pct": 0.169
     },
     {
@@ -1395,8 +1224,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.69,
-      "bankroll": 985.56,
-      "drawdown_pct": -1.74,
+      "bankroll": 986.21,
+      "drawdown_pct": -1.57,
       "clv_pct": 0.229
     },
     {
@@ -1404,8 +1233,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 985.3,
-      "drawdown_pct": -1.77,
+      "bankroll": 985.95,
+      "drawdown_pct": -1.59,
       "clv_pct": 0.381
     },
     {
@@ -1413,8 +1242,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 985.14,
-      "drawdown_pct": -1.78,
+      "bankroll": 985.79,
+      "drawdown_pct": -1.61,
       "clv_pct": 0.128
     },
     {
@@ -1422,8 +1251,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.43,
-      "bankroll": 984.71,
-      "drawdown_pct": -1.83,
+      "bankroll": 985.36,
+      "drawdown_pct": -1.65,
       "clv_pct": 0.0
     },
     {
@@ -1431,8 +1260,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 984.56,
-      "drawdown_pct": -1.84,
+      "bankroll": 985.21,
+      "drawdown_pct": -1.66,
       "clv_pct": 0.225
     },
     {
@@ -1440,8 +1269,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 984.31,
-      "drawdown_pct": -1.87,
+      "bankroll": 984.96,
+      "drawdown_pct": -1.69,
       "clv_pct": 0.0
     },
     {
@@ -1449,8 +1278,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 984.07,
-      "drawdown_pct": -1.89,
+      "bankroll": 984.72,
+      "drawdown_pct": -1.71,
       "clv_pct": 0.224
     },
     {
@@ -1458,8 +1287,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.51,
-      "bankroll": 983.56,
-      "drawdown_pct": -1.94,
+      "bankroll": 984.21,
+      "drawdown_pct": -1.76,
       "clv_pct": null
     },
     {
@@ -1467,8 +1296,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.85,
-      "bankroll": 984.41,
-      "drawdown_pct": -1.86,
+      "bankroll": 985.06,
+      "drawdown_pct": -1.68,
       "clv_pct": null
     },
     {
@@ -1476,8 +1305,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.38,
-      "bankroll": 983.03,
-      "drawdown_pct": -1.99,
+      "bankroll": 983.68,
+      "drawdown_pct": -1.82,
       "clv_pct": null
     },
     {
@@ -1485,8 +1314,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.58,
-      "bankroll": 982.45,
-      "drawdown_pct": -2.05,
+      "bankroll": 983.1,
+      "drawdown_pct": -1.88,
       "clv_pct": null
     },
     {
@@ -1494,8 +1323,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6426,
-      "bankroll": 983.1,
-      "drawdown_pct": -1.99,
+      "bankroll": 983.75,
+      "drawdown_pct": -1.81,
       "clv_pct": null
     },
     {
@@ -1503,8 +1332,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.8673,
-      "bankroll": 983.96,
-      "drawdown_pct": -1.9,
+      "bankroll": 984.61,
+      "drawdown_pct": -1.72,
       "clv_pct": null
     },
     {
@@ -1512,8 +1341,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.44,
-      "bankroll": 983.52,
-      "drawdown_pct": -1.94,
+      "bankroll": 984.17,
+      "drawdown_pct": -1.77,
       "clv_pct": null
     },
     {
@@ -1521,8 +1350,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.8925,
-      "bankroll": 984.42,
-      "drawdown_pct": -1.86,
+      "bankroll": 985.07,
+      "drawdown_pct": -1.68,
       "clv_pct": null
     },
     {
@@ -1530,8 +1359,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.59,
-      "bankroll": 983.83,
-      "drawdown_pct": -1.91,
+      "bankroll": 984.48,
+      "drawdown_pct": -1.74,
       "clv_pct": null
     },
     {
@@ -1539,8 +1368,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1315,
-      "bankroll": 984.96,
-      "drawdown_pct": -1.8,
+      "bankroll": 985.61,
+      "drawdown_pct": -1.63,
       "clv_pct": null
     },
     {
@@ -1548,8 +1377,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.43,
-      "bankroll": 983.53,
-      "drawdown_pct": -1.94,
+      "bankroll": 984.18,
+      "drawdown_pct": -1.77,
       "clv_pct": null
     },
     {
@@ -1557,8 +1386,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1461,
-      "bankroll": 984.67,
-      "drawdown_pct": -1.83,
+      "bankroll": 985.32,
+      "drawdown_pct": -1.65,
       "clv_pct": null
     },
     {
@@ -1566,8 +1395,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.326,
-      "bankroll": 986.0,
-      "drawdown_pct": -1.7,
+      "bankroll": 986.65,
+      "drawdown_pct": -1.52,
       "clv_pct": null
     },
     {
@@ -1575,8 +1404,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.33,
-      "bankroll": 985.67,
-      "drawdown_pct": -1.73,
+      "bankroll": 986.32,
+      "drawdown_pct": -1.55,
       "clv_pct": null
     },
     {
@@ -1584,8 +1413,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.136,
-      "bankroll": 986.81,
-      "drawdown_pct": -1.62,
+      "bankroll": 987.46,
+      "drawdown_pct": -1.44,
       "clv_pct": null
     },
     {
@@ -1593,8 +1422,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 986.57,
-      "drawdown_pct": -1.64,
+      "bankroll": 987.22,
+      "drawdown_pct": -1.47,
       "clv_pct": null
     },
     {
@@ -1602,8 +1431,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.68,
-      "bankroll": 985.89,
-      "drawdown_pct": -1.71,
+      "bankroll": 986.54,
+      "drawdown_pct": -1.53,
       "clv_pct": null
     },
     {
@@ -1611,8 +1440,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.9646,
-      "bankroll": 986.85,
-      "drawdown_pct": -1.61,
+      "bankroll": 987.5,
+      "drawdown_pct": -1.44,
       "clv_pct": null
     },
     {
@@ -1620,8 +1449,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 986.6,
-      "drawdown_pct": -1.64,
+      "bankroll": 987.25,
+      "drawdown_pct": -1.46,
       "clv_pct": null
     },
     {
@@ -1629,8 +1458,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.8378,
-      "bankroll": 987.44,
-      "drawdown_pct": -1.55,
+      "bankroll": 988.09,
+      "drawdown_pct": -1.38,
       "clv_pct": null
     },
     {
@@ -1638,8 +1467,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 987.17,
-      "drawdown_pct": -1.58,
+      "bankroll": 987.82,
+      "drawdown_pct": -1.4,
       "clv_pct": null
     },
     {
@@ -1647,8 +1476,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3248,
-      "bankroll": 987.49,
-      "drawdown_pct": -1.55,
+      "bankroll": 988.14,
+      "drawdown_pct": -1.37,
       "clv_pct": null
     },
     {
@@ -1656,8 +1485,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.688,
-      "bankroll": 988.18,
-      "drawdown_pct": -1.48,
+      "bankroll": 988.83,
+      "drawdown_pct": -1.3,
       "clv_pct": null
     },
     {
@@ -1665,8 +1494,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.38,
-      "bankroll": 987.8,
-      "drawdown_pct": -1.52,
+      "bankroll": 988.45,
+      "drawdown_pct": -1.34,
       "clv_pct": null
     },
     {
@@ -1674,8 +1503,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0703,
-      "bankroll": 988.87,
-      "drawdown_pct": -1.41,
+      "bankroll": 989.52,
+      "drawdown_pct": -1.23,
       "clv_pct": null
     },
     {
@@ -1683,8 +1512,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.53,
-      "bankroll": 989.4,
-      "drawdown_pct": -1.36,
+      "bankroll": 990.05,
+      "drawdown_pct": -1.18,
       "clv_pct": null
     },
     {
@@ -1692,8 +1521,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.36,
-      "bankroll": 989.04,
-      "drawdown_pct": -1.39,
+      "bankroll": 989.69,
+      "drawdown_pct": -1.22,
       "clv_pct": null
     },
     {
@@ -1701,8 +1530,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.66,
-      "bankroll": 987.38,
-      "drawdown_pct": -1.56,
+      "bankroll": 988.03,
+      "drawdown_pct": -1.38,
       "clv_pct": null
     },
     {
@@ -1710,8 +1539,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.32,
-      "bankroll": 987.06,
-      "drawdown_pct": -1.59,
+      "bankroll": 987.71,
+      "drawdown_pct": -1.42,
       "clv_pct": null
     },
     {
@@ -1719,8 +1548,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.651,
-      "bankroll": 987.71,
-      "drawdown_pct": -1.53,
+      "bankroll": 988.36,
+      "drawdown_pct": -1.35,
       "clv_pct": null
     },
     {
@@ -1728,8 +1557,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.29,
-      "bankroll": 987.42,
-      "drawdown_pct": -1.56,
+      "bankroll": 988.07,
+      "drawdown_pct": -1.38,
       "clv_pct": null
     },
     {
@@ -1737,8 +1566,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.5512,
-      "bankroll": 987.97,
-      "drawdown_pct": -1.5,
+      "bankroll": 988.62,
+      "drawdown_pct": -1.32,
       "clv_pct": null
     },
     {
@@ -1746,8 +1575,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.7638,
-      "bankroll": 988.74,
-      "drawdown_pct": -1.42,
+      "bankroll": 989.39,
+      "drawdown_pct": -1.25,
       "clv_pct": null
     },
     {
@@ -1755,8 +1584,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.39,
-      "bankroll": 988.35,
-      "drawdown_pct": -1.46,
+      "bankroll": 989.0,
+      "drawdown_pct": -1.29,
       "clv_pct": null
     },
     {
@@ -1764,8 +1593,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1375,
-      "bankroll": 989.49,
-      "drawdown_pct": -1.35,
+      "bankroll": 990.14,
+      "drawdown_pct": -1.17,
       "clv_pct": null
     },
     {
@@ -1773,8 +1602,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.885,
-      "bankroll": 990.37,
-      "drawdown_pct": -1.26,
+      "bankroll": 991.02,
+      "drawdown_pct": -1.09,
       "clv_pct": null
     },
     {
@@ -1782,8 +1611,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.61,
-      "bankroll": 989.76,
-      "drawdown_pct": -1.32,
+      "bankroll": 990.41,
+      "drawdown_pct": -1.15,
       "clv_pct": null
     },
     {
@@ -1791,8 +1620,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6461,
-      "bankroll": 990.41,
-      "drawdown_pct": -1.26,
+      "bankroll": 991.06,
+      "drawdown_pct": -1.08,
       "clv_pct": null
     },
     {
@@ -1800,8 +1629,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1739,
-      "bankroll": 991.58,
-      "drawdown_pct": -1.14,
+      "bankroll": 992.23,
+      "drawdown_pct": -0.96,
       "clv_pct": null
     },
     {
@@ -1809,8 +1638,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.83,
-      "bankroll": 990.75,
-      "drawdown_pct": -1.22,
+      "bankroll": 991.4,
+      "drawdown_pct": -1.05,
       "clv_pct": null
     },
     {
@@ -1818,8 +1647,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.976,
-      "bankroll": 991.73,
-      "drawdown_pct": -1.13,
+      "bankroll": 992.38,
+      "drawdown_pct": -0.95,
       "clv_pct": null
     },
     {
@@ -1827,8 +1656,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.29,
-      "bankroll": 991.44,
-      "drawdown_pct": -1.16,
+      "bankroll": 992.09,
+      "drawdown_pct": -0.98,
       "clv_pct": null
     },
     {
@@ -1836,8 +1665,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6672,
-      "bankroll": 992.1,
-      "drawdown_pct": -1.09,
+      "bankroll": 992.75,
+      "drawdown_pct": -0.91,
       "clv_pct": null
     },
     {
@@ -1845,8 +1674,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.37,
-      "bankroll": 991.73,
-      "drawdown_pct": -1.13,
+      "bankroll": 992.38,
+      "drawdown_pct": -0.95,
       "clv_pct": null
     },
     {
@@ -1854,8 +1683,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 991.56,
-      "drawdown_pct": -1.14,
+      "bankroll": 992.21,
+      "drawdown_pct": -0.97,
       "clv_pct": 0.032
     },
     {
@@ -1863,8 +1692,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 991.4,
-      "drawdown_pct": -1.16,
+      "bankroll": 992.05,
+      "drawdown_pct": -0.98,
       "clv_pct": 0.0
     },
     {
@@ -1872,8 +1701,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0439,
-      "bankroll": 992.45,
-      "drawdown_pct": -1.05,
+      "bankroll": 993.1,
+      "drawdown_pct": -0.88,
       "clv_pct": null
     },
     {
@@ -1881,8 +1710,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.41,
-      "bankroll": 992.04,
-      "drawdown_pct": -1.1,
+      "bankroll": 992.69,
+      "drawdown_pct": -0.92,
       "clv_pct": null
     },
     {
@@ -1890,8 +1719,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0416,
-      "bankroll": 993.08,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.73,
+      "drawdown_pct": -0.81,
       "clv_pct": null
     },
     {
@@ -1899,8 +1728,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.38,
-      "bankroll": 993.46,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.11,
+      "drawdown_pct": -0.78,
       "clv_pct": null
     },
     {
@@ -1908,8 +1737,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -2.25,
-      "bankroll": 991.21,
-      "drawdown_pct": -1.18,
+      "bankroll": 991.86,
+      "drawdown_pct": -1.0,
       "clv_pct": null
     },
     {
@@ -1917,8 +1746,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 990.94,
-      "drawdown_pct": -1.2,
+      "bankroll": 991.59,
+      "drawdown_pct": -1.03,
       "clv_pct": 0.0
     },
     {
@@ -1926,8 +1755,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 990.76,
-      "drawdown_pct": -1.22,
+      "bankroll": 991.41,
+      "drawdown_pct": -1.05,
       "clv_pct": 0.074
     },
     {
@@ -1935,8 +1764,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 990.63,
-      "drawdown_pct": -1.24,
+      "bankroll": 991.28,
+      "drawdown_pct": -1.06,
       "clv_pct": 0.046
     },
     {
@@ -1944,8 +1773,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.301,
-      "bankroll": 990.93,
-      "drawdown_pct": -1.21,
+      "bankroll": 991.58,
+      "drawdown_pct": -1.03,
       "clv_pct": 0.0
     },
     {
@@ -1953,8 +1782,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.11,
-      "bankroll": 990.82,
-      "drawdown_pct": -1.22,
+      "bankroll": 991.47,
+      "drawdown_pct": -1.04,
       "clv_pct": 0.0
     },
     {
@@ -1962,8 +1791,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3375,
-      "bankroll": 991.16,
-      "drawdown_pct": -1.18,
+      "bankroll": 991.81,
+      "drawdown_pct": -1.01,
       "clv_pct": 0.066
     },
     {
@@ -1971,8 +1800,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 991.02,
-      "drawdown_pct": -1.2,
+      "bankroll": 991.67,
+      "drawdown_pct": -1.02,
       "clv_pct": 0.0
     },
     {
@@ -1980,8 +1809,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 990.88,
-      "drawdown_pct": -1.21,
+      "bankroll": 991.53,
+      "drawdown_pct": -1.03,
       "clv_pct": 0.0
     },
     {
@@ -1989,8 +1818,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.39,
-      "bankroll": 990.49,
-      "drawdown_pct": -1.25,
+      "bankroll": 991.14,
+      "drawdown_pct": -1.07,
       "clv_pct": -0.05
     },
     {
@@ -1998,8 +1827,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.2,
-      "bankroll": 990.29,
-      "drawdown_pct": -1.27,
+      "bankroll": 990.94,
+      "drawdown_pct": -1.09,
       "clv_pct": 0.0
     },
     {
@@ -2007,8 +1836,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 990.08,
-      "drawdown_pct": -1.29,
+      "bankroll": 990.73,
+      "drawdown_pct": -1.11,
       "clv_pct": 0.042
     },
     {
@@ -2016,8 +1845,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 989.91,
-      "drawdown_pct": -1.31,
+      "bankroll": 990.56,
+      "drawdown_pct": -1.13,
       "clv_pct": 0.058
     },
     {
@@ -2025,8 +1854,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 989.74,
-      "drawdown_pct": -1.32,
+      "bankroll": 990.39,
+      "drawdown_pct": -1.15,
       "clv_pct": 0.138
     },
     {
@@ -2034,8 +1863,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 989.57,
-      "drawdown_pct": -1.34,
+      "bankroll": 990.22,
+      "drawdown_pct": -1.17,
       "clv_pct": -0.014
     },
     {
@@ -2043,8 +1872,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 989.42,
-      "drawdown_pct": -1.36,
+      "bankroll": 990.07,
+      "drawdown_pct": -1.18,
       "clv_pct": 0.039
     },
     {
@@ -2052,8 +1881,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.532,
-      "bankroll": 989.95,
-      "drawdown_pct": -1.3,
+      "bankroll": 990.6,
+      "drawdown_pct": -1.13,
       "clv_pct": 0.0
     },
     {
@@ -2061,8 +1890,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 989.68,
-      "drawdown_pct": -1.33,
+      "bankroll": 990.33,
+      "drawdown_pct": -1.15,
       "clv_pct": 0.178
     },
     {
@@ -2070,8 +1899,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 989.53,
-      "drawdown_pct": -1.35,
+      "bankroll": 990.18,
+      "drawdown_pct": -1.17,
       "clv_pct": 0.0
     },
     {
@@ -2079,8 +1908,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.36,
-      "bankroll": 989.89,
-      "drawdown_pct": -1.31,
+      "bankroll": 990.54,
+      "drawdown_pct": -1.13,
       "clv_pct": 0.182
     },
     {
@@ -2088,8 +1917,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 989.65,
-      "drawdown_pct": -1.33,
+      "bankroll": 990.3,
+      "drawdown_pct": -1.16,
       "clv_pct": -0.036
     },
     {
@@ -2097,8 +1926,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 989.4,
-      "drawdown_pct": -1.36,
+      "bankroll": 990.05,
+      "drawdown_pct": -1.18,
       "clv_pct": 0.098
     },
     {
@@ -2106,8 +1935,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 989.25,
-      "drawdown_pct": -1.37,
+      "bankroll": 989.9,
+      "drawdown_pct": -1.2,
       "clv_pct": -0.048
     },
     {
@@ -2115,8 +1944,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 989.1,
-      "drawdown_pct": -1.39,
+      "bankroll": 989.75,
+      "drawdown_pct": -1.21,
       "clv_pct": 0.0
     },
     {
@@ -2124,8 +1953,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 988.96,
-      "drawdown_pct": -1.4,
+      "bankroll": 989.61,
+      "drawdown_pct": -1.23,
       "clv_pct": 0.115
     },
     {
@@ -2133,8 +1962,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 988.79,
-      "drawdown_pct": -1.42,
+      "bankroll": 989.44,
+      "drawdown_pct": -1.24,
       "clv_pct": 0.129
     },
     {
@@ -2142,8 +1971,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 988.65,
-      "drawdown_pct": -1.43,
+      "bankroll": 989.3,
+      "drawdown_pct": -1.26,
       "clv_pct": 0.0
     },
     {
@@ -2151,8 +1980,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3223,
-      "bankroll": 988.97,
-      "drawdown_pct": -1.4,
+      "bankroll": 989.62,
+      "drawdown_pct": -1.22,
       "clv_pct": 0.029
     },
     {
@@ -2160,8 +1989,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 988.82,
-      "drawdown_pct": -1.42,
+      "bankroll": 989.47,
+      "drawdown_pct": -1.24,
       "clv_pct": 0.027
     },
     {
@@ -2169,8 +1998,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.4522,
-      "bankroll": 989.27,
-      "drawdown_pct": -1.37,
+      "bankroll": 989.92,
+      "drawdown_pct": -1.19,
       "clv_pct": -0.218
     },
     {
@@ -2178,8 +2007,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 989.06,
-      "drawdown_pct": -1.39,
+      "bankroll": 989.71,
+      "drawdown_pct": -1.22,
       "clv_pct": -0.151
     },
     {
@@ -2187,8 +2016,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 988.91,
-      "drawdown_pct": -1.41,
+      "bankroll": 989.56,
+      "drawdown_pct": -1.23,
       "clv_pct": 0.148
     },
     {
@@ -2196,8 +2025,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 988.77,
-      "drawdown_pct": -1.42,
+      "bankroll": 989.42,
+      "drawdown_pct": -1.24,
       "clv_pct": 0.079
     },
     {
@@ -2205,8 +2034,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 988.65,
-      "drawdown_pct": -1.43,
+      "bankroll": 989.3,
+      "drawdown_pct": -1.26,
       "clv_pct": -0.079
     },
     {
@@ -2214,8 +2043,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.5035,
-      "bankroll": 989.16,
-      "drawdown_pct": -1.38,
+      "bankroll": 989.81,
+      "drawdown_pct": -1.21,
       "clv_pct": -0.014
     },
     {
@@ -2223,8 +2052,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 989.04,
-      "drawdown_pct": -1.39,
+      "bankroll": 989.69,
+      "drawdown_pct": -1.22,
       "clv_pct": 0.027
     },
     {
@@ -2232,8 +2061,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 988.91,
-      "drawdown_pct": -1.41,
+      "bankroll": 989.56,
+      "drawdown_pct": -1.23,
       "clv_pct": 0.053
     },
     {
@@ -2241,8 +2070,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3666,
-      "bankroll": 989.27,
-      "drawdown_pct": -1.37,
+      "bankroll": 989.92,
+      "drawdown_pct": -1.19,
       "clv_pct": -0.138
     },
     {
@@ -2250,8 +2079,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.405,
-      "bankroll": 989.68,
-      "drawdown_pct": -1.33,
+      "bankroll": 990.33,
+      "drawdown_pct": -1.15,
       "clv_pct": 0.0
     },
     {
@@ -2259,8 +2088,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 989.51,
-      "drawdown_pct": -1.35,
+      "bankroll": 990.16,
+      "drawdown_pct": -1.17,
       "clv_pct": -0.016
     },
     {
@@ -2268,8 +2097,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 989.27,
-      "drawdown_pct": -1.37,
+      "bankroll": 989.92,
+      "drawdown_pct": -1.2,
       "clv_pct": -0.066
     },
     {
@@ -2277,8 +2106,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 989.02,
-      "drawdown_pct": -1.4,
+      "bankroll": 989.67,
+      "drawdown_pct": -1.22,
       "clv_pct": 0.342
     },
     {
@@ -2286,8 +2115,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.1,
-      "bankroll": 988.92,
-      "drawdown_pct": -1.41,
+      "bankroll": 989.57,
+      "drawdown_pct": -1.23,
       "clv_pct": 0.039
     },
     {
@@ -2295,8 +2124,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.8928,
-      "bankroll": 989.81,
-      "drawdown_pct": -1.32,
+      "bankroll": 990.46,
+      "drawdown_pct": -1.14,
       "clv_pct": 0.078
     },
     {
@@ -2304,8 +2133,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 989.54,
-      "drawdown_pct": -1.34,
+      "bankroll": 990.19,
+      "drawdown_pct": -1.17,
       "clv_pct": -0.055
     },
     {
@@ -2313,8 +2142,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 989.4,
-      "drawdown_pct": -1.36,
+      "bankroll": 990.05,
+      "drawdown_pct": -1.18,
       "clv_pct": 0.0
     },
     {
@@ -2322,8 +2151,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.672,
-      "bankroll": 990.07,
-      "drawdown_pct": -1.29,
+      "bankroll": 990.72,
+      "drawdown_pct": -1.11,
       "clv_pct": 0.101
     },
     {
@@ -2331,8 +2160,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.29,
-      "bankroll": 989.78,
-      "drawdown_pct": -1.32,
+      "bankroll": 990.43,
+      "drawdown_pct": -1.14,
       "clv_pct": 0.097
     },
     {
@@ -2340,8 +2169,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 989.66,
-      "drawdown_pct": -1.33,
+      "bankroll": 990.31,
+      "drawdown_pct": -1.16,
       "clv_pct": 0.107
     },
     {
@@ -2349,8 +2178,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 989.52,
-      "drawdown_pct": -1.35,
+      "bankroll": 990.17,
+      "drawdown_pct": -1.17,
       "clv_pct": 0.164
     },
     {
@@ -2358,8 +2187,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.37,
-      "bankroll": 989.15,
-      "drawdown_pct": -1.38,
+      "bankroll": 989.8,
+      "drawdown_pct": -1.21,
       "clv_pct": -0.052
     },
     {
@@ -2367,8 +2196,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 989.02,
-      "drawdown_pct": -1.4,
+      "bankroll": 989.67,
+      "drawdown_pct": -1.22,
       "clv_pct": 0.0
     },
     {
@@ -2376,8 +2205,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.33,
-      "bankroll": 988.69,
-      "drawdown_pct": -1.43,
+      "bankroll": 989.34,
+      "drawdown_pct": -1.25,
       "clv_pct": null
     },
     {
@@ -2385,8 +2214,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 988.42,
-      "drawdown_pct": -1.46,
+      "bankroll": 989.07,
+      "drawdown_pct": -1.28,
       "clv_pct": null
     },
     {
@@ -2394,8 +2223,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.387,
-      "bankroll": 988.81,
-      "drawdown_pct": -1.42,
+      "bankroll": 989.46,
+      "drawdown_pct": -1.24,
       "clv_pct": null
     },
     {
@@ -2403,8 +2232,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1591,
-      "bankroll": 989.97,
-      "drawdown_pct": -1.3,
+      "bankroll": 990.62,
+      "drawdown_pct": -1.13,
       "clv_pct": null
     },
     {
@@ -2412,8 +2241,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 989.72,
-      "drawdown_pct": -1.33,
+      "bankroll": 990.37,
+      "drawdown_pct": -1.15,
       "clv_pct": null
     },
     {
@@ -2421,8 +2250,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.03,
-      "bankroll": 988.69,
-      "drawdown_pct": -1.43,
+      "bankroll": 989.34,
+      "drawdown_pct": -1.25,
       "clv_pct": null
     },
     {
@@ -2430,8 +2259,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1935,
-      "bankroll": 989.88,
-      "drawdown_pct": -1.31,
+      "bankroll": 990.53,
+      "drawdown_pct": -1.13,
       "clv_pct": null
     },
     {
@@ -2439,8 +2268,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 989.63,
-      "drawdown_pct": -1.34,
+      "bankroll": 990.28,
+      "drawdown_pct": -1.16,
       "clv_pct": null
     },
     {
@@ -2448,8 +2277,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1016,
-      "bankroll": 990.73,
-      "drawdown_pct": -1.23,
+      "bankroll": 991.39,
+      "drawdown_pct": -1.05,
       "clv_pct": null
     },
     {
@@ -2457,8 +2286,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.24,
-      "bankroll": 991.97,
-      "drawdown_pct": -1.1,
+      "bankroll": 992.63,
+      "drawdown_pct": -0.93,
       "clv_pct": null
     },
     {
@@ -2466,8 +2295,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.7626,
-      "bankroll": 992.74,
-      "drawdown_pct": -1.03,
+      "bankroll": 993.39,
+      "drawdown_pct": -0.85,
       "clv_pct": null
     },
     {
@@ -2475,8 +2304,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.2792,
-      "bankroll": 994.02,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.67,
+      "drawdown_pct": -0.72,
       "clv_pct": null
     },
     {
@@ -2484,8 +2313,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.94,
-      "bankroll": 992.08,
-      "drawdown_pct": -1.09,
+      "bankroll": 992.73,
+      "drawdown_pct": -0.92,
       "clv_pct": null
     },
     {
@@ -2493,8 +2322,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.27,
-      "bankroll": 990.81,
-      "drawdown_pct": -1.22,
+      "bankroll": 991.46,
+      "drawdown_pct": -1.04,
       "clv_pct": null
     },
     {
@@ -2502,8 +2331,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.3705,
-      "bankroll": 991.18,
-      "drawdown_pct": -1.18,
+      "bankroll": 991.83,
+      "drawdown_pct": -1.0,
       "clv_pct": null
     },
     {
@@ -2511,8 +2340,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.273,
-      "bankroll": 992.45,
-      "drawdown_pct": -1.05,
+      "bankroll": 993.1,
+      "drawdown_pct": -0.88,
       "clv_pct": null
     },
     {
@@ -2520,8 +2349,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 992.18,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.83,
+      "drawdown_pct": -0.9,
       "clv_pct": 0.041
     },
     {
@@ -2529,8 +2358,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 991.97,
-      "drawdown_pct": -1.1,
+      "bankroll": 992.62,
+      "drawdown_pct": -0.93,
       "clv_pct": 0.395
     },
     {
@@ -2538,8 +2367,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 991.81,
-      "drawdown_pct": -1.12,
+      "bankroll": 992.46,
+      "drawdown_pct": -0.94,
       "clv_pct": 0.034
     },
     {
@@ -2547,8 +2376,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.48,
-      "bankroll": 992.29,
-      "drawdown_pct": -1.07,
+      "bankroll": 992.94,
+      "drawdown_pct": -0.89,
       "clv_pct": -0.01
     },
     {
@@ -2556,8 +2385,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.28,
-      "bankroll": 992.01,
-      "drawdown_pct": -1.1,
+      "bankroll": 992.66,
+      "drawdown_pct": -0.92,
       "clv_pct": 0.046
     },
     {
@@ -2565,8 +2394,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 991.75,
-      "drawdown_pct": -1.12,
+      "bankroll": 992.4,
+      "drawdown_pct": -0.95,
       "clv_pct": 0.267
     },
     {
@@ -2574,8 +2403,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 991.48,
-      "drawdown_pct": -1.15,
+      "bankroll": 992.13,
+      "drawdown_pct": -0.97,
       "clv_pct": 0.088
     },
     {
@@ -2583,8 +2412,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.32,
-      "bankroll": 991.16,
-      "drawdown_pct": -1.18,
+      "bankroll": 991.81,
+      "drawdown_pct": -1.01,
       "clv_pct": 0.422
     },
     {
@@ -2592,8 +2421,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.39,
-      "bankroll": 991.55,
-      "drawdown_pct": -1.14,
+      "bankroll": 992.2,
+      "drawdown_pct": -0.97,
       "clv_pct": -0.01
     },
     {
@@ -2601,8 +2430,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.2,
-      "bankroll": 991.35,
-      "drawdown_pct": -1.16,
+      "bankroll": 992.0,
+      "drawdown_pct": -0.99,
       "clv_pct": 0.0
     },
     {
@@ -2610,8 +2439,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 991.23,
-      "drawdown_pct": -1.18,
+      "bankroll": 991.88,
+      "drawdown_pct": -1.0,
       "clv_pct": -0.063
     },
     {
@@ -2619,8 +2448,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.35,
-      "bankroll": 991.58,
-      "drawdown_pct": -1.14,
+      "bankroll": 992.23,
+      "drawdown_pct": -0.96,
       "clv_pct": null
     },
     {
@@ -2628,8 +2457,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.1288,
-      "bankroll": 992.71,
-      "drawdown_pct": -1.03,
+      "bankroll": 993.36,
+      "drawdown_pct": -0.85,
       "clv_pct": null
     },
     {
@@ -2637,8 +2466,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 992.45,
-      "drawdown_pct": -1.05,
+      "bankroll": 993.1,
+      "drawdown_pct": -0.88,
       "clv_pct": null
     },
     {
@@ -2646,8 +2475,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0519,
-      "bankroll": 993.5,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.15,
+      "drawdown_pct": -0.77,
       "clv_pct": null
     },
     {
@@ -2655,8 +2484,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 993.26,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.91,
+      "drawdown_pct": -0.8,
       "clv_pct": null
     },
     {
@@ -2664,8 +2493,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.32,
-      "bankroll": 992.94,
-      "drawdown_pct": -1.01,
+      "bankroll": 993.59,
+      "drawdown_pct": -0.83,
       "clv_pct": null
     },
     {
@@ -2673,8 +2502,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.9085,
-      "bankroll": 993.85,
-      "drawdown_pct": -0.91,
+      "bankroll": 994.5,
+      "drawdown_pct": -0.74,
       "clv_pct": null
     },
     {
@@ -2682,8 +2511,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.3,
-      "bankroll": 993.55,
-      "drawdown_pct": -0.94,
+      "bankroll": 994.2,
+      "drawdown_pct": -0.77,
       "clv_pct": null
     },
     {
@@ -2691,8 +2520,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.0285,
-      "bankroll": 994.58,
-      "drawdown_pct": -0.84,
+      "bankroll": 995.23,
+      "drawdown_pct": -0.67,
       "clv_pct": null
     },
     {
@@ -2700,8 +2529,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.31,
-      "bankroll": 994.27,
-      "drawdown_pct": -0.87,
+      "bankroll": 994.92,
+      "drawdown_pct": -0.7,
       "clv_pct": null
     },
     {
@@ -2709,8 +2538,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6669,
-      "bankroll": 994.93,
-      "drawdown_pct": -0.81,
+      "bankroll": 995.59,
+      "drawdown_pct": -0.63,
       "clv_pct": null
     },
     {
@@ -2718,8 +2547,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.819,
-      "bankroll": 995.75,
-      "drawdown_pct": -0.72,
+      "bankroll": 996.4,
+      "drawdown_pct": -0.55,
       "clv_pct": null
     },
     {
@@ -2727,8 +2556,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.19,
-      "bankroll": 995.56,
-      "drawdown_pct": -0.74,
+      "bankroll": 996.21,
+      "drawdown_pct": -0.57,
       "clv_pct": null
     },
     {
@@ -2736,8 +2565,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.35,
-      "bankroll": 995.91,
-      "drawdown_pct": -0.71,
+      "bankroll": 996.56,
+      "drawdown_pct": -0.53,
       "clv_pct": 0.094
     },
     {
@@ -2745,8 +2574,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 995.66,
-      "drawdown_pct": -0.73,
+      "bankroll": 996.31,
+      "drawdown_pct": -0.56,
       "clv_pct": -0.111
     },
     {
@@ -2754,8 +2583,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.896,
-      "bankroll": 996.56,
-      "drawdown_pct": -0.64,
+      "bankroll": 997.21,
+      "drawdown_pct": -0.47,
       "clv_pct": 0.013
     },
     {
@@ -2763,8 +2592,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 996.43,
-      "drawdown_pct": -0.66,
+      "bankroll": 997.08,
+      "drawdown_pct": -0.48,
       "clv_pct": 0.129
     },
     {
@@ -2772,8 +2601,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.11,
-      "bankroll": 996.32,
-      "drawdown_pct": -0.67,
+      "bankroll": 996.97,
+      "drawdown_pct": -0.49,
       "clv_pct": 0.057
     },
     {
@@ -2781,8 +2610,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.345,
-      "bankroll": 996.66,
-      "drawdown_pct": -0.63,
+      "bankroll": 997.32,
+      "drawdown_pct": -0.46,
       "clv_pct": 0.154
     },
     {
@@ -2790,8 +2619,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.18,
-      "bankroll": 996.48,
-      "drawdown_pct": -0.65,
+      "bankroll": 997.14,
+      "drawdown_pct": -0.48,
       "clv_pct": 0.0
     },
     {
@@ -2799,8 +2628,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 996.35,
-      "drawdown_pct": -0.67,
+      "bankroll": 997.01,
+      "drawdown_pct": -0.49,
       "clv_pct": 0.0
     },
     {
@@ -2808,8 +2637,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.24,
-      "bankroll": 996.11,
-      "drawdown_pct": -0.69,
+      "bankroll": 996.77,
+      "drawdown_pct": -0.51,
       "clv_pct": -0.028
     },
     {
@@ -2817,8 +2646,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.3,
-      "bankroll": 995.81,
-      "drawdown_pct": -0.72,
+      "bankroll": 996.47,
+      "drawdown_pct": -0.54,
       "clv_pct": 0.0
     },
     {
@@ -2826,8 +2655,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 995.65,
-      "drawdown_pct": -0.73,
+      "bankroll": 996.31,
+      "drawdown_pct": -0.56,
       "clv_pct": -0.01
     },
     {
@@ -2835,8 +2664,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.559,
-      "bankroll": 996.21,
-      "drawdown_pct": -0.68,
+      "bankroll": 996.86,
+      "drawdown_pct": -0.5,
       "clv_pct": 0.0
     },
     {
@@ -2844,8 +2673,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 996.0,
-      "drawdown_pct": -0.7,
+      "bankroll": 996.65,
+      "drawdown_pct": -0.52,
       "clv_pct": 0.077
     },
     {
@@ -2853,8 +2682,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.11,
-      "bankroll": 995.89,
-      "drawdown_pct": -0.71,
+      "bankroll": 996.54,
+      "drawdown_pct": -0.53,
       "clv_pct": null
     },
     {
@@ -2862,8 +2691,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.476,
-      "bankroll": 996.37,
-      "drawdown_pct": -0.66,
+      "bankroll": 997.02,
+      "drawdown_pct": -0.49,
       "clv_pct": null
     },
     {
@@ -2871,8 +2700,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 996.24,
-      "drawdown_pct": -0.68,
+      "bankroll": 996.89,
+      "drawdown_pct": -0.5,
       "clv_pct": null
     },
     {
@@ -2880,8 +2709,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 995.98,
-      "drawdown_pct": -0.7,
+      "bankroll": 996.63,
+      "drawdown_pct": -0.53,
       "clv_pct": -0.024
     },
     {
@@ -2889,8 +2718,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.17,
-      "bankroll": 995.81,
-      "drawdown_pct": -0.72,
+      "bankroll": 996.46,
+      "drawdown_pct": -0.54,
       "clv_pct": -0.16
     },
     {
@@ -2898,8 +2727,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 995.69,
-      "drawdown_pct": -0.73,
+      "bankroll": 996.34,
+      "drawdown_pct": -0.55,
       "clv_pct": 0.026
     },
     {
@@ -2907,8 +2736,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 995.53,
-      "drawdown_pct": -0.75,
+      "bankroll": 996.18,
+      "drawdown_pct": -0.57,
       "clv_pct": 0.0
     },
     {
@@ -2916,8 +2745,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 995.27,
-      "drawdown_pct": -0.77,
+      "bankroll": 995.92,
+      "drawdown_pct": -0.6,
       "clv_pct": 0.0
     },
     {
@@ -2925,8 +2754,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 995.04,
-      "drawdown_pct": -0.8,
+      "bankroll": 995.69,
+      "drawdown_pct": -0.62,
       "clv_pct": 0.213
     },
     {
@@ -2934,8 +2763,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.34,
-      "bankroll": 994.7,
-      "drawdown_pct": -0.83,
+      "bankroll": 995.35,
+      "drawdown_pct": -0.65,
       "clv_pct": 0.103
     },
     {
@@ -2943,8 +2772,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.288,
-      "bankroll": 995.99,
-      "drawdown_pct": -0.7,
+      "bankroll": 996.64,
+      "drawdown_pct": -0.52,
       "clv_pct": null
     },
     {
@@ -2952,8 +2781,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -1.74,
-      "bankroll": 994.25,
-      "drawdown_pct": -0.88,
+      "bankroll": 994.9,
+      "drawdown_pct": -0.7,
       "clv_pct": null
     },
     {
@@ -2961,8 +2790,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.22,
-      "bankroll": 994.03,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.68,
+      "drawdown_pct": -0.72,
       "clv_pct": null
     },
     {
@@ -2970,8 +2799,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.31,
-      "bankroll": 993.72,
-      "drawdown_pct": -0.93,
+      "bankroll": 994.37,
+      "drawdown_pct": -0.75,
       "clv_pct": null
     },
     {
@@ -2979,8 +2808,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.27,
-      "bankroll": 993.99,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.64,
+      "drawdown_pct": -0.72,
       "clv_pct": -0.013
     },
     {
@@ -2988,8 +2817,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 993.83,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.48,
+      "drawdown_pct": -0.74,
       "clv_pct": 0.026
     },
     {
@@ -2997,8 +2826,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 993.62,
-      "drawdown_pct": -0.94,
+      "bankroll": 994.27,
+      "drawdown_pct": -0.76,
       "clv_pct": 0.127
     },
     {
@@ -3006,8 +2835,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.28,
-      "bankroll": 993.34,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.99,
+      "drawdown_pct": -0.79,
       "clv_pct": 0.202
     },
     {
@@ -3015,8 +2844,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 993.11,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.76,
+      "drawdown_pct": -0.81,
       "clv_pct": 0.237
     },
     {
@@ -3024,8 +2853,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.12,
-      "bankroll": 992.99,
-      "drawdown_pct": -1.0,
+      "bankroll": 993.64,
+      "drawdown_pct": -0.82,
       "clv_pct": -0.014
     },
     {
@@ -3033,8 +2862,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 992.85,
-      "drawdown_pct": -1.01,
+      "bankroll": 993.5,
+      "drawdown_pct": -0.84,
       "clv_pct": -0.135
     },
     {
@@ -3042,8 +2871,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.19,
-      "bankroll": 992.66,
-      "drawdown_pct": -1.03,
+      "bankroll": 993.31,
+      "drawdown_pct": -0.86,
       "clv_pct": 0.0
     },
     {
@@ -3051,8 +2880,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3864,
-      "bankroll": 993.04,
-      "drawdown_pct": -1.0,
+      "bankroll": 993.69,
+      "drawdown_pct": -0.82,
       "clv_pct": 0.126
     },
     {
@@ -3060,8 +2889,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.4368,
-      "bankroll": 993.48,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.13,
+      "drawdown_pct": -0.77,
       "clv_pct": 0.0
     },
     {
@@ -3069,8 +2898,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.27,
-      "bankroll": 993.21,
-      "drawdown_pct": -0.98,
+      "bankroll": 993.86,
+      "drawdown_pct": -0.8,
       "clv_pct": 0.389
     },
     {
@@ -3078,8 +2907,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.574,
-      "bankroll": 993.78,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.44,
+      "drawdown_pct": -0.74,
       "clv_pct": 0.0
     },
     {
@@ -3087,8 +2916,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.14,
-      "bankroll": 993.64,
-      "drawdown_pct": -0.94,
+      "bankroll": 994.3,
+      "drawdown_pct": -0.76,
       "clv_pct": 0.25
     },
     {
@@ -3096,8 +2925,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.43,
-      "bankroll": 994.07,
-      "drawdown_pct": -0.89,
+      "bankroll": 994.73,
+      "drawdown_pct": -0.72,
       "clv_pct": 0.236
     },
     {
@@ -3105,8 +2934,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.36,
-      "bankroll": 993.71,
-      "drawdown_pct": -0.93,
+      "bankroll": 994.37,
+      "drawdown_pct": -0.75,
       "clv_pct": -0.067
     },
     {
@@ -3114,8 +2943,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 993.45,
-      "drawdown_pct": -0.95,
+      "bankroll": 994.11,
+      "drawdown_pct": -0.78,
       "clv_pct": 0.067
     },
     {
@@ -3123,8 +2952,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.5015,
-      "bankroll": 993.96,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.61,
+      "drawdown_pct": -0.73,
       "clv_pct": 0.0
     },
     {
@@ -3132,8 +2961,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.6785,
-      "bankroll": 994.63,
-      "drawdown_pct": -0.84,
+      "bankroll": 995.29,
+      "drawdown_pct": -0.66,
       "clv_pct": 0.068
     },
     {
@@ -3141,8 +2970,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 994.48,
-      "drawdown_pct": -0.85,
+      "bankroll": 995.14,
+      "drawdown_pct": -0.67,
       "clv_pct": -0.041
     },
     {
@@ -3150,8 +2979,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.16,
-      "bankroll": 994.32,
-      "drawdown_pct": -0.87,
+      "bankroll": 994.98,
+      "drawdown_pct": -0.69,
       "clv_pct": 0.178
     },
     {
@@ -3159,8 +2988,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -3.25,
-      "bankroll": 991.07,
-      "drawdown_pct": -1.19,
+      "bankroll": 991.73,
+      "drawdown_pct": -1.01,
       "clv_pct": null
     },
     {
@@ -3168,8 +2997,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.344,
-      "bankroll": 992.42,
-      "drawdown_pct": -1.06,
+      "bankroll": 993.07,
+      "drawdown_pct": -0.88,
       "clv_pct": null
     },
     {
@@ -3177,8 +3006,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.21,
-      "bankroll": 992.21,
-      "drawdown_pct": -1.08,
+      "bankroll": 992.86,
+      "drawdown_pct": -0.9,
       "clv_pct": null
     },
     {
@@ -3186,8 +3015,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.53,
-      "bankroll": 991.68,
-      "drawdown_pct": -1.13,
+      "bankroll": 992.33,
+      "drawdown_pct": -0.95,
       "clv_pct": null
     },
     {
@@ -3195,8 +3024,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.9401,
-      "bankroll": 992.62,
-      "drawdown_pct": -1.04,
+      "bankroll": 993.27,
+      "drawdown_pct": -0.86,
       "clv_pct": null
     },
     {
@@ -3204,8 +3033,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 0.6956,
-      "bankroll": 993.31,
-      "drawdown_pct": -0.97,
+      "bankroll": 993.97,
+      "drawdown_pct": -0.79,
       "clv_pct": null
     },
     {
@@ -3213,8 +3042,8 @@
       "sport": "baseball",
       "result": "LOST",
       "profit": -0.26,
-      "bankroll": 993.05,
-      "drawdown_pct": -0.99,
+      "bankroll": 993.71,
+      "drawdown_pct": -0.82,
       "clv_pct": null
     },
     {
@@ -3222,8 +3051,8 @@
       "sport": "baseball",
       "result": "WON",
       "profit": 1.222,
-      "bankroll": 994.28,
-      "drawdown_pct": -0.87,
+      "bankroll": 994.93,
+      "drawdown_pct": -0.7,
       "clv_pct": null
     },
     {
@@ -3231,8 +3060,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.23,
-      "bankroll": 994.05,
-      "drawdown_pct": -0.9,
+      "bankroll": 994.7,
+      "drawdown_pct": -0.72,
       "clv_pct": -0.083
     },
     {
@@ -3240,8 +3069,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.25,
-      "bankroll": 993.8,
-      "drawdown_pct": -0.92,
+      "bankroll": 994.45,
+      "drawdown_pct": -0.74,
       "clv_pct": -0.048
     },
     {
@@ -3249,8 +3078,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.55,
-      "bankroll": 994.35,
-      "drawdown_pct": -0.87,
+      "bankroll": 995.0,
+      "drawdown_pct": -0.69,
       "clv_pct": 0.25
     },
     {
@@ -3258,8 +3087,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.3025,
-      "bankroll": 994.65,
-      "drawdown_pct": -0.84,
+      "bankroll": 995.3,
+      "drawdown_pct": -0.66,
       "clv_pct": -0.107
     },
     {
@@ -3267,8 +3096,8 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.15,
-      "bankroll": 994.5,
-      "drawdown_pct": -0.85,
+      "bankroll": 995.15,
+      "drawdown_pct": -0.67,
       "clv_pct": -0.014
     },
     {
@@ -3276,8 +3105,8 @@
       "sport": "football",
       "result": "WON",
       "profit": 0.33,
-      "bankroll": 994.83,
-      "drawdown_pct": -0.82,
+      "bankroll": 995.48,
+      "drawdown_pct": -0.64,
       "clv_pct": 0.0
     },
     {
@@ -3285,9 +3114,180 @@
       "sport": "football",
       "result": "LOST",
       "profit": -0.13,
-      "bankroll": 994.7,
-      "drawdown_pct": -0.83,
+      "bankroll": 995.35,
+      "drawdown_pct": -0.65,
       "clv_pct": 0.014
+    },
+    {
+      "settled_at": "2026-09-08T02:03:35Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.15,
+      "bankroll": 995.2,
+      "drawdown_pct": -0.67,
+      "clv_pct": -0.054
+    },
+    {
+      "settled_at": "2026-09-08T02:10:53Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.19,
+      "bankroll": 995.01,
+      "drawdown_pct": -0.69,
+      "clv_pct": 0.105
+    },
+    {
+      "settled_at": "2026-09-08T02:56:53Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.37,
+      "bankroll": 994.64,
+      "drawdown_pct": -0.72,
+      "clv_pct": -0.141
+    },
+    {
+      "settled_at": "2026-09-08T06:29:22Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.2,
+      "bankroll": 994.44,
+      "drawdown_pct": -0.74,
+      "clv_pct": 0.027
+    },
+    {
+      "settled_at": "2026-09-08T07:35:28Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.23,
+      "bankroll": 994.21,
+      "drawdown_pct": -0.77,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T07:35:28Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.39,
+      "bankroll": 993.82,
+      "drawdown_pct": -0.81,
+      "clv_pct": -0.106
+    },
+    {
+      "settled_at": "2026-09-08T07:35:28Z",
+      "sport": "football",
+      "result": "LOST",
+      "profit": -0.13,
+      "bankroll": 993.69,
+      "drawdown_pct": -0.82,
+      "clv_pct": 0.24
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.050417+00:00",
+      "sport": "tennis",
+      "result": "LOST",
+      "profit": -0.07,
+      "bankroll": 993.62,
+      "drawdown_pct": -0.83,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016626+00:00",
+      "sport": "baseball",
+      "result": "WON",
+      "profit": 1.3454,
+      "bankroll": 994.97,
+      "drawdown_pct": -0.69,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016698+00:00",
+      "sport": "baseball",
+      "result": "LOST",
+      "profit": -2.49,
+      "bankroll": 992.48,
+      "drawdown_pct": -0.94,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016672+00:00",
+      "sport": "baseball",
+      "result": "WON",
+      "profit": 1.3338,
+      "bankroll": 993.81,
+      "drawdown_pct": -0.81,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016690+00:00",
+      "sport": "baseball",
+      "result": "WON",
+      "profit": 1.2354,
+      "bankroll": 995.04,
+      "drawdown_pct": -0.68,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016604+00:00",
+      "sport": "baseball",
+      "result": "WON",
+      "profit": 1.3104,
+      "bankroll": 996.35,
+      "drawdown_pct": -0.55,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016638+00:00",
+      "sport": "baseball",
+      "result": "LOST",
+      "profit": -1.15,
+      "bankroll": 995.2,
+      "drawdown_pct": -0.67,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016647+00:00",
+      "sport": "baseball",
+      "result": "LOST",
+      "profit": -1.31,
+      "bankroll": 993.89,
+      "drawdown_pct": -0.8,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016682+00:00",
+      "sport": "baseball",
+      "result": "LOST",
+      "profit": -1.06,
+      "bankroll": 992.83,
+      "drawdown_pct": -0.9,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016664+00:00",
+      "sport": "baseball",
+      "result": "LOST",
+      "profit": -1.05,
+      "bankroll": 991.78,
+      "drawdown_pct": -1.01,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.016656+00:00",
+      "sport": "baseball",
+      "result": "LOST",
+      "profit": -0.98,
+      "bankroll": 990.8,
+      "drawdown_pct": -1.11,
+      "clv_pct": null
+    },
+    {
+      "settled_at": "2026-09-08T10:10:22.050401+00:00",
+      "sport": "tennis",
+      "result": "WON",
+      "profit": 0.696,
+      "bankroll": 991.5,
+      "drawdown_pct": -1.04,
+      "clv_pct": null
     }
   ]
 }
