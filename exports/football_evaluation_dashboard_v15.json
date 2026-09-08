@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-08T10:12:12+00:00",
+  "generated_at": "2026-09-08T19:05:22+00:00",
   "version": "v15",
-  "total_rows": 782,
-  "training_ready_rows": 782,
+  "total_rows": 784,
+  "training_ready_rows": 784,
   "wins": 219,
-  "losses": 563,
-  "hit_rate": 0.28005115089514065,
-  "brier_score": 0.19676323083669667,
-  "log_loss": 0.5824571394773529,
-  "average_clv_probability": 0.006760100442883181,
-  "average_consensus_safety": 0.8280063938618927,
+  "losses": 565,
+  "hit_rate": 0.27933673469387754,
+  "brier_score": 0.1965194004090869,
+  "log_loss": 0.581939582574686,
+  "average_clv_probability": 0.006917571801287304,
+  "average_consensus_safety": 0.8283801020408164,
   "by_league": [
     {
       "league": "MLS",
@@ -300,18 +300,28 @@
       "brier_score": 0.361421520218715,
       "log_loss": 0.9332162281905791,
       "average_clv_probability": null
+    },
+    {
+      "league": "UEFA Champions League",
+      "samples": 2,
+      "wins": 0,
+      "losses": 2,
+      "hit_rate": 0.0,
+      "brier_score": 0.10118170321366032,
+      "log_loss": 0.37957483363192324,
+      "average_clv_probability": 0.03675839421886856
     }
   ],
   "by_bookmaker": [
     {
       "bookmaker": "Betfair",
-      "samples": 199,
+      "samples": 200,
       "wins": 49,
-      "losses": 150,
-      "hit_rate": 0.24623115577889448,
-      "brier_score": 0.1880843217362617,
-      "log_loss": 0.5639930492177985,
-      "average_clv_probability": 0.01258875220846226
+      "losses": 151,
+      "hit_rate": 0.245,
+      "brier_score": 0.18748877744869577,
+      "log_loss": 0.562696423588633,
+      "average_clv_probability": 0.012711545936609399
     },
     {
       "bookmaker": "1xBet",
@@ -355,13 +365,13 @@
     },
     {
       "bookmaker": "Unibet (SE)",
-      "samples": 50,
+      "samples": 51,
       "wins": 15,
-      "losses": 35,
-      "hit_rate": 0.3,
-      "brier_score": 0.20573263530896582,
-      "log_loss": 0.600647247267019,
-      "average_clv_probability": 0.009573269670507617
+      "losses": 36,
+      "hit_rate": 0.29411764705882354,
+      "brier_score": 0.2043141119147555,
+      "log_loss": 0.5977812570045119,
+      "average_clv_probability": 0.011175829049812519
     },
     {
       "bookmaker": "Coolbet",
@@ -527,12 +537,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 782,
+      "samples": 784,
       "wins": 219,
-      "losses": 563,
-      "hit_rate": 0.28005115089514065,
-      "brier_score": 0.19676323083669667,
-      "log_loss": 0.5824571394773529
+      "losses": 565,
+      "hit_rate": 0.27933673469387754,
+      "brier_score": 0.1965194004090869,
+      "log_loss": 0.581939582574686
     }
   ],
   "by_consensus_safety": [
@@ -565,12 +575,12 @@
     },
     {
       "bucket": "0.95+",
-      "samples": 138,
+      "samples": 140,
       "wins": 42,
-      "losses": 96,
-      "hit_rate": 0.30434782608695654,
-      "brier_score": 0.2145651175931427,
-      "log_loss": 0.621230840028864
+      "losses": 98,
+      "hit_rate": 0.3,
+      "brier_score": 0.2129453545305787,
+      "log_loss": 0.6177786113660506
     },
     {
       "bucket": "<0.50",
@@ -630,12 +640,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 758,
+      "samples": 760,
       "wins": 203,
-      "losses": 555,
-      "hit_rate": 0.2678100263852243,
-      "brier_score": 0.19691053568989972,
-      "log_loss": 0.5829186761080133
+      "losses": 557,
+      "hit_rate": 0.26710526315789473,
+      "brier_score": 0.1966586177096991,
+      "log_loss": 0.5823835607330762
     }
   ],
   "metrics_reliable": true
