@@ -1,41 +1,50 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 7
-Score events: 16
+Open bets: 8
+Score events: 23
 
 === OPEN BETS ===
 soccer_mexico_ligamx | 2026-09-05T23:00:00Z | Querétaro vs Monterrey | pick=Querétaro
 soccer_netherlands_eredivisie | 2026-09-05T16:45:00Z | FC Utrecht vs Go Ahead Eagles | pick=Go Ahead Eagles
 soccer_mexico_ligamx | 2026-09-06T18:00:00Z | Pumas vs León | pick=León
-soccer_uefa_champs_league | 2026-09-08T16:45:00Z | Club Brugge vs Aston Villa | pick=Draw
 soccer_greece_super_league | 2026-09-07T15:00:00Z | Asteras Tripolis vs Aris Thessaloniki | pick=Aris Thessaloniki
+soccer_uefa_champs_league | 2026-09-08T19:00:00Z | Lille vs Real Betis | pick=Real Betis
+soccer_efl_champ | 2026-09-08T18:45:00Z | Watford vs Preston North End | pick=Preston North End
+soccer_efl_champ | 2026-09-08T18:45:00Z | Blackburn Rovers vs Sheffield United | pick=Blackburn Rovers
 soccer_netherlands_eredivisie | 2026-09-08T12:00:00Z | FC Utrecht vs Go Ahead Eagles | pick=Go Ahead Eagles
-soccer_uefa_champs_league | 2026-09-08T16:45:00Z | Club Brugge vs Aston Villa | pick=Club Brugge
 
 === SCORE EVENTS ===
+soccer_efl_champ | 2026-09-06T11:00:00Z | Birmingham City vs Wolverhampton Wanderers | 2-2
+soccer_efl_champ | 2026-09-08T18:45:00Z | Blackburn Rovers vs Sheffield United | 1-2
+soccer_efl_champ | 2026-09-08T18:45:00Z | Cardiff City vs Stoke City | 1-1
+soccer_efl_champ | 2026-09-08T18:45:00Z | Watford vs Preston North End | 2-1
+soccer_efl_champ | 2026-09-08T18:45:00Z | Southampton vs Swansea City | 3-1
+soccer_efl_champ | 2026-09-08T18:46:00Z | Wrexham AFC vs Burnley | 1-1
+soccer_efl_champ | 2026-09-08T19:00:00Z | Bolton Wanderers vs West Ham United | 2-3
 soccer_greece_super_league | 2026-09-06T16:00:00Z | Atromitos Athens vs Kalamata FC | 1-1
 soccer_greece_super_league | 2026-09-06T16:30:00Z | OFI Crete vs AE Kifisia FC | 2-0
 soccer_greece_super_league | 2026-09-06T17:00:00Z | Levadiakos vs Panetolikos Agrinio | 0-2
 soccer_greece_super_league | 2026-09-06T18:30:00Z | Panathinaikos vs PAOK Thessaloniki | 3-1
 soccer_greece_super_league | 2026-09-07T15:00:00Z | Asteras Tripolis vs Iraklis FC | 0-2
-soccer_mexico_ligamx | 2026-09-05T23:02:00Z | Atlético San Luis vs Guadalajara | 0-3
-soccer_mexico_ligamx | 2026-09-06T01:03:00Z | Tigres vs Necaxa | 1-1
-soccer_mexico_ligamx | 2026-09-06T03:03:00Z | Atlas vs Atlante FC | 1-1
 soccer_mexico_ligamx | 2026-09-06T23:02:00Z | Cruz Azul vs Santos Laguna | 1-0
-soccer_netherlands_eredivisie | 2026-09-06T10:15:00Z | Groningen vs FC Twente Enschede | 2-2
 soccer_netherlands_eredivisie | 2026-09-06T12:30:00Z | Heerenveen vs AZ Alkmaar | 2-3
 soccer_netherlands_eredivisie | 2026-09-06T12:30:00Z | SC Telstar vs SC Cambuur | 2-2
 soccer_netherlands_eredivisie | 2026-09-06T14:45:00Z | ADO Den Haag vs Fortuna Sittard | 2-3
 soccer_netherlands_eredivisie | 2026-09-08T16:45:00Z | NEC Nijmegen vs Excelsior | 2-2
 soccer_uefa_champs_league | 2026-09-08T16:45:00Z | AEK Athens vs LASK | 1-0
 soccer_uefa_champs_league | 2026-09-08T16:45:00Z | Club Brugge vs Aston Villa | 2-3
+soccer_uefa_champs_league | 2026-09-08T19:00:00Z | Borussia Dortmund vs Villarreal | 3-2
+soccer_uefa_champs_league | 2026-09-08T19:00:00Z | Real Madrid vs Inter Milan | 2-1
+soccer_uefa_champs_league | 2026-09-08T19:00:00Z | Lille vs Real Betis | 2-3
+soccer_uefa_champs_league | 2026-09-08T19:00:00Z | Porto vs Manchester City | 0-2
 
 === CLOSEST CANDIDATES ===
-soccer_mexico_ligamx | Querétaro vs Monterrey -> Tigres vs Necaxa | combined=0.267 min=0.267 | bet_time=2026-09-05T23:00:00Z score_time=2026-09-06T01:03:00Z
+soccer_mexico_ligamx | Querétaro vs Monterrey -> Cruz Azul vs Santos Laguna | combined=0.202 min=0.182 | bet_time=2026-09-05T23:00:00Z score_time=2026-09-06T23:02:00Z
 soccer_netherlands_eredivisie | FC Utrecht vs Go Ahead Eagles -> NEC Nijmegen vs Excelsior | combined=0.272 min=0.211 | bet_time=2026-09-05T16:45:00Z score_time=2026-09-08T16:45:00Z
-soccer_mexico_ligamx | Pumas vs León -> Atlas vs Atlante FC | combined=0.382 min=0.364 | bet_time=2026-09-06T18:00:00Z score_time=2026-09-06T03:03:00Z
-soccer_uefa_champs_league | Club Brugge vs Aston Villa -> Club Brugge vs Aston Villa | combined=1.000 min=1.000 | bet_time=2026-09-08T16:45:00Z score_time=2026-09-08T16:45:00Z
+soccer_mexico_ligamx | Pumas vs León -> Cruz Azul vs Santos Laguna | combined=0.202 min=0.118 | bet_time=2026-09-06T18:00:00Z score_time=2026-09-06T23:02:00Z
 soccer_greece_super_league | Asteras Tripolis vs Aris Thessaloniki -> Asteras Tripolis vs Iraklis FC | combined=0.625 min=0.250 | bet_time=2026-09-07T15:00:00Z score_time=2026-09-07T15:00:00Z
+soccer_uefa_champs_league | Lille vs Real Betis -> Lille vs Real Betis | combined=1.000 min=1.000 | bet_time=2026-09-08T19:00:00Z score_time=2026-09-08T19:00:00Z
+soccer_efl_champ | Watford vs Preston North End -> Watford vs Preston North End | combined=1.000 min=1.000 | bet_time=2026-09-08T18:45:00Z score_time=2026-09-08T18:45:00Z
+soccer_efl_champ | Blackburn Rovers vs Sheffield United -> Blackburn Rovers vs Sheffield United | combined=1.000 min=1.000 | bet_time=2026-09-08T18:45:00Z score_time=2026-09-08T18:45:00Z
 soccer_netherlands_eredivisie | FC Utrecht vs Go Ahead Eagles -> NEC Nijmegen vs Excelsior | combined=0.272 min=0.211 | bet_time=2026-09-08T12:00:00Z score_time=2026-09-08T16:45:00Z
-soccer_uefa_champs_league | Club Brugge vs Aston Villa -> Club Brugge vs Aston Villa | combined=1.000 min=1.000 | bet_time=2026-09-08T16:45:00Z score_time=2026-09-08T16:45:00Z
