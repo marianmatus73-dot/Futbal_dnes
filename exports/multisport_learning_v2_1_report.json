@@ -1,17 +1,17 @@
 {
   "version": "V2.1",
-  "generated_at": "2026-09-10T10:09:50.433833+00:00",
+  "generated_at": "2026-09-10T18:46:42.443212+00:00",
   "sports": {
     "baseball": {
-      "total_bets": 1791,
-      "settled_bets": 1258,
-      "open_bets": 533,
+      "total_bets": 1803,
+      "settled_bets": 1259,
+      "open_bets": 544,
       "wins": 680,
-      "losses": 578,
-      "win_rate": 0.5405,
-      "profit": 88.0396,
-      "stake_sum": 1536.44,
-      "yield": 0.0573,
+      "losses": 579,
+      "win_rate": 0.5401,
+      "profit": 86.8296,
+      "stake_sum": 1546.5,
+      "yield": 0.0561,
       "probability_samples": 0,
       "brier_score": null,
       "log_loss": null,
@@ -66,14 +66,14 @@
       "status": "READY"
     },
     "hockey": {
-      "total_bets": 262,
+      "total_bets": 264,
       "settled_bets": 0,
-      "open_bets": 262,
+      "open_bets": 264,
       "wins": 0,
       "losses": 0,
       "win_rate": null,
       "profit": 0.0,
-      "stake_sum": 97.12,
+      "stake_sum": 97.78,
       "yield": 0.0,
       "probability_samples": 0,
       "brier_score": null,
@@ -130,7 +130,7 @@
     }
   },
   "adaptive_weights": {
-    "baseball": 0.4556,
+    "baseball": 0.4555,
     "basketball": 0.166,
     "tennis": 0.1532,
     "hockey": 0.1279,

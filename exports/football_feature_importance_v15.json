@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 804,
+  "training_samples": 808,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 804,
+      "samples": 808,
       "wins": 226,
-      "losses": 578,
-      "winrate": 0.2811,
-      "average_value": 0.8301
+      "losses": 582,
+      "winrate": 0.2797,
+      "average_value": 0.8306
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 804,
+      "samples": 808,
       "wins": 226,
-      "losses": 578,
-      "winrate": 0.2811,
-      "average_value": 0.1182
+      "losses": 582,
+      "winrate": 0.2797,
+      "average_value": 0.1178
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 804,
+      "samples": 808,
       "wins": 226,
-      "losses": 578,
-      "winrate": 0.2811,
-      "average_value": -10.5749
+      "losses": 582,
+      "winrate": 0.2797,
+      "average_value": -10.5912
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 804,
+      "samples": 808,
       "wins": 226,
-      "losses": 578,
-      "winrate": 0.2811,
+      "losses": 582,
+      "winrate": 0.2797,
       "average_value": -0.0062
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 804,
+      "samples": 808,
       "wins": 226,
-      "losses": 578,
-      "winrate": 0.2811,
-      "average_value": 0.6743
+      "losses": 582,
+      "winrate": 0.2797,
+      "average_value": 0.6757
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 804,
+      "samples": 808,
       "wins": 226,
-      "losses": 578,
-      "winrate": 0.2811,
-      "average_value": 0.5137
+      "losses": 582,
+      "winrate": 0.2797,
+      "average_value": 0.5139
     }
   ],
   "warning": null,
