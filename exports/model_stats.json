@@ -1,31 +1,31 @@
 {
-  "total_bets": 2094,
-  "wins": 919,
-  "losses": 1175,
-  "winrate": 43.89,
-  "yield": 6.93,
-  "profit": 101.14,
-  "stake_sum": 1460.31,
-  "open_bets": 746,
-  "settled_bets": 2094,
+  "total_bets": 2101,
+  "wins": 922,
+  "losses": 1179,
+  "winrate": 43.88,
+  "yield": 7.02,
+  "profit": 103.05,
+  "stake_sum": 1467.64,
+  "open_bets": 725,
+  "settled_bets": 2101,
   "by_sport": {
     "baseball": {
-      "total": 1259,
-      "wins": 680,
-      "losses": 579,
-      "winrate": 54.01,
-      "profit": 86.83,
-      "stake_sum": 1250.54,
-      "yield": 6.94
+      "total": 1263,
+      "wins": 683,
+      "losses": 580,
+      "winrate": 54.08,
+      "profit": 89.31,
+      "stake_sum": 1257.3,
+      "yield": 7.1
     },
     "football": {
-      "total": 786,
+      "total": 789,
       "wins": 223,
-      "losses": 563,
-      "winrate": 28.37,
-      "profit": 14.15,
-      "stake_sum": 187.78,
-      "yield": 7.53
+      "losses": 566,
+      "winrate": 28.26,
+      "profit": 13.58,
+      "stake_sum": 188.35,
+      "yield": 7.21
     },
     "basketball": {
       "total": 25,
@@ -66,13 +66,13 @@
   },
   "by_bookmaker": {
     "888sport": {
-      "total": 335,
+      "total": 336,
       "wins": 207,
-      "losses": 128,
-      "winrate": 61.79,
-      "profit": 61.31,
-      "stake_sum": 369.47,
-      "yield": 16.59
+      "losses": 129,
+      "winrate": 61.61,
+      "profit": 60.19,
+      "stake_sum": 370.59,
+      "yield": 16.24
     },
     "BetOnline.ag": {
       "total": 395,
@@ -93,13 +93,13 @@
       "yield": 38.14
     },
     "GTbets": {
-      "total": 127,
+      "total": 128,
       "wins": 58,
-      "losses": 69,
-      "winrate": 45.67,
-      "profit": 7.86,
-      "stake_sum": 111.25,
-      "yield": 7.06
+      "losses": 70,
+      "winrate": 45.31,
+      "profit": 7.71,
+      "stake_sum": 111.4,
+      "yield": 6.92
     },
     "Betsson": {
       "total": 24,
@@ -191,15 +191,6 @@
       "stake_sum": 1.02,
       "yield": -12.06
     },
-    "Unibet (SE)": {
-      "total": 54,
-      "wins": 16,
-      "losses": 38,
-      "winrate": 29.63,
-      "profit": -0.41,
-      "stake_sum": 13.02,
-      "yield": -3.16
-    },
     "PMU (FR)": {
       "total": 3,
       "wins": 1,
@@ -208,6 +199,15 @@
       "profit": -0.55,
       "stake_sum": 1.52,
       "yield": -36.45
+    },
+    "Unibet (SE)": {
+      "total": 55,
+      "wins": 16,
+      "losses": 39,
+      "winrate": 29.09,
+      "profit": -0.69,
+      "stake_sum": 13.3,
+      "yield": -5.2
     },
     "Marathon Bet": {
       "total": 13,
@@ -264,13 +264,22 @@
       "yield": -30.17
     },
     "Betfair": {
-      "total": 262,
+      "total": 263,
       "wins": 77,
-      "losses": 185,
-      "winrate": 29.39,
-      "profit": -4.92,
-      "stake_sum": 76.99,
-      "yield": -6.39
+      "losses": 186,
+      "winrate": 29.28,
+      "profit": -5.06,
+      "stake_sum": 77.13,
+      "yield": -6.56
+    },
+    "1xBet": {
+      "total": 236,
+      "wins": 86,
+      "losses": 150,
+      "winrate": 36.44,
+      "profit": -6.0,
+      "stake_sum": 109.93,
+      "yield": -5.46
     },
     "MyBookie.ag": {
       "total": 30,
@@ -280,26 +289,17 @@
       "profit": -8.69,
       "stake_sum": 24.72,
       "yield": -35.17
-    },
-    "1xBet": {
-      "total": 233,
-      "wins": 83,
-      "losses": 150,
-      "winrate": 35.62,
-      "profit": -9.6,
-      "stake_sum": 104.29,
-      "yield": -9.21
     }
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 1259,
-      "wins": 680,
-      "losses": 579,
-      "winrate": 54.01,
-      "profit": 86.83,
-      "stake_sum": 1250.54,
-      "yield": 6.94
+      "total": 1263,
+      "wins": 683,
+      "losses": 580,
+      "winrate": 54.08,
+      "profit": 89.31,
+      "stake_sum": 1257.3,
+      "yield": 7.1
     },
     "Allsvenskan": {
       "total": 39,
@@ -347,13 +347,13 @@
       "yield": 18.65
     },
     "Liga MX": {
-      "total": 30,
+      "total": 31,
       "wins": 10,
-      "losses": 20,
-      "winrate": 33.33,
-      "profit": 2.73,
-      "stake_sum": 6.86,
-      "yield": 39.85
+      "losses": 21,
+      "winrate": 32.26,
+      "profit": 2.58,
+      "stake_sum": 7.01,
+      "yield": 36.86
     },
     "Brazil Serie A": {
       "total": 41,
@@ -499,15 +499,6 @@
       "stake_sum": 5.5,
       "yield": -9.98
     },
-    "UEFA Champions League": {
-      "total": 7,
-      "wins": 1,
-      "losses": 6,
-      "winrate": 14.29,
-      "profit": -0.63,
-      "stake_sum": 1.17,
-      "yield": -53.5
-    },
     "Belgian Pro League": {
       "total": 19,
       "wins": 4,
@@ -534,6 +525,15 @@
       "profit": -0.92,
       "stake_sum": 4.22,
       "yield": -21.72
+    },
+    "UEFA Champions League": {
+      "total": 9,
+      "wins": 1,
+      "losses": 8,
+      "winrate": 11.11,
+      "profit": -1.05,
+      "stake_sum": 1.59,
+      "yield": -65.79
     },
     "Serie A": {
       "total": 11,
@@ -608,5 +608,5 @@
       "yield": -69.46
     }
   },
-  "last_update": "2026-09-10T18:46:43.357296+00:00"
+  "last_update": "2026-09-11T10:08:16.839868+00:00"
 }

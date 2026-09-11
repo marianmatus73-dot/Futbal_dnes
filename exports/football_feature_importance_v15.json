@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 808,
+  "training_samples": 812,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 808,
+      "samples": 812,
       "wins": 226,
-      "losses": 582,
-      "winrate": 0.2797,
-      "average_value": 0.8306
+      "losses": 586,
+      "winrate": 0.2783,
+      "average_value": 0.831
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 808,
+      "samples": 812,
       "wins": 226,
-      "losses": 582,
-      "winrate": 0.2797,
-      "average_value": 0.1178
+      "losses": 586,
+      "winrate": 0.2783,
+      "average_value": 0.1177
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 808,
+      "samples": 812,
       "wins": 226,
-      "losses": 582,
-      "winrate": 0.2797,
-      "average_value": -10.5912
+      "losses": 586,
+      "winrate": 0.2783,
+      "average_value": -10.4654
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 808,
+      "samples": 812,
       "wins": 226,
-      "losses": 582,
-      "winrate": 0.2797,
-      "average_value": -0.0062
+      "losses": 586,
+      "winrate": 0.2783,
+      "average_value": -0.0052
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 808,
+      "samples": 812,
       "wins": 226,
-      "losses": 582,
-      "winrate": 0.2797,
-      "average_value": 0.6757
+      "losses": 586,
+      "winrate": 0.2783,
+      "average_value": 0.6767
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 808,
+      "samples": 812,
       "wins": 226,
-      "losses": 582,
-      "winrate": 0.2797,
-      "average_value": 0.5139
+      "losses": 586,
+      "winrate": 0.2783,
+      "average_value": 0.5141
     }
   ],
   "warning": null,
