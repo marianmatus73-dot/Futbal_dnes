@@ -1,13 +1,13 @@
 {
-  "total_bets": 2101,
+  "total_bets": 2102,
   "wins": 922,
-  "losses": 1179,
-  "winrate": 43.88,
-  "yield": 7.02,
-  "profit": 103.05,
-  "stake_sum": 1467.64,
-  "open_bets": 725,
-  "settled_bets": 2101,
+  "losses": 1180,
+  "winrate": 43.86,
+  "yield": 7.0,
+  "profit": 102.79,
+  "stake_sum": 1467.9,
+  "open_bets": 712,
+  "settled_bets": 2102,
   "by_sport": {
     "baseball": {
       "total": 1263,
@@ -19,13 +19,13 @@
       "yield": 7.1
     },
     "football": {
-      "total": 789,
+      "total": 790,
       "wins": 223,
-      "losses": 566,
-      "winrate": 28.26,
-      "profit": 13.58,
-      "stake_sum": 188.35,
-      "yield": 7.21
+      "losses": 567,
+      "winrate": 28.23,
+      "profit": 13.32,
+      "stake_sum": 188.61,
+      "yield": 7.06
     },
     "basketball": {
       "total": 25,
@@ -218,15 +218,6 @@
       "stake_sum": 6.02,
       "yield": -12.62
     },
-    "Tipico": {
-      "total": 72,
-      "wins": 18,
-      "losses": 54,
-      "winrate": 25.0,
-      "profit": -0.86,
-      "stake_sum": 16.22,
-      "yield": -5.28
-    },
     "Unibet (NL)": {
       "total": 19,
       "wins": 3,
@@ -235,6 +226,15 @@
       "profit": -0.91,
       "stake_sum": 4.77,
       "yield": -19.18
+    },
+    "Tipico": {
+      "total": 73,
+      "wins": 18,
+      "losses": 55,
+      "winrate": 24.66,
+      "profit": -1.12,
+      "stake_sum": 16.48,
+      "yield": -6.77
     },
     "Unibet (FR)": {
       "total": 97,
@@ -553,15 +553,6 @@
       "stake_sum": 8.78,
       "yield": -12.76
     },
-    "2. Bundesliga": {
-      "total": 23,
-      "wins": 5,
-      "losses": 18,
-      "winrate": 21.74,
-      "profit": -1.27,
-      "stake_sum": 5.16,
-      "yield": -24.54
-    },
     "Premier League": {
       "total": 14,
       "wins": 2,
@@ -579,6 +570,15 @@
       "profit": -1.4,
       "stake_sum": 2.59,
       "yield": -54.15
+    },
+    "2. Bundesliga": {
+      "total": 24,
+      "wins": 5,
+      "losses": 19,
+      "winrate": 20.83,
+      "profit": -1.53,
+      "stake_sum": 5.42,
+      "yield": -28.16
     },
     "mma_mixed_martial_arts": {
       "total": 20,
@@ -608,5 +608,5 @@
       "yield": -69.46
     }
   },
-  "last_update": "2026-09-11T10:08:16.839868+00:00"
+  "last_update": "2026-09-11T18:50:05.741522+00:00"
 }
