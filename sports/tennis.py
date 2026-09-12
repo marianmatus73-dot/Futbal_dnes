@@ -25,6 +25,12 @@ from core.meta_model import MetaFeatures, predict_probability
 
 log = logging.getLogger("multisport-main")
 
+
+def tennis_confidence(edge: float) -> int:
+    """Map a qualified market-price edge onto the shared 0-100 scale."""
+    return int(round(max(1.0, min(90.0, 65.0 + float(edge) * 100.0))))
+
+
 class TennisModule(SportModule):
     name = "tennis"
 
@@ -144,7 +150,7 @@ class TennisModule(SportModule):
                                 odds=odds, prob_model=prob_market, prob_market=prob_market, prob_final=prob_market,
                                 edge=edge, stake=stake, bookmaker=bookmaker,
                                 start_time=str(event.get("commence_time")),
-                                score=float(edge * 100),
+                                score=float(tennis_confidence(edge)),
                                 external_event_id=str(event.get("id", "")),
                             )
                             bets.append(bet)

@@ -9,10 +9,15 @@ from unittest.mock import AsyncMock, patch
 sys.modules.setdefault("aiohttp", SimpleNamespace())
 
 from core.config import Settings
-from sports.tennis import TennisModule
+from sports.tennis import TennisModule, tennis_confidence
 
 
 class TennisDiscoveryTests(unittest.IsolatedAsyncioTestCase):
+    def test_tennis_edge_uses_shared_confidence_scale(self) -> None:
+        self.assertEqual(tennis_confidence(.07), 72)
+        self.assertEqual(tennis_confidence(.16), 81)
+        self.assertLessEqual(tennis_confidence(1.0), 90)
+
     async def asyncTearDown(self) -> None:
         os.environ.pop("TENNIS_SPORT_KEYS", None)
 
@@ -36,3 +41,4 @@ class TennisDiscoveryTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -16,6 +16,7 @@ from core.professional_risk import (
     apply_professional_risk_controls,
     calibrated_probability,
     conservative_probability,
+    effective_confidence,
 )
 from core.sport_policy import settings_for_sport, sport_policy
 from core.sport_walkforward import walkforward_report
@@ -82,6 +83,59 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertEqual(summary.accepted, 1)
         self.assertEqual(len(output["result"].bets), 1)
         self.assertGreaterEqual(output["result"].bets[0].edge, .04)
+
+    def test_early_football_confidence_cannot_claim_certainty(self) -> None:
+        bet = Bet(
+            sport="football", league="L", event="A vs B", market="h2h",
+            selection="A", odds=2.0, prob_model=.60, prob_market=.50,
+            prob_final=.60, edge=.20, stake=2, bookmaker="Book",
+            start_time="2026-09-20", score=100, release_stage="EARLY",
+            lineup_verified=False,
+        )
+        self.assertEqual(effective_confidence(bet, samples=500), 75)
+        bet.release_stage = "FINAL"
+        bet.lineup_verified = True
+        self.assertEqual(effective_confidence(bet, samples=500), 92)
+
+    def test_football_tip_pool_is_balanced_across_odds_bands(self) -> None:
+        high = [
+            Bet(
+                sport="football", league="L", event=f"High {index}",
+                market="h2h", selection="Away", odds=3.80,
+                prob_model=.29, prob_market=.263, prob_final=.29,
+                edge=.102, stake=5, bookmaker="Book",
+                start_time=f"2026-09-{20 + index}", score=100,
+                release_stage="EARLY",
+            )
+            for index in range(3)
+        ]
+        lower = [
+            Bet(
+                sport="football", league="L", event=f"Lower {index}",
+                market="h2h", selection="Home", odds=1.50,
+                prob_model=.72, prob_market=2 / 3, prob_final=.72,
+                edge=.08, stake=5, bookmaker="Book",
+                start_time=f"2026-09-{25 + index}", score=80,
+                release_stage="EARLY",
+            )
+            for index in range(2)
+        ]
+        output = {
+            "result": SportResult(
+                sport="football", mode="scan", bets=high + lower
+            )
+        }
+        summary = apply_professional_risk_controls([output], self.settings)
+        accepted = output["result"].bets
+        self.assertEqual(summary.accepted, 4)
+        self.assertEqual(sum(bet.odds >= 3 for bet in accepted), 2)
+        self.assertEqual(sum(bet.odds < 1.60 for bet in accepted), 2)
+        self.assertEqual(
+            summary.rejected_reasons.get(
+                "football: odds band tip limit reached"
+            ),
+            1,
+        )
 
     def test_uncertainty_haircut_is_equal_in_edge_space(self) -> None:
         short_probability = .75

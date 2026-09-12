@@ -139,6 +139,22 @@ def conservative_probability(
     return max(.01, probability - uncertainty)
 
 
+def effective_confidence(bet: Bet, samples: int) -> int:
+    """Return publication confidence, not the model's raw agreement score."""
+    confidence = max(1, min(100, int(round(bet.score))))
+    if bet.sport != "football":
+        return confidence
+
+    # Raw football agreement can saturate at 100 even when the event is still
+    # days away. An unconfirmed/EARLY candidate must never look certain.
+    confidence = min(confidence, 92)
+    if str(bet.release_stage or "").upper() != "FINAL" or not bet.lineup_verified:
+        confidence = min(confidence, 75)
+    elif samples < 30:
+        confidence = min(confidence, 82)
+    return confidence
+
+
 def apply_professional_risk_controls(
     outputs: list[dict], settings: Settings
 ) -> RiskSummary:
@@ -191,6 +207,7 @@ def apply_professional_risk_controls(
         sport_exposure = sport_allocations.get(result.sport, 0.0)
         accepted: list[Bet] = []
         seen_events: set[tuple[str, str]] = set()
+        accepted_odds_bands: dict[tuple[float, float | None], int] = {}
 
         for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
             summary.candidates += 1
@@ -234,7 +251,8 @@ def apply_professional_risk_controls(
                 existing_allocation
                 and existing_allocation[0] == bet.selection
             )
-            confidence = int(round(bet.score))
+            confidence = effective_confidence(bet, samples)
+            odds_band = _odds_band(bet.odds)
             stake_cap = settings.bank * policy.max_stake_pct
             stake = (
                 existing_allocation[1]
@@ -257,6 +275,11 @@ def apply_professional_risk_controls(
                 reason = "duplicate event in current run"
             elif existing_allocation and not repeats_same_selection:
                 reason = "opposite selection already allocated today"
+            elif (
+                result.sport == "football"
+                and accepted_odds_bands.get(odds_band, 0) >= 2
+            ):
+                reason = "odds band tip limit reached"
             elif len(accepted) >= policy.max_tips:
                 reason = "daily sport tip limit reached"
             elif not repeats_same_selection and accepted_daily + stake > daily_limit:
@@ -270,9 +293,11 @@ def apply_professional_risk_controls(
 
             bet.prob_final = calibrated
             bet.edge = conservative_edge
+            bet.score = float(confidence)
             bet.stake = round(stake, 2)
             accepted.append(bet)
             seen_events.add(event_key)
+            accepted_odds_bands[odds_band] = accepted_odds_bands.get(odds_band, 0) + 1
             if not repeats_same_selection:
                 accepted_daily += stake
                 sport_exposure += stake
