@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from core.pro_tipper import build_pro_tip, filter_value_tips
-from core.tip_card import save_latest_tip_card
+from core.tip_card import save_latest_rejected_candidates, save_latest_tip_card
 
 
 class TipCardTests(unittest.TestCase):
@@ -57,6 +57,26 @@ class TipCardTests(unittest.TestCase):
             self.assertFalse(card["publishable"])
             self.assertEqual(card["selected"], [])
             self.assertEqual(card["rejected_sample"], [])
+
+    def test_complete_rejected_export_keeps_risk_and_selection_items(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            tip = build_pro_tip(
+                sport="football", league="test", match="A vs B",
+                pick="A", odds=2.0, model_probability=0.60,
+            )
+            path = save_latest_rejected_candidates(
+                [{"sport": "tennis", "event": "C vs D",
+                  "rejection_reason": "confidence below sport minimum"}],
+                [tip],
+                export_dir=Path(temp),
+            )
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(payload["total"], 2)
+            self.assertEqual(len(payload["candidates"]), 2)
+            self.assertEqual(
+                payload["candidates"][1]["rejection_stage"],
+                "VALUE_OR_TOP_SELECTION",
+            )
 
 
 if __name__ == "__main__":
