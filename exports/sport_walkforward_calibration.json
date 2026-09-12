@@ -13,12 +13,12 @@
     "status": "BUILDING"
   },
   "football": {
-    "samples": 790,
-    "train_samples": 553,
-    "test_samples": 237,
+    "samples": 802,
+    "train_samples": 561,
+    "test_samples": 241,
     "split": "chronological_70_30",
-    "raw_brier": 0.189578,
-    "calibrated_brier": 0.192049,
+    "raw_brier": 0.18676,
+    "calibrated_brier": 0.189433,
     "status": "READY"
   },
   "hockey": {
