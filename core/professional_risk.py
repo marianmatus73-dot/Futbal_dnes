@@ -5,7 +5,7 @@ import os
 import sqlite3
 import hashlib
 from datetime import datetime, timezone
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from core.config import Settings
@@ -22,6 +22,7 @@ class RiskSummary:
     daily_exposure: float = 0.0
     drawdown_paused: bool = False
     rejected_reasons: dict[str, int] = field(default_factory=dict)
+    rejected_candidates: list[dict] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -368,6 +369,29 @@ def apply_professional_risk_controls(
 
             if reason:
                 _reject(summary, f"{result.sport}: {reason}")
+                candidate = asdict(bet)
+                candidate.update(
+                    {
+                        "event": bet.event,
+                        "selection": bet.selection,
+                        "rejection_stage": "PROFESSIONAL_RISK",
+                        "rejection_reason": reason,
+                        "calibrated_probability": round(calibrated, 6),
+                        "conservative_edge": round(conservative_edge, 6),
+                        "effective_confidence": confidence,
+                        "league_clv_samples": league_clv.samples,
+                        "league_average_clv": (
+                            round(league_clv.average, 6)
+                            if league_clv.samples else None
+                        ),
+                        "opening_move_pct": (
+                            round((bet.opening_odds - bet.odds) / bet.opening_odds, 6)
+                            if bet.opening_odds and bet.opening_odds > 1.0
+                            else None
+                        ),
+                    }
+                )
+                summary.rejected_candidates.append(candidate)
                 continue
 
             bet.prob_final = calibrated
