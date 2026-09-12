@@ -52,7 +52,7 @@ from core.pro_tipper import (
     format_rejected_report,
 )
 from core.top_tips import select_top_tips, select_telegram_tips
-from core.tip_card import save_latest_tip_card
+from core.tip_card import save_latest_rejected_candidates, save_latest_tip_card
 from core.tip_card_validation import validate_tip_card
 from core.mobile_history import export_mobile_tip_history
 from core.mobile_performance import export_mobile_performance
@@ -674,6 +674,7 @@ def build_report(
     module_outputs: list[dict],
     *,
     write_tip_card: bool = True,
+    risk_rejected_candidates: list[dict] | None = None,
 ) -> str:
     buffer = StringIO()
 
@@ -689,6 +690,9 @@ def build_report(
 
     top_tips = select_top_tips(pro_tips, limit=top_limit)
     rejected = rejected_tips_by_sport(all_tips, top_tips, limit_per_sport=5)
+    all_selection_rejected = rejected_tips(
+        all_tips, top_tips, limit=len(all_tips)
+    )
     telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
 
     if write_tip_card:
@@ -699,6 +703,16 @@ def build_report(
             top_limit=top_limit,
         )
         log.info("Saved complete daily tip card: %s", card_path)
+        rejected_path = save_latest_rejected_candidates(
+            risk_rejected_candidates or [],
+            all_selection_rejected,
+            export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+        )
+        log.info(
+            "Saved complete rejected candidate list: %s (%s candidates)",
+            rejected_path,
+            len(risk_rejected_candidates or []) + len(all_selection_rejected),
+        )
 
     saved = save_tip_audit_log(top_tips)
 
@@ -821,6 +835,7 @@ async def run() -> None:
         *(guarded_run(sport) for sport in selected)
     )
 
+    risk_rejected_candidates: list[dict] = []
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             release_summary = apply_football_release_policy(
@@ -844,6 +859,7 @@ async def run() -> None:
                     result.bets = []
 
         risk_summary = apply_professional_risk_controls(module_outputs, settings)
+        risk_rejected_candidates = risk_summary.rejected_candidates
         log.info(
             "Professional risk controls: candidates=%s, accepted=%s, "
             "rejected=%s, exposure=%.2f, drawdown_paused=%s, reasons=%s",
@@ -2180,6 +2196,7 @@ async def run() -> None:
         successful_results,
         module_outputs,
         write_tip_card=(not args.dry_run and not args.analytics and not args.backtest),
+        risk_rejected_candidates=risk_rejected_candidates,
     )
 
     report_text += audit_block_summary(settings)
