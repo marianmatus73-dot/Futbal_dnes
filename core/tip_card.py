@@ -69,3 +69,52 @@ def save_latest_tip_card(
         if temporary.exists():
             temporary.unlink()
     return destination
+
+
+def save_latest_rejected_candidates(
+    risk_rejected: list[dict],
+    selection_rejected: list,
+    *,
+    export_dir: Path,
+) -> Path:
+    """Atomically export every rejected candidate from the current run."""
+    export_dir.mkdir(parents=True, exist_ok=True)
+    candidates = list(risk_rejected)
+    for tip in selection_rejected:
+        item = _tip_payload(tip, "REJECT")
+        item.update(
+            {
+                "rejection_stage": "VALUE_OR_TOP_SELECTION",
+                "rejection_reason": "not selected for the published top list",
+            }
+        )
+        candidates.append(item)
+
+    payload = {
+        "schema_version": 1,
+        "generated_at": datetime.now().astimezone().isoformat(),
+        "total": len(candidates),
+        "candidates": candidates,
+    }
+    destination = export_dir / "latest_rejected_candidates.json"
+    handle = tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        dir=export_dir,
+        prefix="rejected-candidates-",
+        suffix=".tmp",
+        delete=False,
+    )
+    temporary = Path(handle.name)
+    try:
+        with handle:
+            json.dump(payload, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        temporary.replace(destination)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+    return destination
+
