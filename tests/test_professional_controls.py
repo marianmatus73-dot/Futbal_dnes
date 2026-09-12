@@ -12,7 +12,9 @@ from core.config import Settings
 from core.market import no_vig_probs
 from core.football_candidate_optimizer_v14 import is_learning_observation_odds
 from core.professional_risk import (
+    _league_clv_profile,
     _settled_profile,
+    adverse_opening_move,
     apply_professional_risk_controls,
     calibrated_probability,
     conservative_probability,
@@ -136,6 +138,52 @@ class ProfessionalControlsTests(unittest.TestCase):
             ),
             1,
         )
+
+    def test_league_clv_guard_requires_reliable_sample(self) -> None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "CREATE TABLE sport_bets (sport TEXT, league TEXT, result TEXT, "
+                "engine_version TEXT, clv_pct REAL)"
+            )
+            conn.executemany(
+                "INSERT INTO sport_bets VALUES "
+                "('football', 'Weak League', 'LOST', 'football-2.0', -0.04)",
+                [()] * 29,
+            )
+        profile = _league_clv_profile(
+            self.settings, "football", "Weak League"
+        )
+        self.assertEqual(profile.samples, 29)
+
+        bet = Bet(
+            sport="football", league="Weak League", event="A vs B",
+            market="h2h", selection="A", odds=2.0,
+            prob_model=.60, prob_market=.50, prob_final=.60,
+            edge=.20, stake=2, bookmaker="Book", start_time="2026-09-20",
+            score=80, release_stage="EARLY",
+        )
+        output = {"result": SportResult(sport="football", mode="scan", bets=[bet])}
+        first = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(first.accepted, 1)
+
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                "INSERT INTO sport_bets VALUES "
+                "('football', 'Weak League', 'LOST', 'football-2.0', -0.04)"
+            )
+            conn.execute("DELETE FROM professional_risk_allocations")
+        output["result"].bets = [replace(bet, stake=2)]
+        second = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(second.accepted, 0)
+        self.assertEqual(
+            second.rejected_reasons.get("football: league CLV below minimum"),
+            1,
+        )
+
+    def test_steam_guard_uses_current_price_from_opening(self) -> None:
+        self.assertTrue(adverse_opening_move(2.00, 1.72))
+        self.assertFalse(adverse_opening_move(2.00, 1.80))
+        self.assertFalse(adverse_opening_move(None, 1.72))
 
     def test_uncertainty_haircut_is_equal_in_edge_space(self) -> None:
         short_probability = .75
