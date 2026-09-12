@@ -24,6 +24,12 @@ class RiskSummary:
     rejected_reasons: dict[str, int] = field(default_factory=dict)
 
 
+@dataclass(frozen=True)
+class LeagueCLVProfile:
+    samples: int = 0
+    average: float = 0.0
+
+
 def _reject(summary: RiskSummary, reason: str) -> None:
     summary.rejected += 1
     summary.rejected_reasons[reason] = (
@@ -86,6 +92,60 @@ def _settled_profile(
         ).fetchone()
     samples = int(row[0] or 0)
     return samples, float(row[1] or 0) / samples if samples else .50
+
+
+def _league_clv_profile(
+    settings: Settings,
+    sport: str,
+    league: str,
+) -> LeagueCLVProfile:
+    """Read only settled, real CLV samples for one league."""
+    db = Path(settings.db_file or "bets.db")
+    if not db.exists():
+        return LeagueCLVProfile()
+    with sqlite3.connect(db) as conn:
+        if conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
+        ).fetchone() is None:
+            return LeagueCLVProfile()
+        columns = {
+            str(column[1]) for column in conn.execute("PRAGMA table_info(sport_bets)")
+        }
+        if not {"sport", "league", "clv_pct"}.issubset(columns):
+            return LeagueCLVProfile()
+        filters = [
+            "sport=?",
+            "league=?",
+            "NULLIF(TRIM(CAST(clv_pct AS TEXT)), '') IS NOT NULL",
+        ]
+        parameters: list[str] = [sport, league]
+        if "result" in columns:
+            filters.append(
+                "UPPER(COALESCE(result,'')) IN ('WON','WIN','V','LOST','LOSS','P')"
+            )
+        if sport == "football" and "engine_version" in columns:
+            filters.append("engine_version='football-2.0'")
+        row = conn.execute(
+            f"SELECT COUNT(*), AVG(CAST(clv_pct AS REAL)) "
+            f"FROM sport_bets WHERE {' AND '.join(filters)}",
+            parameters,
+        ).fetchone()
+    return LeagueCLVProfile(int(row[0] or 0), float(row[1] or 0.0))
+
+
+def adverse_opening_move(
+    opening_odds: float | None,
+    current_odds: float,
+    threshold: float = .13,
+) -> bool:
+    """True when the available price has shortened materially since opening."""
+    if opening_odds is None:
+        return False
+    opening = float(opening_odds)
+    current = float(current_odds)
+    if opening <= 1.0 or current <= 1.0:
+        return False
+    return (opening - current) / opening >= abs(float(threshold))
 
 
 def calibrated_probability(
@@ -198,6 +258,10 @@ def apply_professional_risk_controls(
         }
     context_db = SportContextDatabase(settings)
     profile_cache: dict[tuple[str, str, tuple[float, float | None]], tuple[int, float]] = {}
+    league_clv_cache: dict[tuple[str, str], LeagueCLVProfile] = {}
+    min_league_clv_samples = int(os.getenv("MIN_LEAGUE_CLV_SAMPLES", "30"))
+    min_league_clv = float(os.getenv("MIN_LEAGUE_AVG_CLV", "-0.025"))
+    max_adverse_move = float(os.getenv("MAX_ADVERSE_OPENING_MOVE", "0.13"))
     for output in outputs:
         result = output.get("result")
         if not isinstance(result, SportResult):
@@ -253,6 +317,12 @@ def apply_professional_risk_controls(
             )
             confidence = effective_confidence(bet, samples)
             odds_band = _odds_band(bet.odds)
+            league_clv_key = (result.sport, bet.league)
+            if league_clv_key not in league_clv_cache:
+                league_clv_cache[league_clv_key] = _league_clv_profile(
+                    settings, result.sport, bet.league
+                )
+            league_clv = league_clv_cache[league_clv_key]
             stake_cap = settings.bank * policy.max_stake_pct
             stake = (
                 existing_allocation[1]
@@ -265,6 +335,15 @@ def apply_professional_risk_controls(
                 reason = "drawdown pause"
             elif not policy.min_odds <= bet.odds <= policy.max_odds:
                 reason = "odds outside sport limits"
+            elif (
+                league_clv.samples >= min_league_clv_samples
+                and league_clv.average < min_league_clv
+            ):
+                reason = "league CLV below minimum"
+            elif adverse_opening_move(
+                bet.opening_odds, bet.odds, max_adverse_move
+            ):
+                reason = "opening price already shortened"
             elif conservative_edge < policy.min_edge:
                 reason = "conservative edge below sport minimum"
             elif conservative_edge > policy.max_edge:
