@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-14T11:05:46.236558+00:00",
+  "generated_at": "2026-09-14T20:00:47.362414+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -16,15 +16,15 @@
       },
       "periods": {
         "30": {
-          "settled": 677,
-          "stake": 678.76,
-          "profit": 32.3834,
-          "yield_pct": 4.771,
+          "settled": 657,
+          "stake": 654.9,
+          "profit": 39.7789,
+          "yield_pct": 6.074,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.234793,
-          "calibration_error": 0.081729,
-          "probability_samples": 677,
+          "brier_score": 0.232893,
+          "calibration_error": 0.084237,
+          "probability_samples": 657,
           "max_drawdown": 13.4556
         },
         "90": {
@@ -267,8 +267,8 @@
         "stake": 206.97,
         "profit": 11.6788,
         "yield_pct": 5.643,
-        "average_clv_pct": 3.242,
-        "clv_samples": 475,
+        "average_clv_pct": 3.252,
+        "clv_samples": 477,
         "brier_score": 0.197555,
         "calibration_error": 0.023771,
         "probability_samples": 876,
@@ -276,15 +276,15 @@
       },
       "periods": {
         "30": {
-          "settled": 629,
-          "stake": 145.92,
-          "profit": -1.1931,
-          "yield_pct": -0.818,
-          "average_clv_pct": 3.242,
-          "clv_samples": 475,
-          "brier_score": 0.193835,
-          "calibration_error": 0.038141,
-          "probability_samples": 629,
+          "settled": 612,
+          "stake": 142.38,
+          "profit": -2.364,
+          "yield_pct": -1.66,
+          "average_clv_pct": 3.252,
+          "clv_samples": 477,
+          "brier_score": 0.192712,
+          "calibration_error": 0.04106,
+          "probability_samples": 612,
           "max_drawdown": 13.236
         },
         "90": {
@@ -292,8 +292,8 @@
           "stake": 206.97,
           "profit": 11.6788,
           "yield_pct": 5.643,
-          "average_clv_pct": 3.242,
-          "clv_samples": 475,
+          "average_clv_pct": 3.252,
+          "clv_samples": 477,
           "brier_score": 0.197555,
           "calibration_error": 0.023771,
           "probability_samples": 876,
@@ -304,8 +304,8 @@
           "stake": 206.97,
           "profit": 11.6788,
           "yield_pct": 5.643,
-          "average_clv_pct": 3.242,
-          "clv_samples": 475,
+          "average_clv_pct": 3.252,
+          "clv_samples": 477,
           "brier_score": 0.197555,
           "calibration_error": 0.023771,
           "probability_samples": 876,
@@ -486,8 +486,8 @@
           "stake": 9.47,
           "profit": -1.8104,
           "yield_pct": -19.117,
-          "average_clv_pct": 1.012,
-          "clv_samples": 26,
+          "average_clv_pct": 1.422,
+          "clv_samples": 27,
           "brier_score": 0.164713,
           "calibration_error": 0.095886,
           "probability_samples": 35,
@@ -618,8 +618,8 @@
           "stake": 3.64,
           "profit": -1.7354,
           "yield_pct": -47.676,
-          "average_clv_pct": -0.251,
-          "clv_samples": 14,
+          "average_clv_pct": -0.285,
+          "clv_samples": 15,
           "brier_score": 0.158727,
           "calibration_error": 0.112536,
           "probability_samples": 16,
@@ -704,8 +704,8 @@
           "stake": 168.81,
           "profit": 8.5181,
           "yield_pct": 5.046,
-          "average_clv_pct": 3.471,
-          "clv_samples": 427,
+          "average_clv_pct": 3.481,
+          "clv_samples": 429,
           "brier_score": 0.197933,
           "calibration_error": 0.014565,
           "probability_samples": 814,
@@ -730,8 +730,8 @@
           "stake": 206.97,
           "profit": 11.6788,
           "yield_pct": 5.643,
-          "average_clv_pct": 3.242,
-          "clv_samples": 475,
+          "average_clv_pct": 3.252,
+          "clv_samples": 477,
           "brier_score": 0.197555,
           "calibration_error": 0.023771,
           "probability_samples": 876,
@@ -1045,7 +1045,7 @@
       "probability_samples": 0,
       "market_brier_score": null,
       "calibration_error": null,
-      "average_odds": 6.4933,
+      "average_odds": 6.5307,
       "minimum_events": 150,
       "readiness_pct": 0.0,
       "maturity": "COLLECTING",
@@ -1061,7 +1061,7 @@
         "yield_pct": null,
         "brier_score": null
       },
-      "generated_at": "2026-09-14T11:05:46.275633+00:00"
+      "generated_at": "2026-09-14T20:00:47.413015+00:00"
     }
   }
 }

@@ -1,8 +1,50 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-14T11:05:46.175405+00:00",
+  "generated_at": "2026-09-14T20:00:47.288199+00:00",
   "limit_per_sport": 5,
   "sports": {
+    "tennis": [
+      {
+        "sport": "tennis",
+        "league": "tennis_wta_guadalajara_open",
+        "match": "Carole Monnet vs Sloane Stephens",
+        "pick": "Carole Monnet",
+        "market": "h2h",
+        "odds": 5.93,
+        "bookmaker": "Pinnacle",
+        "model_probability": 0.1930449286388592,
+        "edge": 0.14475642682843493,
+        "stake": 0.22,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-09-14T19:05:48Z",
+        "created_at": "2026-09-14 19:59:01",
+        "settled_at": null
+      },
+      {
+        "sport": "tennis",
+        "league": "tennis_wta_guadalajara_open",
+        "match": "Elsa Jacquemot vs Liudmila Samsonova",
+        "pick": "Elsa Jacquemot",
+        "market": "h2h",
+        "odds": 4.6,
+        "bookmaker": "Matchbook",
+        "model_probability": 0.23636803136972215,
+        "edge": 0.08729294430072176,
+        "stake": 0.18,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-09-14T16:10:00Z",
+        "created_at": "2026-09-13 18:23:31",
+        "settled_at": null
+      }
+    ],
     "football": [
       {
         "sport": "football",
@@ -102,28 +144,6 @@
         "final_score": null,
         "start_time": "2026-09-14T16:30:00Z",
         "created_at": "2026-09-04 10:03:32",
-        "settled_at": null
-      }
-    ],
-    "tennis": [
-      {
-        "sport": "tennis",
-        "league": "tennis_wta_guadalajara_open",
-        "match": "Elsa Jacquemot vs Liudmila Samsonova",
-        "pick": "Elsa Jacquemot",
-        "market": "h2h",
-        "odds": 4.6,
-        "bookmaker": "Matchbook",
-        "model_probability": 0.23636803136972215,
-        "edge": 0.08729294430072176,
-        "stake": 0.18,
-        "closing_odds": null,
-        "clv_pct": null,
-        "settlement_source": "",
-        "result": "OPEN",
-        "final_score": null,
-        "start_time": "2026-09-14T16:10:00Z",
-        "created_at": "2026-09-13 18:23:31",
         "settled_at": null
       }
     ],
@@ -303,8 +323,8 @@
         "model_probability": 0.296742173601934,
         "edge": 0.07420666843900103,
         "stake": 0.21,
-        "closing_odds": null,
-        "clv_pct": null,
+        "closing_odds": 3.23,
+        "clv_pct": 0.12074,
         "settlement_source": "the_odds_api_scores",
         "result": "LOST",
         "final_score": "0-2",
