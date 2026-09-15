@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-14T20:00:46+00:00",
+  "generated_at": "2026-09-15T10:35:35+00:00",
   "version": "v15",
-  "total_rows": 929,
-  "training_ready_rows": 929,
-  "wins": 256,
-  "losses": 673,
-  "hit_rate": 0.2755651237890204,
-  "brier_score": 0.19617585293713602,
-  "log_loss": 0.5813450334359729,
-  "average_clv_probability": 0.008276905881296643,
-  "average_consensus_safety": 0.8374854682454256,
+  "total_rows": 937,
+  "training_ready_rows": 937,
+  "wins": 258,
+  "losses": 679,
+  "hit_rate": 0.2753468516542156,
+  "brier_score": 0.1962395912638491,
+  "log_loss": 0.5815121937480702,
+  "average_clv_probability": 0.008483690763527604,
+  "average_consensus_safety": 0.8377652081109931,
   "by_league": [
     {
       "league": "MLS",
@@ -23,13 +23,13 @@
     },
     {
       "league": "Argentina Primera Division",
-      "samples": 79,
+      "samples": 84,
       "wins": 23,
-      "losses": 56,
-      "hit_rate": 0.2911392405063291,
-      "brier_score": 0.2010745753624428,
-      "log_loss": 0.5918247521353954,
-      "average_clv_probability": 0.00905034612717263
+      "losses": 61,
+      "hit_rate": 0.27380952380952384,
+      "brier_score": 0.19486376536577477,
+      "log_loss": 0.5787436172627275,
+      "average_clv_probability": 0.010729262953624986
     },
     {
       "league": "Brazil Serie A",
@@ -52,6 +52,16 @@
       "average_clv_probability": 0.013582705399946422
     },
     {
+      "league": "La Liga",
+      "samples": 43,
+      "wins": 10,
+      "losses": 33,
+      "hit_rate": 0.23255813953488372,
+      "brier_score": 0.17403107451091554,
+      "log_loss": 0.5347007543963428,
+      "average_clv_probability": 0.004048250939518959
+    },
+    {
       "league": "Eliteserien",
       "samples": 41,
       "wins": 13,
@@ -60,16 +70,6 @@
       "brier_score": 0.21630929626463136,
       "log_loss": 0.6245023653681524,
       "average_clv_probability": 0.004938514732563545
-    },
-    {
-      "league": "La Liga",
-      "samples": 41,
-      "wins": 8,
-      "losses": 33,
-      "hit_rate": 0.1951219512195122,
-      "brier_score": 0.15709311815181318,
-      "log_loss": 0.498340697350099,
-      "average_clv_probability": 0.0018103245942533864
     },
     {
       "league": "Allsvenskan",
@@ -152,6 +152,16 @@
       "average_clv_probability": -0.005709168996592517
     },
     {
+      "league": "Segunda Division",
+      "samples": 25,
+      "wins": 8,
+      "losses": 17,
+      "hit_rate": 0.32,
+      "brier_score": 0.20360025451213906,
+      "log_loss": 0.59747325219126,
+      "average_clv_probability": -0.007379304426943689
+    },
+    {
       "league": "Belgian Pro League",
       "samples": 24,
       "wins": 5,
@@ -160,16 +170,6 @@
       "brier_score": 0.16182239176747973,
       "log_loss": 0.5059708283097024,
       "average_clv_probability": 0.008475759617765238
-    },
-    {
-      "league": "Segunda Division",
-      "samples": 24,
-      "wins": 8,
-      "losses": 16,
-      "hit_rate": 0.3333333333333333,
-      "brier_score": 0.20779416350055746,
-      "log_loss": 0.6062464209966746,
-      "average_clv_probability": -0.007421447628451703
     },
     {
       "league": "Swiss Super League",
@@ -325,13 +325,13 @@
     },
     {
       "bookmaker": "1xBet",
-      "samples": 159,
+      "samples": 165,
       "wins": 51,
-      "losses": 108,
-      "hit_rate": 0.32075471698113206,
-      "brier_score": 0.22070233472216122,
-      "log_loss": 0.6339169057660087,
-      "average_clv_probability": 0.012193989993247644
+      "losses": 114,
+      "hit_rate": 0.3090909090909091,
+      "brier_score": 0.21623201513155046,
+      "log_loss": 0.6244849312062397,
+      "average_clv_probability": 0.012512759245674273
     },
     {
       "bookmaker": "Pinnacle",
@@ -405,13 +405,13 @@
     },
     {
       "bookmaker": "Unibet (NL)",
-      "samples": 23,
-      "wins": 3,
+      "samples": 25,
+      "wins": 5,
       "losses": 20,
-      "hit_rate": 0.13043478260869565,
-      "brier_score": 0.1472296217990237,
-      "log_loss": 0.4785843661801819,
-      "average_clv_probability": 0.017202159377357095
+      "hit_rate": 0.2,
+      "brier_score": 0.17715198644490293,
+      "log_loss": 0.5427041707933147,
+      "average_clv_probability": 0.01926151511248537
     },
     {
       "bookmaker": "Nordic Bet",
@@ -547,12 +547,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 929,
-      "wins": 256,
-      "losses": 673,
-      "hit_rate": 0.2755651237890204,
-      "brier_score": 0.19617585293713602,
-      "log_loss": 0.5813450334359729
+      "samples": 937,
+      "wins": 258,
+      "losses": 679,
+      "hit_rate": 0.2753468516542156,
+      "brier_score": 0.1962395912638491,
+      "log_loss": 0.5815121937480702
     }
   ],
   "by_consensus_safety": [
@@ -567,21 +567,21 @@
     },
     {
       "bucket": "0.70-0.84",
-      "samples": 190,
+      "samples": 191,
       "wins": 41,
-      "losses": 149,
-      "hit_rate": 0.21578947368421053,
-      "brier_score": 0.17327606418158828,
-      "log_loss": 0.5328293331091197
+      "losses": 150,
+      "hit_rate": 0.21465968586387435,
+      "brier_score": 0.17281885893926385,
+      "log_loss": 0.531856237249065
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 512,
-      "wins": 142,
-      "losses": 370,
-      "hit_rate": 0.27734375,
-      "brier_score": 0.20097084669961127,
-      "log_loss": 0.5915307540584537
+      "samples": 519,
+      "wins": 144,
+      "losses": 375,
+      "hit_rate": 0.2774566473988439,
+      "brier_score": 0.20123362867616684,
+      "log_loss": 0.5921467582543593
     },
     {
       "bucket": "0.95+",
@@ -650,12 +650,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 904,
-      "wins": 240,
-      "losses": 664,
-      "hit_rate": 0.26548672566371684,
-      "brier_score": 0.19630560206899994,
-      "log_loss": 0.5817429145707878
+      "samples": 912,
+      "wins": 242,
+      "losses": 670,
+      "hit_rate": 0.26535087719298245,
+      "brier_score": 0.19636994945833683,
+      "log_loss": 0.5819111669428895
     }
   ],
   "metrics_reliable": true
