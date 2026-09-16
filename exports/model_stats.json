@@ -1,22 +1,22 @@
 {
-  "total_bets": 2253,
-  "wins": 976,
-  "losses": 1277,
-  "winrate": 43.32,
-  "yield": 6.55,
-  "profit": 102.71,
-  "stake_sum": 1567.15,
-  "open_bets": 464,
-  "settled_bets": 2253,
+  "total_bets": 2269,
+  "wins": 982,
+  "losses": 1287,
+  "winrate": 43.28,
+  "yield": 5.97,
+  "profit": 95.14,
+  "stake_sum": 1593.27,
+  "open_bets": 449,
+  "settled_bets": 2269,
   "by_sport": {
     "baseball": {
-      "total": 1318,
-      "wins": 713,
-      "losses": 605,
-      "winrate": 54.1,
-      "profit": 92.59,
-      "stake_sum": 1335.67,
-      "yield": 6.93
+      "total": 1333,
+      "wins": 719,
+      "losses": 614,
+      "winrate": 53.94,
+      "profit": 85.43,
+      "stake_sum": 1361.38,
+      "yield": 6.28
     },
     "football": {
       "total": 883,
@@ -46,13 +46,13 @@
       "yield": -100.0
     },
     "tennis": {
-      "total": 6,
+      "total": 7,
       "wins": 1,
-      "losses": 5,
-      "winrate": 16.67,
-      "profit": -0.39,
-      "stake_sum": 1.38,
-      "yield": -28.55
+      "losses": 6,
+      "winrate": 14.29,
+      "profit": -0.8,
+      "stake_sum": 1.79,
+      "yield": -44.92
     },
     "mma": {
       "total": 20,
@@ -75,13 +75,13 @@
       "yield": 15.92
     },
     "BetOnline.ag": {
-      "total": 404,
-      "wins": 222,
-      "losses": 182,
-      "winrate": 54.95,
-      "profit": 33.87,
-      "stake_sum": 439.71,
-      "yield": 7.7
+      "total": 407,
+      "wins": 223,
+      "losses": 184,
+      "winrate": 54.79,
+      "profit": 31.61,
+      "stake_sum": 445.33,
+      "yield": 7.1
     },
     "Betclic (FR)": {
       "total": 32,
@@ -91,15 +91,6 @@
       "profit": 11.2,
       "stake_sum": 29.36,
       "yield": 38.14
-    },
-    "Matchbook": {
-      "total": 132,
-      "wins": 55,
-      "losses": 77,
-      "winrate": 41.67,
-      "profit": 8.48,
-      "stake_sum": 59.73,
-      "yield": 14.19
     },
     "Betsson": {
       "total": 27,
@@ -111,22 +102,31 @@
       "yield": 44.89
     },
     "GTbets": {
-      "total": 134,
-      "wins": 61,
-      "losses": 73,
-      "winrate": 45.52,
-      "profit": 7.36,
-      "stake_sum": 118.47,
-      "yield": 6.21
+      "total": 136,
+      "wins": 62,
+      "losses": 74,
+      "winrate": 45.59,
+      "profit": 6.97,
+      "stake_sum": 121.72,
+      "yield": 5.73
+    },
+    "Matchbook": {
+      "total": 135,
+      "wins": 55,
+      "losses": 80,
+      "winrate": 40.74,
+      "profit": 4.13,
+      "stake_sum": 64.08,
+      "yield": 6.44
     },
     "William Hill": {
-      "total": 9,
+      "total": 10,
       "wins": 6,
-      "losses": 3,
-      "winrate": 66.67,
-      "profit": 3.91,
-      "stake_sum": 6.99,
-      "yield": 55.94
+      "losses": 4,
+      "winrate": 60.0,
+      "profit": 3.36,
+      "stake_sum": 7.54,
+      "yield": 44.57
     },
     "Coolbet": {
       "total": 73,
@@ -254,6 +254,15 @@
       "stake_sum": 18.51,
       "yield": -10.71
     },
+    "1xBet": {
+      "total": 276,
+      "wins": 103,
+      "losses": 173,
+      "winrate": 37.32,
+      "profit": -3.82,
+      "stake_sum": 141.31,
+      "yield": -2.7
+    },
     "Nordic Bet": {
       "total": 24,
       "wins": 6,
@@ -262,15 +271,6 @@
       "profit": -3.95,
       "stake_sum": 10.78,
       "yield": -36.6
-    },
-    "1xBet": {
-      "total": 270,
-      "wins": 99,
-      "losses": 171,
-      "winrate": 36.67,
-      "profit": -5.35,
-      "stake_sum": 130.5,
-      "yield": -4.1
     },
     "MyBookie.ag": {
       "total": 35,
@@ -282,24 +282,24 @@
       "yield": -24.36
     },
     "Betfair": {
-      "total": 278,
+      "total": 279,
       "wins": 82,
-      "losses": 196,
-      "winrate": 29.5,
-      "profit": -8.07,
-      "stake_sum": 90.29,
-      "yield": -8.94
+      "losses": 197,
+      "winrate": 29.39,
+      "profit": -9.61,
+      "stake_sum": 91.83,
+      "yield": -10.46
     }
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 1318,
-      "wins": 713,
-      "losses": 605,
-      "winrate": 54.1,
-      "profit": 92.59,
-      "stake_sum": 1335.67,
-      "yield": 6.93
+      "total": 1333,
+      "wins": 719,
+      "losses": 614,
+      "winrate": 53.94,
+      "profit": 85.43,
+      "stake_sum": 1361.38,
+      "yield": 6.28
     },
     "MLS": {
       "total": 141,
@@ -491,12 +491,12 @@
       "yield": -49.07
     },
     "tennis_wta_guadalajara_open": {
-      "total": 2,
+      "total": 3,
       "wins": 0,
-      "losses": 2,
+      "losses": 3,
       "winrate": 0.0,
-      "profit": -0.4,
-      "stake_sum": 0.4,
+      "profit": -0.81,
+      "stake_sum": 0.81,
       "yield": -100.0
     },
     "Ligue 2": {
@@ -617,5 +617,5 @@
       "yield": -71.74
     }
   },
-  "last_update": "2026-09-15T19:20:49.311628+00:00"
+  "last_update": "2026-09-16T10:24:38.208598+00:00"
 }
