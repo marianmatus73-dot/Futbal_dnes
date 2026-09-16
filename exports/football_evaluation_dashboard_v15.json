@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-16T10:24:36+00:00",
+  "generated_at": "2026-09-16T19:11:25+00:00",
   "version": "v15",
-  "total_rows": 938,
-  "training_ready_rows": 938,
-  "wins": 258,
+  "total_rows": 940,
+  "training_ready_rows": 940,
+  "wins": 260,
   "losses": 680,
-  "hit_rate": 0.27505330490405117,
-  "brier_score": 0.196127662799638,
-  "log_loss": 0.5812756636048563,
-  "average_clv_probability": 0.00854784673114396,
-  "average_consensus_safety": 0.8377206823027725,
+  "hit_rate": 0.2765957446808511,
+  "brier_score": 0.1967696469067857,
+  "log_loss": 0.5826406027926871,
+  "average_clv_probability": 0.008536913238796217,
+  "average_consensus_safety": 0.8378638297872347,
   "by_league": [
     {
       "league": "MLS",
@@ -53,13 +53,13 @@
     },
     {
       "league": "La Liga",
-      "samples": 44,
-      "wins": 10,
+      "samples": 45,
+      "wins": 11,
       "losses": 34,
-      "hit_rate": 0.22727272727272727,
-      "brier_score": 0.17214970217734565,
-      "log_loss": 0.5307222581467322,
-      "average_clv_probability": 0.005139150333524982
+      "hit_rate": 0.24444444444444444,
+      "brier_score": 0.17943629499835043,
+      "log_loss": 0.5462186335229946,
+      "average_clv_probability": 0.006307230801761711
     },
     {
       "league": "Eliteserien",
@@ -310,6 +310,16 @@
       "brier_score": 0.361421520218715,
       "log_loss": 0.9332162281905791,
       "average_clv_probability": null
+    },
+    {
+      "league": "UEFA Europa League",
+      "samples": 1,
+      "wins": 1,
+      "losses": 0,
+      "hit_rate": 1.0,
+      "brier_score": 0.49567400719555976,
+      "log_loss": 1.217535013692067,
+      "average_clv_probability": -0.03586723768736616
     }
   ],
   "by_bookmaker": [
@@ -345,13 +355,13 @@
     },
     {
       "bookmaker": "Tipico",
-      "samples": 82,
-      "wins": 21,
+      "samples": 83,
+      "wins": 22,
       "losses": 61,
-      "hit_rate": 0.25609756097560976,
-      "brier_score": 0.193164994999768,
-      "log_loss": 0.575175883133602,
-      "average_clv_probability": 0.004315325452659315
+      "hit_rate": 0.26506024096385544,
+      "brier_score": 0.1968623610735366,
+      "log_loss": 0.5830419465907698,
+      "average_clv_probability": 0.005312412004691592
     },
     {
       "bookmaker": "Matchbook",
@@ -534,6 +544,16 @@
       "average_clv_probability": 0.06398425003076175
     },
     {
+      "bookmaker": "Suprabets",
+      "samples": 1,
+      "wins": 1,
+      "losses": 0,
+      "hit_rate": 1.0,
+      "brier_score": 0.49567400719555976,
+      "log_loss": 1.217535013692067,
+      "average_clv_probability": -0.03586723768736616
+    },
+    {
       "bookmaker": "William Hill",
       "samples": 1,
       "wins": 0,
@@ -547,12 +567,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 938,
-      "wins": 258,
+      "samples": 940,
+      "wins": 260,
       "losses": 680,
-      "hit_rate": 0.27505330490405117,
-      "brier_score": 0.196127662799638,
-      "log_loss": 0.5812756636048563
+      "hit_rate": 0.2765957446808511,
+      "brier_score": 0.1967696469067857,
+      "log_loss": 0.5826406027926871
     }
   ],
   "by_consensus_safety": [
@@ -576,12 +596,12 @@
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 519,
-      "wins": 144,
+      "samples": 521,
+      "wins": 146,
       "losses": 375,
-      "hit_rate": 0.2774566473988439,
-      "brier_score": 0.20123362867616684,
-      "log_loss": 0.5921467582543593
+      "hit_rate": 0.2802303262955854,
+      "brier_score": 0.20237231030565972,
+      "log_loss": 0.5945676808018868
     },
     {
       "bucket": "0.95+",
@@ -650,12 +670,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 913,
-      "wins": 242,
+      "samples": 915,
+      "wins": 244,
       "losses": 671,
-      "hit_rate": 0.26506024096385544,
-      "brier_score": 0.19625481336017198,
-      "log_loss": 0.5816677230792208
+      "hit_rate": 0.26666666666666666,
+      "brier_score": 0.19691406009197282,
+      "log_loss": 0.5830690987268844
     }
   ],
   "metrics_reliable": true

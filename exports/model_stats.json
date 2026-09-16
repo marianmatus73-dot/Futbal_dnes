@@ -1,13 +1,13 @@
 {
-  "total_bets": 2269,
-  "wins": 982,
+  "total_bets": 2271,
+  "wins": 984,
   "losses": 1287,
-  "winrate": 43.28,
-  "yield": 5.97,
-  "profit": 95.14,
-  "stake_sum": 1593.27,
-  "open_bets": 449,
-  "settled_bets": 2269,
+  "winrate": 43.33,
+  "yield": 6.05,
+  "profit": 96.41,
+  "stake_sum": 1593.71,
+  "open_bets": 443,
+  "settled_bets": 2271,
   "by_sport": {
     "baseball": {
       "total": 1333,
@@ -19,13 +19,13 @@
       "yield": 6.28
     },
     "football": {
-      "total": 883,
-      "wins": 247,
+      "total": 885,
+      "wins": 249,
       "losses": 636,
-      "winrate": 27.97,
-      "profit": 10.84,
-      "stake_sum": 208.61,
-      "yield": 5.2
+      "winrate": 28.14,
+      "profit": 12.11,
+      "stake_sum": 209.05,
+      "yield": 5.79
     },
     "basketball": {
       "total": 25,
@@ -155,6 +155,15 @@
       "stake_sum": 6.88,
       "yield": 14.23
     },
+    "Suprabets": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 0.81,
+      "stake_sum": 0.27,
+      "yield": 300.0
+    },
     "BetAnything": {
       "total": 4,
       "wins": 2,
@@ -191,6 +200,15 @@
       "stake_sum": 16.4,
       "yield": -0.17
     },
+    "Tipico": {
+      "total": 80,
+      "wins": 21,
+      "losses": 59,
+      "winrate": 26.25,
+      "profit": -0.2,
+      "stake_sum": 18.15,
+      "yield": -1.12
+    },
     "PMU (FR)": {
       "total": 3,
       "wins": 1,
@@ -199,15 +217,6 @@
       "profit": -0.55,
       "stake_sum": 1.52,
       "yield": -36.45
-    },
-    "Tipico": {
-      "total": 79,
-      "wins": 20,
-      "losses": 59,
-      "winrate": 25.32,
-      "profit": -0.66,
-      "stake_sum": 17.98,
-      "yield": -3.69
     },
     "Everygame": {
       "total": 16,
@@ -436,6 +445,15 @@
       "stake_sum": 0.55,
       "yield": 158.73
     },
+    "UEFA Europa League": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 0.81,
+      "stake_sum": 0.27,
+      "yield": 300.0
+    },
     "Championship": {
       "total": 44,
       "wins": 12,
@@ -508,6 +526,15 @@
       "stake_sum": 4.22,
       "yield": -21.72
     },
+    "La Liga": {
+      "total": 38,
+      "wins": 10,
+      "losses": 28,
+      "winrate": 26.32,
+      "profit": -0.93,
+      "stake_sum": 10.02,
+      "yield": -9.3
+    },
     "Danish Superliga": {
       "total": 28,
       "wins": 7,
@@ -562,15 +589,6 @@
       "stake_sum": 3.35,
       "yield": -40.75
     },
-    "La Liga": {
-      "total": 37,
-      "wins": 9,
-      "losses": 28,
-      "winrate": 24.32,
-      "profit": -1.39,
-      "stake_sum": 9.85,
-      "yield": -14.12
-    },
     "Serie A": {
       "total": 16,
       "wins": 3,
@@ -617,5 +635,5 @@
       "yield": -71.74
     }
   },
-  "last_update": "2026-09-16T10:24:38.208598+00:00"
+  "last_update": "2026-09-16T19:11:27.070609+00:00"
 }
