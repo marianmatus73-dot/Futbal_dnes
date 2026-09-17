@@ -1,10 +1,10 @@
 {
   "version": "v15.2",
-  "created_at": "2026-09-16T19:11:25+00:00",
+  "created_at": "2026-09-17T10:33:59+00:00",
   "model_maturity": "READY",
-  "training_samples": 940,
+  "training_samples": 948,
   "meta_ai": {
-    "samples": 940,
+    "samples": 948,
     "milestone": 20,
     "status": "UNLOCKED"
   },
@@ -12,7 +12,7 @@
     "enabled": true,
     "reason": null
   },
-  "explainability_records": 1230,
+  "explainability_records": 1251,
   "top_feature": "Consensus safety",
   "current_weights": {
     "elo": 0.25,
