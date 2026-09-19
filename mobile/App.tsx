@@ -329,6 +329,19 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
           ) : <Text style={styles.historyEmpty}>Zatiaľ nemáme uzavreté ostré tipy v tomto intervale.</Text>}
         </View>
       )}
+      {selected === "handball" && (
+        <View style={styles.graphCard}>
+          <Text style={styles.graphTitle}>Hádzaná · sledovací režim</Text>
+          <Text style={styles.sectionSubtitle}>Nahrádza MMA. Zápasy sa zbierajú a vyhodnocujú, ale zatiaľ nejde o ostré tipy.</Text>
+          {data.handballShadow ? (
+            <View style={styles.summaryGrid}>
+              <Summary label="Vyhodnotené zápasy" value={String(data.handballShadow.settled_events)} />
+              <Summary label="Čakajú" value={String(data.handballShadow.open_events)} />
+              <Summary label="Cieľ na overenie" value={String(data.handballShadow.minimum_events)} />
+            </View>
+          ) : <Text style={styles.historyEmpty}>Sledovacie údaje zatiaľ nie sú dostupné.</Text>}
+        </View>
+      )}
       {tips.length ? tips.map((tip, index) => <TipItem key={`${tip.match}-${index}`} tip={tip} />) : <EmptyTips sport={selected} />}
       <Candidates tips={candidates} />
       <View style={styles.historyFilters}>{([['all','Všetky'],['open','Čakajú'],['won','Vyšli'],['lost','Nevyšli']] as const).map(([value,label]) => <Pressable key={value} onPress={() => setHistoryFilter(value)} style={[styles.sortChip, historyFilter === value && styles.sortChipActive]}><Text style={[styles.sortText, historyFilter === value && styles.sortTextActive]}>{label}</Text></Pressable>)}</View>
