@@ -15,6 +15,44 @@ from core.sport_settlement import settle_sport_bets
 
 
 class SportSettlementTotalsTests(unittest.TestCase):
+    def test_double_chance_draw_settles_1x_and_loses_12(self):
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            db = Path(tmp) / "bets.db"
+            settings = Settings(db_file=str(db), odds_api_key="test")
+            init_sport_db(settings)
+            with sqlite3.connect(db) as conn:
+                for selection in ("1X", "12"):
+                    conn.execute(
+                        """INSERT INTO sport_bets
+                        (sport, league, event, home_team, away_team, market,
+                         selection, odds, stake, result, source_hash)
+                        VALUES ('football', 'soccer_test', 'Home vs Away',
+                                'Home', 'Away', 'double_chance', ?, 1.5, 1,
+                                'OPEN', ?)""",
+                        (selection, selection),
+                    )
+            scores = [{
+                "completed": True, "home_team": "Home", "away_team": "Away",
+                "scores": [
+                    {"name": "Home", "score": "1"},
+                    {"name": "Away", "score": "1"},
+                ],
+            }]
+            with (
+                patch("core.sport_settlement.fetch_scores", AsyncMock(return_value=scores)),
+                patch("core.sport_settlement.update_closing_lines"),
+                patch("core.sport_settlement.refresh_bookmaker_stats"),
+            ):
+                settled = asyncio.run(
+                    settle_sport_bets(settings, "football", ["soccer_test"])
+                )
+            self.assertEqual(settled, 2)
+            with sqlite3.connect(db) as conn:
+                results = dict(conn.execute(
+                    "SELECT selection, result FROM sport_bets"
+                ).fetchall())
+            self.assertEqual(results, {"1X": "WON", "12": "LOST"})
+
     def test_inactive_tournament_key_and_exact_event_id_are_used(self):
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             db = Path(tmp) / "bets.db"
