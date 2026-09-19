@@ -550,6 +550,14 @@ class FootballSettlementEngine:
         bet: OpenFootballBet,
         game: CompletedFootballGame,
     ) -> str:
+        if bet.market.casefold() == "double_chance":
+            from core.football_double_chance import double_chance_won
+
+            won = double_chance_won(
+                bet.selection, game.home_goals, game.away_goals
+            )
+            return "VOID" if won is None else "WON" if won else "LOST"
+
         if bet.market.casefold() not in {"h2h", "1x2"}:
             return "VOID"
 
