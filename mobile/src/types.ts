@@ -72,6 +72,13 @@ export type ModelTable = {
   generated_at?: string;
   sports?: ModelRow[] | Record<string, { all_time?: ModelRow; low_odds_1_20_1_60?: ModelRow["low_odds_1_20_1_60"] }>;
   rows?: ModelRow[];
+  shadow_models?: Record<string, {
+    settled_events: number;
+    open_events: number;
+    minimum_events: number;
+    publishing_unlocked: boolean;
+    benchmark?: { settled: number; wins: number; losses: number; yield_pct: number | null };
+  }>;
 };
 
 export type HistoryTip = {
@@ -123,6 +130,7 @@ export type MobilePerformance = {
 export type AppData = {
   tipCard: TipCard;
   modelRows: ModelRow[];
+  handballShadow?: NonNullable<ModelTable["shadow_models"]>[string];
   historyBySport: Record<string, HistoryTip[]>;
   resultsBySport: Record<string, HistoryTip[]>;
   performance: MobilePerformance;
