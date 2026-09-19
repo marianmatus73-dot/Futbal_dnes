@@ -29,7 +29,6 @@ from sports.base import SportModule
 from core.meta_model import MetaFeatures, predict_probability
 from core.adaptive_weights import (
     sport_weight,
-    bookmaker_weight,
     league_weight,
 )
 
@@ -43,6 +42,11 @@ def _mc_probability(result: Any) -> float:
     if value is None:
         raise AttributeError("Monte Carlo result has no win probability field")
     return max(0.01, min(0.99, float(value)))
+
+def nfl_selection_score(probability: float) -> float:
+    """Selection probability proxy; edge is a separate value measure."""
+    return max(1.0, min(99.0, float(probability) * 100.0))
+
 
 def now_utc() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -335,7 +339,6 @@ class NFLModule(SportModule):
                     )
 
                     current_sport_weight = sport_weight(self.name)
-                    current_bookmaker_weight = bookmaker_weight(bookmaker)
                     current_league_weight = league_weight(league)
 
                     mc_preview = simulate_single_bet(
@@ -366,13 +369,6 @@ class NFLModule(SportModule):
                         probability_reason = f"{type(exc).__name__}: {exc}"
 
                     edge = prob_final * odds - 1.0
-                    adjusted_edge = (
-                        edge
-                        * grade
-                        * current_sport_weight
-                        * current_bookmaker_weight
-                        * current_league_weight
-                    )
 
                     if edge < settings.min_edge:
                         blocked += 1
@@ -473,7 +469,7 @@ class NFLModule(SportModule):
                         stake=stake,
                         bookmaker=bookmaker,
                         start_time=start,
-                        score=adjusted_edge * 100,
+                        score=nfl_selection_score(prob_final),
                         external_event_id=str(event.get("id", "")),
                     )
 
