@@ -315,6 +315,20 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
         <Summary label="Yield" value={formatPercent(row?.yield_pct ?? row?.yield)} positive />
         <Summary label="Zisk" value={formatNumber(row?.net_profit ?? row?.profit)} />
       </View>
+      {selected === "football" && (
+        <View style={styles.graphCard}>
+          <Text style={styles.graphTitle}>Futbal · kurzy 1,20–1,60</Text>
+          <Text style={styles.sectionSubtitle}>Samostatné výsledky uzavretých ostrých tipov 1X2. Zamietnuté analýzy sa nezapočítavajú.</Text>
+          {row?.low_odds_1_20_1_60?.settled ? (
+            <View style={styles.summaryGrid}>
+              <Summary label="Uzavreté" value={String(row.low_odds_1_20_1_60.settled)} />
+              <Summary label="Úspešnosť" value={`${row.low_odds_1_20_1_60.hit_rate_pct?.toFixed(1) ?? "—"} %`} />
+              <Summary label="Yield" value={formatPercent(row.low_odds_1_20_1_60.yield_pct)} />
+              <Summary label="Zisk" value={formatNumber(row.low_odds_1_20_1_60.profit)} />
+            </View>
+          ) : <Text style={styles.historyEmpty}>Zatiaľ nemáme uzavreté ostré tipy v tomto intervale.</Text>}
+        </View>
+      )}
       {tips.length ? tips.map((tip, index) => <TipItem key={`${tip.match}-${index}`} tip={tip} />) : <EmptyTips sport={selected} />}
       <Candidates tips={candidates} />
       <View style={styles.historyFilters}>{([['all','Všetky'],['open','Čakajú'],['won','Vyšli'],['lost','Nevyšli']] as const).map(([value,label]) => <Pressable key={value} onPress={() => setHistoryFilter(value)} style={[styles.sortChip, historyFilter === value && styles.sortChipActive]}><Text style={[styles.sortText, historyFilter === value && styles.sortTextActive]}>{label}</Text></Pressable>)}</View>
