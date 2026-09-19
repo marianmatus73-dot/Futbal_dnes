@@ -10,10 +10,15 @@ from core.config import Settings
 from core.sport_quant import init_sport_db
 from core.sport_settlement import ensure_settlement_columns
 from core.types import Bet
-from sports.hockey import HockeyModule
+from sports.hockey import HockeyModule, hockey_selection_score
 
 
 class HockeyEventIdentityTests(unittest.TestCase):
+    def test_selection_score_uses_probability_not_edge(self) -> None:
+        self.assertEqual(hockey_selection_score(0.72), 72.0)
+        self.assertAlmostEqual(hockey_selection_score(0.14), 14.0)
+        self.assertEqual(hockey_selection_score(1.5), 99.0)
+
     def test_save_is_idempotent_and_persists_external_event_id(self) -> None:
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as directory:
             database = Path(directory) / "bets.db"
