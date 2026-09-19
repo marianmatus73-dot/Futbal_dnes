@@ -33,3 +33,15 @@ class FootballTotalsBacktestTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertEqual(evaluate_totals(Path(tmp) / "missing.db")["status"], "NO_DATABASE")
 
+    def test_exported_csv_without_totals_is_insufficient(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            file = Path(tmp) / "history.csv"
+            file.write_text(
+                "sport,market,selection,odds,prob_final,stake,start_time,created_at,result\n"
+                "football,h2h,Home,1.8,0.6,10,2026-01-02T12:00:00Z,2026-01-01T12:00:00Z,WON\n",
+                encoding="utf-8",
+            )
+            result = evaluate_totals(file)
+            self.assertEqual(result["status"], "INSUFFICIENT_SAMPLE")
+            self.assertEqual(result["sample"], 0)
+
