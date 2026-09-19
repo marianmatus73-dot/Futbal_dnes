@@ -5,7 +5,7 @@ Súkromná mobilná aplikácia pre produkčné tipy Multisport Betting Engine.
 ## Čo obsahuje
 
 - dnešné potvrdené tipy a bezpečné `NO BET`,
-- sekcie Futbal, Tenis, Basketbal, Hokej, Baseball, MMA a NFL,
+- sekcie Futbal, Tenis, Basketbal, Hokej, Baseball, Hádzaná a NFL; hádzaná je zatiaľ iba v sledovacom režime,
 - stav modelu: uzavreté tipy, yield a zisk,
 - rozlíšenie `EARLY` a `FINAL`,
 - automatické obnovenie každých päť minút a potiahnutím obrazovky,
