@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sqlite3
+import csv
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,21 +26,29 @@ def evaluate_totals(db_file: str | Path, min_samples: int = 30) -> dict:
     path = Path(db_file)
     if not path.is_file():
         return {"status": "NO_DATABASE", "sample": 0, "required_sample": min_samples}
-
-    with closing(sqlite3.connect(f"file:{path.resolve().as_posix()}?mode=ro", uri=True)) as conn:
-        table = conn.execute(
-            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
-        ).fetchone()
-        if not table:
-            return {"status": "NO_BET_HISTORY", "sample": 0, "required_sample": min_samples}
-        columns = {row[1] for row in conn.execute("PRAGMA table_info(sport_bets)")}
-        required = {"sport", "market", "selection", "odds", "prob_final", "stake", "start_time", "created_at", "result"}
-        if not required.issubset(columns):
-            return {"status": "MISSING_COLUMNS", "missing": sorted(required - columns), "sample": 0}
-        rows = conn.execute(
-            """SELECT selection, odds, prob_final, stake, start_time, created_at, result
-               FROM sport_bets WHERE sport='football' AND market='totals_2.5'"""
-        ).fetchall()
+    required = {"sport", "market", "selection", "odds", "prob_final", "stake", "start_time", "created_at", "result"}
+    if path.suffix.lower() == ".csv":
+        with path.open(newline="", encoding="utf-8-sig") as file:
+            reader = csv.DictReader(file)
+            columns = set(reader.fieldnames or [])
+            if not required.issubset(columns):
+                return {"status": "MISSING_COLUMNS", "missing": sorted(required - columns), "sample": 0}
+            rows = [tuple(row[key] for key in ("selection", "odds", "prob_final", "stake", "start_time", "created_at", "result"))
+                    for row in reader if row["sport"] == "football" and row["market"] == "totals_2.5"]
+    else:
+        with closing(sqlite3.connect(f"file:{path.resolve().as_posix()}?mode=ro", uri=True)) as conn:
+            table = conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
+            ).fetchone()
+            if not table:
+                return {"status": "NO_BET_HISTORY", "sample": 0, "required_sample": min_samples}
+            columns = {row[1] for row in conn.execute("PRAGMA table_info(sport_bets)")}
+            if not required.issubset(columns):
+                return {"status": "MISSING_COLUMNS", "missing": sorted(required - columns), "sample": 0}
+            rows = conn.execute(
+                """SELECT selection, odds, prob_final, stake, start_time, created_at, result
+                   FROM sport_bets WHERE sport='football' AND market='totals_2.5'"""
+            ).fetchall()
 
     excluded = {"unsettled": 0, "not_pre_match": 0, "invalid_values": 0}
     valid = []
