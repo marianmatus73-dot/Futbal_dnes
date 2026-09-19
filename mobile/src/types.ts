@@ -58,11 +58,19 @@ export type ModelRow = {
   average_clv_pct?: number | null;
   brier_score?: number | null;
   max_drawdown?: number | null;
+  low_odds_1_20_1_60?: {
+    settled: number;
+    wins: number;
+    losses: number;
+    hit_rate_pct: number | null;
+    profit: number;
+    yield_pct: number;
+  };
 };
 
 export type ModelTable = {
   generated_at?: string;
-  sports?: ModelRow[] | Record<string, { all_time?: ModelRow }>;
+  sports?: ModelRow[] | Record<string, { all_time?: ModelRow; low_odds_1_20_1_60?: ModelRow["low_odds_1_20_1_60"] }>;
   rows?: ModelRow[];
 };
 
