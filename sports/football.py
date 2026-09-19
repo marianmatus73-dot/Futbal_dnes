@@ -16,7 +16,11 @@ from core.market import (
     consensus_totals,
     dedupe_best_bets,
 )
-from core.odds_api import fetch_odds
+from core.odds_api import fetch_odds, fetch_event_odds
+from core.football_double_chance import (
+    best_double_chance_prices,
+    double_chance_probabilities,
+)
 from core.sport_quant import (
     bookmaker_grade,
     discover_active_sport_keys,
@@ -823,6 +827,10 @@ class FootballModule(SportModule):
         scanned_events = 0
         candidate_rows_raw = 0
         candidate_rows_optimized = 0
+        double_chance_requests = 0
+        double_chance_request_limit = max(
+            0, int(os.getenv("FOOTBALL_DOUBLE_CHANCE_MAX_EVENTS", "4"))
+        )
 
         for sport_key in clean_sport_keys:
             data = await fetch_odds(
@@ -1344,6 +1352,91 @@ class FootballModule(SportModule):
                                     f"{bundle.xg.away_expected_goals:.2f}; "
                                     f"reliability={total_reliability:.3f}"
                                 ),
+                            )
+
+                if (
+                    os.getenv("FOOTBALL_DOUBLE_CHANCE_ENABLED", "1") == "1"
+                    and double_chance_requests < double_chance_request_limit
+                    and event.get("id")
+                ):
+                    double_chance_requests += 1
+                    extra = await fetch_event_odds(
+                        settings.odds_api_key,
+                        sport_key,
+                        str(event["id"]),
+                        markets="double_chance",
+                    )
+                    dc_prices = best_double_chance_prices(
+                        extra.get("bookmakers", []), home, away,
+                        min_books=2,
+                    )
+                    if dc_prices:
+                        bundle = build_model_bundle(
+                            settings,
+                            market=market_snapshot,
+                            league_average_xg=league_average_xg,
+                            home_advantage_xg=home_advantage_xg,
+                            home_advantage_elo=home_advantage_elo,
+                            dixon_rho=dixon_rho,
+                        )
+                        reliability = max(0.0, min(1.0, (
+                            bundle.xg.home_reliability
+                            + bundle.xg.away_reliability
+                        ) / 2.0))
+                        model_dc = double_chance_probabilities(
+                            bundle.dixon_coles.home_win,
+                            bundle.dixon_coles.draw,
+                            bundle.dixon_coles.away_win,
+                        )
+                        market_dc = double_chance_probabilities(
+                            market_snapshot.consensus_home,
+                            market_snapshot.consensus_draw,
+                            market_snapshot.consensus_away,
+                        )
+                        for selection, (bookmaker, odds) in dc_prices.items():
+                            model_probability = model_dc.get(selection, 0.0)
+                            market_probability = market_dc.get(selection, 0.0)
+                            edge = model_probability * odds - 1.0
+                            # This is an experimental market. Require actual
+                            # quotes, usable xG evidence and a narrow edge.
+                            if (
+                                reliability < 0.50
+                                or not 1.20 <= odds <= 2.20
+                                or not 0.08 <= edge <= 0.16
+                                or market_probability <= 0
+                            ):
+                                self._audit(
+                                    settings, sport_key, event_name, selection,
+                                    bookmaker, odds, market_probability, edge,
+                                    "BLOCK", "double chance evidence or edge gate",
+                                )
+                                continue
+                            grade = bookmaker_grade(
+                                settings, self.name, bookmaker,
+                                min_samples=grade_min_samples,
+                            )
+                            stake = min(
+                                round(kelly_stake(model_probability, odds, settings)
+                                      * grade * reliability, 2),
+                                round(settings.bank * 0.0025, 2),
+                            )
+                            if stake <= 0:
+                                continue
+                            bets.append(Bet(
+                                sport=self.name, league=league, event=event_name,
+                                market="double_chance", selection=selection,
+                                odds=odds, prob_model=model_probability,
+                                prob_market=market_probability,
+                                prob_final=model_probability, edge=edge,
+                                stake=stake, bookmaker=bookmaker,
+                                start_time=start,
+                                score=min(75.0, 60.0 + reliability * 20.0),
+                                external_event_id=str(event["id"]),
+                            ))
+                            self._audit(
+                                settings, sport_key, event_name, selection,
+                                bookmaker, odds, market_probability, edge,
+                                "PASS", "quoted double chance; Dixon-Coles 1X2",
                             )
 
         bets = dedupe_best_bets(bets)
