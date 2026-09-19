@@ -54,6 +54,7 @@ export async function loadAppData(): Promise<AppData> {
     const value: AppData = {
       tipCard,
       modelRows: rowsFrom(table),
+      handballShadow: table.shadow_models?.handball,
       historyBySport: history.sports ?? {},
       resultsBySport: history.results_sports ?? {},
       performance,
