@@ -45,6 +45,11 @@ def _mc_probability(result: Any) -> float:
         raise AttributeError("Monte Carlo result has no win probability field")
     return max(0.01, min(0.99, float(value)))
 
+def hockey_selection_score(probability: float) -> float:
+    """Selection likelihood proxy; expected value is tracked separately as edge."""
+    return max(1.0, min(99.0, float(probability) * 100.0))
+
+
 def now_utc() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -219,7 +224,6 @@ class HockeyModule(SportModule):
                         prob_final = fallback_probability
                         probability_reason = f"{type(exc).__name__}: {exc}"
                     edge = prob_final * odds - 1.0
-                    adjusted_edge = edge * grade
 
                     if edge < settings.min_edge:
                         blocked += 1
@@ -244,7 +248,7 @@ class HockeyModule(SportModule):
                         sport=self.name, league=league, event=event_name, market="h2h", selection=selection,
                         odds=odds, prob_model=prob_market, prob_market=prob_market, prob_final=prob_final,
                         edge=edge, stake=stake, bookmaker=bookmaker,
-                        start_time=start, score=adjusted_edge * 100,
+                        start_time=start, score=hockey_selection_score(prob_final),
                         external_event_id=str(event.get("id", "")),
                     )
                     bets.append(bet)
