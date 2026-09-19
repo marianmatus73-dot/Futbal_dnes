@@ -29,6 +29,7 @@ function rowsFrom(table: ModelTable) {
     return Object.entries(table.sports).map(([sport, value]) => ({
       sport,
       ...(value.all_time ?? {}),
+      low_odds_1_20_1_60: value.low_odds_1_20_1_60,
     }));
   }
   if (Array.isArray(table.rows)) return table.rows;
