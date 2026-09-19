@@ -7,6 +7,7 @@ from typing import Any
 import aiohttp
 
 from core.config import Settings
+from core.football_double_chance import double_chance_won
 from core.sport_quant import (
     connect,
     norm,
@@ -212,7 +213,7 @@ async def settle_sport_bets(
                    selection, odds, stake, market, external_event_id
             FROM sport_bets
             WHERE sport=?
-              AND market IN ('h2h', 'totals_2.5')
+              AND market IN ('h2h', 'totals_2.5', 'double_chance')
               AND (
                     result IS NULL
                     OR result=''
@@ -335,6 +336,15 @@ async def settle_sport_bets(
                 is_over = "over" in bet_selection
                 is_under = "under" in bet_selection
                 result = "WON" if (is_over and total > 2.5) or (is_under and total < 2.5) else "LOST"
+            elif str(market) == "double_chance":
+                won = double_chance_won(
+                    str(selection),
+                    int(matched["home_score"]),
+                    int(matched["away_score"]),
+                )
+                if won is None:
+                    continue
+                result = "WON" if won else "LOST"
             elif winner == "DRAW":
                 result = "WON" if bet_selection in {"draw", "x", "remiza"} else "LOST"
             else:
