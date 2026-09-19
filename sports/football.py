@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 import sqlite3
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict
@@ -46,6 +48,7 @@ from core.football_candidate_optimizer_v14 import (
     is_learning_observation_odds,
     optimize_candidate_prices,
 )
+from core.football_totals_confidence import totals_publication_confidence
 from core.football_explainability_v15 import (
     explain_and_save_football_decision_v15,
 )
@@ -678,6 +681,55 @@ class FootballModule(SportModule):
                 reason,
             ))
 
+    def _export_scan_audit(self, settings: Settings, after_id: int) -> Path:
+        """Publish every upstream football decision from this scan, including short prices."""
+        with self._connect(settings) as conn:
+            conn.row_factory = sqlite3.Row
+            rows = [
+                dict(row)
+                for row in conn.execute(
+                    "SELECT id, created_at, league, event, selection, bookmaker, "
+                    "odds, prob_market, edge, decision, reason "
+                    "FROM sport_decision_audit "
+                    "WHERE sport='football' AND id>? ORDER BY id",
+                    (after_id,),
+                )
+            ]
+        summary: dict[str, dict[str, int]] = {}
+        for row in rows:
+            odds = float(row["odds"] or 0)
+            band = (
+                "<1.60" if odds < 1.60 else
+                "1.60-2.19" if odds < 2.20 else
+                "2.20-2.99" if odds < 3.00 else "3.00+"
+            )
+            reason = str(row["reason"] or "").split(";", 1)[0]
+            key = f"{row['decision']}: {reason}"
+            summary.setdefault(band, {})[key] = summary.setdefault(band, {}).get(key, 0) + 1
+        export_dir = Path(os.getenv("EXPORT_DIR", "exports"))
+        export_dir.mkdir(parents=True, exist_ok=True)
+        destination = export_dir / "latest_football_candidate_audit.json"
+        handle = tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=export_dir,
+            prefix="football-audit-", suffix=".tmp", delete=False,
+        )
+        temporary = Path(handle.name)
+        try:
+            with handle:
+                json.dump(
+                    {"schema_version": 1, "total": len(rows),
+                     "by_odds_and_reason": summary, "candidates": rows},
+                    handle, ensure_ascii=False, indent=2,
+                )
+                handle.write("\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+            temporary.replace(destination)
+        finally:
+            if temporary.exists():
+                temporary.unlink()
+        return destination
+
     def _football_home_adjustment(
         self,
         sport_key: str,
@@ -760,6 +812,10 @@ class FootballModule(SportModule):
         min_books = int(os.getenv("MIN_FOOTBALL_BOOKMAKERS", "3"))
         top_n = int(os.getenv("TOP_N_REPORT", "8"))
         grade_min_samples = int(os.getenv("FOOTBALL_BOOKMAKER_GRADE_MIN_SAMPLES", "20"))
+        with self._connect(settings) as conn:
+            audit_start_id = int(conn.execute(
+                "SELECT COALESCE(MAX(id), 0) FROM sport_decision_audit"
+            ).fetchone()[0])
 
         bets: list[Bet] = []
         snapshots_saved = 0
@@ -1244,6 +1300,16 @@ class FootballModule(SportModule):
                             if stake <= 0:
                                 continue
                             selection = f"{total_name} 2.5 gólu"
+                            totals_confidence = totals_publication_confidence(
+                                edge, total_reliability
+                            )
+                            if totals_confidence is None:
+                                self._audit(
+                                    settings, sport_key, event_name, selection,
+                                    bookmaker, odds, market_probability, edge,
+                                    "BLOCK", "totals xG evidence insufficient",
+                                )
+                                continue
                             total_bet = Bet(
                                 sport=self.name,
                                 league=league,
@@ -1258,7 +1324,7 @@ class FootballModule(SportModule):
                                 stake=stake,
                                 bookmaker=bookmaker,
                                 start_time=start,
-                                score=max(0.0, min(100.0, (60.0 + edge * 100.0) * total_reliability)),
+                                score=totals_confidence,
                                 external_event_id=str(event.get("id", "")),
                             )
                             bets.append(total_bet)
@@ -1294,6 +1360,7 @@ class FootballModule(SportModule):
         # afterwards so the current production run can use them immediately.
         updated_clv += football_market_db.reconcile_closing_lines()
         analytics = sport_analytics_report(settings, self.name)
+        self._export_scan_audit(settings, audit_start_id)
 
         return SportResult(
             sport=self.name,
