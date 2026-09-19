@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-09-19T15:35:18+00:00",
+  "generated_at": "2026-09-19T18:17:23+00:00",
   "version": "v15",
-  "total_rows": 954,
-  "training_ready_rows": 954,
-  "wins": 262,
+  "total_rows": 955,
+  "training_ready_rows": 955,
+  "wins": 263,
   "losses": 692,
-  "hit_rate": 0.2746331236897275,
-  "brier_score": 0.19617153734068793,
-  "log_loss": 0.5814000515488769,
-  "average_clv_probability": 0.008736840070582733,
-  "average_consensus_safety": 0.8386645702306087,
+  "hit_rate": 0.2753926701570681,
+  "brier_score": 0.19645497559366462,
+  "log_loss": 0.5819951290640645,
+  "average_clv_probability": 0.008741212577103042,
+  "average_consensus_safety": 0.8387005235602102,
   "by_league": [
     {
       "league": "MLS",
@@ -93,13 +93,13 @@
     },
     {
       "league": "League Two",
-      "samples": 35,
-      "wins": 11,
+      "samples": 36,
+      "wins": 12,
       "losses": 24,
-      "hit_rate": 0.3142857142857143,
-      "brier_score": 0.22899124651617214,
-      "log_loss": 0.651716226492615,
-      "average_clv_probability": 0.016585527015113385
+      "hit_rate": 0.3333333333333333,
+      "brier_score": 0.23559857491665248,
+      "log_loss": 0.6655490834942915,
+      "average_clv_probability": 0.016414451518113313
     },
     {
       "league": "Liga MX",
@@ -385,13 +385,13 @@
     },
     {
       "bookmaker": "Coolbet",
-      "samples": 56,
-      "wins": 13,
+      "samples": 57,
+      "wins": 14,
       "losses": 43,
-      "hit_rate": 0.23214285714285715,
-      "brier_score": 0.18304647332671856,
-      "log_loss": 0.5528715355294089,
-      "average_clv_probability": 0.00858709726388537
+      "hit_rate": 0.24561403508771928,
+      "brier_score": 0.18802557149525795,
+      "log_loss": 0.563342194178945,
+      "average_clv_probability": 0.008692264507519776
     },
     {
       "bookmaker": "LeoVegas (SE)",
@@ -567,12 +567,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 954,
-      "wins": 262,
+      "samples": 955,
+      "wins": 263,
       "losses": 692,
-      "hit_rate": 0.2746331236897275,
-      "brier_score": 0.19617153734068793,
-      "log_loss": 0.5814000515488769
+      "hit_rate": 0.2753926701570681,
+      "brier_score": 0.19645497559366462,
+      "log_loss": 0.5819951290640645
     }
   ],
   "by_consensus_safety": [
@@ -596,12 +596,12 @@
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 532,
-      "wins": 148,
+      "samples": 533,
+      "wins": 149,
       "losses": 384,
-      "hit_rate": 0.2781954887218045,
-      "brier_score": 0.20174211695287117,
-      "log_loss": 0.5932738399687482
+      "hit_rate": 0.2795497185741088,
+      "brier_score": 0.20223951461137135,
+      "log_loss": 0.5943177897597129
     },
     {
       "bucket": "0.95+",
@@ -670,12 +670,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 929,
-      "wins": 246,
+      "samples": 930,
+      "wins": 247,
       "losses": 683,
-      "hit_rate": 0.26480086114101187,
-      "brier_score": 0.19629767870268336,
-      "log_loss": 0.5817887060146415
+      "hit_rate": 0.26559139784946234,
+      "brier_score": 0.1965886006276627,
+      "log_loss": 0.5823993623291989
     }
   ],
   "metrics_reliable": true

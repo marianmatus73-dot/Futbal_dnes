@@ -1,13 +1,13 @@
 {
-  "total_bets": 2332,
-  "wins": 1013,
+  "total_bets": 2333,
+  "wins": 1014,
   "losses": 1319,
-  "winrate": 43.44,
-  "yield": 6.14,
-  "profit": 101.88,
-  "stake_sum": 1660.23,
-  "open_bets": 396,
-  "settled_bets": 2332,
+  "winrate": 43.46,
+  "yield": 6.19,
+  "profit": 102.85,
+  "stake_sum": 1660.58,
+  "open_bets": 398,
+  "settled_bets": 2333,
   "by_sport": {
     "baseball": {
       "total": 1372,
@@ -19,13 +19,13 @@
       "yield": 6.38
     },
     "football": {
-      "total": 895,
-      "wins": 250,
+      "total": 896,
+      "wins": 251,
       "losses": 645,
-      "winrate": 27.93,
-      "profit": 10.6,
-      "stake_sum": 211.11,
-      "yield": 5.02
+      "winrate": 28.01,
+      "profit": 11.56,
+      "stake_sum": 211.46,
+      "yield": 5.47
     },
     "basketball": {
       "total": 27,
@@ -129,13 +129,13 @@
       "yield": 7.97
     },
     "Coolbet": {
-      "total": 76,
-      "wins": 23,
+      "total": 77,
+      "wins": 24,
       "losses": 53,
-      "winrate": 30.26,
-      "profit": 2.88,
-      "stake_sum": 28.89,
-      "yield": 9.96
+      "winrate": 31.17,
+      "profit": 3.84,
+      "stake_sum": 29.24,
+      "yield": 13.13
     },
     "1xBet": {
       "total": 295,
@@ -490,6 +490,15 @@
       "stake_sum": 0.98,
       "yield": 0.61
     },
+    "League Two": {
+      "total": 33,
+      "wins": 11,
+      "losses": 22,
+      "winrate": 33.33,
+      "profit": -0.13,
+      "stake_sum": 8.47,
+      "yield": -1.49
+    },
     "Serie B": {
       "total": 14,
       "wins": 3,
@@ -552,15 +561,6 @@
       "profit": -1.05,
       "stake_sum": 1.59,
       "yield": -65.79
-    },
-    "League Two": {
-      "total": 32,
-      "wins": 10,
-      "losses": 22,
-      "winrate": 31.25,
-      "profit": -1.09,
-      "stake_sum": 8.12,
-      "yield": -13.4
     },
     "2. Bundesliga": {
       "total": 26,
@@ -653,5 +653,5 @@
       "yield": -71.74
     }
   },
-  "last_update": "2026-09-19T15:35:19.880930+00:00"
+  "last_update": "2026-09-19T18:17:24.815726+00:00"
 }
