@@ -323,7 +323,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
             <View style={styles.summaryGrid}>
               <Summary label="Uzavreté" value={String(row.low_odds_1_20_1_60.settled)} />
               <Summary label="Úspešnosť" value={`${row.low_odds_1_20_1_60.hit_rate_pct?.toFixed(1) ?? "—"} %`} />
-              <Summary label="Yield" value={formatPercent(row.low_odds_1_20_1_60.yield_pct)} />
+              <Summary label="Yield" value={`${row.low_odds_1_20_1_60.yield_pct.toFixed(1)} %`} />
               <Summary label="Zisk" value={formatNumber(row.low_odds_1_20_1_60.profit)} />
             </View>
           ) : <Text style={styles.historyEmpty}>Zatiaľ nemáme uzavreté ostré tipy v tomto intervale.</Text>}
