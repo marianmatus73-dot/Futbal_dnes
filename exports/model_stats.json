@@ -1,13 +1,13 @@
 {
-  "total_bets": 2372,
-  "wins": 1023,
-  "losses": 1349,
-  "winrate": 43.13,
-  "yield": 5.62,
-  "profit": 94.94,
-  "stake_sum": 1688.93,
-  "open_bets": 353,
-  "settled_bets": 2372,
+  "total_bets": 2377,
+  "wins": 1024,
+  "losses": 1353,
+  "winrate": 43.08,
+  "yield": 5.59,
+  "profit": 94.56,
+  "stake_sum": 1690.41,
+  "open_bets": 338,
+  "settled_bets": 2377,
   "by_sport": {
     "baseball": {
       "total": 1387,
@@ -19,13 +19,13 @@
       "yield": 6.23
     },
     "football": {
-      "total": 904,
+      "total": 908,
       "wins": 252,
-      "losses": 652,
-      "winrate": 27.88,
-      "profit": 9.8,
-      "stake_sum": 213.75,
-      "yield": 4.58
+      "losses": 656,
+      "winrate": 27.75,
+      "profit": 8.78,
+      "stake_sum": 214.77,
+      "yield": 4.09
     },
     "basketball": {
       "total": 27,
@@ -64,13 +64,13 @@
       "yield": -64.15
     },
     "hockey": {
-      "total": 23,
-      "wins": 3,
+      "total": 24,
+      "wins": 4,
       "losses": 20,
-      "winrate": 13.04,
-      "profit": -4.43,
-      "stake_sum": 7.62,
-      "yield": -58.15
+      "winrate": 16.67,
+      "profit": -3.79,
+      "stake_sum": 8.08,
+      "yield": -46.87
     }
   },
   "by_bookmaker": {
@@ -146,15 +146,6 @@
       "stake_sum": 2.89,
       "yield": 59.64
     },
-    "1xBet": {
-      "total": 301,
-      "wins": 116,
-      "losses": 185,
-      "winrate": 38.54,
-      "profit": 1.17,
-      "stake_sum": 169.56,
-      "yield": 0.69
-    },
     "Winamax (DE)": {
       "total": 13,
       "wins": 7,
@@ -164,6 +155,15 @@
       "stake_sum": 19.17,
       "yield": 5.21
     },
+    "1xBet": {
+      "total": 303,
+      "wins": 116,
+      "losses": 187,
+      "winrate": 38.28,
+      "profit": 0.83,
+      "stake_sum": 169.9,
+      "yield": 0.49
+    },
     "Suprabets": {
       "total": 1,
       "wins": 1,
@@ -172,6 +172,15 @@
       "profit": 0.81,
       "stake_sum": 0.27,
       "yield": 300.0
+    },
+    "Coolbet": {
+      "total": 89,
+      "wins": 25,
+      "losses": 64,
+      "winrate": 28.09,
+      "profit": 0.71,
+      "stake_sum": 33.47,
+      "yield": 2.13
     },
     "Winamax (FR)": {
       "total": 10,
@@ -199,15 +208,6 @@
       "profit": 0.09,
       "stake_sum": 13.64,
       "yield": 0.63
-    },
-    "Coolbet": {
-      "total": 88,
-      "wins": 24,
-      "losses": 64,
-      "winrate": 27.27,
-      "profit": 0.07,
-      "stake_sum": 33.01,
-      "yield": 0.21
     },
     "Everygame": {
       "total": 17,
@@ -255,22 +255,13 @@
       "yield": -1.78
     },
     "Unibet (SE)": {
-      "total": 71,
+      "total": 72,
       "wins": 19,
-      "losses": 52,
-      "winrate": 26.76,
-      "profit": -2.54,
-      "stake_sum": 20.03,
-      "yield": -12.7
-    },
-    "Unibet (NL)": {
-      "total": 29,
-      "wins": 4,
-      "losses": 25,
-      "winrate": 13.79,
-      "profit": -3.52,
-      "stake_sum": 8.17,
-      "yield": -43.02
+      "losses": 53,
+      "winrate": 26.39,
+      "profit": -2.84,
+      "stake_sum": 20.33,
+      "yield": -13.99
     },
     "Pinnacle": {
       "total": 95,
@@ -280,6 +271,15 @@
       "profit": -3.7,
       "stake_sum": 44.41,
       "yield": -8.32
+    },
+    "Unibet (NL)": {
+      "total": 30,
+      "wins": 4,
+      "losses": 26,
+      "winrate": 13.33,
+      "profit": -3.9,
+      "stake_sum": 8.55,
+      "yield": -45.56
     },
     "Nordic Bet": {
       "total": 24,
@@ -418,6 +418,15 @@
       "stake_sum": 3.32,
       "yield": 43.33
     },
+    "icehockey_sweden_allsvenskan": {
+      "total": 9,
+      "wins": 4,
+      "losses": 5,
+      "winrate": 44.44,
+      "profit": 1.13,
+      "stake_sum": 3.16,
+      "yield": 35.85
+    },
     "Swiss Super League": {
       "total": 25,
       "wins": 6,
@@ -462,15 +471,6 @@
       "profit": 0.69,
       "stake_sum": 18.05,
       "yield": 3.82
-    },
-    "icehockey_sweden_allsvenskan": {
-      "total": 8,
-      "wins": 3,
-      "losses": 5,
-      "winrate": 37.5,
-      "profit": 0.49,
-      "stake_sum": 2.7,
-      "yield": 18.11
     },
     "UEFA Europa League": {
       "total": 7,
@@ -544,15 +544,6 @@
       "stake_sum": 4.22,
       "yield": -21.72
     },
-    "Danish Superliga": {
-      "total": 28,
-      "wins": 7,
-      "losses": 21,
-      "winrate": 25.0,
-      "profit": -0.94,
-      "stake_sum": 5.89,
-      "yield": -15.94
-    },
     "UEFA Champions League": {
       "total": 9,
       "wins": 1,
@@ -561,6 +552,15 @@
       "profit": -1.05,
       "stake_sum": 1.59,
       "yield": -65.79
+    },
+    "Danish Superliga": {
+      "total": 29,
+      "wins": 7,
+      "losses": 22,
+      "winrate": 24.14,
+      "profit": -1.24,
+      "stake_sum": 6.19,
+      "yield": -20.01
     },
     "League One": {
       "total": 33,
@@ -572,22 +572,13 @@
       "yield": -13.65
     },
     "Premier League": {
-      "total": 17,
+      "total": 18,
       "wins": 3,
-      "losses": 14,
-      "winrate": 17.65,
-      "profit": -1.37,
-      "stake_sum": 3.35,
-      "yield": -40.75
-    },
-    "2. Bundesliga": {
-      "total": 27,
-      "wins": 6,
-      "losses": 21,
-      "winrate": 22.22,
-      "profit": -1.49,
-      "stake_sum": 6.19,
-      "yield": -24.08
+      "losses": 15,
+      "winrate": 16.67,
+      "profit": -1.56,
+      "stake_sum": 3.54,
+      "yield": -43.93
     },
     "La Liga": {
       "total": 40,
@@ -625,14 +616,14 @@
       "stake_sum": 1.77,
       "yield": -100.0
     },
-    "Ligue 1": {
-      "total": 20,
-      "wins": 3,
-      "losses": 17,
-      "winrate": 15.0,
-      "profit": -2.08,
-      "stake_sum": 3.8,
-      "yield": -54.84
+    "2. Bundesliga": {
+      "total": 28,
+      "wins": 6,
+      "losses": 22,
+      "winrate": 21.43,
+      "profit": -1.87,
+      "stake_sum": 6.57,
+      "yield": -28.47
     },
     "J-League": {
       "total": 26,
@@ -642,6 +633,15 @@
       "profit": -2.2,
       "stake_sum": 5.28,
       "yield": -41.65
+    },
+    "Ligue 1": {
+      "total": 21,
+      "wins": 3,
+      "losses": 18,
+      "winrate": 14.29,
+      "profit": -2.23,
+      "stake_sum": 3.95,
+      "yield": -56.55
     },
     "Eredivisie": {
       "total": 21,
@@ -662,5 +662,5 @@
       "yield": -100.0
     }
   },
-  "last_update": "2026-09-20T10:12:41.104858+00:00"
+  "last_update": "2026-09-20T18:22:33.850878+00:00"
 }
