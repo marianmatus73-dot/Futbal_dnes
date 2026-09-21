@@ -13,16 +13,16 @@
     "status": "BUILDING"
   },
   "football": {
-    "samples": 908,
-    "train_samples": 635,
-    "test_samples": 273,
+    "samples": 912,
+    "train_samples": 638,
+    "test_samples": 274,
     "split": "chronological_70_30",
-    "raw_brier": 0.187539,
-    "calibrated_brier": 0.186471,
+    "raw_brier": 0.185773,
+    "calibrated_brier": 0.184316,
     "status": "READY"
   },
   "hockey": {
-    "samples": 24,
+    "samples": 25,
     "status": "BUILDING"
   },
   "mma": {

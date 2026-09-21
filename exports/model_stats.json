@@ -1,13 +1,13 @@
 {
-  "total_bets": 2397,
+  "total_bets": 2398,
   "wins": 1031,
-  "losses": 1366,
-  "winrate": 43.01,
-  "yield": 5.4,
-  "profit": 92.51,
-  "stake_sum": 1713.86,
-  "open_bets": 311,
-  "settled_bets": 2397,
+  "losses": 1367,
+  "winrate": 42.99,
+  "yield": 5.38,
+  "profit": 92.18,
+  "stake_sum": 1714.19,
+  "open_bets": 331,
+  "settled_bets": 2398,
   "by_sport": {
     "baseball": {
       "total": 1402,
@@ -64,13 +64,13 @@
       "yield": -64.15
     },
     "hockey": {
-      "total": 24,
+      "total": 25,
       "wins": 4,
-      "losses": 20,
-      "winrate": 16.67,
-      "profit": -3.79,
-      "stake_sum": 8.08,
-      "yield": -46.87
+      "losses": 21,
+      "winrate": 16.0,
+      "profit": -4.12,
+      "stake_sum": 8.41,
+      "yield": -48.95
     }
   },
   "by_bookmaker": {
@@ -255,13 +255,13 @@
       "yield": -1.78
     },
     "Unibet (SE)": {
-      "total": 72,
+      "total": 73,
       "wins": 19,
-      "losses": 53,
-      "winrate": 26.39,
-      "profit": -2.84,
-      "stake_sum": 20.33,
-      "yield": -13.99
+      "losses": 54,
+      "winrate": 26.03,
+      "profit": -3.17,
+      "stake_sum": 20.66,
+      "yield": -15.36
     },
     "Unibet (NL)": {
       "total": 30,
@@ -409,15 +409,6 @@
       "stake_sum": 5.71,
       "yield": 26.04
     },
-    "icehockey_sweden_allsvenskan": {
-      "total": 9,
-      "wins": 4,
-      "losses": 5,
-      "winrate": 44.44,
-      "profit": 1.13,
-      "stake_sum": 3.16,
-      "yield": 35.85
-    },
     "Swiss Super League": {
       "total": 25,
       "wins": 6,
@@ -453,6 +444,15 @@
       "profit": 0.87,
       "stake_sum": 0.55,
       "yield": 158.73
+    },
+    "icehockey_sweden_allsvenskan": {
+      "total": 10,
+      "wins": 4,
+      "losses": 6,
+      "winrate": 40.0,
+      "profit": 0.8,
+      "stake_sum": 3.49,
+      "yield": 23.01
     },
     "Championship": {
       "total": 44,
@@ -662,5 +662,5 @@
       "yield": -100.0
     }
   },
-  "last_update": "2026-09-21T11:15:26.274465+00:00"
+  "last_update": "2026-09-21T20:11:23.529832+00:00"
 }
