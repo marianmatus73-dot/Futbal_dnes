@@ -1,11 +1,11 @@
 {
   "baseball": {
-    "samples": 1405,
-    "train_samples": 983,
+    "samples": 1406,
+    "train_samples": 984,
     "test_samples": 422,
     "split": "chronological_70_30",
-    "raw_brier": 0.239951,
-    "calibrated_brier": 0.234368,
+    "raw_brier": 0.240269,
+    "calibrated_brier": 0.234588,
     "status": "READY"
   },
   "basketball": {
@@ -13,16 +13,16 @@
     "status": "BUILDING"
   },
   "football": {
-    "samples": 912,
-    "train_samples": 638,
+    "samples": 913,
+    "train_samples": 639,
     "test_samples": 274,
     "split": "chronological_70_30",
-    "raw_brier": 0.185773,
-    "calibrated_brier": 0.184316,
+    "raw_brier": 0.185638,
+    "calibrated_brier": 0.184169,
     "status": "READY"
   },
   "hockey": {
-    "samples": 25,
+    "samples": 26,
     "status": "BUILDING"
   },
   "mma": {
@@ -34,7 +34,7 @@
     "status": "BUILDING"
   },
   "tennis": {
-    "samples": 10,
+    "samples": 12,
     "status": "BUILDING"
   }
 }
