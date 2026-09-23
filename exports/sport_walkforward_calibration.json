@@ -1,11 +1,11 @@
 {
   "baseball": {
-    "samples": 1406,
-    "train_samples": 984,
-    "test_samples": 422,
+    "samples": 1420,
+    "train_samples": 993,
+    "test_samples": 427,
     "split": "chronological_70_30",
-    "raw_brier": 0.240269,
-    "calibrated_brier": 0.234588,
+    "raw_brier": 0.244375,
+    "calibrated_brier": 0.237354,
     "status": "READY"
   },
   "basketball": {
@@ -22,7 +22,7 @@
     "status": "READY"
   },
   "hockey": {
-    "samples": 26,
+    "samples": 28,
     "status": "BUILDING"
   },
   "mma": {
