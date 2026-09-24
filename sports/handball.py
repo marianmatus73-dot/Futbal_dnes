@@ -10,6 +10,14 @@ from pathlib import Path
 from typing import Any
 
 from core.config import Settings
+from core.api_sports_handball import (
+    ApiSportsHandballClient,
+    ApiSportsHandballError,
+    DEFAULT_PRIORITY_LEAGUES,
+    league_allowed,
+    normalize_game,
+    upcoming_days,
+)
 from core.market import best_outlier_prices, consensus_h2h
 from core.learning_observation_settlement import settle_learning_observations
 from core.odds_api import fetch_odds
@@ -264,6 +272,33 @@ class HandballModule(SportModule):
             configured = filter_active_keys(configured, active)
 
         events_scanned = snapshots_saved = observations_saved = candidates_saved = 0
+        api_sports_events: list[dict[str, Any]] = []
+        api_sports_key = os.getenv("API_SPORTS_KEY", "").strip()
+        if api_sports_key:
+            league_names = {
+                value.strip().casefold()
+                for value in os.getenv(
+                    "HANDBALL_API_SPORTS_LEAGUES",
+                    ",".join(DEFAULT_PRIORITY_LEAGUES),
+                ).split(",")
+                if value.strip()
+            }
+            lookahead = max(1, min(int(os.getenv("HANDBALL_LOOKAHEAD_DAYS", "4")), 7))
+            max_games = max(1, min(int(os.getenv("HANDBALL_API_MAX_GAMES", "20")), 30))
+            client = ApiSportsHandballClient(api_sports_key, settings_timeout(settings))
+            try:
+                games: list[dict[str, Any]] = []
+                for day in upcoming_days(lookahead):
+                    games.extend(await client.games_for_date(day))
+                games = [game for game in games if league_allowed(game, league_names)][:max_games]
+                for game in games:
+                    odds = await client.odds_for_game(game.get("id", ""))
+                    normalized = normalize_game(game, odds)
+                    if normalized and normalized.get("bookmakers"):
+                        api_sports_events.append(normalized)
+            except ApiSportsHandballError as exc:
+                log.warning("API-Sports Handball unavailable; Odds API fallback stays active: %s", exc)
+
         min_books = int(os.getenv("MIN_HANDBALL_BOOKMAKERS", "2"))
         for sport_key in configured:
             data = await fetch_odds(settings.odds_api_key, sport_key, markets="h2h")
@@ -285,6 +320,25 @@ class HandballModule(SportModule):
                         settings, sport_key, event, consensus
                     )
 
+        for event in api_sports_events:
+            events_scanned += 1
+            sport_key = str(event.get("league_key", "api_sports_handball"))
+            home = str(event.get("home_team", "")).strip()
+            away = str(event.get("away_team", "")).strip()
+            event_name = f"{home} vs {away}"
+            bookmakers = event.get("bookmakers", [])
+            snapshots_saved += self._save_snapshot_rows(
+                settings, sport_key, event_name, home, away, bookmakers
+            )
+            consensus = consensus_h2h(bookmakers, min_books=1)
+            if consensus:
+                observations_saved += self._save_observations(
+                    settings, sport_key, event, consensus
+                )
+                candidates_saved += self._save_baseline_candidate(
+                    settings, sport_key, event, consensus
+                )
+
         return SportResult(
             sport=self.name,
             mode="shadow",
@@ -299,4 +353,12 @@ class HandballModule(SportModule):
                 f"({settlement.won} won, {settlement.lost} lost)."
             ),
         )
+
+
+def settings_timeout(settings: Settings) -> int:
+    del settings
+    try:
+        return max(5, min(int(os.getenv("HTTP_TIMEOUT", "30")), 60))
+    except ValueError:
+        return 30
 
