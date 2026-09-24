@@ -93,6 +93,7 @@ jobs:
       - name: Run engine
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          API_SPORTS_KEY: ${{ secrets.API_SPORTS_KEY }}
           SPORTMONKS_API_TOKEN: ${{ secrets.SPORTMONKS_API_TOKEN }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
@@ -105,6 +106,9 @@ jobs:
           SPORT_MODE: "all"
           SPORT_CONCURRENCY: "5"
           SPORT_KEY_AUTO_DISCOVERY: "1"
+          HANDBALL_LOOKAHEAD_DAYS: "4"
+          HANDBALL_API_MAX_GAMES: "20"
+          HANDBALL_API_SPORTS_LEAGUES: "Champions League,EHF European League,Bundesliga,Starligue,Liga ASOBAL,Herre Handbold Ligaen,REMA 1000-ligaen,Handbollsligan,Extraliga"
           SPORTMONKS_SYNC_ENABLED: "1"
           SPORTMONKS_INCLUDE_XG: "0"
           SPORT_CONTEXT_MAX_AGE_HOURS: "24"
