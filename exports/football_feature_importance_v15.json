@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 973,
+  "training_samples": 974,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 973,
+      "samples": 974,
       "wins": 264,
-      "losses": 709,
-      "winrate": 0.2713,
-      "average_value": 0.8392
+      "losses": 710,
+      "winrate": 0.271,
+      "average_value": 0.8393
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 973,
+      "samples": 974,
       "wins": 264,
-      "losses": 709,
-      "winrate": 0.2713,
+      "losses": 710,
+      "winrate": 0.271,
       "average_value": 0.1162
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 973,
+      "samples": 974,
       "wins": 264,
-      "losses": 709,
-      "winrate": 0.2713,
-      "average_value": -12.5598
+      "losses": 710,
+      "winrate": 0.271,
+      "average_value": -12.5944
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 973,
+      "samples": 974,
       "wins": 264,
-      "losses": 709,
-      "winrate": 0.2713,
-      "average_value": -0.0268
+      "losses": 710,
+      "winrate": 0.271,
+      "average_value": -0.0278
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 973,
+      "samples": 974,
       "wins": 264,
-      "losses": 709,
-      "winrate": 0.2713,
-      "average_value": 0.6908
+      "losses": 710,
+      "winrate": 0.271,
+      "average_value": 0.6909
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 973,
+      "samples": 974,
       "wins": 264,
-      "losses": 709,
-      "winrate": 0.2713,
-      "average_value": 0.52
+      "losses": 710,
+      "winrate": 0.271,
+      "average_value": 0.5201
     }
   ],
   "warning": null,
