@@ -18,12 +18,12 @@
     "status": "READY"
   },
   "football": {
-    "samples": 915,
-    "train_samples": 640,
-    "test_samples": 275,
+    "samples": 918,
+    "train_samples": 642,
+    "test_samples": 276,
     "split": "chronological_70_30",
-    "raw_brier": 0.183678,
-    "calibrated_brier": 0.182221,
+    "raw_brier": 0.186874,
+    "calibrated_brier": 0.185713,
     "status": "READY"
   },
   "hockey": {
@@ -44,7 +44,7 @@
     "status": "BUILDING"
   },
   "tennis": {
-    "samples": 16,
+    "samples": 17,
     "status": "BUILDING"
   }
 }

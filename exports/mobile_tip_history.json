@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-25T10:42:09.645008+00:00",
+  "generated_at": "2026-09-25T19:39:37.559198+00:00",
   "limit_per_sport": 5,
   "sports": {
     "baseball": [
@@ -203,12 +203,12 @@
         "stake": 0.27,
         "closing_odds": null,
         "clv_pct": null,
-        "settlement_source": "",
-        "result": "OPEN",
-        "final_score": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "WON",
+        "final_score": "0-2",
         "start_time": "2026-09-25T03:00:00Z",
         "created_at": "2026-09-23 19:16:44",
-        "settled_at": null
+        "settled_at": "2026-09-25T19:37:36.475028+00:00"
       }
     ]
   },
@@ -233,6 +233,26 @@
         "start_time": "2026-09-25T06:30:00Z",
         "created_at": "2026-09-24 18:55:16",
         "settled_at": "2026-09-25T10:40:12.147572+00:00"
+      },
+      {
+        "sport": "tennis",
+        "league": "tennis_wta_singapore_open",
+        "match": "Mirra Andreeva vs Leylah Fernandez",
+        "pick": "Leylah Fernandez",
+        "market": "h2h",
+        "odds": 4.04,
+        "bookmaker": "Pinnacle",
+        "model_probability": 0.27417456693806114,
+        "edge": 0.10766525042976705,
+        "stake": 0.27,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "WON",
+        "final_score": "0-2",
+        "start_time": "2026-09-25T03:00:00Z",
+        "created_at": "2026-09-23 19:16:44",
+        "settled_at": "2026-09-25T19:37:36.475028+00:00"
       },
       {
         "sport": "tennis",
@@ -293,26 +313,6 @@
         "start_time": "2026-09-24T03:00:00Z",
         "created_at": "2026-09-22 19:19:31",
         "settled_at": "2026-09-24T10:36:34.918950+00:00"
-      },
-      {
-        "sport": "tennis",
-        "league": "tennis_wta_singapore_open",
-        "match": "Barbora Krejcikova vs Anna-Lena Friedsam",
-        "pick": "Anna-Lena Friedsam",
-        "market": "h2h",
-        "odds": 7.8,
-        "bookmaker": "Betfair",
-        "model_probability": 0.14388980771177237,
-        "edge": 0.12234050015182452,
-        "stake": 0.13,
-        "closing_odds": null,
-        "clv_pct": null,
-        "settlement_source": "the_odds_api_scores",
-        "result": "LOST",
-        "final_score": "2-1",
-        "start_time": "2026-09-22T10:30:00Z",
-        "created_at": "2026-09-21 11:13:53",
-        "settled_at": "2026-09-22T19:19:30.943994+00:00"
       }
     ],
     "baseball": [
