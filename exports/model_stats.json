@@ -1,13 +1,13 @@
 {
-  "total_bets": 2486,
-  "wins": 1074,
+  "total_bets": 2487,
+  "wins": 1075,
   "losses": 1412,
-  "winrate": 43.2,
-  "yield": 5.17,
-  "profit": 93.53,
-  "stake_sum": 1807.99,
-  "open_bets": 283,
-  "settled_bets": 2486,
+  "winrate": 43.22,
+  "yield": 5.21,
+  "profit": 94.22,
+  "stake_sum": 1808.26,
+  "open_bets": 272,
+  "settled_bets": 2487,
   "by_sport": {
     "baseball": {
       "total": 1465,
@@ -37,13 +37,13 @@
       "yield": 22.23
     },
     "tennis": {
-      "total": 17,
-      "wins": 4,
+      "total": 18,
+      "wins": 5,
       "losses": 13,
-      "winrate": 23.53,
-      "profit": -0.48,
-      "stake_sum": 4.16,
-      "yield": -11.43
+      "winrate": 27.78,
+      "profit": 0.21,
+      "stake_sum": 4.43,
+      "yield": 4.81
     },
     "nfl": {
       "total": 2,
@@ -263,6 +263,15 @@
       "stake_sum": 80.59,
       "yield": -3.26
     },
+    "Unibet (SE)": {
+      "total": 79,
+      "wins": 21,
+      "losses": 58,
+      "winrate": 26.58,
+      "profit": -3.46,
+      "stake_sum": 25.79,
+      "yield": -13.41
+    },
     "Nordic Bet": {
       "total": 24,
       "wins": 6,
@@ -271,15 +280,6 @@
       "profit": -3.95,
       "stake_sum": 10.78,
       "yield": -36.6
-    },
-    "Unibet (SE)": {
-      "total": 78,
-      "wins": 20,
-      "losses": 58,
-      "winrate": 25.64,
-      "profit": -4.15,
-      "stake_sum": 25.52,
-      "yield": -16.25
     },
     "Unibet (NL)": {
       "total": 31,
@@ -382,6 +382,15 @@
       "stake_sum": 7.55,
       "yield": 31.18
     },
+    "tennis_wta_singapore_open": {
+      "total": 8,
+      "wins": 4,
+      "losses": 4,
+      "winrate": 50.0,
+      "profit": 1.98,
+      "stake_sum": 1.68,
+      "yield": 117.67
+    },
     "Brazil Serie A": {
       "total": 48,
       "wins": 14,
@@ -417,15 +426,6 @@
       "profit": 1.49,
       "stake_sum": 5.71,
       "yield": 26.04
-    },
-    "tennis_wta_singapore_open": {
-      "total": 7,
-      "wins": 3,
-      "losses": 4,
-      "winrate": 42.86,
-      "profit": 1.29,
-      "stake_sum": 1.41,
-      "yield": 91.38
     },
     "Swiss Super League": {
       "total": 25,
@@ -689,5 +689,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-09-26T10:25:55.858466+00:00"
+  "last_update": "2026-09-26T18:48:08.229239+00:00"
 }
