@@ -1,13 +1,13 @@
 {
-  "total_bets": 2503,
+  "total_bets": 2504,
   "wins": 1084,
-  "losses": 1419,
-  "winrate": 43.31,
-  "yield": 5.31,
-  "profit": 97.17,
-  "stake_sum": 1828.59,
-  "open_bets": 263,
-  "settled_bets": 2503,
+  "losses": 1420,
+  "winrate": 43.29,
+  "yield": 5.3,
+  "profit": 96.99,
+  "stake_sum": 1828.77,
+  "open_bets": 270,
+  "settled_bets": 2504,
   "by_sport": {
     "baseball": {
       "total": 1478,
@@ -19,13 +19,13 @@
       "yield": 5.81
     },
     "football": {
-      "total": 923,
+      "total": 924,
       "wins": 258,
-      "losses": 665,
-      "winrate": 27.95,
-      "profit": 10.14,
-      "stake_sum": 219.69,
-      "yield": 4.62
+      "losses": 666,
+      "winrate": 27.92,
+      "profit": 9.96,
+      "stake_sum": 219.87,
+      "yield": 4.53
     },
     "basketball": {
       "total": 31,
@@ -111,13 +111,13 @@
       "yield": 43.74
     },
     "1xBet": {
-      "total": 337,
+      "total": 338,
       "wins": 135,
-      "losses": 202,
-      "winrate": 40.06,
-      "profit": 6.86,
-      "stake_sum": 217.29,
-      "yield": 3.16
+      "losses": 203,
+      "winrate": 39.94,
+      "profit": 6.68,
+      "stake_sum": 217.47,
+      "yield": 3.07
     },
     "BetAnything": {
       "total": 8,
@@ -364,15 +364,6 @@
       "stake_sum": 7.3,
       "yield": 39.52
     },
-    "UEFA Nations League": {
-      "total": 6,
-      "wins": 4,
-      "losses": 2,
-      "winrate": 66.67,
-      "profit": 2.37,
-      "stake_sum": 1.63,
-      "yield": 145.65
-    },
     "Segunda Division": {
       "total": 24,
       "wins": 8,
@@ -381,6 +372,15 @@
       "profit": 2.35,
       "stake_sum": 7.55,
       "yield": 31.18
+    },
+    "UEFA Nations League": {
+      "total": 7,
+      "wins": 4,
+      "losses": 3,
+      "winrate": 57.14,
+      "profit": 2.19,
+      "stake_sum": 1.81,
+      "yield": 121.22
     },
     "tennis_wta_singapore_open": {
       "total": 8,
@@ -689,5 +689,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-09-27T10:57:07.834067+00:00"
+  "last_update": "2026-09-27T19:23:01.050341+00:00"
 }
