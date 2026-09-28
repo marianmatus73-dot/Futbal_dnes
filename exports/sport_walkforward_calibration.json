@@ -18,21 +18,21 @@
     "status": "READY"
   },
   "football": {
-    "samples": 924,
-    "train_samples": 646,
+    "samples": 925,
+    "train_samples": 647,
     "test_samples": 278,
     "split": "chronological_70_30",
     "raw_brier": 0.190034,
-    "calibrated_brier": 0.188712,
+    "calibrated_brier": 0.188705,
     "status": "READY"
   },
   "hockey": {
-    "samples": 31,
-    "train_samples": 21,
+    "samples": 32,
+    "train_samples": 22,
     "test_samples": 10,
     "split": "chronological_70_30",
-    "raw_brier": 0.167985,
-    "calibrated_brier": 0.151562,
+    "raw_brier": 0.1691,
+    "calibrated_brier": 0.148843,
     "status": "READY"
   },
   "mma": {
