@@ -9,12 +9,12 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 32,
-    "train_samples": 22,
-    "test_samples": 10,
+    "samples": 35,
+    "train_samples": 24,
+    "test_samples": 11,
     "split": "chronological_70_30",
-    "raw_brier": 0.266884,
-    "calibrated_brier": 0.257639,
+    "raw_brier": 0.268681,
+    "calibrated_brier": 0.287879,
     "status": "READY"
   },
   "football": {

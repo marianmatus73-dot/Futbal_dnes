@@ -1,13 +1,13 @@
 {
-  "total_bets": 2526,
-  "wins": 1093,
-  "losses": 1433,
-  "winrate": 43.27,
-  "yield": 5.15,
-  "profit": 95.74,
-  "stake_sum": 1858.05,
-  "open_bets": 253,
-  "settled_bets": 2526,
+  "total_bets": 2529,
+  "wins": 1094,
+  "losses": 1435,
+  "winrate": 43.26,
+  "yield": 5.13,
+  "profit": 95.44,
+  "stake_sum": 1859.51,
+  "open_bets": 259,
+  "settled_bets": 2529,
   "by_sport": {
     "baseball": {
       "total": 1492,
@@ -28,13 +28,13 @@
       "yield": 4.46
     },
     "basketball": {
-      "total": 32,
-      "wins": 13,
-      "losses": 19,
-      "winrate": 40.62,
-      "profit": 2.8,
-      "stake_sum": 15.44,
-      "yield": 18.11
+      "total": 35,
+      "wins": 14,
+      "losses": 21,
+      "winrate": 40.0,
+      "profit": 2.5,
+      "stake_sum": 16.9,
+      "yield": 14.77
     },
     "tennis": {
       "total": 18,
@@ -75,13 +75,13 @@
   },
   "by_bookmaker": {
     "888sport": {
-      "total": 344,
+      "total": 345,
       "wins": 209,
-      "losses": 135,
-      "winrate": 60.76,
-      "profit": 58.1,
-      "stake_sum": 375.33,
-      "yield": 15.48
+      "losses": 136,
+      "winrate": 60.58,
+      "profit": 57.59,
+      "stake_sum": 375.84,
+      "yield": 15.32
     },
     "BetOnline.ag": {
       "total": 431,
@@ -300,13 +300,13 @@
       "yield": -21.5
     },
     "Betfair": {
-      "total": 307,
-      "wins": 92,
-      "losses": 215,
-      "winrate": 29.97,
-      "profit": -12.84,
-      "stake_sum": 119.01,
-      "yield": -10.79
+      "total": 309,
+      "wins": 93,
+      "losses": 216,
+      "winrate": 30.1,
+      "profit": -12.63,
+      "stake_sum": 119.96,
+      "yield": -10.53
     }
   },
   "by_league": {
@@ -481,15 +481,6 @@
       "stake_sum": 3.71,
       "yield": 15.71
     },
-    "basketball_euroleague": {
-      "total": 2,
-      "wins": 1,
-      "losses": 1,
-      "winrate": 50.0,
-      "profit": 0.43,
-      "stake_sum": 0.95,
-      "yield": 44.84
-    },
     "UEFA Europa League": {
       "total": 7,
       "wins": 2,
@@ -498,6 +489,15 @@
       "profit": 0.27,
       "stake_sum": 1.36,
       "yield": 19.89
+    },
+    "basketball_euroleague": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "winrate": 40.0,
+      "profit": 0.12,
+      "stake_sum": 2.41,
+      "yield": 5.19
     },
     "tennis_atp_us_open": {
       "total": 4,
@@ -689,5 +689,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-09-29T11:42:31.253757+00:00"
+  "last_update": "2026-09-29T20:19:54.612999+00:00"
 }
