@@ -1,13 +1,13 @@
 {
-  "total_bets": 2525,
-  "wins": 1092,
+  "total_bets": 2526,
+  "wins": 1093,
   "losses": 1433,
-  "winrate": 43.25,
-  "yield": 5.1,
-  "profit": 94.75,
-  "stake_sum": 1857.45,
-  "open_bets": 261,
-  "settled_bets": 2525,
+  "winrate": 43.27,
+  "yield": 5.15,
+  "profit": 95.74,
+  "stake_sum": 1858.05,
+  "open_bets": 253,
+  "settled_bets": 2526,
   "by_sport": {
     "baseball": {
       "total": 1492,
@@ -45,6 +45,15 @@
       "stake_sum": 4.43,
       "yield": 4.81
     },
+    "nfl": {
+      "total": 7,
+      "wins": 2,
+      "losses": 5,
+      "winrate": 28.57,
+      "profit": -1.25,
+      "stake_sum": 6.08,
+      "yield": -20.53
+    },
     "mma": {
       "total": 20,
       "wins": 5,
@@ -53,15 +62,6 @@
       "profit": -1.76,
       "stake_sum": 8.71,
       "yield": -20.22
-    },
-    "nfl": {
-      "total": 6,
-      "wins": 1,
-      "losses": 5,
-      "winrate": 16.67,
-      "profit": -2.24,
-      "stake_sum": 5.48,
-      "yield": -40.95
     },
     "hockey": {
       "total": 32,
@@ -300,13 +300,13 @@
       "yield": -21.5
     },
     "Betfair": {
-      "total": 306,
-      "wins": 91,
+      "total": 307,
+      "wins": 92,
       "losses": 215,
-      "winrate": 29.74,
-      "profit": -13.83,
-      "stake_sum": 118.41,
-      "yield": -11.68
+      "winrate": 29.97,
+      "profit": -12.84,
+      "stake_sum": 119.01,
+      "yield": -10.79
     }
   },
   "by_league": {
@@ -580,6 +580,15 @@
       "stake_sum": 6.19,
       "yield": -20.01
     },
+    "americanfootball_nfl": {
+      "total": 7,
+      "wins": 2,
+      "losses": 5,
+      "winrate": 28.57,
+      "profit": -1.25,
+      "stake_sum": 6.08,
+      "yield": -20.53
+    },
     "League One": {
       "total": 33,
       "wins": 7,
@@ -661,15 +670,6 @@
       "stake_sum": 3.95,
       "yield": -56.55
     },
-    "americanfootball_nfl": {
-      "total": 6,
-      "wins": 1,
-      "losses": 5,
-      "winrate": 16.67,
-      "profit": -2.24,
-      "stake_sum": 5.48,
-      "yield": -40.95
-    },
     "Eredivisie": {
       "total": 21,
       "wins": 2,
@@ -689,5 +689,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-09-28T21:28:35.084529+00:00"
+  "last_update": "2026-09-29T11:42:31.253757+00:00"
 }
