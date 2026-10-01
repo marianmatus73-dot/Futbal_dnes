@@ -1,13 +1,13 @@
 {
-  "total_bets": 2645,
-  "wins": 1131,
-  "losses": 1514,
-  "winrate": 42.76,
-  "yield": 4.67,
-  "profit": 89.24,
-  "stake_sum": 1909.23,
-  "open_bets": 166,
-  "settled_bets": 2645,
+  "total_bets": 2649,
+  "wins": 1133,
+  "losses": 1516,
+  "winrate": 42.77,
+  "yield": 4.7,
+  "profit": 89.92,
+  "stake_sum": 1911.16,
+  "open_bets": 169,
+  "settled_bets": 2649,
   "by_sport": {
     "baseball": {
       "total": 1500,
@@ -28,22 +28,22 @@
       "yield": 4.46
     },
     "basketball": {
-      "total": 36,
-      "wins": 15,
+      "total": 37,
+      "wins": 16,
       "losses": 21,
-      "winrate": 41.67,
-      "profit": 3.01,
-      "stake_sum": 17.92,
-      "yield": 16.77
+      "winrate": 43.24,
+      "profit": 3.84,
+      "stake_sum": 18.85,
+      "yield": 20.38
     },
     "tennis": {
-      "total": 29,
-      "wins": 6,
-      "losses": 23,
-      "winrate": 20.69,
-      "profit": -0.29,
-      "stake_sum": 6.16,
-      "yield": -4.63
+      "total": 32,
+      "wins": 7,
+      "losses": 25,
+      "winrate": 21.88,
+      "profit": -0.44,
+      "stake_sum": 7.16,
+      "yield": -6.15
     },
     "nfl": {
       "total": 7,
@@ -102,13 +102,13 @@
       "yield": 26.01
     },
     "Betsson": {
-      "total": 30,
+      "total": 31,
       "wins": 15,
-      "losses": 15,
-      "winrate": 50.0,
-      "profit": 7.71,
-      "stake_sum": 17.63,
-      "yield": 43.74
+      "losses": 16,
+      "winrate": 48.39,
+      "profit": 7.28,
+      "stake_sum": 18.06,
+      "yield": 40.32
     },
     "LeoVegas (SE)": {
       "total": 67,
@@ -192,13 +192,13 @@
       "yield": 1.97
     },
     "William Hill": {
-      "total": 13,
+      "total": 14,
       "wins": 6,
-      "losses": 7,
-      "winrate": 46.15,
-      "profit": 0.5,
-      "stake_sum": 10.4,
-      "yield": 4.81
+      "losses": 8,
+      "winrate": 42.86,
+      "profit": 0.19,
+      "stake_sum": 10.71,
+      "yield": 1.78
     },
     "Codere (IT)": {
       "total": 31,
@@ -300,13 +300,13 @@
       "yield": -19.79
     },
     "Betfair": {
-      "total": 312,
-      "wins": 94,
+      "total": 314,
+      "wins": 96,
       "losses": 218,
-      "winrate": 30.13,
-      "profit": -11.97,
-      "stake_sum": 120.92,
-      "yield": -9.9
+      "winrate": 30.57,
+      "profit": -10.55,
+      "stake_sum": 122.11,
+      "yield": -8.64
     }
   },
   "by_league": {
@@ -427,6 +427,15 @@
       "stake_sum": 5.71,
       "yield": 26.04
     },
+    "basketball_euroleague": {
+      "total": 7,
+      "wins": 4,
+      "losses": 3,
+      "winrate": 57.14,
+      "profit": 1.47,
+      "stake_sum": 4.36,
+      "yield": 33.76
+    },
     "Swiss Super League": {
       "total": 25,
       "wins": 6,
@@ -471,15 +480,6 @@
       "profit": 0.71,
       "stake_sum": 10.91,
       "yield": 6.52
-    },
-    "basketball_euroleague": {
-      "total": 6,
-      "wins": 3,
-      "losses": 3,
-      "winrate": 50.0,
-      "profit": 0.64,
-      "stake_sum": 3.43,
-      "yield": 18.51
     },
     "tennis_atp_japan_open": {
       "total": 4,
@@ -544,6 +544,15 @@
       "stake_sum": 3.19,
       "yield": -8.31
     },
+    "tennis_wta_china_open": {
+      "total": 6,
+      "wins": 1,
+      "losses": 5,
+      "winrate": 16.67,
+      "profit": -0.34,
+      "stake_sum": 1.18,
+      "yield": -28.39
+    },
     "Belgian Pro League": {
       "total": 23,
       "wins": 5,
@@ -562,24 +571,6 @@
       "stake_sum": 0.81,
       "yield": -49.07
     },
-    "tennis_atp_china_open": {
-      "total": 3,
-      "wins": 0,
-      "losses": 3,
-      "winrate": 0.0,
-      "profit": -0.49,
-      "stake_sum": 0.49,
-      "yield": -100.0
-    },
-    "tennis_wta_china_open": {
-      "total": 4,
-      "wins": 0,
-      "losses": 4,
-      "winrate": 0.0,
-      "profit": -0.61,
-      "stake_sum": 0.61,
-      "yield": -100.0
-    },
     "Ligue 2": {
       "total": 21,
       "wins": 5,
@@ -588,6 +579,15 @@
       "profit": -0.92,
       "stake_sum": 4.22,
       "yield": -21.72
+    },
+    "tennis_atp_china_open": {
+      "total": 4,
+      "wins": 0,
+      "losses": 4,
+      "winrate": 0.0,
+      "profit": -0.92,
+      "stake_sum": 0.92,
+      "yield": -100.0
     },
     "UEFA Champions League": {
       "total": 9,
@@ -725,5 +725,5 @@
       "yield": -17.17
     }
   },
-  "last_update": "2026-10-01T11:57:23.095840+00:00"
+  "last_update": "2026-10-01T20:39:34.192248+00:00"
 }
