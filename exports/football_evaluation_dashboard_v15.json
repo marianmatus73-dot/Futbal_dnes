@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-01T20:39:32+00:00",
+  "generated_at": "2026-10-02T11:28:57+00:00",
   "version": "v15",
-  "total_rows": 988,
-  "training_ready_rows": 988,
+  "total_rows": 989,
+  "training_ready_rows": 989,
   "wins": 272,
-  "losses": 716,
-  "hit_rate": 0.27530364372469635,
-  "brier_score": 0.19668268853368473,
-  "log_loss": 0.5825062068602097,
-  "average_clv_probability": 0.008960619613654556,
-  "average_consensus_safety": 0.8405020242914986,
+  "losses": 717,
+  "hit_rate": 0.2750252780586451,
+  "brier_score": 0.19657921138089515,
+  "log_loss": 0.5822882511481918,
+  "average_clv_probability": 0.00900563377079726,
+  "average_consensus_safety": 0.8405348837209309,
   "by_league": [
     {
       "league": "MLS",
@@ -282,6 +282,16 @@
       "average_clv_probability": 0.0048096386797594265
     },
     {
+      "league": "UEFA Nations League",
+      "samples": 13,
+      "wins": 6,
+      "losses": 7,
+      "hit_rate": 0.46153846153846156,
+      "brier_score": 0.2798181184428097,
+      "log_loss": 0.7598802192199605,
+      "average_clv_probability": 0.011595891628288505
+    },
+    {
       "league": "UEFA Europa League",
       "samples": 12,
       "wins": 3,
@@ -290,16 +300,6 @@
       "brier_score": 0.19636875638398701,
       "log_loss": 0.5830935331007183,
       "average_clv_probability": 0.005469730151635853
-    },
-    {
-      "league": "UEFA Nations League",
-      "samples": 12,
-      "wins": 6,
-      "losses": 6,
-      "hit_rate": 0.5,
-      "brier_score": 0.2952743129443103,
-      "log_loss": 0.792624570182082,
-      "average_clv_probability": 0.009651066906896322
     },
     {
       "league": "Scottish Premiership",
@@ -504,6 +504,16 @@
       "average_clv_probability": 0.006169394705804225
     },
     {
+      "bookmaker": "Suprabets",
+      "samples": 3,
+      "wins": 2,
+      "losses": 1,
+      "hit_rate": 0.6666666666666666,
+      "brier_score": 0.36394394512212463,
+      "log_loss": 0.9389384410659596,
+      "average_clv_probability": 0.03342959514440449
+    },
+    {
       "bookmaker": "Winamax (DE)",
       "samples": 3,
       "wins": 1,
@@ -522,16 +532,6 @@
       "brier_score": 0.13053310433543555,
       "log_loss": 0.4480089828475395,
       "average_clv_probability": 0.07112014224028446
-    },
-    {
-      "bookmaker": "Suprabets",
-      "samples": 2,
-      "wins": 2,
-      "losses": 0,
-      "hit_rate": 1.0,
-      "brier_score": 0.49874402547078567,
-      "log_loss": 1.2249336577616876,
-      "average_clv_probability": 0.03267749857410937
     },
     {
       "bookmaker": "Unibet (FR)",
@@ -577,12 +577,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 988,
+      "samples": 989,
       "wins": 272,
-      "losses": 716,
-      "hit_rate": 0.27530364372469635,
-      "brier_score": 0.19668268853368473,
-      "log_loss": 0.5825062068602097
+      "losses": 717,
+      "hit_rate": 0.2750252780586451,
+      "brier_score": 0.19657921138089515,
+      "log_loss": 0.5822882511481918
     }
   ],
   "by_consensus_safety": [
@@ -606,12 +606,12 @@
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 551,
+      "samples": 552,
       "wins": 154,
-      "losses": 397,
-      "hit_rate": 0.279491833030853,
-      "brier_score": 0.2025537426091326,
-      "log_loss": 0.5950245964450847
+      "losses": 398,
+      "hit_rate": 0.27898550724637683,
+      "brier_score": 0.20235771007618997,
+      "log_loss": 0.5946114142190511
     },
     {
       "bucket": "0.95+",
@@ -680,12 +680,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 961,
+      "samples": 962,
       "wins": 255,
-      "losses": 706,
-      "hit_rate": 0.26534859521331944,
-      "brier_score": 0.19671868745116353,
-      "log_loss": 0.5827050058160131
+      "losses": 707,
+      "hit_rate": 0.26507276507276506,
+      "brier_score": 0.19661226863304881,
+      "log_loss": 0.5824807261921654
     }
   ],
   "metrics_reliable": true
