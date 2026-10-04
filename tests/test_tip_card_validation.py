@@ -37,6 +37,20 @@ class TipCardValidationTests(unittest.TestCase):
             result = validate_tip_card(self.write(Path(temp), valid_card()))
             self.assertEqual(result["status"], "READY")
 
+    def test_accepts_current_schema_version(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            card = valid_card()
+            card["schema_version"] = 3
+            result = validate_tip_card(self.write(Path(temp), card))
+            self.assertEqual(result["status"], "READY")
+
+    def test_rejects_unknown_schema_version(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            card = valid_card()
+            card["schema_version"] = 99
+            with self.assertRaises(TipCardValidationError):
+                validate_tip_card(self.write(Path(temp), card))
+
     def test_rejects_missing_candidate_field(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             card = valid_card()
