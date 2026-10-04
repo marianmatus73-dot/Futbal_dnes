@@ -40,6 +40,7 @@ from core.sport_settlement import (
 from core.audit_summary import audit_block_summary
 from core.performance_summary import performance_report
 from core.operational_health import build_operational_health, operational_health_report
+from core.model_governance import build_model_governance, model_governance_report
 from core.bet_converter import bet_to_tip_dict
 from core.bankroll import bankroll_summary
 from core.pro_tipper import (
@@ -847,6 +848,7 @@ async def run() -> None:
     )
 
     risk_rejected_candidates: list[dict] = []
+    operational_health = {}
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
             release_summary = apply_football_release_policy(
@@ -2234,6 +2236,16 @@ async def run() -> None:
             report_text += operational_health_report(operational_health)
         except Exception:
             log.exception("Operational health export failed")
+
+        try:
+            governance = build_model_governance(
+                professional_table,
+                operational_health,
+                export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+            )
+            report_text += model_governance_report(governance)
+        except Exception:
+            log.exception("Model governance export failed")
 
     if "football_ai_health" in locals():
         report_text += "\n\n=== FOOTBALL AI HEALTH V15.2 ===\n"

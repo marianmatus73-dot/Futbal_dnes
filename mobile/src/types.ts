@@ -37,7 +37,10 @@ export type Tip = {
   opening_odds?: number | null;
   final_odds?: number | null;
   created_at?: string;
+  rejection_explanation?: { code: string; category: string; explanation: string; next_step: string };
 };
+
+export type AppNotification = { type: string; title: string; message: string; created_at: string; sport?: string };
 
 export type TipCard = {
   schema_version: number;
@@ -46,6 +49,19 @@ export type TipCard = {
   selected: Tip[];
   rejected_sample?: Tip[];
   low_odds_watch?: Tip[];
+  notifications?: AppNotification[];
+};
+
+export type GovernanceMetric = { settled?: number; yield_pct?: number; average_clv_pct?: number | null; brier_score?: number | null };
+export type ModelGovernance = {
+  schema_version: number;
+  generated_at: string;
+  principle: string;
+  source_quality: { sport: string; score: number; status: string; odds_feed: boolean; stable_event_ids: boolean; settlement_samples: number }[];
+  football_market_modes: { market: string; mode: string; metrics: GovernanceMetric }[];
+  football_league_trust: { league: string; mode: string; metrics: GovernanceMetric }[];
+  weekly_model_coach: { segment: string; status: string; auto_apply: boolean; samples: number; minimum_samples: number; recommendations: string[] }[];
+  champion_challenger: { sport: string; decision: string; auto_promote: boolean; challenger: { name: string; mode: string; evaluated_samples: number; minimum_samples: number } }[];
 };
 
 export type ModelRow = {
@@ -160,6 +176,14 @@ export type OperationalHealth = {
     note: string;
   };
   sports: SportHealth[];
+  bankroll_safety?: {
+    drawdown_paused: boolean;
+    daily_loss_paused: boolean;
+    daily_exposure: number;
+    max_daily_loss_pct: number;
+    max_league_exposure_pct: number;
+    correlated_event_limit: number;
+  };
 };
 
 export type AppData = {
@@ -170,6 +194,7 @@ export type AppData = {
   resultsBySport: Record<string, HistoryTip[]>;
   performance: MobilePerformance;
   operationalHealth?: OperationalHealth;
+  modelGovernance?: ModelGovernance;
   source: "live" | "cache";
   refreshedAt: string;
 };

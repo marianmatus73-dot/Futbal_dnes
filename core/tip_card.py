@@ -7,6 +7,9 @@ from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
+from core.mobile_notifications import build_notifications
+from core.rejection_explanations import enrich_rejection
+
 
 def _tip_payload(tip, decision: str) -> dict:
     payload = asdict(tip)
@@ -20,6 +23,12 @@ def _tip_payload(tip, decision: str) -> dict:
         }
     )
     return payload
+
+
+def _rejected_payload(tip) -> dict:
+    payload = _tip_payload(tip, "REJECT")
+    payload.setdefault("rejection_reason", "not selected for the published top list")
+    return enrich_rejection(payload)
 
 
 def build_low_odds_watch(
@@ -118,10 +127,17 @@ def save_latest_tip_card(
             "top_limit": top_limit,
         },
         "selected": [_tip_payload(tip, "ACCEPT") for tip in selected],
-        "rejected_sample": [_tip_payload(tip, "REJECT") for tip in rejected],
+        "rejected_sample": [_rejected_payload(tip) for tip in rejected],
         "low_odds_watch": list(low_odds_watch or []),
     }
     destination = export_dir / "latest_tip_card.json"
+    previous = None
+    if destination.exists():
+        try:
+            previous = json.loads(destination.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            previous = None
+    payload["notifications"] = build_notifications(previous, payload)
     handle = tempfile.NamedTemporaryFile(
         mode="w",
         encoding="utf-8",
@@ -152,7 +168,7 @@ def save_latest_rejected_candidates(
 ) -> Path:
     """Atomically export every rejected candidate from the current run."""
     export_dir.mkdir(parents=True, exist_ok=True)
-    candidates = list(risk_rejected)
+    candidates = [enrich_rejection(item) for item in risk_rejected]
     for tip in selection_rejected:
         item = _tip_payload(tip, "REJECT")
         item.update(
@@ -161,7 +177,7 @@ def save_latest_rejected_candidates(
                 "rejection_reason": "not selected for the published top list",
             }
         )
-        candidates.append(item)
+        candidates.append(enrich_rejection(item))
 
     payload = {
         "schema_version": 1,

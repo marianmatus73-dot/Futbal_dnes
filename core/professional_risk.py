@@ -21,6 +21,7 @@ class RiskSummary:
     rejected: int = 0
     daily_exposure: float = 0.0
     drawdown_paused: bool = False
+    daily_loss_paused: bool = False
     rejected_reasons: dict[str, int] = field(default_factory=dict)
     rejected_candidates: list[dict] = field(default_factory=list)
 
@@ -216,6 +217,25 @@ def effective_confidence(bet: Bet, samples: int) -> int:
     return confidence
 
 
+def _today_settled_profit(conn: sqlite3.Connection, today: str) -> float:
+    """Return today's settled P/L when the production schema supports it."""
+    if conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='sport_bets'"
+    ).fetchone() is None:
+        return 0.0
+    columns = {str(row[1]) for row in conn.execute("PRAGMA table_info(sport_bets)")}
+    if "profit" not in columns:
+        return 0.0
+    timestamp = "settled_at" if "settled_at" in columns else "start_time" if "start_time" in columns else None
+    if timestamp is None:
+        return 0.0
+    return float(conn.execute(
+        f"SELECT COALESCE(SUM(CAST(profit AS REAL)), 0) FROM sport_bets "
+        f"WHERE SUBSTR(COALESCE({timestamp},''),1,10)=?",
+        (today,),
+    ).fetchone()[0] or 0.0)
+
+
 def apply_professional_risk_controls(
     outputs: list[dict], settings: Settings
 ) -> RiskSummary:
@@ -257,6 +277,17 @@ def apply_professional_risk_controls(
                 "WHERE allocation_date=? GROUP BY sport", (today,)
             ).fetchall()
         }
+        league_allocations = {
+            (str(row[0]), str(row[1])): float(row[2] or 0.0)
+            for row in conn.execute(
+                "SELECT sport, league, SUM(stake) FROM professional_risk_allocations "
+                "WHERE allocation_date=? GROUP BY sport, league", (today,)
+            ).fetchall()
+        }
+        settled_profit_today = _today_settled_profit(conn, today)
+    daily_loss_limit = settings.bank * float(os.getenv("MAX_DAILY_LOSS_PCT", "0.03"))
+    summary.daily_loss_paused = settled_profit_today <= -daily_loss_limit
+    league_limit = settings.bank * float(os.getenv("MAX_LEAGUE_EXPOSURE_PCT", "0.03"))
     context_db = SportContextDatabase(settings)
     profile_cache: dict[tuple[str, str, tuple[float, float | None]], tuple[int, float]] = {}
     league_clv_cache: dict[tuple[str, str], LeagueCLVProfile] = {}
@@ -334,6 +365,8 @@ def apply_professional_risk_controls(
             reason = ""
             if summary.drawdown_paused:
                 reason = "drawdown pause"
+            elif summary.daily_loss_paused:
+                reason = "daily loss limit reached"
             elif not policy.min_odds <= bet.odds <= policy.max_odds:
                 reason = "odds outside sport limits"
             elif (
@@ -355,6 +388,8 @@ def apply_professional_risk_controls(
                 reason = "duplicate event in current run"
             elif existing_allocation and not repeats_same_selection:
                 reason = "opposite selection already allocated today"
+            elif existing_allocation and repeats_same_selection and bet.market != "h2h":
+                reason = "correlated event exposure reached"
             elif (
                 result.sport == "football"
                 and accepted_odds_bands.get(odds_band, 0) >= 2
@@ -366,6 +401,10 @@ def apply_professional_risk_controls(
                 reason = "daily exposure limit reached"
             elif not repeats_same_selection and sport_exposure + stake > sport_limit:
                 reason = "sport exposure limit reached"
+            elif not repeats_same_selection and league_allocations.get(
+                (result.sport, bet.league), 0.0
+            ) + stake > league_limit:
+                reason = "league exposure limit reached"
 
             if reason:
                 _reject(summary, f"{result.sport}: {reason}")
@@ -405,6 +444,9 @@ def apply_professional_risk_controls(
                 accepted_daily += stake
                 sport_exposure += stake
                 sport_allocations[result.sport] = sport_exposure
+                league_allocations[(result.sport, bet.league)] = (
+                    league_allocations.get((result.sport, bet.league), 0.0) + stake
+                )
             summary.accepted += 1
             allocation_key = hashlib.sha256(
                 "|".join((result.sport, bet.league, bet.event, bet.selection, bet.start_time)).encode()

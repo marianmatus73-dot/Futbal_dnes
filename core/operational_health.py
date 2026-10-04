@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
@@ -164,6 +165,14 @@ def build_operational_health(
             "note": "1X2 a dvojtip fungujú bez plateného xG. Góly nad/pod sa bez xG iba sledujú a vyhodnocujú.",
         },
         "sports": sports,
+        "bankroll_safety": {
+            "drawdown_paused": bool(getattr(risk_summary, "drawdown_paused", False)),
+            "daily_loss_paused": bool(getattr(risk_summary, "daily_loss_paused", False)),
+            "daily_exposure": float(getattr(risk_summary, "daily_exposure", 0.0) or 0.0),
+            "max_daily_loss_pct": float(os.getenv("MAX_DAILY_LOSS_PCT", "0.03")) * 100,
+            "max_league_exposure_pct": float(os.getenv("MAX_LEAGUE_EXPOSURE_PCT", "0.03")) * 100,
+            "correlated_event_limit": 1,
+        },
     }
     output = Path(export_dir)
     output.mkdir(parents=True, exist_ok=True)
