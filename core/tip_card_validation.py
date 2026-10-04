@@ -9,6 +9,7 @@ REQUIRED_CANDIDATE_FIELDS = (
     "sport", "event", "selection", "odds", "model_probability",
     "market_probability", "edge", "confidence", "decision",
 )
+SUPPORTED_SCHEMA_VERSIONS = {2, 3}
 
 
 class TipCardValidationError(ValueError):
@@ -30,7 +31,7 @@ def validate_tip_card(path: Path, *, max_age_minutes: int = 30) -> dict:
     except (OSError, json.JSONDecodeError) as exc:
         raise TipCardValidationError(f"Cannot read valid tip card: {path}") from exc
 
-    if card.get("schema_version") != 2:
+    if card.get("schema_version") not in SUPPORTED_SCHEMA_VERSIONS:
         raise TipCardValidationError("Unsupported tip card schema_version")
 
     try:
