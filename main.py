@@ -52,7 +52,11 @@ from core.pro_tipper import (
     format_rejected_report,
 )
 from core.top_tips import select_top_tips, select_telegram_tips
-from core.tip_card import save_latest_rejected_candidates, save_latest_tip_card
+from core.tip_card import (
+    build_low_odds_watch,
+    save_latest_rejected_candidates,
+    save_latest_tip_card,
+)
 from core.tip_card_validation import validate_tip_card
 from core.mobile_history import export_mobile_tip_history
 from core.mobile_performance import export_mobile_performance
@@ -696,11 +700,17 @@ def build_report(
     telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
 
     if write_tip_card:
+        low_odds_watch = build_low_odds_watch(
+            all_tips,
+            risk_rejected_candidates or [],
+            limit=int(os.getenv("LOW_ODDS_WATCH_LIMIT", "5")),
+        )
         card_path = save_latest_tip_card(
             top_tips,
             rejected,
             export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
             top_limit=top_limit,
+            low_odds_watch=low_odds_watch,
         )
         log.info("Saved complete daily tip card: %s", card_path)
         rejected_path = save_latest_rejected_candidates(
