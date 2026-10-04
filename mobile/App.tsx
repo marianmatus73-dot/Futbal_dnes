@@ -191,7 +191,7 @@ function CandidateItem({ tip }: { tip: Tip }) {
       </View>
       <OddsMovement tip={tip} />
       <View style={styles.candidateFooter}><View><Text style={styles.bookmaker}>{tip.bookmaker}</Text><BookmakerWeight tip={tip} /><Text style={[styles.riskText, { color: riskColor(tip.risk) }]}>RIZIKO {tip.risk?.toUpperCase()}</Text></View><Pressable onPress={() => setExpanded((value) => !value)} hitSlop={10}><Text style={styles.detailButton}>{expanded ? "Skryť detail" : "Prečo neprešiel?"}</Text></Pressable></View>
-      {expanded ? <View style={styles.rejectionBox}><Text style={styles.rejectionTitle}>Rozhodnutie profesionálneho filtra</Text>{reasons.map((reason, index) => <Text key={`${reason}-${index}`} style={styles.rejectionText}>• {reason}</Text>)}{tip.reason ? <Text style={styles.modelReason}>{tip.reason}</Text> : null}</View> : null}
+      {expanded ? <View style={styles.rejectionBox}><Text style={styles.rejectionTitle}>Rozhodnutie profesionálneho filtra</Text>{tip.rejection_explanation ? <><Text style={styles.rejectionText}>• {tip.rejection_explanation.category}: {tip.rejection_explanation.explanation}</Text><Text style={styles.modelReason}>{tip.rejection_explanation.next_step}</Text></> : reasons.map((reason, index) => <Text key={`${reason}-${index}`} style={styles.rejectionText}>• {reason}</Text>)}{tip.reason ? <Text style={styles.modelReason}>{tip.reason}</Text> : null}</View> : null}
       <Text style={styles.updatedText}>Aktualizované {relativeTime(tip.created_at || "")}</Text>
     </View>
   );
@@ -457,9 +457,54 @@ function System({ data }: { data: AppData }) {
             <Text style={styles.infoTitle}>Futbal bez plateného xG</Text>
             <Text style={styles.infoText}>1X2 a dvojtip sú aktívne. Over/Under sa bez xG bezpečne sleduje a vyhodnocuje, ale neposiela sa automaticky ako ostrý tip. Platené xG teda nie je podmienkou fungovania futbalu.</Text>
           </View>
+          {data.operationalHealth.bankroll_safety && (
+            <View style={styles.systemSection}>
+              <Text style={styles.infoTitle}>Ochrana bankrollu</Text>
+              <StatusRow label="Denná strata" value={data.operationalHealth.bankroll_safety.daily_loss_paused ? "Nové tipy pozastavené" : `Limit ${data.operationalHealth.bankroll_safety.max_daily_loss_pct.toFixed(1)} %`} ok={!data.operationalHealth.bankroll_safety.daily_loss_paused} />
+              <StatusRow label="Drawdown" value={data.operationalHealth.bankroll_safety.drawdown_paused ? "Ochranná pauza" : "V norme"} ok={!data.operationalHealth.bankroll_safety.drawdown_paused} />
+              <StatusRow label="Liga a korelácia" value={`${data.operationalHealth.bankroll_safety.max_league_exposure_pct.toFixed(1)} % · max. ${data.operationalHealth.bankroll_safety.correlated_event_limit} výber na zápas`} ok />
+            </View>
+          )}
         </>
       ) : (
         <View style={styles.infoCard}><Text style={styles.infoTitle}>Detail zdravia dát</Text><Text style={styles.infoText}>Objaví sa po najbližšom produkčnom behu.</Text></View>
+      )}
+      {(data.tipCard.notifications ?? []).length > 0 && (
+        <View style={styles.systemSection}>
+          <Text style={styles.infoTitle}>Dôležité upozornenia</Text>
+          {(data.tipCard.notifications ?? []).slice(0, 8).map((item, index) => (
+            <StatusRow key={`${item.type}-${index}`} label={item.title} value={item.message} ok={item.type !== "CANCELLED"} />
+          ))}
+        </View>
+      )}
+      {data.modelGovernance && (
+        <>
+          <View style={styles.systemSection}>
+            <Text style={styles.infoTitle}>Kvalita zdrojov</Text>
+            {data.modelGovernance.source_quality.map((item) => (
+              <StatusRow key={item.sport} label={item.sport} value={`${item.score}/100 · ${item.status}`} ok={item.status === "GOOD"} />
+            ))}
+          </View>
+          <View style={styles.systemSection}>
+            <Text style={styles.infoTitle}>Futbalové modely podľa trhu</Text>
+            {data.modelGovernance.football_market_modes.map((item) => (
+              <StatusRow key={item.market} label={item.market} value={`${item.mode} · ${item.metrics.settled ?? 0} uzavretých`} ok={item.mode === "LIVE"} />
+            ))}
+          </View>
+          <View style={styles.systemSection}>
+            <Text style={styles.infoTitle}>Týždenný tréner modelu</Text>
+            <Text style={styles.infoText}>{data.modelGovernance.principle}</Text>
+            {data.modelGovernance.weekly_model_coach.filter((item) => item.status === "READY").slice(0, 5).map((item) => (
+              <StatusRow key={item.segment} label={item.segment} value={item.recommendations[0] ?? "Bez zmeny"} ok />
+            ))}
+          </View>
+          <View style={styles.systemSection}>
+            <Text style={styles.infoTitle}>Champion vs. challenger</Text>
+            {data.modelGovernance.champion_challenger.map((item) => (
+              <StatusRow key={item.sport} label={item.sport} value={`${item.challenger.mode} · ${item.challenger.evaluated_samples}/${item.challenger.minimum_samples}`} ok={item.decision === "EVALUATE"} />
+            ))}
+          </View>
+        </>
       )}
       <View style={styles.signatureCard}>
         <Image source={require("./assets/matyus-signature.png")} style={styles.signatureImage} resizeMode="contain" accessible accessibilityLabel="Osobný podpis Mátyus s erbom" />

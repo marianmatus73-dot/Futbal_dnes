@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { DATA_BASE_URL } from "./config";
-import type { AppData, MobileHistory, MobilePerformance, ModelTable, OperationalHealth, TipCard } from "./types";
+import type { AppData, MobileHistory, MobilePerformance, ModelGovernance, ModelTable, OperationalHealth, TipCard } from "./types";
 
 const CACHE_KEY = "multisport:last-data:v1";
 
@@ -38,7 +38,7 @@ function rowsFrom(table: ModelTable) {
 
 export async function loadAppData(): Promise<AppData> {
   try {
-    const [tipCard, table, history, performance, operationalHealth] = await Promise.all([
+    const [tipCard, table, history, performance, operationalHealth, modelGovernance] = await Promise.all([
       fetchJson<TipCard>("latest_tip_card.json"),
       fetchJson<ModelTable>("professional_model_table.json"),
       fetchOptionalJson<MobileHistory>("mobile_tip_history.json", {
@@ -51,6 +51,7 @@ export async function loadAppData(): Promise<AppData> {
         current_bankroll: 1000, points: [],
       }),
       fetchOptionalJson<OperationalHealth | undefined>("operational_health.json", undefined),
+      fetchOptionalJson<ModelGovernance | undefined>("model_governance.json", undefined),
     ]);
     const value: AppData = {
       tipCard,
@@ -60,6 +61,7 @@ export async function loadAppData(): Promise<AppData> {
       resultsBySport: history.results_sports ?? {},
       performance,
       operationalHealth,
+      modelGovernance,
       source: "live",
       refreshedAt: new Date().toISOString(),
     };
