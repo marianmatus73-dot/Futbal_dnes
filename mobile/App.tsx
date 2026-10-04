@@ -434,6 +434,33 @@ function System({ data }: { data: AppData }) {
       <StatusRow label="Zdroj v aplikácii" value={data.source === "live" ? "Aktuálne online dáta" : "Posledná uložená verzia"} ok={data.source === "live"} />
       <StatusRow label="Posledný report" value={relativeTime(data.tipCard.generated_at)} ok={healthy} />
       <StatusRow label="Mobilné dáta" value="API kľúče nie sú v telefóne" ok />
+      {data.operationalHealth ? (
+        <>
+          <View style={styles.systemSection}>
+            <Text style={styles.infoTitle}>Dnešný priechod tipov</Text>
+            <Text style={styles.infoText}>
+              {data.operationalHealth.funnel.candidates} kandidátov · {data.operationalHealth.funnel.accepted} prijatých · {data.operationalHealth.funnel.rejected} zamietnutých
+            </Text>
+          </View>
+          <View style={styles.systemSection}>
+            <Text style={styles.infoTitle}>Dáta podľa športu</Text>
+            {data.operationalHealth.sports.map((item) => (
+              <StatusRow
+                key={item.sport}
+                label={({ football: "Futbal", tennis: "Tenis", basketball: "Basketbal", hockey: "Hokej", baseball: "Baseball", handball: "Hádzaná", nfl: "NFL" } as Record<string, string>)[item.sport] ?? item.sport}
+                value={`${item.status === "READY" ? "Pripravené" : item.status === "COLLECTING" ? "Zbiera dáta" : item.status === "IDLE" ? "Bez dnešných udalostí" : item.status === "CAUTION" ? "Opatrný režim" : "Treba skontrolovať"} · ${item.settled_bets}/${item.minimum_settled} uzavretých · ${item.publishing_mode}`}
+                ok={item.status === "READY" || item.status === "IDLE"}
+              />
+            ))}
+          </View>
+          <View style={styles.infoCard}>
+            <Text style={styles.infoTitle}>Futbal bez plateného xG</Text>
+            <Text style={styles.infoText}>1X2 a dvojtip sú aktívne. Over/Under sa bez xG bezpečne sleduje a vyhodnocuje, ale neposiela sa automaticky ako ostrý tip. Platené xG teda nie je podmienkou fungovania futbalu.</Text>
+          </View>
+        </>
+      ) : (
+        <View style={styles.infoCard}><Text style={styles.infoTitle}>Detail zdravia dát</Text><Text style={styles.infoText}>Objaví sa po najbližšom produkčnom behu.</Text></View>
+      )}
       <View style={styles.signatureCard}>
         <Image source={require("./assets/matyus-signature.png")} style={styles.signatureImage} resizeMode="contain" accessible accessibilityLabel="Osobný podpis Mátyus s erbom" />
       </View>
@@ -478,7 +505,7 @@ function AppContent() {
 
   if (loading) return <SafeAreaView style={styles.loading}><StatusBar style="light" /><ActivityIndicator color={colors.primary} size="large" /><Text style={styles.loadingText}>Načítavam najnovšiu analýzu…</Text></SafeAreaView>;
 
-  const usable = data ?? { tipCard: emptyCard, modelRows: [], historyBySport: {}, resultsBySport: {}, performance: { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, source: "live" as const, refreshedAt: "" };
+  const usable = data ?? { tipCard: emptyCard, modelRows: [], historyBySport: {}, resultsBySport: {}, performance: { schema_version: 1, generated_at: "", starting_bankroll: 1000, current_bankroll: 1000, points: [] }, operationalHealth: undefined, source: "live" as const, refreshedAt: "" };
   return (
     <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <StatusBar style="light" />
@@ -509,6 +536,7 @@ function NavItem({ icon, label, active, onPress }: { icon: string; label: string
 }
 
 const styles = StyleSheet.create({
+  systemSection: { marginTop: 22 },
   signatureCard: { marginTop: 24, padding: 16, alignItems: "center" },
   signatureImage: { width: "100%", maxWidth: 360, aspectRatio: 1800 / 900 },
   safe: { flex: 1, backgroundColor: colors.background }, loading: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center", gap: 16 }, loadingText: { color: colors.muted, fontSize: 15 },

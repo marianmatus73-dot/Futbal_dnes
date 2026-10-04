@@ -129,6 +129,39 @@ export type MobilePerformance = {
   points: PerformancePoint[];
 };
 
+export type SportHealth = {
+  sport: string;
+  status: "READY" | "COLLECTING" | "CAUTION" | "ATTENTION" | "IDLE" | string;
+  message: string;
+  publishing_mode: "LIVE" | "SHADOW" | string;
+  snapshots_24h: number;
+  latest_snapshot_at?: string | null;
+  open_bets: number;
+  settled_bets: number;
+  minimum_settled: number;
+  missing_event_id: number;
+  yield_pct: number;
+};
+
+export type OperationalHealth = {
+  schema_version: number;
+  generated_at: string;
+  funnel: {
+    candidates: number;
+    accepted: number;
+    rejected: number;
+    rejection_reasons?: Record<string, number>;
+  };
+  football_without_paid_xg: {
+    paid_xg_required: boolean;
+    h2h: string;
+    double_chance: string;
+    totals: string;
+    note: string;
+  };
+  sports: SportHealth[];
+};
+
 export type AppData = {
   tipCard: TipCard;
   modelRows: ModelRow[];
@@ -136,6 +169,7 @@ export type AppData = {
   historyBySport: Record<string, HistoryTip[]>;
   resultsBySport: Record<string, HistoryTip[]>;
   performance: MobilePerformance;
+  operationalHealth?: OperationalHealth;
   source: "live" | "cache";
   refreshedAt: string;
 };
