@@ -30,6 +30,22 @@ class FootballEventIdentityTests(unittest.TestCase):
         )
         self.assertIs(engine._match_game(bet, [game]), game)
 
+    def test_mismatched_external_id_never_falls_back_to_team_alias(self) -> None:
+        engine = object.__new__(FootballSettlementEngine)
+        bet = OpenFootballBet(
+            bet_id=1, source_hash="hash", sport_key="soccer_test", league="Test",
+            event="A vs B", market="h2h", selection="A",
+            start_time="2026-08-20T10:00:00Z", home_team="A", away_team="B",
+            external_event_id="stored-id",
+        )
+        game = CompletedFootballGame(
+            event_id="different-id", sport_key="soccer_test",
+            home_team="A", away_team="B",
+            commence_time="2026-08-20T10:00:00Z", home_goals=2, away_goals=1,
+            last_update="2026-08-20T12:00:00Z",
+        )
+        self.assertIsNone(engine._match_game(bet, [game]))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -25,14 +25,15 @@ class SportSettlementTotalsTests(unittest.TestCase):
                     conn.execute(
                         """INSERT INTO sport_bets
                         (sport, league, event, home_team, away_team, market,
-                         selection, odds, stake, result, source_hash)
+                         selection, odds, stake, result, source_hash, start_time)
                         VALUES ('football', 'soccer_test', 'Home vs Away',
                                 'Home', 'Away', 'double_chance', ?, 1.5, 1,
-                                'OPEN', ?)""",
+                                'OPEN', ?, '2026-10-04T18:00:00Z')""",
                         (selection, selection),
                     )
             scores = [{
                 "completed": True, "home_team": "Home", "away_team": "Away",
+                "commence_time": "2026-10-04T18:00:00Z",
                 "scores": [
                     {"name": "Home", "score": "1"},
                     {"name": "Away", "score": "1"},
@@ -107,12 +108,14 @@ class SportSettlementTotalsTests(unittest.TestCase):
                 conn.execute(
                     """INSERT INTO sport_bets
                     (sport, league, event, home_team, away_team, market,
-                     selection, odds, stake, result, source_hash)
+                     selection, odds, stake, result, source_hash, start_time)
                     VALUES ('football', 'soccer_test', 'Home vs Away', 'Home',
-                            'Away', 'totals_2.5', 'Over 2.5', 1.9, 10, 'OPEN', 'x')"""
+                            'Away', 'totals_2.5', 'Over 2.5', 1.9, 10, 'OPEN',
+                            'x', '2026-10-04T18:00:00Z')"""
                 )
             scores = [{
                 "completed": True, "home_team": "Home", "away_team": "Away",
+                "commence_time": "2026-10-04T18:00:00Z",
                 "scores": [{"name": "Home", "score": "2"}, {"name": "Away", "score": "1"}],
             }]
             with patch("core.sport_settlement.fetch_scores", AsyncMock(return_value=scores)), patch("core.sport_settlement.update_closing_lines"), patch("core.sport_settlement.refresh_bookmaker_stats"):
@@ -121,6 +124,97 @@ class SportSettlementTotalsTests(unittest.TestCase):
             with sqlite3.connect(db) as conn:
                 row = conn.execute("SELECT result, final_score, home_goals, away_goals FROM sport_bets").fetchone()
             self.assertEqual(row, ("WON", "2-1", 2, 1))
+
+    def test_legacy_row_backfills_identity_only_from_unique_time_match(self):
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            db = Path(tmp) / "bets.db"
+            settings = Settings(db_file=str(db), odds_api_key="test")
+            init_sport_db(settings)
+            with sqlite3.connect(db) as conn:
+                conn.execute(
+                    """INSERT INTO sport_bets
+                    (sport, league, event, home_team, away_team, market,
+                     selection, odds, stake, result, source_hash, start_time)
+                    VALUES ('hockey', 'icehockey_test', 'Home vs Away', 'Home',
+                            'Away', 'h2h', 'Home', 1.8, 1, 'OPEN', 'legacy',
+                            '2026-10-04T18:00:00Z')"""
+                )
+            scores = [
+                {
+                    "id": "stable-123",
+                    "completed": True,
+                    "commence_time": "2026-10-04T18:00:00Z",
+                    "home_team": "Home",
+                    "away_team": "Away",
+                    "scores": [
+                        {"name": "Home", "score": "3"},
+                        {"name": "Away", "score": "1"},
+                    ],
+                }
+            ]
+            with (
+                patch(
+                    "core.sport_settlement.fetch_scores",
+                    AsyncMock(return_value=scores),
+                ),
+                patch("core.sport_settlement.update_closing_lines"),
+                patch("core.sport_settlement.refresh_bookmaker_stats"),
+                patch("core.sport_settlement.update_elo_after_result"),
+            ):
+                settled = asyncio.run(
+                    settle_sport_bets(settings, "hockey", ["icehockey_test"])
+                )
+            self.assertEqual(settled, 1)
+            with sqlite3.connect(db) as conn:
+                row = conn.execute(
+                    "SELECT result, external_event_id FROM sport_bets"
+                ).fetchone()
+            self.assertEqual(row, ("WON", "stable-123"))
+
+    def test_existing_identity_never_falls_back_to_matching_names(self):
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            db = Path(tmp) / "bets.db"
+            settings = Settings(db_file=str(db), odds_api_key="test")
+            init_sport_db(settings)
+            with sqlite3.connect(db) as conn:
+                conn.execute("ALTER TABLE sport_bets ADD COLUMN external_event_id TEXT")
+                conn.execute(
+                    """INSERT INTO sport_bets
+                    (sport, league, event, home_team, away_team, market,
+                     selection, odds, stake, result, source_hash,
+                     external_event_id, start_time)
+                    VALUES ('tennis', 'tennis_test', 'A vs B', 'A', 'B',
+                            'h2h', 'A', 1.8, 1, 'OPEN', 'strict', 'wrong-id',
+                            '2026-10-04T18:00:00Z')"""
+                )
+            scores = [
+                {
+                    "id": "right-id",
+                    "completed": True,
+                    "commence_time": "2026-10-04T18:00:00Z",
+                    "home_team": "A",
+                    "away_team": "B",
+                    "scores": [
+                        {"name": "A", "score": "2"},
+                        {"name": "B", "score": "0"},
+                    ],
+                }
+            ]
+            with (
+                patch(
+                    "core.sport_settlement.fetch_scores",
+                    AsyncMock(return_value=scores),
+                ),
+                patch("core.sport_settlement.update_closing_lines"),
+                patch("core.sport_settlement.refresh_bookmaker_stats"),
+            ):
+                settled = asyncio.run(
+                    settle_sport_bets(settings, "tennis", ["tennis_test"])
+                )
+            self.assertEqual(settled, 0)
+            with sqlite3.connect(db) as conn:
+                result = conn.execute("SELECT result FROM sport_bets").fetchone()[0]
+            self.assertEqual(result, "OPEN")
 
 
 if __name__ == "__main__":
