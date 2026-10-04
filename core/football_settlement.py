@@ -486,6 +486,9 @@ class FootballSettlementEngine:
             for game in games:
                 if game.event_id and game.event_id == bet.external_event_id:
                     return game
+            # A stored provider identity must never be overridden by fuzzy
+            # team matching. A mismatch is safer left unresolved for audit.
+            return None
 
         exact_candidates = [
             game

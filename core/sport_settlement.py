@@ -21,6 +21,83 @@ def now_utc() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _parse_time(value: Any) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def _match_score_event(
+    *,
+    external_event_id: str,
+    home_team: str,
+    away_team: str,
+    event_name: str,
+    start_time: str,
+    score_events: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    """Resolve one result without ever overriding a stored provider ID."""
+    identity = str(external_event_id or "").strip()
+    if identity:
+        return next(
+            (
+                event
+                for event in score_events
+                if event.get("external_event_id") == identity
+            ),
+            None,
+        )
+
+    bet_home = norm(home_team or "")
+    bet_away = norm(away_team or "")
+    bet_event = norm(event_name or "")
+    candidates = []
+    for event in score_events:
+        score_home = norm(event.get("home", ""))
+        score_away = norm(event.get("away", ""))
+        teams_match = (
+            bool(bet_home and bet_away)
+            and bet_home == score_home
+            and bet_away == score_away
+        )
+        event_matches = bool(bet_event) and bet_event == norm(event.get("event", ""))
+        if teams_match or (not bet_home and not bet_away and event_matches):
+            candidates.append(event)
+
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        candidate_time = _parse_time(candidates[0].get("commence_time"))
+        bet_time = _parse_time(start_time)
+        if bet_time is None or candidate_time is None:
+            return None
+        if abs((candidate_time - bet_time).total_seconds()) > 12 * 60 * 60:
+            return None
+        return candidates[0]
+
+    bet_time = _parse_time(start_time)
+    if bet_time is None:
+        return None
+    timed = []
+    for candidate in candidates:
+        candidate_time = _parse_time(candidate.get("commence_time"))
+        if candidate_time is not None:
+            timed.append((abs((candidate_time - bet_time).total_seconds()), candidate))
+    timed.sort(key=lambda item: item[0])
+    if not timed or timed[0][0] > 12 * 60 * 60:
+        return None
+    if len(timed) > 1 and timed[0][0] == timed[1][0]:
+        return None
+    return timed[0][1]
+
+
 def _score_result(event: dict[str, Any]) -> tuple[str, int, int] | None:
     scores = event.get("scores") or []
 
@@ -210,7 +287,8 @@ async def settle_sport_bets(
         open_rows = conn.execute(
             """
             SELECT id, league, event, home_team, away_team,
-                   selection, odds, stake, market, external_event_id
+                   selection, odds, stake, market, external_event_id,
+                   start_time
             FROM sport_bets
             WHERE sport=?
               AND market IN ('h2h', 'totals_2.5', 'double_chance')
@@ -271,6 +349,7 @@ async def settle_sport_bets(
                     "event": f"{home} vs {away}",
                     "winner": winner,
                     "external_event_id": str(event.get("id", "")).strip(),
+                    "commence_time": str(event.get("commence_time", "")).strip(),
                     "home_score": home_score,
                     "away_score": away_score,
                 }
@@ -294,37 +373,18 @@ async def settle_sport_bets(
                 stake,
                 market,
                 external_event_id,
+                start_time,
             ) = row
 
-            bet_home = norm(home_team or "")
-            bet_away = norm(away_team or "")
-            bet_event = norm(event_name or "")
             bet_selection = norm(selection or "")
-
-            matched = None
-
-            for score_event in score_events:
-                if external_event_id:
-                    if score_event["external_event_id"] == str(external_event_id):
-                        matched = score_event
-                        break
-                    continue
-                score_home = norm(score_event["home"])
-                score_away = norm(score_event["away"])
-                score_event_name = norm(score_event["event"])
-
-                if (
-                    bet_home
-                    and bet_away
-                    and bet_home == score_home
-                    and bet_away == score_away
-                ):
-                    matched = score_event
-                    break
-
-                if bet_event and bet_event == score_event_name:
-                    matched = score_event
-                    break
+            matched = _match_score_event(
+                external_event_id=str(external_event_id or ""),
+                home_team=str(home_team or ""),
+                away_team=str(away_team or ""),
+                event_name=str(event_name or ""),
+                start_time=str(start_time or ""),
+                score_events=score_events,
+            )
 
             if not matched:
                 continue
@@ -374,6 +434,7 @@ async def settle_sport_bets(
                     int(matched["away_score"]),
                     f'{matched["home_score"]}-{matched["away_score"]}',
                     "the_odds_api_scores",
+                    str(matched.get("external_event_id") or ""),
                     int(bet_id),
                 )
             )
@@ -400,6 +461,7 @@ async def settle_sport_bets(
                         ,away_goals=?
                         ,final_score=?
                         ,settlement_source=?
+                        ,external_event_id=COALESCE(NULLIF(TRIM(external_event_id), ''), ?)
                     WHERE id=?
                     """,
                     updates,
