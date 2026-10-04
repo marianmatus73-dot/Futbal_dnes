@@ -39,6 +39,7 @@ from core.sport_settlement import (
 )
 from core.audit_summary import audit_block_summary
 from core.performance_summary import performance_report
+from core.operational_health import build_operational_health, operational_health_report
 from core.bet_converter import bet_to_tip_dict
 from core.bankroll import bankroll_summary
 from core.pro_tipper import (
@@ -2215,11 +2216,24 @@ async def run() -> None:
 
     report_text += performance_report(settings)
 
+    professional_table = {}
     try:
         professional_table = build_professional_model_table(settings)
         report_text += professional_model_report(professional_table)
     except Exception:
         log.exception("Professional model table failed")
+
+    if not args.dry_run and not args.analytics and not args.backtest:
+        try:
+            operational_health = build_operational_health(
+                settings,
+                risk_summary=risk_summary,
+                professional_table=professional_table,
+                export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+            )
+            report_text += operational_health_report(operational_health)
+        except Exception:
+            log.exception("Operational health export failed")
 
     if "football_ai_health" in locals():
         report_text += "\n\n=== FOOTBALL AI HEALTH V15.2 ===\n"
