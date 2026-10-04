@@ -29,6 +29,7 @@ export type Tip = {
   raw_edge?: number;
   rejected_reasons?: string[];
   decision?: "ACCEPT" | "REJECT" | string;
+  watch_status?: "PASSED_PRO_FILTER" | "WATCH_ONLY" | string;
   start_time?: string;
   bookmaker_weight?: number;
   bookmaker_samples?: number;
@@ -44,6 +45,7 @@ export type TipCard = {
   publishable: boolean;
   selected: Tip[];
   rejected_sample?: Tip[];
+  low_odds_watch?: Tip[];
 };
 
 export type ModelRow = {

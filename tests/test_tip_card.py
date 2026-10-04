@@ -6,10 +6,40 @@ import unittest
 from pathlib import Path
 
 from core.pro_tipper import build_pro_tip, filter_value_tips
-from core.tip_card import save_latest_rejected_candidates, save_latest_tip_card
+from core.tip_card import (
+    build_low_odds_watch,
+    save_latest_rejected_candidates,
+    save_latest_tip_card,
+)
 
 
 class TipCardTests(unittest.TestCase):
+    def test_low_odds_watch_is_separate_and_deduplicates_opposite_sides(self) -> None:
+        accepted = build_pro_tip(
+            sport="football", league="test", match="A vs B", pick="A",
+            odds=1.50, model_probability=0.72, model_score=78,
+        )
+        rejected = {
+            "sport": "football", "league": "test", "event": "A vs B",
+            "selection": "B", "market": "h2h", "odds": 1.55,
+            "prob_final": 0.67, "prob_market": 0.64, "score": 70,
+            "rejection_reason": "conservative edge below sport minimum",
+        }
+        rows = build_low_odds_watch([accepted], [rejected])
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["pick"], "A")
+        self.assertEqual(rows[0]["watch_status"], "PASSED_PRO_FILTER")
+
+    def test_low_odds_watch_keeps_rejected_observation_without_publishing(self) -> None:
+        rows = build_low_odds_watch([], [{
+            "sport": "football", "league": "test", "event": "C vs D",
+            "selection": "C", "market": "h2h", "odds": 1.40,
+            "prob_final": 0.74, "prob_market": 0.71, "score": 68,
+            "rejection_reason": "confidence below sport minimum",
+        }])
+        self.assertEqual(rows[0]["decision"], "REJECT")
+        self.assertEqual(rows[0]["watch_status"], "WATCH_ONLY")
+
     def test_value_filter_uses_expected_return_for_lower_odds(self) -> None:
         tip = build_pro_tip(
             sport="football",

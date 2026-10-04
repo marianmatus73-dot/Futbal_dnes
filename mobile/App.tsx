@@ -208,6 +208,21 @@ function Candidates({ tips }: { tips: Tip[] }) {
   );
 }
 
+function LowOddsWatch({ tips }: { tips: Tip[] }) {
+  return (
+    <View style={styles.candidatesSection}>
+      <Text style={styles.lowOddsTitle}>Futbal · nižšie kurzy 1,20–1,60</Text>
+      <Text style={styles.candidatesSubtitle}>Samostatné sledovanie favoritov. Nie sú automaticky potvrdeným tipom a platené xG nie je podmienkou ich zobrazenia.</Text>
+      {tips.length ? tips.map((tip, index) => (
+        <View key={`low-odds-${tip.match}-${index}`}>
+          <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{tip.decision === "ACCEPT" ? "PREŠIEL FILTROM" : "SLEDOVANIE"}</Text></View>
+          <TipItem tip={tip} />
+        </View>
+      )) : <Text style={styles.historyEmpty}>V aktuálnom behu nebol vhodný zápas v tomto intervale. Sekcia sa doplní automaticky pri ďalšom náleze.</Text>}
+    </View>
+  );
+}
+
 const historyStatus = (result: string) => ({
   WON: { label: "VYŠIEL", color: colors.primary },
   LOST: { label: "NEVYŠIEL", color: colors.danger },
@@ -258,6 +273,7 @@ function Today({ data }: { data: AppData }) {
   const tips = [...(data.tipCard.selected ?? [])].sort(sorter);
   const candidates = [...(data.tipCard.rejected_sample ?? [])].sort(sorter);
   const allTips = [...tips, ...candidates];
+  const lowOdds = data.tipCard.low_odds_watch ?? [];
   return (
     <>
       <View style={styles.hero}>
@@ -272,6 +288,7 @@ function Today({ data }: { data: AppData }) {
       <View style={styles.sortRow}><Text style={styles.sortLabel}>Zoradiť:</Text>{([['time', 'Čas'], ['confidence', 'Confidence'], ['edge', 'Edge']] as const).map(([value, label]) => <Pressable key={value} onPress={() => setSort(value)} style={[styles.sortChip, sort === value && styles.sortChipActive]}><Text style={[styles.sortText, sort === value && styles.sortTextActive]}>{label}</Text></Pressable>)}</View>
       <View style={styles.nextDecision}><Text style={styles.nextDecisionLabel}>NAJBLIŽŠIE ROZHODNUTIE</Text><Text style={styles.nextDecisionValue}>{nextDecision(allTips)}</Text></View>
       {filter !== "candidates" ? (tips.length ? tips.map((tip, index) => <TipItem key={`${tip.sport}-${tip.match}-${index}`} tip={tip} />) : <EmptyTips />) : null}
+      {filter === "all" ? <LowOddsWatch tips={lowOdds} /> : null}
       {filter !== "confirmed" ? <Candidates tips={candidates} /> : null}
     </>
   );
@@ -289,6 +306,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
   const orderedSports = [...SPORTS].sort((a, b) => Number(favorites.includes(b)) - Number(favorites.includes(a)));
   const tips = data.tipCard.selected.filter((tip) => tip.sport === selected);
   const candidates = (data.tipCard.rejected_sample ?? []).filter((tip) => tip.sport === selected);
+  const lowOdds = selected === "football" ? (data.tipCard.low_odds_watch ?? []) : [];
   const row = data.modelRows.find((item) => item.sport === selected);
   const history = (data.historyBySport[selected] ?? []).filter((tip) => historyFilter === "all" || (historyFilter === "open" && tip.result === "OPEN") || (historyFilter === "won" && tip.result === "WON") || (historyFilter === "lost" && tip.result === "LOST"));
   const recentResults = data.resultsBySport[selected] ?? [];
@@ -329,6 +347,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
           ) : <Text style={styles.historyEmpty}>Zatiaľ nemáme uzavreté ostré tipy v tomto intervale.</Text>}
         </View>
       )}
+      {selected === "football" ? <LowOddsWatch tips={lowOdds} /> : null}
       {selected === "handball" && (
         <View style={styles.graphCard}>
           <Text style={styles.graphTitle}>Hádzaná · sledovací režim</Text>
@@ -506,7 +525,7 @@ const styles = StyleSheet.create({
   emptyCard: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 22, padding: 28, alignItems: "center" }, emptyIcon: { fontSize: 32 }, emptyTitle: { color: colors.text, fontWeight: "900", fontSize: 18, marginTop: 12 }, emptyText: { color: colors.muted, textAlign: "center", lineHeight: 21, marginTop: 8 },
   counters: { flexDirection: "row", gap: 8, marginBottom: 12 }, filters: { flexDirection: "row", gap: 8, marginBottom: 16 }, filterChip: { borderWidth: 1, borderColor: colors.border, borderRadius: 16, paddingHorizontal: 13, paddingVertical: 8, backgroundColor: colors.surface }, filterChipActive: { borderColor: colors.primary, backgroundColor: colors.primaryDark }, filterText: { color: colors.muted, fontWeight: "800", fontSize: 11 }, filterTextActive: { color: colors.primary },
   sortRow: { flexDirection: "row", alignItems: "center", gap: 7, marginBottom: 12 }, sortLabel: { color: colors.muted, fontSize: 10, marginRight: 2 }, sortChip: { borderRadius: 12, backgroundColor: colors.surface, paddingHorizontal: 10, paddingVertical: 6 }, sortChipActive: { backgroundColor: "#243C39" }, sortText: { color: colors.muted, fontSize: 9, fontWeight: "800" }, sortTextActive: { color: colors.primary }, nextDecision: { backgroundColor: "#102844", borderRadius: 15, padding: 13, marginBottom: 14 }, nextDecisionLabel: { color: colors.accent, fontSize: 9, fontWeight: "900", letterSpacing: 1 }, nextDecisionValue: { color: colors.text, fontSize: 12, fontWeight: "700", marginTop: 5 },
-  candidatesSection: { marginTop: 22 }, candidatesTitle: { color: colors.warning, fontSize: 21, fontWeight: "900" }, candidatesSubtitle: { color: colors.muted, lineHeight: 19, marginTop: 5, marginBottom: 13 }, candidateCard: { backgroundColor: "#171C2B", borderRadius: 22, borderWidth: 1, borderColor: "#664D24", padding: 17, marginBottom: 14 }, rejectedBadge: { backgroundColor: "#4A2B20", borderWidth: 1, borderColor: colors.warning, borderRadius: 9, paddingHorizontal: 8, paddingVertical: 6 }, rejectedBadgeText: { color: colors.warning, fontSize: 8, fontWeight: "900" }, candidateFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 }, detailButton: { color: colors.accent, fontSize: 11, fontWeight: "900" }, rejectionBox: { backgroundColor: "#251F1D", borderRadius: 14, padding: 12, marginTop: 12 }, rejectionTitle: { color: colors.warning, fontWeight: "900", fontSize: 11, marginBottom: 5 }, rejectionText: { color: "#D7C7B0", fontSize: 11, lineHeight: 17 }, modelReason: { color: colors.muted, fontSize: 10, lineHeight: 15, marginTop: 8 },
+  candidatesSection: { marginTop: 22 }, candidatesTitle: { color: colors.warning, fontSize: 21, fontWeight: "900" }, lowOddsTitle: { color: colors.primary, fontSize: 21, fontWeight: "900" }, candidatesSubtitle: { color: colors.muted, lineHeight: 19, marginTop: 5, marginBottom: 13 }, watchBadge: { alignSelf: "flex-start", backgroundColor: "#123B31", borderColor: colors.primary, borderWidth: 1, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6, marginBottom: 7 }, watchBadgeText: { color: colors.primary, fontSize: 9, fontWeight: "900" }, candidateCard: { backgroundColor: "#171C2B", borderRadius: 22, borderWidth: 1, borderColor: "#664D24", padding: 17, marginBottom: 14 }, rejectedBadge: { backgroundColor: "#4A2B20", borderWidth: 1, borderColor: colors.warning, borderRadius: 9, paddingHorizontal: 8, paddingVertical: 6 }, rejectedBadgeText: { color: colors.warning, fontSize: 8, fontWeight: "900" }, candidateFooter: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 12 }, detailButton: { color: colors.accent, fontSize: 11, fontWeight: "900" }, rejectionBox: { backgroundColor: "#251F1D", borderRadius: 14, padding: 12, marginTop: 12 }, rejectionTitle: { color: colors.warning, fontWeight: "900", fontSize: 11, marginBottom: 5 }, rejectionText: { color: "#D7C7B0", fontSize: 11, lineHeight: 17 }, modelReason: { color: colors.muted, fontSize: 10, lineHeight: 15, marginTop: 8 },
   historySection: { marginTop: 24, marginBottom: 8 }, historyTitle: { color: colors.text, fontSize: 21, fontWeight: "900" }, historySubtitle: { color: colors.muted, lineHeight: 18, fontSize: 12, marginTop: 5, marginBottom: 12 }, historyEmpty: { color: colors.muted, backgroundColor: colors.surface, borderRadius: 16, padding: 16, marginTop: 18, marginBottom: 8 }, historyCard: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border, borderRadius: 18, padding: 14, marginBottom: 10 }, historyTop: { flexDirection: "row", alignItems: "center" }, historyHeading: { flex: 1, paddingRight: 8 }, historyMatch: { color: colors.text, fontWeight: "800", fontSize: 14, marginTop: 3 }, historyBadge: { borderWidth: 1, borderRadius: 10, paddingHorizontal: 9, paddingVertical: 6 }, historyBadgeText: { fontSize: 9, fontWeight: "900" }, historyBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end", borderTopWidth: 1, borderColor: colors.border, marginTop: 12, paddingTop: 12 }, historyPick: { color: colors.text, fontWeight: "800", fontSize: 14, marginTop: 4 }, historyMarket: { color: colors.muted, fontSize: 10, marginTop: 3 }, scoreBox: { alignItems: "flex-end" }, finalScore: { fontSize: 20, fontWeight: "900", marginTop: 3 }, historyDetailLink: { color: colors.accent, fontSize: 10, fontWeight: "800", marginTop: 12 }, historyDetail: { backgroundColor: colors.surfaceAlt, borderRadius: 12, padding: 11, marginTop: 9 }, unresolvedNote: { color: colors.warning, fontSize: 10, lineHeight: 15, marginTop: 8 },
   historyFilters: { flexDirection: "row", flexWrap: "wrap", gap: 7, marginTop: 22, marginBottom: -10 },
   sportTabs: { gap: 9, paddingVertical: 6, paddingRight: 18, marginBottom: 16 }, sportTab: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, borderRadius: 15, alignItems: "center", paddingVertical: 10, paddingHorizontal: 13, minWidth: 78 }, tabEmoji: { fontSize: 20 }, sportTabText: { color: colors.muted, fontSize: 11, fontWeight: "800", marginTop: 4 },
