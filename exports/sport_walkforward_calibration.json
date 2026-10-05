@@ -18,12 +18,12 @@
     "status": "READY"
   },
   "football": {
-    "samples": 927,
-    "train_samples": 648,
+    "samples": 929,
+    "train_samples": 650,
     "test_samples": 279,
     "split": "chronological_70_30",
-    "raw_brier": 0.189701,
-    "calibrated_brier": 0.188296,
+    "raw_brier": 0.189509,
+    "calibrated_brier": 0.188001,
     "status": "READY"
   },
   "hockey": {
@@ -44,12 +44,12 @@
     "status": "BUILDING"
   },
   "tennis": {
-    "samples": 56,
+    "samples": 57,
     "train_samples": 39,
-    "test_samples": 17,
+    "test_samples": 18,
     "split": "chronological_70_30",
-    "raw_brier": 0.202338,
-    "calibrated_brier": 0.17678,
+    "raw_brier": 0.19155,
+    "calibrated_brier": 0.180848,
     "status": "READY"
   }
 }
