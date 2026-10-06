@@ -44,12 +44,12 @@
     "status": "BUILDING"
   },
   "tennis": {
-    "samples": 60,
+    "samples": 61,
     "train_samples": 42,
-    "test_samples": 18,
+    "test_samples": 19,
     "split": "chronological_70_30",
-    "raw_brier": 0.183589,
-    "calibrated_brier": 0.174162,
+    "raw_brier": 0.179096,
+    "calibrated_brier": 0.178154,
     "status": "READY"
   }
 }

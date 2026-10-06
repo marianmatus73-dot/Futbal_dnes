@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-06T12:20:08.805152+00:00",
+  "generated_at": "2026-10-06T20:39:14.411584+00:00",
   "limit_per_sport": 5,
   "sports": {
     "tennis": [
@@ -17,12 +17,12 @@
         "stake": 1.53,
         "closing_odds": null,
         "clv_pct": null,
-        "settlement_source": "",
-        "result": "OPEN",
-        "final_score": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "WON",
+        "final_score": "1-0",
         "start_time": "2026-10-06T11:08:30Z",
         "created_at": "2026-10-06 12:18:41",
-        "settled_at": null
+        "settled_at": "2026-10-06T20:37:28.307673+00:00"
       },
       {
         "sport": "tennis",
@@ -234,6 +234,26 @@
     "tennis": [
       {
         "sport": "tennis",
+        "league": "tennis_atp_china_open",
+        "match": "Novak Djokovic vs Alex de Minaur",
+        "pick": "Novak Djokovic",
+        "market": "h2h",
+        "odds": 1.65,
+        "bookmaker": "Betsson",
+        "model_probability": 0.6865913383462294,
+        "edge": 0.1328757082712786,
+        "stake": 1.53,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "WON",
+        "final_score": "1-0",
+        "start_time": "2026-10-06T11:08:30Z",
+        "created_at": "2026-10-06 12:18:41",
+        "settled_at": "2026-10-06T20:37:28.307673+00:00"
+      },
+      {
+        "sport": "tennis",
         "league": "tennis_wta_china_open",
         "match": "Linda Noskova vs Ekaterina Alexandrova",
         "pick": "Ekaterina Alexandrova",
@@ -311,26 +331,6 @@
         "start_time": "2026-10-05T07:00:00Z",
         "created_at": "2026-10-04 11:24:52",
         "settled_at": "2026-10-05T12:49:00.803512+00:00"
-      },
-      {
-        "sport": "tennis",
-        "league": "tennis_wta_china_open",
-        "match": "Coco Gauff vs Sun Xinran",
-        "pick": "Sun Xinran",
-        "market": "h2h",
-        "odds": 12.75,
-        "bookmaker": "Marathon Bet",
-        "model_probability": 0.09025171579075372,
-        "edge": 0.1507093763321099,
-        "stake": 0.1,
-        "closing_odds": null,
-        "clv_pct": null,
-        "settlement_source": "the_odds_api_scores",
-        "result": "LOST",
-        "final_score": "2-0",
-        "start_time": "2026-10-05T04:00:00Z",
-        "created_at": "2026-10-03 18:52:31",
-        "settled_at": "2026-10-05T22:14:11.222500+00:00"
       }
     ],
     "hockey": [

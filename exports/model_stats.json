@@ -1,13 +1,13 @@
 {
-  "total_bets": 2777,
-  "wins": 1177,
+  "total_bets": 2778,
+  "wins": 1178,
   "losses": 1600,
-  "winrate": 42.38,
-  "yield": 4.32,
-  "profit": 85.06,
-  "stake_sum": 1967.78,
-  "open_bets": 85,
-  "settled_bets": 2777,
+  "winrate": 42.4,
+  "yield": 4.37,
+  "profit": 86.06,
+  "stake_sum": 1969.31,
+  "open_bets": 90,
+  "settled_bets": 2778,
   "by_sport": {
     "baseball": {
       "total": 1509,
@@ -45,6 +45,15 @@
       "stake_sum": 12.84,
       "yield": 0.48
     },
+    "tennis": {
+      "total": 61,
+      "wins": 13,
+      "losses": 48,
+      "winrate": 21.31,
+      "profit": -0.89,
+      "stake_sum": 14.75,
+      "yield": -6.05
+    },
     "mma": {
       "total": 20,
       "wins": 5,
@@ -53,15 +62,6 @@
       "profit": -1.76,
       "stake_sum": 8.71,
       "yield": -20.22
-    },
-    "tennis": {
-      "total": 60,
-      "wins": 12,
-      "losses": 48,
-      "winrate": 20.0,
-      "profit": -1.89,
-      "stake_sum": 13.22,
-      "yield": -14.27
     },
     "hockey": {
       "total": 205,
@@ -93,13 +93,13 @@
       "yield": 7.04
     },
     "Betsson": {
-      "total": 33,
-      "wins": 17,
+      "total": 34,
+      "wins": 18,
       "losses": 16,
-      "winrate": 51.52,
-      "profit": 9.48,
-      "stake_sum": 21.34,
-      "yield": 44.42
+      "winrate": 52.94,
+      "profit": 10.47,
+      "stake_sum": 22.87,
+      "yield": 45.8
     },
     "Betclic (FR)": {
       "total": 44,
@@ -697,6 +697,15 @@
       "stake_sum": 3.95,
       "yield": -56.55
     },
+    "tennis_atp_china_open": {
+      "total": 9,
+      "wins": 1,
+      "losses": 8,
+      "winrate": 11.11,
+      "profit": -2.24,
+      "stake_sum": 4.76,
+      "yield": -46.96
+    },
     "icehockey_nhl": {
       "total": 173,
       "wins": 63,
@@ -705,15 +714,6 @@
       "profit": -2.49,
       "stake_sum": 64.99,
       "yield": -3.82
-    },
-    "tennis_atp_china_open": {
-      "total": 8,
-      "wins": 0,
-      "losses": 8,
-      "winrate": 0.0,
-      "profit": -3.23,
-      "stake_sum": 3.23,
-      "yield": -100.0
     },
     "Eredivisie": {
       "total": 21,
@@ -734,5 +734,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-10-06T12:20:08.857651+00:00"
+  "last_update": "2026-10-06T20:39:14.766813+00:00"
 }
