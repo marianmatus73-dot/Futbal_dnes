@@ -1,13 +1,13 @@
 {
-  "total_bets": 2783,
-  "wins": 1180,
-  "losses": 1603,
-  "winrate": 42.4,
-  "yield": 4.36,
-  "profit": 85.91,
-  "stake_sum": 1972.46,
-  "open_bets": 83,
-  "settled_bets": 2783,
+  "total_bets": 2785,
+  "wins": 1181,
+  "losses": 1604,
+  "winrate": 42.41,
+  "yield": 4.39,
+  "profit": 86.71,
+  "stake_sum": 1973.05,
+  "open_bets": 86,
+  "settled_bets": 2785,
   "by_sport": {
     "baseball": {
       "total": 1511,
@@ -46,13 +46,13 @@
       "yield": 0.48
     },
     "tennis": {
-      "total": 61,
-      "wins": 13,
-      "losses": 48,
-      "winrate": 21.31,
-      "profit": -0.89,
-      "stake_sum": 14.75,
-      "yield": -6.05
+      "total": 63,
+      "wins": 14,
+      "losses": 49,
+      "winrate": 22.22,
+      "profit": -0.1,
+      "stake_sum": 15.34,
+      "yield": -0.62
     },
     "mma": {
       "total": 20,
@@ -155,6 +155,15 @@
       "stake_sum": 0.46,
       "yield": 292.98
     },
+    "Coolbet": {
+      "total": 95,
+      "wins": 27,
+      "losses": 68,
+      "winrate": 28.42,
+      "profit": 1.33,
+      "stake_sum": 35.91,
+      "yield": 3.7
+    },
     "Winamax (FR)": {
       "total": 12,
       "wins": 6,
@@ -172,15 +181,6 @@
       "profit": 0.52,
       "stake_sum": 142.05,
       "yield": 0.36
-    },
-    "Coolbet": {
-      "total": 94,
-      "wins": 26,
-      "losses": 68,
-      "winrate": 27.66,
-      "profit": 0.32,
-      "stake_sum": 35.53,
-      "yield": 0.91
     },
     "Codere (IT)": {
       "total": 31,
@@ -209,15 +209,6 @@
       "stake_sum": 26.41,
       "yield": -1.59
     },
-    "Matchbook": {
-      "total": 170,
-      "wins": 68,
-      "losses": 102,
-      "winrate": 40.0,
-      "profit": -0.57,
-      "stake_sum": 104.32,
-      "yield": -0.55
-    },
     "Winamax (DE)": {
       "total": 20,
       "wins": 8,
@@ -226,6 +217,15 @@
       "profit": -0.59,
       "stake_sum": 21.36,
       "yield": -2.77
+    },
+    "Matchbook": {
+      "total": 171,
+      "wins": 68,
+      "losses": 103,
+      "winrate": 39.77,
+      "profit": -0.78,
+      "stake_sum": 104.53,
+      "yield": -0.75
     },
     "Everygame": {
       "total": 22,
@@ -463,6 +463,15 @@
       "stake_sum": 0.93,
       "yield": 110.0
     },
+    "tennis_atp_shanghai_masters": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "winrate": 100.0,
+      "profit": 1.01,
+      "stake_sum": 0.38,
+      "yield": 265.0
+    },
     "FIFA World Cup": {
       "total": 3,
       "wins": 2,
@@ -535,15 +544,6 @@
       "stake_sum": 0.98,
       "yield": 0.61
     },
-    "tennis_wta_china_open": {
-      "total": 27,
-      "wins": 5,
-      "losses": 22,
-      "winrate": 18.52,
-      "profit": -0.06,
-      "stake_sum": 4.48,
-      "yield": -1.31
-    },
     "Argentina Primera Division": {
       "total": 81,
       "wins": 22,
@@ -570,6 +570,15 @@
       "profit": -0.27,
       "stake_sum": 3.19,
       "yield": -8.31
+    },
+    "tennis_wta_china_open": {
+      "total": 28,
+      "wins": 5,
+      "losses": 23,
+      "winrate": 17.86,
+      "profit": -0.27,
+      "stake_sum": 4.69,
+      "yield": -5.72
     },
     "Belgian Pro League": {
       "total": 23,
@@ -734,5 +743,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-10-07T12:11:46.694573+00:00"
+  "last_update": "2026-10-07T20:54:01.441825+00:00"
 }

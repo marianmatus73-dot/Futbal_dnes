@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-07T12:11:46.802324+00:00",
+  "generated_at": "2026-10-07T20:54:01.540680+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -87,15 +87,15 @@
       "sport": "tennis",
       "mode": "SHADOW",
       "metrics": {
-        "settled": 61,
-        "stake": 14.75,
-        "profit": -0.8923,
-        "yield_pct": -6.049,
+        "settled": 63,
+        "stake": 15.34,
+        "profit": -0.0953,
+        "yield_pct": -0.621,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.155116,
-        "calibration_error": 0.123995,
-        "probability_samples": 61,
+        "brier_score": 0.158445,
+        "calibration_error": 0.127638,
+        "probability_samples": 63,
         "max_drawdown": 3.2023
       }
     }
@@ -711,10 +711,10 @@
       "segment": "tennis",
       "status": "HOLD",
       "auto_apply": false,
-      "samples": 61,
+      "samples": 63,
       "minimum_samples": 100,
       "recommendations": [
-        "Zbierať dáta: 61/100 uzavretých tipov."
+        "Zbierať dáta: 63/100 uzavretých tipov."
       ]
     },
     {
@@ -877,21 +877,21 @@
     {
       "sport": "tennis",
       "champion": {
-        "settled": 61,
-        "stake": 14.75,
-        "profit": -0.8923,
-        "yield_pct": -6.049,
+        "settled": 63,
+        "stake": 15.34,
+        "profit": -0.0953,
+        "yield_pct": -0.621,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.155116,
-        "calibration_error": 0.123995,
-        "probability_samples": 61,
+        "brier_score": 0.158445,
+        "calibration_error": 0.127638,
+        "probability_samples": 63,
         "max_drawdown": 3.2023
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 61,
+        "evaluated_samples": 63,
         "minimum_samples": 75
       },
       "decision": "COLLECTING",
@@ -913,7 +913,7 @@
       "status": "PARTIAL",
       "odds_feed": false,
       "stable_event_ids": false,
-      "settlement_samples": 61
+      "settlement_samples": 63
     },
     {
       "sport": "basketball",
