@@ -1,13 +1,13 @@
 {
-  "total_bets": 2791,
+  "total_bets": 2792,
   "wins": 1184,
-  "losses": 1607,
-  "winrate": 42.42,
-  "yield": 4.46,
-  "profit": 88.16,
-  "stake_sum": 1978.19,
-  "open_bets": 81,
-  "settled_bets": 2791,
+  "losses": 1608,
+  "winrate": 42.41,
+  "yield": 4.45,
+  "profit": 87.98,
+  "stake_sum": 1978.37,
+  "open_bets": 84,
+  "settled_bets": 2792,
   "by_sport": {
     "baseball": {
       "total": 1515,
@@ -28,13 +28,13 @@
       "yield": 3.69
     },
     "basketball": {
-      "total": 42,
+      "total": 43,
       "wins": 18,
-      "losses": 24,
-      "winrate": 42.86,
-      "profit": 3.54,
-      "stake_sum": 22.08,
-      "yield": 16.02
+      "losses": 25,
+      "winrate": 41.86,
+      "profit": 3.36,
+      "stake_sum": 22.26,
+      "yield": 15.08
     },
     "nfl": {
       "total": 11,
@@ -165,13 +165,13 @@
       "yield": 3.7
     },
     "Winamax (FR)": {
-      "total": 12,
+      "total": 13,
       "wins": 6,
-      "losses": 6,
-      "winrate": 50.0,
-      "profit": 1.21,
-      "stake_sum": 9.41,
-      "yield": 12.89
+      "losses": 7,
+      "winrate": 46.15,
+      "profit": 1.03,
+      "stake_sum": 9.59,
+      "yield": 10.78
     },
     "GTbets": {
       "total": 154,
@@ -517,15 +517,6 @@
       "stake_sum": 1.36,
       "yield": 19.89
     },
-    "basketball_euroleague": {
-      "total": 11,
-      "wins": 5,
-      "losses": 6,
-      "winrate": 45.45,
-      "profit": 0.14,
-      "stake_sum": 6.66,
-      "yield": 2.15
-    },
     "americanfootball_nfl": {
       "total": 11,
       "wins": 5,
@@ -543,6 +534,15 @@
       "profit": 0.01,
       "stake_sum": 0.98,
       "yield": 0.61
+    },
+    "basketball_euroleague": {
+      "total": 12,
+      "wins": 5,
+      "losses": 7,
+      "winrate": 41.67,
+      "profit": -0.04,
+      "stake_sum": 6.84,
+      "yield": -0.53
     },
     "Argentina Primera Division": {
       "total": 81,
@@ -743,5 +743,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-10-08T12:22:24.347880+00:00"
+  "last_update": "2026-10-08T20:55:50.027626+00:00"
 }
