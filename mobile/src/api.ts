@@ -5,9 +5,13 @@ import type { AppData, MobileHistory, MobilePerformance, ModelGovernance, ModelT
 
 const CACHE_KEY = "multisport:last-data:v1";
 
-async function fetchJson<T>(name: string): Promise<T> {
-  const response = await fetch(`${DATA_BASE_URL}/${name}`, {
-    headers: { Accept: "application/json" },
+async function fetchJson<T>(name: string, refreshToken: string): Promise<T> {
+  const response = await fetch(`${DATA_BASE_URL}/${name}?refresh=${refreshToken}`, {
+    headers: {
+      Accept: "application/json",
+      "Cache-Control": "no-cache, no-store, must-revalidate",
+      Pragma: "no-cache",
+    },
   });
   if (!response.ok) {
     throw new Error(`Server vrátil ${response.status}`);
@@ -15,9 +19,9 @@ async function fetchJson<T>(name: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-async function fetchOptionalJson<T>(name: string, fallback: T): Promise<T> {
+async function fetchOptionalJson<T>(name: string, fallback: T, refreshToken: string): Promise<T> {
   try {
-    return await fetchJson<T>(name);
+    return await fetchJson<T>(name, refreshToken);
   } catch {
     return fallback;
   }
@@ -38,20 +42,26 @@ function rowsFrom(table: ModelTable) {
 
 export async function loadAppData(): Promise<AppData> {
   try {
+    // GitHub Raw is fronted by a CDN. A unique token prevents a successful
+    // refresh from receiving yesterday's JSON from an HTTP cache.
+    const refreshToken = Date.now().toString();
     const [tipCard, table, history, performance, operationalHealth, modelGovernance] = await Promise.all([
-      fetchJson<TipCard>("latest_tip_card.json"),
-      fetchJson<ModelTable>("professional_model_table.json"),
+      fetchJson<TipCard>("latest_tip_card.json", refreshToken),
+      // Only the current tip card is essential. A temporary failure of a
+      // statistics file must not make the app replace fresh tips with its
+      // entire stale AsyncStorage snapshot.
+      fetchOptionalJson<ModelTable>("professional_model_table.json", {}, refreshToken),
       fetchOptionalJson<MobileHistory>("mobile_tip_history.json", {
         schema_version: 1,
         generated_at: "",
         sports: {},
-      }),
+      }, refreshToken),
       fetchOptionalJson<MobilePerformance>("mobile_performance.json", {
         schema_version: 1, generated_at: "", starting_bankroll: 1000,
         current_bankroll: 1000, points: [],
-      }),
-      fetchOptionalJson<OperationalHealth | undefined>("operational_health.json", undefined),
-      fetchOptionalJson<ModelGovernance | undefined>("model_governance.json", undefined),
+      }, refreshToken),
+      fetchOptionalJson<OperationalHealth | undefined>("operational_health.json", undefined, refreshToken),
+      fetchOptionalJson<ModelGovernance | undefined>("model_governance.json", undefined, refreshToken),
     ]);
     const value: AppData = {
       tipCard,
