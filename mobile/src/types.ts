@@ -15,6 +15,7 @@ export type Tip = {
   league: string;
   match: string;
   pick: string;
+  market?: string;
   odds: number;
   model_probability: number;
   market_probability: number;

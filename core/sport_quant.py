@@ -91,6 +91,7 @@ def init_sport_db(settings: Settings) -> None:
                 sport TEXT,
                 league TEXT,
                 event TEXT,
+                market TEXT DEFAULT 'h2h',
                 selection TEXT,
                 bookmaker TEXT,
                 odds REAL,
@@ -100,6 +101,16 @@ def init_sport_db(settings: Settings) -> None:
                 reason TEXT
             )
         """)
+
+        audit_columns = {
+            str(row[1])
+            for row in conn.execute("PRAGMA table_info(sport_decision_audit)")
+        }
+        if "market" not in audit_columns:
+            conn.execute(
+                "ALTER TABLE sport_decision_audit "
+                "ADD COLUMN market TEXT DEFAULT 'h2h'"
+            )
 
         conn.execute("""
             CREATE TABLE IF NOT EXISTS sport_bookmaker_stats (
