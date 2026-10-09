@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 from dataclasses import asdict
 from datetime import datetime
@@ -35,9 +36,15 @@ def build_low_odds_watch(
     accepted: list,
     rejected: list[dict],
     *,
-    limit: int = 5,
+    limit: int = 3,
+    audit_candidates: list[dict] | None = None,
 ) -> list[dict]:
-    """Build a separate football watchlist for decimal odds 1.20-1.60."""
+    """Build a separate daily football experiment for odds 1.20-1.60.
+
+    The production filter remains untouched.  When it provides fewer than the
+    requested number of low-price rows, the current scan audit supplies the
+    most probable unique matches as observation-only selections.
+    """
     rows: list[dict] = []
     for tip in accepted:
         if str(getattr(tip, "sport", "")).lower() != "football":
@@ -72,6 +79,50 @@ def build_low_odds_watch(
         item["rejected_reasons"] = item.get("rejected_reasons") or [reason]
         rows.append(item)
 
+    for candidate in audit_candidates or []:
+        odds = float(candidate.get("odds", 0) or 0)
+        if not 1.20 <= odds <= 1.60:
+            continue
+        reason = str(candidate.get("reason") or "upstream football scan")
+        final_match = re.search(r"(?:^|;)\s*(?:final|fallback)=([0-9.]+)", reason)
+        model_probability = (
+            float(final_match.group(1))
+            if final_match
+            else float(candidate.get("prob_market", 0) or 0)
+        )
+        market_probability = float(candidate.get("prob_market", 0) or 0)
+        if not 0 < model_probability < 1 or not 0 < market_probability < 1:
+            continue
+        rows.append({
+            "sport": "football",
+            "league": str(candidate.get("league") or "football"),
+            "event": str(candidate.get("event") or ""),
+            "match": str(candidate.get("event") or ""),
+            "selection": str(candidate.get("selection") or ""),
+            "pick": str(candidate.get("selection") or ""),
+            "market": "h2h",
+            "odds": odds,
+            "model_probability": model_probability,
+            "market_probability": market_probability,
+            "implied_probability": market_probability,
+            "edge": model_probability - market_probability,
+            "confidence": round(model_probability * 100),
+            "bookmaker": str(candidate.get("bookmaker") or "market"),
+            "bookmaker_weight": 1.0,
+            "bookmaker_samples": 0,
+            "bookmaker_label": "EXPERIMENT",
+            "risk": "low_odds_experiment",
+            "stake_units": 0.10,
+            "stake_u": 0.10,
+            "stake_amount": 0,
+            "created_at": str(candidate.get("created_at") or ""),
+            "decision": "WATCH",
+            "watch_status": "DAILY_LOW_ODDS_EXPERIMENT",
+            "not_official_tip": True,
+            "reason": reason,
+            "rejected_reasons": ["Denný experiment; neprešiel ostrým value filtrom"],
+        })
+
     best: dict[tuple[str, str], dict] = {}
     for row in rows:
         key = (
@@ -95,7 +146,7 @@ def build_low_odds_watch(
         best.values(),
         key=lambda row: (
             row.get("decision") == "ACCEPT",
-            float(row.get("confidence") or 0),
+            float(row.get("model_probability") or 0),
             float(row.get("model_probability") or 0) * float(row.get("odds") or 0) - 1.0,
         ),
         reverse=True,

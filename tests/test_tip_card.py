@@ -40,6 +40,35 @@ class TipCardTests(unittest.TestCase):
         self.assertEqual(rows[0]["decision"], "REJECT")
         self.assertEqual(rows[0]["watch_status"], "WATCH_ONLY")
 
+    def test_low_odds_watch_fills_three_daily_rows_from_scan_audit(self) -> None:
+        audit = [
+            {
+                "league": "league", "event": f"Home {index} vs Away {index}",
+                "selection": f"Home {index}", "bookmaker": "Book",
+                "odds": 1.30 + index * 0.05, "prob_market": 0.70 - index * 0.02,
+                "edge": -0.01, "decision": "BLOCK",
+                "reason": f"edge below minimum; final={0.76 - index * 0.02:.2f}",
+            }
+            for index in range(4)
+        ]
+        rows = build_low_odds_watch([], [], audit_candidates=audit, limit=3)
+        self.assertEqual(len(rows), 3)
+        self.assertTrue(all(row["not_official_tip"] for row in rows))
+        self.assertTrue(all(row["stake_units"] == 0.10 for row in rows))
+        self.assertEqual(rows[0]["match"], "Home 0 vs Away 0")
+
+    def test_low_odds_watch_keeps_only_one_side_per_match_from_audit(self) -> None:
+        rows = build_low_odds_watch([], [], audit_candidates=[
+            {"league": "league", "event": "A vs B", "selection": "A",
+             "bookmaker": "Book", "odds": 1.40, "prob_market": 0.68,
+             "reason": "edge below minimum; final=0.74"},
+            {"league": "league", "event": "A vs B", "selection": "1X",
+             "bookmaker": "Book", "odds": 1.30, "prob_market": 0.73,
+             "reason": "double chance evidence or edge gate"},
+        ], limit=3)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["selection"], "A")
+
     def test_value_filter_uses_expected_return_for_lower_odds(self) -> None:
         tip = build_pro_tip(
             sport="football",

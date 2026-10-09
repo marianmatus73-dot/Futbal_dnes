@@ -90,6 +90,12 @@ def _sport_health(
     )
     settled = max(settled, int(metrics.get("settled", 0) or 0))
     yield_pct = float(metrics.get("yield_pct", 0.0) or 0.0)
+    if sport == "handball":
+        shadow = professional_table.get("shadow_models", {}).get("handball", {})
+        settled = max(settled, int(shadow.get("settled_events", 0) or 0))
+        open_bets = max(open_bets, int(shadow.get("open_events", 0) or 0))
+        benchmark = shadow.get("benchmark", {})
+        yield_pct = float(benchmark.get("yield_pct", 0.0) or 0.0)
     minimum = MINIMUM_SETTLED[sport]
     publishing_mode = "SHADOW" if sport == "handball" else "LIVE"
 

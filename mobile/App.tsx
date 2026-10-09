@@ -211,14 +211,14 @@ function Candidates({ tips }: { tips: Tip[] }) {
 function LowOddsWatch({ tips }: { tips: Tip[] }) {
   return (
     <View style={styles.candidatesSection}>
-      <Text style={styles.lowOddsTitle}>Futbal · nižšie kurzy 1,20–1,60</Text>
-      <Text style={styles.candidatesSubtitle}>Samostatné sledovanie favoritov. Nie sú automaticky potvrdeným tipom a platené xG nie je podmienkou ich zobrazenia.</Text>
+      <Text style={styles.lowOddsTitle}>Futbal · denný experiment 1,20–1,60</Text>
+      <Text style={styles.candidatesSubtitle}>Každý deň až 3 najsilnejší favoriti na samostatné meranie úspešnosti. Nie sú súčasťou ostrého value výberu; odporúčaný skúšobný vklad je najviac 0,10 jednotky.</Text>
       {tips.length ? tips.map((tip, index) => (
         <View key={`low-odds-${tip.match}-${index}`}>
-          <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{tip.decision === "ACCEPT" ? "PREŠIEL FILTROM" : "SLEDOVANIE"}</Text></View>
+          <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{tip.decision === "ACCEPT" ? "PREŠIEL FILTROM" : "DENNÝ EXPERIMENT"}</Text></View>
           <TipItem tip={tip} />
         </View>
-      )) : <Text style={styles.historyEmpty}>V aktuálnom behu nebol vhodný zápas v tomto intervale. Sekcia sa doplní automaticky pri ďalšom náleze.</Text>}
+      )) : <Text style={styles.historyEmpty}>Dnes poskytovateľ neposlal aspoň jeden jedinečný zápas s kurzom 1,20–1,60.</Text>}
     </View>
   );
 }
