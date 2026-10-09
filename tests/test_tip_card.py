@@ -69,6 +69,28 @@ class TipCardTests(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["selection"], "A")
 
+    def test_low_odds_watch_preserves_and_balances_football_markets(self) -> None:
+        audit = [
+            {"league": "league", "event": "A vs B", "market": "h2h",
+             "selection": "A", "bookmaker": "Book", "odds": 1.40,
+             "prob_market": 0.68, "reason": "edge below; final=0.74"},
+            {"league": "league", "event": "C vs D", "market": "double_chance",
+             "selection": "1X", "bookmaker": "Book", "odds": 1.35,
+             "prob_market": 0.72,
+             "reason": "double chance gate; final=0.78"},
+            {"league": "league", "event": "E vs F", "market": "totals_2.5",
+             "selection": "Under 2.5 gólu", "bookmaker": "Book", "odds": 1.55,
+             "prob_market": 0.62, "reason": "totals edge gate; final=0.69"},
+            {"league": "league", "event": "G vs H", "market": "h2h",
+             "selection": "G", "bookmaker": "Book", "odds": 1.30,
+             "prob_market": 0.75, "reason": "edge below; final=0.80"},
+        ]
+        rows = build_low_odds_watch([], [], audit_candidates=audit, limit=3)
+        self.assertEqual(
+            {row["market"] for row in rows},
+            {"h2h", "double_chance", "totals_2.5"},
+        )
+
     def test_value_filter_uses_expected_return_for_lower_odds(self) -> None:
         tip = build_pro_tip(
             sport="football",

@@ -663,19 +663,21 @@ class FootballModule(SportModule):
         edge: float | None,
         decision: str,
         reason: str,
+        market: str = "h2h",
     ) -> None:
         with self._connect(settings) as conn:
             conn.execute("""
                 INSERT INTO sport_decision_audit
                 (
-                    sport, league, event, selection, bookmaker,
+                    sport, league, event, market, selection, bookmaker,
                     odds, prob_market, edge, decision, reason
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 self.name,
                 sport_key,
                 event_name,
+                market,
                 selection,
                 bookmaker,
                 odds,
@@ -692,7 +694,7 @@ class FootballModule(SportModule):
             rows = [
                 dict(row)
                 for row in conn.execute(
-                    "SELECT id, created_at, league, event, selection, bookmaker, "
+                    "SELECT id, created_at, league, event, market, selection, bookmaker, "
                     "odds, prob_market, edge, decision, reason "
                     "FROM sport_decision_audit "
                     "WHERE sport='football' AND id>? ORDER BY id",
@@ -1292,6 +1294,17 @@ class FootballModule(SportModule):
                             minimum_edge = float(os.getenv("FOOTBALL_TOTALS_MIN_EDGE", "0.07"))
                             maximum_edge = float(os.getenv("FOOTBALL_TOTALS_MAX_EDGE", "0.16"))
                             if not (minimum_edge <= edge <= maximum_edge):
+                                self._audit(
+                                    settings, sport_key, event_name,
+                                    f"{total_name} 2.5 gólu", bookmaker, odds,
+                                    market_probability, edge, "BLOCK",
+                                    (
+                                        "totals edge gate; "
+                                        f"final={model_probability:.4f}; "
+                                        f"reliability={total_reliability:.3f}"
+                                    ),
+                                    market="totals_2.5",
+                                )
                                 continue
                             grade = bookmaker_grade(
                                 settings,
@@ -1316,6 +1329,7 @@ class FootballModule(SportModule):
                                     settings, sport_key, event_name, selection,
                                     bookmaker, odds, market_probability, edge,
                                     "BLOCK", "totals xG evidence insufficient",
+                                    market="totals_2.5",
                                 )
                                 continue
                             total_bet = Bet(
@@ -1352,6 +1366,7 @@ class FootballModule(SportModule):
                                     f"{bundle.xg.away_expected_goals:.2f}; "
                                     f"reliability={total_reliability:.3f}"
                                 ),
+                                market="totals_2.5",
                             )
 
                 if (
@@ -1408,7 +1423,12 @@ class FootballModule(SportModule):
                                 self._audit(
                                     settings, sport_key, event_name, selection,
                                     bookmaker, odds, market_probability, edge,
-                                    "BLOCK", "double chance evidence or edge gate",
+                                    "BLOCK", (
+                                        "double chance evidence or edge gate; "
+                                        f"final={model_probability:.4f}; "
+                                        f"reliability={reliability:.3f}"
+                                    ),
+                                    market="double_chance",
                                 )
                                 continue
                             grade = bookmaker_grade(
@@ -1436,7 +1456,12 @@ class FootballModule(SportModule):
                             self._audit(
                                 settings, sport_key, event_name, selection,
                                 bookmaker, odds, market_probability, edge,
-                                "PASS", "quoted double chance; Dixon-Coles 1X2",
+                                "PASS", (
+                                    "quoted double chance; Dixon-Coles 1X2; "
+                                    f"final={model_probability:.4f}; "
+                                    f"reliability={reliability:.3f}"
+                                ),
+                                market="double_chance",
                             )
 
         bets = dedupe_best_bets(bets)

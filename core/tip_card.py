@@ -91,6 +91,9 @@ def build_low_odds_watch(
             else float(candidate.get("prob_market", 0) or 0)
         )
         market_probability = float(candidate.get("prob_market", 0) or 0)
+        market = str(candidate.get("market") or "h2h").strip().casefold()
+        if market not in {"h2h", "double_chance", "totals_2.5"}:
+            continue
         if not 0 < model_probability < 1 or not 0 < market_probability < 1:
             continue
         rows.append({
@@ -100,7 +103,7 @@ def build_low_odds_watch(
             "match": str(candidate.get("event") or ""),
             "selection": str(candidate.get("selection") or ""),
             "pick": str(candidate.get("selection") or ""),
-            "market": "h2h",
+            "market": market,
             "odds": odds,
             "model_probability": model_probability,
             "market_probability": market_probability,
@@ -142,7 +145,7 @@ def build_low_odds_watch(
         ) if current else None
         if current_rank is None or rank > current_rank:
             best[key] = row
-    return sorted(
+    ranked = sorted(
         best.values(),
         key=lambda row: (
             row.get("decision") == "ACCEPT",
@@ -150,7 +153,28 @@ def build_low_odds_watch(
             float(row.get("model_probability") or 0) * float(row.get("odds") or 0) - 1.0,
         ),
         reverse=True,
-    )[: max(1, limit)]
+    )
+
+    # Give each supported football market a fair place before filling the
+    # remaining slots by score. Otherwise abundant h2h rows hide totals and
+    # double-chance observations even when those markets were collected.
+    selected: list[dict] = []
+    selected_ids: set[int] = set()
+    for market in ("h2h", "double_chance", "totals_2.5"):
+        candidate = next(
+            (row for row in ranked if str(row.get("market")) == market),
+            None,
+        )
+        if candidate is not None and len(selected) < max(1, limit):
+            selected.append(candidate)
+            selected_ids.add(id(candidate))
+    for candidate in ranked:
+        if len(selected) >= max(1, limit):
+            break
+        if id(candidate) not in selected_ids:
+            selected.append(candidate)
+            selected_ids.add(id(candidate))
+    return selected
 
 
 def save_latest_tip_card(
