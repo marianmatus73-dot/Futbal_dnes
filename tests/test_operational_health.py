@@ -54,6 +54,33 @@ class OperationalHealthTests(unittest.TestCase):
             self.assertEqual(tennis["status"], "ATTENTION")
             self.assertTrue((root / "exports" / "operational_health.json").exists())
 
+    def test_handball_health_uses_shadow_event_counts(self) -> None:
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            db = root / "bets.db"
+            with closing(sqlite3.connect(db)) as conn:
+                conn.execute("CREATE TABLE sport_bets (sport TEXT, result TEXT)")
+                conn.execute("CREATE TABLE sport_odds_snapshots (sport TEXT, captured_at TEXT)")
+                conn.commit()
+            table = {
+                "shadow_models": {
+                    "handball": {
+                        "settled_events": 12,
+                        "open_events": 4,
+                        "benchmark": {"yield_pct": 3.5},
+                    }
+                }
+            }
+            payload = build_operational_health(
+                Settings(db_file=str(db)), professional_table=table,
+                export_dir=root / "exports",
+            )
+            handball = next(row for row in payload["sports"] if row["sport"] == "handball")
+            self.assertEqual(handball["settled_bets"], 12)
+            self.assertEqual(handball["open_bets"], 4)
+            self.assertEqual(handball["yield_pct"], 3.5)
+            self.assertEqual(handball["publishing_mode"], "SHADOW")
+
 
 if __name__ == "__main__":
     unittest.main()

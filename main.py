@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import csv
+import json
 import logging
 import os
 import sqlite3
@@ -702,10 +703,18 @@ def build_report(
     telegram_tips = select_telegram_tips(top_tips, min_confidence=min_telegram_conf)
 
     if write_tip_card:
+        audit_candidates: list[dict] = []
+        audit_path = Path(os.getenv("EXPORT_DIR", "exports")) / "latest_football_candidate_audit.json"
+        try:
+            audit_payload = json.loads(audit_path.read_text(encoding="utf-8"))
+            audit_candidates = list(audit_payload.get("candidates") or [])
+        except (OSError, json.JSONDecodeError, TypeError):
+            log.warning("Football candidate audit unavailable for daily low-odds experiment")
         low_odds_watch = build_low_odds_watch(
             all_tips,
             risk_rejected_candidates or [],
-            limit=int(os.getenv("LOW_ODDS_WATCH_LIMIT", "5")),
+            limit=max(3, int(os.getenv("LOW_ODDS_WATCH_LIMIT", "3"))),
+            audit_candidates=audit_candidates,
         )
         card_path = save_latest_tip_card(
             top_tips,
