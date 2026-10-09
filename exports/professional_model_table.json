@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T12:12:51.811781+00:00",
+  "generated_at": "2026-10-09T15:10:16.872425+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -1182,52 +1182,52 @@
     },
     "tennis": {
       "all_time": {
-        "settled": 66,
-        "stake": 15.75,
-        "profit": -0.5053,
-        "yield_pct": -3.208,
+        "settled": 69,
+        "stake": 16.59,
+        "profit": 0.3097,
+        "yield_pct": 1.867,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.152087,
-        "calibration_error": 0.128011,
-        "probability_samples": 66,
+        "brier_score": 0.167772,
+        "calibration_error": 0.129093,
+        "probability_samples": 69,
         "max_drawdown": 3.2023
       },
       "periods": {
         "30": {
-          "settled": 64,
-          "stake": 15.39,
-          "profit": -1.1313,
-          "yield_pct": -7.351,
+          "settled": 67,
+          "stake": 16.23,
+          "profit": -0.3163,
+          "yield_pct": -1.949,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.149445,
-          "calibration_error": 0.119628,
-          "probability_samples": 64,
+          "brier_score": 0.165718,
+          "calibration_error": 0.121118,
+          "probability_samples": 67,
           "max_drawdown": 3.1323
         },
         "90": {
-          "settled": 66,
-          "stake": 15.75,
-          "profit": -0.5053,
-          "yield_pct": -3.208,
+          "settled": 69,
+          "stake": 16.59,
+          "profit": 0.3097,
+          "yield_pct": 1.867,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.152087,
-          "calibration_error": 0.128011,
-          "probability_samples": 66,
+          "brier_score": 0.167772,
+          "calibration_error": 0.129093,
+          "probability_samples": 69,
           "max_drawdown": 3.2023
         },
         "365": {
-          "settled": 66,
-          "stake": 15.75,
-          "profit": -0.5053,
-          "yield_pct": -3.208,
+          "settled": 69,
+          "stake": 16.59,
+          "profit": 0.3097,
+          "yield_pct": 1.867,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.152087,
-          "calibration_error": 0.128011,
-          "probability_samples": 66,
+          "brier_score": 0.167772,
+          "calibration_error": 0.129093,
+          "probability_samples": 69,
           "max_drawdown": 3.2023
         }
       },
@@ -1257,16 +1257,16 @@
           "max_drawdown": 0.24
         },
         "tennis_atp_shanghai_masters": {
-          "settled": 4,
-          "stake": 0.79,
-          "profit": 0.597,
-          "yield_pct": 75.57,
+          "settled": 6,
+          "stake": 1.5,
+          "profit": 0.879,
+          "yield_pct": 58.6,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.132696,
-          "calibration_error": 0.274198,
-          "probability_samples": 4,
-          "max_drawdown": 0.41
+          "brier_score": 0.240986,
+          "calibration_error": 0.26559,
+          "probability_samples": 6,
+          "max_drawdown": 0.55
         },
         "tennis_atp_us_open": {
           "settled": 4,
@@ -1281,15 +1281,15 @@
           "max_drawdown": 0.69
         },
         "tennis_wta_china_open": {
-          "settled": 28,
-          "stake": 4.69,
-          "profit": -0.2685,
-          "yield_pct": -5.725,
+          "settled": 29,
+          "stake": 4.82,
+          "profit": 0.2645,
+          "yield_pct": 5.488,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.133913,
-          "calibration_error": 0.050915,
-          "probability_samples": 28,
+          "brier_score": 0.150793,
+          "calibration_error": 0.076386,
+          "probability_samples": 29,
           "max_drawdown": 1.515
         },
         "tennis_wta_guadalajara_open": {
@@ -1331,27 +1331,27 @@
           "max_drawdown": 0.0
         },
         "2.00-2.99": {
-          "settled": 3,
-          "stake": 1.38,
-          "profit": -0.5244,
-          "yield_pct": -38.0,
+          "settled": 4,
+          "stake": 1.93,
+          "profit": -1.0744,
+          "yield_pct": -55.668,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.248012,
-          "calibration_error": 0.490586,
-          "probability_samples": 3,
-          "max_drawdown": 0.64
+          "brier_score": 0.246144,
+          "calibration_error": 0.490551,
+          "probability_samples": 4,
+          "max_drawdown": 1.0744
         },
         "3.00+": {
-          "settled": 61,
-          "stake": 10.97,
-          "profit": 0.8946,
-          "yield_pct": 8.155,
+          "settled": 63,
+          "stake": 11.26,
+          "profit": 2.2596,
+          "yield_pct": 20.067,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.140219,
-          "calibration_error": 0.096103,
-          "probability_samples": 61,
+          "brier_score": 0.156372,
+          "calibration_error": 0.092548,
+          "probability_samples": 63,
           "max_drawdown": 2.26
         },
         "<1.50": {
@@ -1369,15 +1369,15 @@
       },
       "by_market": {
         "h2h": {
-          "settled": 66,
-          "stake": 15.75,
-          "profit": -0.5053,
-          "yield_pct": -3.208,
+          "settled": 69,
+          "stake": 16.59,
+          "profit": 0.3097,
+          "yield_pct": 1.867,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.152087,
-          "calibration_error": 0.128011,
-          "probability_samples": 66,
+          "brier_score": 0.167772,
+          "calibration_error": 0.129093,
+          "probability_samples": 69,
           "max_drawdown": 3.2023
         }
       }
@@ -1410,7 +1410,7 @@
         "yield_pct": null,
         "brier_score": null
       },
-      "generated_at": "2026-10-09T12:12:51.948071+00:00"
+      "generated_at": "2026-10-09T15:10:16.946903+00:00"
     }
   }
 }
