@@ -1,13 +1,13 @@
 {
-  "total_bets": 2821,
-  "wins": 1193,
-  "losses": 1628,
-  "winrate": 42.29,
-  "yield": 4.52,
-  "profit": 89.91,
-  "stake_sum": 1990.91,
-  "open_bets": 78,
-  "settled_bets": 2821,
+  "total_bets": 2824,
+  "wins": 1194,
+  "losses": 1630,
+  "winrate": 42.28,
+  "yield": 4.53,
+  "profit": 90.16,
+  "stake_sum": 1991.89,
+  "open_bets": 82,
+  "settled_bets": 2824,
   "by_sport": {
     "baseball": {
       "total": 1517,
@@ -19,13 +19,13 @@
       "yield": 5.46
     },
     "football": {
-      "total": 938,
+      "total": 939,
       "wins": 259,
-      "losses": 679,
-      "winrate": 27.61,
-      "profit": 6.19,
-      "stake_sum": 224.5,
-      "yield": 2.76
+      "losses": 680,
+      "winrate": 27.58,
+      "profit": 5.83,
+      "stake_sum": 224.86,
+      "yield": 2.59
     },
     "basketball": {
       "total": 46,
@@ -46,13 +46,13 @@
       "yield": 0.48
     },
     "tennis": {
-      "total": 76,
-      "wins": 16,
-      "losses": 60,
-      "winrate": 21.05,
-      "profit": -0.73,
-      "stake_sum": 17.63,
-      "yield": -4.14
+      "total": 78,
+      "wins": 17,
+      "losses": 61,
+      "winrate": 21.79,
+      "profit": -0.13,
+      "stake_sum": 18.25,
+      "yield": -0.71
     },
     "mma": {
       "total": 20,
@@ -120,13 +120,13 @@
       "yield": 30.3
     },
     "1xBet": {
-      "total": 429,
+      "total": 430,
       "wins": 168,
-      "losses": 261,
-      "winrate": 39.16,
-      "profit": 3.43,
-      "stake_sum": 260.58,
-      "yield": 1.32
+      "losses": 262,
+      "winrate": 39.07,
+      "profit": 3.07,
+      "stake_sum": 260.94,
+      "yield": 1.18
     },
     "BetAnything": {
       "total": 9,
@@ -236,6 +236,15 @@
       "stake_sum": 21.6,
       "yield": -3.85
     },
+    "Pinnacle": {
+      "total": 109,
+      "wins": 35,
+      "losses": 74,
+      "winrate": 32.11,
+      "profit": -1.32,
+      "stake_sum": 55.03,
+      "yield": -2.4
+    },
     "Unibet (SE)": {
       "total": 92,
       "wins": 26,
@@ -244,15 +253,6 @@
       "profit": -1.92,
       "stake_sum": 31.51,
       "yield": -6.09
-    },
-    "Pinnacle": {
-      "total": 108,
-      "wins": 34,
-      "losses": 74,
-      "winrate": 31.48,
-      "profit": -2.04,
-      "stake_sum": 54.53,
-      "yield": -3.74
     },
     "Unibet (FR)": {
       "total": 104,
@@ -300,13 +300,13 @@
       "yield": -19.19
     },
     "Betfair": {
-      "total": 340,
+      "total": 341,
       "wins": 103,
-      "losses": 237,
-      "winrate": 30.29,
-      "profit": -12.18,
-      "stake_sum": 131.49,
-      "yield": -9.26
+      "losses": 238,
+      "winrate": 30.21,
+      "profit": -12.3,
+      "stake_sum": 131.61,
+      "yield": -9.34
     }
   },
   "by_league": {
@@ -499,6 +499,15 @@
       "stake_sum": 3.28,
       "yield": 22.08
     },
+    "tennis_atp_shanghai_masters": {
+      "total": 14,
+      "wins": 3,
+      "losses": 11,
+      "winrate": 21.43,
+      "profit": 0.68,
+      "stake_sum": 2.92,
+      "yield": 23.25
+    },
     "icehockey_sweden_allsvenskan": {
       "total": 12,
       "wins": 4,
@@ -516,15 +525,6 @@
       "profit": 0.27,
       "stake_sum": 1.36,
       "yield": 19.89
-    },
-    "tennis_atp_shanghai_masters": {
-      "total": 12,
-      "wins": 2,
-      "losses": 10,
-      "winrate": 16.67,
-      "profit": 0.08,
-      "stake_sum": 2.3,
-      "yield": 3.43
     },
     "americanfootball_nfl": {
       "total": 11,
@@ -625,15 +625,6 @@
       "stake_sum": 6.19,
       "yield": -20.01
     },
-    "Premier League": {
-      "total": 18,
-      "wins": 3,
-      "losses": 15,
-      "winrate": 16.67,
-      "profit": -1.56,
-      "stake_sum": 3.54,
-      "yield": -43.93
-    },
     "League One": {
       "total": 34,
       "wins": 7,
@@ -678,6 +669,15 @@
       "profit": -1.87,
       "stake_sum": 6.57,
       "yield": -28.47
+    },
+    "Premier League": {
+      "total": 19,
+      "wins": 3,
+      "losses": 16,
+      "winrate": 15.79,
+      "profit": -1.92,
+      "stake_sum": 3.9,
+      "yield": -49.11
     },
     "J-League": {
       "total": 26,
@@ -743,5 +743,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-10-11T11:43:27.061284+00:00"
+  "last_update": "2026-10-11T19:48:15.834797+00:00"
 }
