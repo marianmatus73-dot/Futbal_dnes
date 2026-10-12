@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-12T16:43:33.859990+00:00",
+  "generated_at": "2026-10-12T22:40:40.225913+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
       "sport": "baseball",
       "mode": "LIVE",
       "metrics": {
-        "settled": 1517,
-        "stake": 1623.08,
-        "profit": 88.6389,
-        "yield_pct": 5.461,
+        "settled": 1518,
+        "stake": 1624.43,
+        "profit": 89.9349,
+        "yield_pct": 5.536,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.242207,
-        "calibration_error": 0.053284,
-        "probability_samples": 1517,
+        "brier_score": 0.242154,
+        "calibration_error": 0.052984,
+        "probability_samples": 1518,
         "max_drawdown": 21.4735
       }
     },
@@ -53,17 +53,17 @@
     },
     {
       "sport": "hockey",
-      "mode": "BLOCKED",
+      "mode": "SHADOW",
       "metrics": {
-        "settled": 213,
-        "stake": 78.43,
-        "profit": -8.2429,
-        "yield_pct": -10.51,
+        "settled": 214,
+        "stake": 78.67,
+        "profit": -7.5349,
+        "yield_pct": -9.578,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.217936,
-        "calibration_error": 0.049465,
-        "probability_samples": 213,
+        "brier_score": 0.219361,
+        "calibration_error": 0.049974,
+        "probability_samples": 214,
         "max_drawdown": 17.735
       }
     },
@@ -71,15 +71,15 @@
       "sport": "nfl",
       "mode": "SHADOW",
       "metrics": {
-        "settled": 11,
-        "stake": 12.84,
-        "profit": 0.0621,
-        "yield_pct": 0.484,
+        "settled": 13,
+        "stake": 17.19,
+        "profit": 2.2639,
+        "yield_pct": 13.17,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.219025,
-        "calibration_error": 0.263476,
-        "probability_samples": 11,
+        "brier_score": 0.206325,
+        "calibration_error": 0.194038,
+        "probability_samples": 13,
         "max_drawdown": 3.01
       }
     },
@@ -87,15 +87,15 @@
       "sport": "tennis",
       "mode": "SHADOW",
       "metrics": {
-        "settled": 78,
-        "stake": 18.25,
-        "profit": -0.1303,
-        "yield_pct": -0.714,
+        "settled": 80,
+        "stake": 18.5,
+        "profit": 0.8847,
+        "yield_pct": 4.782,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.155822,
-        "calibration_error": 0.106859,
-        "probability_samples": 78,
+        "brier_score": 0.162407,
+        "calibration_error": 0.0951,
+        "probability_samples": 80,
         "max_drawdown": 3.2023
       }
     }
@@ -661,7 +661,7 @@
       "segment": "baseball",
       "status": "READY",
       "auto_apply": false,
-      "samples": 1517,
+      "samples": 1518,
       "minimum_samples": 100,
       "recommendations": [
         "Ponechať prahy bez zmeny."
@@ -691,7 +691,7 @@
       "segment": "hockey",
       "status": "READY",
       "auto_apply": false,
-      "samples": 213,
+      "samples": 214,
       "minimum_samples": 100,
       "recommendations": [
         "Sprísniť minimálny edge o 1 percentuálny bod."
@@ -701,20 +701,20 @@
       "segment": "nfl",
       "status": "HOLD",
       "auto_apply": false,
-      "samples": 11,
+      "samples": 13,
       "minimum_samples": 100,
       "recommendations": [
-        "Zbierať dáta: 11/100 uzavretých tipov."
+        "Zbierať dáta: 13/100 uzavretých tipov."
       ]
     },
     {
       "segment": "tennis",
       "status": "HOLD",
       "auto_apply": false,
-      "samples": 78,
+      "samples": 80,
       "minimum_samples": 100,
       "recommendations": [
-        "Zbierať dáta: 78/100 uzavretých tipov."
+        "Zbierať dáta: 80/100 uzavretých tipov."
       ]
     },
     {
@@ -762,21 +762,21 @@
     {
       "sport": "baseball",
       "champion": {
-        "settled": 1517,
-        "stake": 1623.08,
-        "profit": 88.6389,
-        "yield_pct": 5.461,
+        "settled": 1518,
+        "stake": 1624.43,
+        "profit": 89.9349,
+        "yield_pct": 5.536,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.242207,
-        "calibration_error": 0.053284,
-        "probability_samples": 1517,
+        "brier_score": 0.242154,
+        "calibration_error": 0.052984,
+        "probability_samples": 1518,
         "max_drawdown": 21.4735
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 1517,
+        "evaluated_samples": 1518,
         "minimum_samples": 75
       },
       "decision": "EVALUATE",
@@ -831,21 +831,21 @@
     {
       "sport": "hockey",
       "champion": {
-        "settled": 213,
-        "stake": 78.43,
-        "profit": -8.2429,
-        "yield_pct": -10.51,
+        "settled": 214,
+        "stake": 78.67,
+        "profit": -7.5349,
+        "yield_pct": -9.578,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.217936,
-        "calibration_error": 0.049465,
-        "probability_samples": 213,
+        "brier_score": 0.219361,
+        "calibration_error": 0.049974,
+        "probability_samples": 214,
         "max_drawdown": 17.735
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 213,
+        "evaluated_samples": 214,
         "minimum_samples": 75
       },
       "decision": "EVALUATE",
@@ -854,21 +854,21 @@
     {
       "sport": "nfl",
       "champion": {
-        "settled": 11,
-        "stake": 12.84,
-        "profit": 0.0621,
-        "yield_pct": 0.484,
+        "settled": 13,
+        "stake": 17.19,
+        "profit": 2.2639,
+        "yield_pct": 13.17,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.219025,
-        "calibration_error": 0.263476,
-        "probability_samples": 11,
+        "brier_score": 0.206325,
+        "calibration_error": 0.194038,
+        "probability_samples": 13,
         "max_drawdown": 3.01
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 11,
+        "evaluated_samples": 13,
         "minimum_samples": 75
       },
       "decision": "COLLECTING",
@@ -877,21 +877,21 @@
     {
       "sport": "tennis",
       "champion": {
-        "settled": 78,
-        "stake": 18.25,
-        "profit": -0.1303,
-        "yield_pct": -0.714,
+        "settled": 80,
+        "stake": 18.5,
+        "profit": 0.8847,
+        "yield_pct": 4.782,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.155822,
-        "calibration_error": 0.106859,
-        "probability_samples": 78,
+        "brier_score": 0.162407,
+        "calibration_error": 0.0951,
+        "probability_samples": 80,
         "max_drawdown": 3.2023
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 78,
+        "evaluated_samples": 80,
         "minimum_samples": 75
       },
       "decision": "EVALUATE",
@@ -913,7 +913,7 @@
       "status": "PARTIAL",
       "odds_feed": false,
       "stable_event_ids": false,
-      "settlement_samples": 78
+      "settlement_samples": 80
     },
     {
       "sport": "basketball",
@@ -929,7 +929,7 @@
       "status": "PARTIAL",
       "odds_feed": true,
       "stable_event_ids": false,
-      "settlement_samples": 213
+      "settlement_samples": 214
     },
     {
       "sport": "baseball",
@@ -937,13 +937,13 @@
       "status": "PARTIAL",
       "odds_feed": true,
       "stable_event_ids": false,
-      "settlement_samples": 1517
+      "settlement_samples": 1518
     },
     {
       "sport": "handball",
-      "score": 45,
-      "status": "MISSING",
-      "odds_feed": false,
+      "score": 80,
+      "status": "GOOD",
+      "odds_feed": true,
       "stable_event_ids": true,
       "settlement_samples": 0
     },
@@ -953,7 +953,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 11
+      "settlement_samples": 13
     }
   ]
 }
