@@ -1,22 +1,22 @@
 {
-  "total_bets": 2830,
-  "wins": 1199,
-  "losses": 1631,
-  "winrate": 42.37,
-  "yield": 4.77,
-  "profit": 95.38,
-  "stake_sum": 1998.08,
-  "open_bets": 81,
-  "settled_bets": 2830,
+  "total_bets": 2834,
+  "wins": 1201,
+  "losses": 1633,
+  "winrate": 42.38,
+  "yield": 4.88,
+  "profit": 97.67,
+  "stake_sum": 2001.86,
+  "open_bets": 79,
+  "settled_bets": 2834,
   "by_sport": {
     "baseball": {
-      "total": 1518,
-      "wins": 818,
+      "total": 1520,
+      "wins": 820,
       "losses": 700,
-      "winrate": 53.89,
-      "profit": 89.93,
-      "stake_sum": 1624.43,
-      "yield": 5.54
+      "winrate": 53.95,
+      "profit": 92.59,
+      "stake_sum": 1627.85,
+      "yield": 5.69
     },
     "football": {
       "total": 939,
@@ -46,13 +46,13 @@
       "yield": 13.17
     },
     "tennis": {
-      "total": 80,
+      "total": 82,
       "wins": 18,
-      "losses": 62,
-      "winrate": 22.5,
-      "profit": 0.88,
-      "stake_sum": 18.5,
-      "yield": 4.78
+      "losses": 64,
+      "winrate": 21.95,
+      "profit": 0.52,
+      "stake_sum": 18.86,
+      "yield": 2.78
     },
     "mma": {
       "total": 20,
@@ -137,6 +137,15 @@
       "stake_sum": 6.03,
       "yield": 50.56
     },
+    "GTbets": {
+      "total": 156,
+      "wins": 70,
+      "losses": 86,
+      "winrate": 44.87,
+      "profit": 2.99,
+      "stake_sum": 144.43,
+      "yield": 2.07
+    },
     "Coolbet": {
       "total": 97,
       "wins": 28,
@@ -154,15 +163,6 @@
       "profit": 1.79,
       "stake_sum": 106.28,
       "yield": 1.69
-    },
-    "GTbets": {
-      "total": 155,
-      "wins": 69,
-      "losses": 86,
-      "winrate": 44.52,
-      "profit": 1.66,
-      "stake_sum": 143.56,
-      "yield": 1.16
     },
     "Suprabets": {
       "total": 2,
@@ -210,13 +210,13 @@
       "yield": -0.25
     },
     "Pinnacle": {
-      "total": 110,
+      "total": 111,
       "wins": 36,
-      "losses": 74,
-      "winrate": 32.73,
-      "profit": -0.15,
-      "stake_sum": 58.59,
-      "yield": -0.25
+      "losses": 75,
+      "winrate": 32.43,
+      "profit": -0.31,
+      "stake_sum": 58.75,
+      "yield": -0.52
     },
     "Codere (IT)": {
       "total": 32,
@@ -300,24 +300,24 @@
       "yield": -19.19
     },
     "Betfair": {
-      "total": 341,
-      "wins": 103,
-      "losses": 238,
-      "winrate": 30.21,
-      "profit": -12.3,
-      "stake_sum": 131.61,
-      "yield": -9.34
+      "total": 343,
+      "wins": 104,
+      "losses": 239,
+      "winrate": 30.32,
+      "profit": -11.17,
+      "stake_sum": 134.36,
+      "yield": -8.31
     }
   },
   "by_league": {
     "baseball_mlb": {
-      "total": 1518,
-      "wins": 818,
+      "total": 1520,
+      "wins": 820,
       "losses": 700,
-      "winrate": 53.89,
-      "profit": 89.93,
-      "stake_sum": 1624.43,
-      "yield": 5.54
+      "winrate": 53.95,
+      "profit": 92.59,
+      "stake_sum": 1627.85,
+      "yield": 5.69
     },
     "MLS": {
       "total": 145,
@@ -562,6 +562,15 @@
       "stake_sum": 19.07,
       "yield": -1.73
     },
+    "tennis_wta_wuhan_open": {
+      "total": 2,
+      "wins": 0,
+      "losses": 2,
+      "winrate": 0.0,
+      "profit": -0.36,
+      "stake_sum": 0.36,
+      "yield": -100.0
+    },
     "Greek Super League": {
       "total": 4,
       "wins": 1,
@@ -743,5 +752,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-10-12T22:40:40.118670+00:00"
+  "last_update": "2026-10-13T13:04:35.087933+00:00"
 }
