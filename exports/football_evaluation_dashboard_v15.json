@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-13T15:02:49+00:00",
+  "generated_at": "2026-10-13T20:54:22+00:00",
   "version": "v15",
-  "total_rows": 1002,
-  "training_ready_rows": 1002,
-  "wins": 273,
+  "total_rows": 1003,
+  "training_ready_rows": 1003,
+  "wins": 274,
   "losses": 729,
-  "hit_rate": 0.27245508982035926,
-  "brier_score": 0.19559833866170773,
-  "log_loss": 0.5802198118268203,
-  "average_clv_probability": 0.008654948177843024,
-  "average_consensus_safety": 0.8406776447105797,
+  "hit_rate": 0.2731804586241276,
+  "brier_score": 0.19586092574026218,
+  "log_loss": 0.5807695193558884,
+  "average_clv_probability": 0.008605450712501411,
+  "average_consensus_safety": 0.8407417746759729,
   "by_league": [
     {
       "league": "MLS",
@@ -283,13 +283,13 @@
     },
     {
       "league": "UEFA Champions League",
-      "samples": 13,
-      "wins": 2,
+      "samples": 14,
+      "wins": 3,
       "losses": 11,
-      "hit_rate": 0.15384615384615385,
-      "brier_score": 0.16276809897608532,
-      "log_loss": 0.5111327803799891,
-      "average_clv_probability": 0.0048096386797594265
+      "hit_rate": 0.21428571428571427,
+      "brier_score": 0.1839256046529247,
+      "log_loss": 0.5554501863158545,
+      "average_clv_probability": 0.0029948034998443923
     },
     {
       "league": "UEFA Europa League",
@@ -345,13 +345,13 @@
     },
     {
       "bookmaker": "1xBet",
-      "samples": 190,
-      "wins": 55,
+      "samples": 191,
+      "wins": 56,
       "losses": 135,
-      "hit_rate": 0.2894736842105263,
-      "brier_score": 0.207857368751551,
-      "log_loss": 0.6067301985390652,
-      "average_clv_probability": 0.012514972339854801
+      "hit_rate": 0.2931937172774869,
+      "brier_score": 0.20917211121071477,
+      "log_loss": 0.6094780847429555,
+      "average_clv_probability": 0.012205504805472504
     },
     {
       "bookmaker": "Pinnacle",
@@ -577,12 +577,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 1002,
-      "wins": 273,
+      "samples": 1003,
+      "wins": 274,
       "losses": 729,
-      "hit_rate": 0.27245508982035926,
-      "brier_score": 0.19559833866170773,
-      "log_loss": 0.5802198118268203
+      "hit_rate": 0.2731804586241276,
+      "brier_score": 0.19586092574026218,
+      "log_loss": 0.5807695193558884
     }
   ],
   "by_consensus_safety": [
@@ -606,12 +606,12 @@
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 559,
-      "wins": 155,
+      "samples": 560,
+      "wins": 156,
       "losses": 404,
-      "hit_rate": 0.2772808586762075,
-      "brier_score": 0.20160220451393676,
-      "log_loss": 0.5930110378486917
+      "hit_rate": 0.2785714285714286,
+      "brier_score": 0.2020617955388259,
+      "log_loss": 0.593972761823037
     },
     {
       "bucket": "0.95+",
@@ -680,12 +680,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 975,
-      "wins": 256,
+      "samples": 976,
+      "wins": 257,
       "losses": 719,
-      "hit_rate": 0.26256410256410256,
-      "brier_score": 0.1956037925213526,
-      "log_loss": 0.5803524406787439
+      "hit_rate": 0.26331967213114754,
+      "brier_score": 0.1958736382036584,
+      "log_loss": 0.5809172193906327
     }
   ],
   "metrics_reliable": true
