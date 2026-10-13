@@ -49,6 +49,7 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertLess(baseball.min_edge, handball.min_edge)
         self.assertGreater(baseball.max_stake_pct, handball.max_stake_pct)
         self.assertEqual(sport_policy("football").min_odds, 1.20)
+        self.assertEqual(sport_policy("hockey").min_edge, .08)
 
     def test_football_balanced_learning_includes_lower_odds(self) -> None:
         self.assertTrue(is_learning_observation_odds(1.20))
@@ -104,8 +105,8 @@ class ProfessionalControlsTests(unittest.TestCase):
             Bet(
                 sport="football", league="L", event=f"High {index}",
                 market="h2h", selection="Away", odds=3.80,
-                prob_model=.29, prob_market=.263, prob_final=.29,
-                edge=.102, stake=5, bookmaker="Book",
+                prob_model=.31, prob_market=.263, prob_final=.31,
+                edge=.178, stake=5, bookmaker="Book",
                 start_time=f"2026-09-{20 + index}", score=100,
                 release_stage="EARLY",
             )
@@ -129,14 +130,14 @@ class ProfessionalControlsTests(unittest.TestCase):
         }
         summary = apply_professional_risk_controls([output], self.settings)
         accepted = output["result"].bets
-        self.assertEqual(summary.accepted, 4)
-        self.assertEqual(sum(bet.odds >= 3 for bet in accepted), 2)
+        self.assertEqual(summary.accepted, 3)
+        self.assertEqual(sum(bet.odds >= 3 for bet in accepted), 1)
         self.assertEqual(sum(bet.odds < 1.60 for bet in accepted), 2)
         self.assertEqual(
             summary.rejected_reasons.get(
-                "football: odds band tip limit reached"
+                "football: high odds daily limit reached"
             ),
-            1,
+            2,
         )
 
     def test_league_clv_guard_requires_reliable_sample(self) -> None:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import tempfile
 from datetime import datetime, timezone
@@ -665,14 +666,21 @@ class FootballModule(SportModule):
         reason: str,
         market: str = "h2h",
     ) -> None:
+        external_event_id = str(getattr(self, "_audit_event_id", "") or "")
+        start_time = str(getattr(self, "_audit_start_time", "") or "")
+        probability_match = re.search(
+            r"(?:^|;)\s*(?:final|fallback)=([0-9.]+)", str(reason)
+        )
+        prob_model = float(probability_match.group(1)) if probability_match else None
         with self._connect(settings) as conn:
             conn.execute("""
                 INSERT INTO sport_decision_audit
                 (
                     sport, league, event, market, selection, bookmaker,
-                    odds, prob_market, edge, decision, reason
+                    odds, prob_market, edge, decision, reason,
+                    external_event_id, start_time, prob_model
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 self.name,
                 sport_key,
@@ -685,6 +693,9 @@ class FootballModule(SportModule):
                 edge,
                 decision,
                 reason,
+                external_event_id,
+                start_time,
+                prob_model,
             ))
 
     def _export_scan_audit(self, settings: Settings, after_id: int) -> Path:
@@ -695,7 +706,8 @@ class FootballModule(SportModule):
                 dict(row)
                 for row in conn.execute(
                     "SELECT id, created_at, league, event, market, selection, bookmaker, "
-                    "odds, prob_market, edge, decision, reason "
+                    "odds, prob_market, edge, decision, reason, "
+                    "external_event_id, start_time, prob_model "
                     "FROM sport_decision_audit "
                     "WHERE sport='football' AND id>? ORDER BY id",
                     (after_id,),
@@ -855,6 +867,8 @@ class FootballModule(SportModule):
                 away = str(event.get("away_team", ""))
                 start = str(event.get("commence_time", ""))
                 event_name = f"{home} vs {away}"
+                self._audit_event_id = str(event.get("id") or "")
+                self._audit_start_time = start
                 bookmakers = event.get("bookmakers", [])
 
                 scanned_events += 1

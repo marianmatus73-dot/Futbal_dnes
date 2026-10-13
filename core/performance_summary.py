@@ -11,6 +11,14 @@ WIN_RESULTS = ("WON", "V")
 LOSS_RESULTS = ("LOST", "P")
 
 
+def _live_clause(cur: sqlite3.Cursor) -> str:
+    columns = {str(row[1]) for row in cur.execute("PRAGMA table_info(sport_bets)")}
+    return (
+        " AND COALESCE(NULLIF(TRIM(tracking_mode), ''), 'LIVE')='LIVE'"
+        if "tracking_mode" in columns else ""
+    )
+
+
 def _group_stats(cur: sqlite3.Cursor, column: str) -> dict:
     allowed = {"sport", "bookmaker", "league"}
     if column not in allowed:
@@ -27,6 +35,7 @@ def _group_stats(cur: sqlite3.Cursor, column: str) -> dict:
             COALESCE(SUM(stake),0) AS stake_sum
         FROM sport_bets
         WHERE result IN ('WON','LOST','V','P')
+        {_live_clause(cur)}
         GROUP BY COALESCE({column}, 'UNKNOWN')
         ORDER BY profit DESC
         """
@@ -59,63 +68,70 @@ def update_model_stats(settings: Settings) -> dict:
 
     try:
         cur = conn.cursor()
+        live_clause = _live_clause(cur)
 
         total = int(
             cur.execute(
-                """
+                f"""
                 SELECT COUNT(*)
                 FROM sport_bets
                 WHERE result IN ('WON','LOST','V','P')
+                {live_clause}
                 """
             ).fetchone()[0]
         )
 
         wins = int(
             cur.execute(
-                """
+                f"""
                 SELECT COUNT(*)
                 FROM sport_bets
                 WHERE result IN ('WON','V')
+                {live_clause}
                 """
             ).fetchone()[0]
         )
 
         losses = int(
             cur.execute(
-                """
+                f"""
                 SELECT COUNT(*)
                 FROM sport_bets
                 WHERE result IN ('LOST','P')
+                {live_clause}
                 """
             ).fetchone()[0]
         )
 
         profit = float(
             cur.execute(
-                """
+                f"""
                 SELECT COALESCE(SUM(profit),0)
                 FROM sport_bets
                 WHERE result IN ('WON','LOST','V','P')
+                {live_clause}
                 """
             ).fetchone()[0]
         )
 
         stake_sum = float(
             cur.execute(
-                """
+                f"""
                 SELECT COALESCE(SUM(stake),0)
                 FROM sport_bets
                 WHERE result IN ('WON','LOST','V','P')
+                {live_clause}
                 """
             ).fetchone()[0]
         )
 
         open_bets = int(
             cur.execute(
-                """
+                f"""
                 SELECT COUNT(*)
                 FROM sport_bets
-                WHERE result IS NULL OR result='' OR result='OPEN'
+                WHERE (result IS NULL OR result='' OR result='OPEN')
+                {live_clause}
                 """
             ).fetchone()[0]
         )
@@ -178,8 +194,10 @@ def performance_report(settings: Settings) -> str:
     conn = sqlite3.connect(settings.db_file)
 
     try:
+        cur = conn.cursor()
+        live_clause = _live_clause(cur)
         rows = conn.execute(
-            """
+            f"""
             SELECT
                 CASE
                     WHEN result IS NULL OR result='' OR result='OPEN'
@@ -188,6 +206,7 @@ def performance_report(settings: Settings) -> str:
                 END AS result_group,
                 COUNT(*)
             FROM sport_bets
+            WHERE 1=1 {live_clause}
             GROUP BY result_group
             ORDER BY COUNT(*) DESC
             """

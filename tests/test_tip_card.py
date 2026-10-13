@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,12 +9,39 @@ from pathlib import Path
 from core.pro_tipper import build_pro_tip, filter_value_tips
 from core.tip_card import (
     build_low_odds_watch,
+    persist_low_odds_watch,
     save_latest_rejected_candidates,
     save_latest_tip_card,
 )
+from core.config import Settings
+from core.sport_quant import init_sport_db
 
 
 class TipCardTests(unittest.TestCase):
+    def test_low_odds_watch_is_persisted_once_for_settlement(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            database = Path(temp) / "bets.db"
+            settings = Settings(db_file=str(database))
+            init_sport_db(settings)
+            rows = [{
+                "league": "soccer_test", "event": "A vs B", "selection": "1X",
+                "market": "double_chance", "odds": 1.35,
+                "model_probability": .79, "market_probability": .74,
+                "bookmaker": "Book", "start_time": "2026-10-13T18:00:00Z",
+                "external_event_id": "event-123", "confidence": 79,
+            }]
+            self.assertEqual(persist_low_odds_watch(settings, rows), 1)
+            self.assertEqual(persist_low_odds_watch(settings, rows), 0)
+            with sqlite3.connect(database) as conn:
+                saved = conn.execute(
+                    "SELECT market, selection, stake, tracking_mode, external_event_id "
+                    "FROM sport_bets"
+                ).fetchone()
+            self.assertEqual(
+                saved,
+                ("double_chance", "1X", 1.0, "LOW_ODDS_WATCH", "event-123"),
+            )
+
     def test_low_odds_watch_is_separate_and_deduplicates_opposite_sides(self) -> None:
         accepted = build_pro_tip(
             sport="football", league="test", match="A vs B", pick="A",

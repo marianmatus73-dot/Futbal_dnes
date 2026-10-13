@@ -19,6 +19,7 @@ REQUIRED_COLUMNS = {
     "profit": "REAL",
     "created_at": "TEXT",
     "settled_at": "TEXT",
+    "tracking_mode": "TEXT DEFAULT 'LIVE'",
 }
 
 def _connect(database: str | Path) -> sqlite3.Connection:

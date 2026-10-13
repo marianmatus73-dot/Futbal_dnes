@@ -304,6 +304,7 @@ def apply_professional_risk_controls(
         accepted: list[Bet] = []
         seen_events: set[tuple[str, str]] = set()
         accepted_odds_bands: dict[tuple[float, float | None], int] = {}
+        football_high_odds_accepted = 0
 
         for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
             summary.candidates += 1
@@ -361,6 +362,12 @@ def apply_professional_risk_controls(
                 if repeats_same_selection
                 else min(float(bet.stake), stake_cap)
             )
+            high_odds_min_edge = float(
+                os.getenv("FOOTBALL_HIGH_ODDS_MIN_EDGE", "0.10")
+            )
+            high_odds_min_confidence = int(
+                os.getenv("FOOTBALL_HIGH_ODDS_MIN_CONFIDENCE", "75")
+            )
 
             reason = ""
             if summary.drawdown_paused:
@@ -384,6 +391,21 @@ def apply_professional_risk_controls(
                 reason = "conservative edge above sport maximum"
             elif confidence < policy.min_confidence:
                 reason = "confidence below sport minimum"
+            elif (
+                result.sport == "football"
+                and bet.odds > 2.20
+                and (
+                    conservative_edge < high_odds_min_edge
+                    or confidence < high_odds_min_confidence
+                )
+            ):
+                reason = "high odds evidence below minimum"
+            elif (
+                result.sport == "football"
+                and bet.odds > 2.20
+                and football_high_odds_accepted >= 1
+            ):
+                reason = "high odds daily limit reached"
             elif event_key in seen_events:
                 reason = "duplicate event in current run"
             elif existing_allocation and not repeats_same_selection:
@@ -440,6 +462,8 @@ def apply_professional_risk_controls(
             accepted.append(bet)
             seen_events.add(event_key)
             accepted_odds_bands[odds_band] = accepted_odds_bands.get(odds_band, 0) + 1
+            if result.sport == "football" and bet.odds > 2.20:
+                football_high_odds_accepted += 1
             if not repeats_same_selection:
                 accepted_daily += stake
                 sport_exposure += stake

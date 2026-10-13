@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
+import sqlite3
 import tempfile
 from dataclasses import asdict
 from datetime import datetime
@@ -10,6 +12,7 @@ from pathlib import Path
 
 from core.mobile_notifications import build_notifications
 from core.rejection_explanations import enrich_rejection
+from core.config import Settings
 
 
 def _tip_payload(tip, decision: str) -> dict:
@@ -86,7 +89,9 @@ def build_low_odds_watch(
         reason = str(candidate.get("reason") or "upstream football scan")
         final_match = re.search(r"(?:^|;)\s*(?:final|fallback)=([0-9.]+)", reason)
         model_probability = (
-            float(final_match.group(1))
+            float(candidate.get("prob_model"))
+            if candidate.get("prob_model") not in (None, "")
+            else float(final_match.group(1))
             if final_match
             else float(candidate.get("prob_market", 0) or 0)
         )
@@ -119,6 +124,8 @@ def build_low_odds_watch(
             "stake_u": 0.10,
             "stake_amount": 0,
             "created_at": str(candidate.get("created_at") or ""),
+            "external_event_id": str(candidate.get("external_event_id") or ""),
+            "start_time": str(candidate.get("start_time") or ""),
             "decision": "WATCH",
             "watch_status": "DAILY_LOW_ODDS_EXPERIMENT",
             "not_official_tip": True,
@@ -175,6 +182,69 @@ def build_low_odds_watch(
             selected.append(candidate)
             selected_ids.add(id(candidate))
     return selected
+
+
+def persist_low_odds_watch(settings: Settings, rows: list[dict]) -> int:
+    """Persist observation-only football picks so they can be settled.
+
+    These rows use a dedicated tracking mode and never count as LIVE tips.
+    One unit is used only for comparable experiment yield; no real stake is
+    allocated by the professional risk engine.
+    """
+    database = Path(settings.db_file or os.getenv("DB_FILE", "bets.db"))
+    if not database.exists() or not rows:
+        return 0
+    with sqlite3.connect(database) as conn:
+        columns = {str(row[1]) for row in conn.execute("PRAGMA table_info(sport_bets)")}
+        for name, definition in {
+            "tracking_mode": "TEXT DEFAULT 'LIVE'",
+            "external_event_id": "TEXT",
+            "engine_version": "TEXT",
+        }.items():
+            if name not in columns:
+                conn.execute(f"ALTER TABLE sport_bets ADD COLUMN {name} {definition}")
+        before = conn.total_changes
+        for row in rows:
+            event = str(row.get("event") or row.get("match") or "").strip()
+            selection = str(row.get("selection") or row.get("pick") or "").strip()
+            market = str(row.get("market") or "h2h").strip().casefold()
+            external_id = str(row.get("external_event_id") or "").strip()
+            start_time = str(row.get("start_time") or "").strip()
+            odds = float(row.get("odds") or 0)
+            if not event or not selection or not start_time or odds <= 1.01:
+                continue
+            identity = external_id or f"{event}|{start_time}"
+            source_hash = hashlib.sha256(
+                f"LOW_ODDS_WATCH|{identity}|{market}|{selection}".encode("utf-8")
+            ).hexdigest()[:24]
+            probability = float(row.get("model_probability") or 0)
+            market_probability = float(
+                row.get("market_probability") or row.get("implied_probability") or 0
+            )
+            home, separator, away = event.partition(" vs ")
+            conn.execute(
+                """
+                INSERT OR IGNORE INTO sport_bets (
+                    sport, league, event, home_team, away_team, market,
+                    selection, odds, prob_model, prob_market, prob_final,
+                    edge, stake, bookmaker, start_time, score, source_hash,
+                    result, external_event_id, engine_version, tracking_mode
+                ) VALUES (
+                    'football', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1.0, ?, ?, ?,
+                    ?, 'OPEN', ?, 'football-2.0-low-odds-watch', 'LOW_ODDS_WATCH'
+                )
+                """,
+                (
+                    str(row.get("league") or "football"), event, home,
+                    away if separator else "", market, selection, odds,
+                    probability, market_probability, probability,
+                    probability * odds - 1.0,
+                    str(row.get("bookmaker") or "market"), start_time,
+                    float(row.get("confidence") or probability * 100),
+                    source_hash, external_id,
+                ),
+            )
+        return conn.total_changes - before
 
 
 def save_latest_tip_card(

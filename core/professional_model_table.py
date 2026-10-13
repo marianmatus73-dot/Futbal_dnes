@@ -146,10 +146,18 @@ def build_professional_model_table(
         ).fetchone()
         if exists is None:
             return {"generated_at": datetime.now(timezone.utc).isoformat(), "sports": {}}
+        columns = {
+            str(row[1]) for row in conn.execute("PRAGMA table_info(sport_bets)")
+        }
+        tracking = (
+            "COALESCE(NULLIF(TRIM(tracking_mode), ''), 'LIVE')"
+            if "tracking_mode" in columns else "'LIVE'"
+        )
         rows = conn.execute(
-            """
+            f"""
             SELECT sport, league, market, odds, stake, profit, clv_pct,
-                   prob_final, result, start_time, settled_at
+                   prob_final, result, start_time, settled_at,
+                   {tracking} AS tracking_mode
             FROM sport_bets
             WHERE UPPER(TRIM(COALESCE(result, ''))) IN
                   ('WON', 'WIN', 'LOST', 'LOSS', 'V', 'P')
@@ -157,9 +165,11 @@ def build_professional_model_table(
         ).fetchall()
 
     now = datetime.now(timezone.utc)
+    live_rows = [row for row in rows if str(row["tracking_mode"]) == "LIVE"]
+    watch_rows = [row for row in rows if str(row["tracking_mode"]) == "LOW_ODDS_WATCH"]
     sports: dict[str, Any] = {}
-    for sport in sorted({str(row["sport"] or "UNKNOWN") for row in rows}):
-        sport_rows = [row for row in rows if str(row["sport"] or "UNKNOWN") == sport]
+    for sport in sorted({str(row["sport"] or "UNKNOWN") for row in live_rows}):
+        sport_rows = [row for row in live_rows if str(row["sport"] or "UNKNOWN") == sport]
         periods = {}
         for days in (30, 90, 365):
             cutoff = now - timedelta(days=days)
@@ -192,6 +202,15 @@ def build_professional_model_table(
             )
             sports[sport]["low_odds_1_20_1_60"] = low_odds_metrics
 
+    football_watch = [row for row in watch_rows if str(row["sport"]) == "football"]
+    experiments = {
+        "football_low_odds_watch": {
+            "all_time": asdict(_metrics(football_watch)),
+            "by_market": _group(football_watch, lambda row: row["market"]),
+            "status": "SHADOW_NOT_OFFICIAL",
+        }
+    }
+
     shadow_models = {
         "handball": build_shadow_model_metrics(
             settings,
@@ -203,6 +222,7 @@ def build_professional_model_table(
         "generated_at": now.isoformat(),
         "sports": sports,
         "shadow_models": shadow_models,
+        "experiments": experiments,
     }
     output = Path(export_dir)
     output.mkdir(parents=True, exist_ok=True)
