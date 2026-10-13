@@ -1,0 +1,304 @@
+
+=== TOP TIPS OF THE DAY ===
+
+
+=== PRO TIPPER VALUE BETS ===
+
+#1 BASEBALL | baseball_mlb
+Match: Tampa Bay Rays vs Cleveland Guardians
+Pick: Cleveland Guardians
+Odds: 2.22
+Bookmaker: GTbets
+Model probability: 48.7%
+Market probability: 45.0%
+Raw edge: 14.5%
+Consensus edge: 3.7%
+Confidence: 94/100
+Risk: low
+Stake: 0.25u
+Stake amount: 16.82
+Reason: Raw edge 14.5% | Score 94.0 | Consensus: elo, xg, form, market
+
+#2 BASEBALL | baseball_mlb
+Match: Los Angeles Dodgers vs Milwaukee Brewers
+Pick: Milwaukee Brewers
+Odds: 2.48
+Bookmaker: LeoVegas (SE)
+Model probability: 43.0%
+Market probability: 40.3%
+Raw edge: 14.6%
+Consensus edge: 2.7%
+Confidence: 93/100
+Risk: medium
+Stake: 0.25u
+Stake amount: 11.36
+Reason: Raw edge 14.6% | Score 93.0 | Consensus: elo, xg, form, market
+
+#3 TENNIS | tennis_wta_wuhan_open
+Match: Mia Pohánková vs Xiyu Wang
+Pick: Mia Pohánková
+Odds: 1.70
+Bookmaker: William Hill
+Model probability: 68.2%
+Market probability: 58.8%
+Raw edge: 13.9%
+Consensus edge: 9.4%
+Confidence: 81/100
+Risk: low
+Stake: 0.57u
+Stake amount: 30.00
+Reason: Raw edge 13.9% | Score 81.0 | Consensus: elo, xg, form, market
+
+#4 FOOTBALL | Championship
+Match: Stoke City vs Middlesbrough
+Pick: Stoke City
+Odds: 4.00
+Bookmaker: Betfair
+Model probability: 28.6%
+Market probability: 25.0%
+Raw edge: 12.4%
+Consensus edge: 3.6%
+Confidence: 75/100
+Risk: medium
+Stake: 0.25u
+Stake amount: 12.01
+Reason: Raw edge 12.4% | Score 75.0 | Consensus: elo, xg, form, market
+Release: EARLY
+
+#5 BASEBALL | baseball_npb
+Match: Fukuoka SoftBank Hawks vs Hokkaido Nippon-Ham Fighters
+Pick: Hokkaido Nippon-Ham Fighters
+Odds: 3.77
+Bookmaker: 1xBet
+Model probability: 27.7%
+Market probability: 26.5%
+Raw edge: 4.7%
+Consensus edge: 1.2%
+Confidence: 73/100
+Risk: medium
+Stake: 0.25u
+Stake amount: 4.07
+Reason: Raw edge 4.7% | Score 73.0 | Consensus: elo, xg, form, market
+
+
+=== CANDIDATES REJECTED BY PRO FILTER ===
+Žiadni odmietnutí kandidáti.
+
+
+=== HIGH CONFIDENCE TIPS ===
+Tips with confidence >= 80: 3
+
+
+=== ORIGINAL MODULE REPORT ===
+
+MULTISPORT BETTING ENGINE REPORT
+==========================================
+
+[FOOTBALL] scan
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 0. Events scanned: 446. Snapshots saved: 1848. Candidate rows: 22275 -> 1335. Blocked: 1250. Stored candidates: 86. Risk pool: 86.
+FOOTBALL ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+01. 2026-10-13T19:00:00Z | Championship | Stoke City vs Middlesbrough | Stoke City @ 4.00 | P 28.6% | Edge 12.4% | Stake 0.40 | Betfair | EARLY
+
+[TENNIS] scan
+Tennis scan hotový. Events: 21, Stored: 4
+01. 2026-10-13T12:47:30Z | tennis_wta_wuhan_open | Mia Pohánková vs Xiyu Wang | Mia Pohánková @ 1.70 | P 68.2% | Edge 13.9% | Stake 1.71 | William Hill
+
+[BASKETBALL] scan
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 71. Snapshots saved: 1358. Blocked: 1344. Stored candidates: 1.
+BASKETBALL ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+No bets found.
+
+[HOCKEY] scan
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 40. Snapshots saved: 1599. Blocked: 1592. Stored candidates: 4.
+HOCKEY ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+No bets found.
+
+[BASEBALL] scan
+Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 5. Snapshots saved: 122. Blocked: 81. Stored candidates: 3.
+BASEBALL ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+01. 2026-10-14T00:00:00Z | baseball_mlb | Tampa Bay Rays vs Cleveland Guardians | Cleveland Guardians @ 2.22 | P 52.5% | Edge 14.5% | Stake 1.08 | GTbets
+02. 2026-10-15T00:00:00Z | baseball_mlb | Los Angeles Dodgers vs Milwaukee Brewers | Milwaukee Brewers @ 2.48 | P 47.0% | Edge 14.6% | Stake 0.91 | LeoVegas (SE)
+03. 2026-10-14T09:00:00Z | baseball_npb | Fukuoka SoftBank Hawks vs Hokkaido Nippon-Ham Fighters | Hokkaido Nippon-Ham Fighters @ 3.77 | P 28.3% | Edge 4.7% | Stake 0.20 | 1xBet
+
+[HANDBALL] shadow
+Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 8. Snapshots saved: 183. Learning observations saved: 24. New benchmark candidates: 8. Settled observations: 0 (0 won, 0 lost).
+No bets found.
+
+[NFL] scan
+NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 14. Snapshots saved: 574. Blocked: 574. Stored candidates: 0.
+NFL ANALYTICS
+Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
+No bets found.
+
+Total bets: 5
+
+
+=== ENGINE SUMMARY ===
+- football: OK (97.08s)
+- tennis: OK (7.18s)
+- basketball: OK (25.44s)
+- hockey: OK (35.24s)
+- baseball: OK (17.40s)
+- handball: OK (18.22s)
+- nfl: OK (11.84s)
+
+
+=== BLOCKED DECISIONS SUMMARY ===
+- football: totals xG evidence insufficient = 106
+- basketball: no market consensus = 23
+- football: totals edge gate; final=0.5627; reliability=0.000 = 22
+- football: totals edge gate; final=0.5194; reliability=0.000 = 20
+- football: totals edge gate; final=0.4761; reliability=0.000 = 19
+- football: totals edge gate; final=0.4806; reliability=0.000 = 19
+- football: totals edge gate; final=0.5233; reliability=0.000 = 19
+- football: totals edge gate; final=0.5178; reliability=0.000 = 18
+- football: totals edge gate; final=0.5213; reliability=0.000 = 18
+- football: totals edge gate; final=0.5217; reliability=0.000 = 18
+
+=== BANKROLL SUMMARY ===
+Bankroll: 1000.00
+Kelly fraction: 0.25
+Max stake %: 3.0%
+
+=== MODEL PERFORMANCE ===
+Total bets: 2834
+Wins: 1201
+Losses: 1633
+Winrate: 42.38%
+Yield: 4.88%
+Profit: 97.67
+Stake sum: 2001.86
+
+Open bets: 80
+Settled bets: 2834
+
+Result distribution:
+- LOST: 1633
+- UNRESOLVED: 1268
+- WON: 1201
+- OPEN: 80
+- VOID: 12
+
+By sport:
+- baseball: 820-700 | profit 92.59 | yield 5.69% | bets 1520
+- football: 259-680 | profit 5.83 | yield 2.59% | bets 939
+- basketball: 21-25 | profit 5.76 | yield 22.38% | bets 46
+- nfl: 7-6 | profit 2.26 | yield 13.17% | bets 13
+- tennis: 18-64 | profit 0.52 | yield 2.78% | bets 82
+- mma: 5-15 | profit -1.76 | yield -20.22% | bets 20
+- hockey: 71-143 | profit -7.53 | yield -9.58% | bets 214
+
+Top bookmakers:
+- 888sport: 209-137 | profit 57.42 | yield 15.27% | bets 346
+- BetOnline.ag: 239-196 | profit 34.00 | yield 7.04% | bets 435
+- Betsson: 18-16 | profit 10.47 | yield 45.80% | bets 34
+- Betclic (FR): 26-18 | profit 8.77 | yield 26.01% | bets 44
+- LeoVegas (SE): 28-48 | profit 8.33 | yield 32.80% | bets 76
+- 1xBet: 169-262 | profit 4.37 | yield 1.66% | bets 431
+- BetAnything: 5-4 | profit 3.05 | yield 50.56% | bets 9
+- GTbets: 70-86 | profit 2.99 | yield 2.07% | bets 156
+- Coolbet: 28-69 | profit 2.07 | yield 5.43% | bets 97
+- Matchbook: 71-105 | profit 1.79 | yield 1.69% | bets 176
+
+Top leagues:
+- baseball_mlb: 820-700 | profit 92.59 | yield 5.69% | bets 1520
+- MLS: 43-102 | profit 5.05 | yield 16.83% | bets 145
+- Allsvenskan: 15-24 | profit 4.31 | yield 29.96% | bets 39
+- Liga MX: 12-23 | profit 3.45 | yield 43.12% | bets 35
+- Turkish Super Lig: 10-16 | profit 2.55 | yield 33.31% | bets 26
+- basketball_wnba: 12-18 | profit 2.37 | yield 16.36% | bets 30
+- Segunda Division: 8-16 | profit 2.35 | yield 31.18% | bets 24
+- americanfootball_nfl: 7-6 | profit 2.26 | yield 13.17% | bets 13
+- tennis_wta_singapore_open: 4-4 | profit 1.98 | yield 117.67% | bets 8
+- basketball_nba_preseason: 2-0 | profit 1.77 | yield 140.12% | bets 2
+
+=== PROFESSIONAL MODEL TABLE ===
+- baseball: settled=1520 | yield=5.69% | profit=92.59 | CLV=n/a (0) | Brier=0.2421 | max DD=21.47
+- basketball: settled=46 | yield=22.38% | profit=5.76 | CLV=n/a (0) | Brier=0.2241 | max DD=2.12
+- football: settled=939 | yield=2.59% | profit=5.83 | CLV=3.65% (539) | Brier=0.1958 | max DD=18.09
+- hockey: settled=214 | yield=-9.58% | profit=-7.53 | CLV=n/a (0) | Brier=0.2194 | max DD=17.73
+- mma: settled=20 | yield=-20.22% | profit=-1.76 | CLV=n/a (0) | Brier=0.1758 | max DD=3.16
+- nfl: settled=13 | yield=13.17% | profit=2.26 | CLV=n/a (0) | Brier=0.2063 | max DD=3.01
+- tennis: settled=82 | yield=2.78% | profit=0.52 | CLV=n/a (0) | Brier=0.1597 | max DD=3.20
+- handball SHADOW: settled events=0/150 | open events=8 | canonical samples=24 | duplicates excluded=0 | market Brier=n/a | maturity=COLLECTING | publishing=LOCKED
+  benchmark market_favourite_v1: settled=0 | open=8 | yield=n/a | Brier=None
+
+=== OPERATIONAL HEALTH ===
+Funnel: candidates=96 | accepted=5 | rejected=91
+- football: READY | settled=951/100 | snapshots24h=1848 | mode=LIVE
+- tennis: ATTENTION | settled=82/75 | snapshots24h=0 | mode=LIVE
+- basketball: ATTENTION | settled=46/75 | snapshots24h=1358 | mode=LIVE
+- hockey: ATTENTION | settled=214/75 | snapshots24h=1599 | mode=LIVE
+- baseball: ATTENTION | settled=1520/100 | snapshots24h=122 | mode=LIVE
+- handball: COLLECTING | settled=0/50 | snapshots24h=183 | mode=SHADOW
+- nfl: COLLECTING | settled=13/50 | snapshots24h=574 | mode=LIVE
+
+=== MODEL GOVERNANCE ===
+Football markets: 1X2=LIVE, DOUBLE_CHANCE=SHADOW, OVER_UNDER=SHADOW, BTTS=SHADOW
+Coach recommendations: 10 (auto-apply OFF)
+
+
+=== FOOTBALL AI HEALTH V15.2 ===
+Model maturity: READY
+Training samples: 1002
+Meta AI status: UNLOCKED
+Weight tuning: True
+Top feature: Consensus safety
+Explainability records: 1335
+
+=== FOOTBALL LEARNING PROGRESS V15.3 ===
+Settled samples: 1002
+Meta AI progress: 100%
+Meta AI status: READY_FOR_TRAINING
+Weight Optimizer progress: 100%
+Readiness: READY
+
+
+=== MULTISPORT LEARNING BUNDLE V2 ===
+Sports completed: 6
+Sports ready: 6
+Status: READY
+- baseball: samples=1520 | winrate=0.5395 | yield=0.0465 | profit=92.592 | maturity=READY | health=BUILDING | weight=0.2844
+- basketball: samples=46 | winrate=0.4565 | yield=0.1764 | profit=5.7559 | maturity=EARLY | health=BUILDING | weight=0.144
+- tennis: samples=82 | winrate=0.2195 | yield=0.0218 | profit=0.5247 | maturity=DEVELOPING | health=BUILDING | weight=0.1782
+- hockey: samples=214 | winrate=0.3318 | yield=-0.0598 | profit=-7.5349 | maturity=READY | health=GOOD | weight=0.2897
+- handball: samples=0 | winrate=None | yield=None | profit=0.0 | maturity=EMPTY | health=EMPTY | weight=0.0193
+- nfl: samples=13 | winrate=0.5385 | yield=0.1317 | profit=2.2639 | maturity=EARLY | health=BUILDING | weight=0.0842
+
+
+=== V16.16 LEAGUE PROFILE ===
+Profiles: 1
+Status: READY
+
+
+=== V16 INTEGRATED AUTONOMOUS CYCLE ===
+Cycle ID: 1
+Stages completed: 17
+Loop state: AUTONOMOUS_ACTIVE
+Loop score: 0.981
+Decision: EXECUTE_NOW
+Errors: 0
+Status: READY
+Feedback source: sqlite:sport_bets+runtime:module_outputs
+Previous result: LOSS
+Previous profit: -0.1600
+Runtime health: 100.0%
+Average module latency: 30343 ms
+
+
+=== V16 PRODUCTION DASHBOARD ===
+Stored cycles: 1
+Ready cycles: 1
+Error cycles: 0
+Average loop score: 0.981
+Dashboard HTML: exports/v16_dashboard.html
+
+
+=== V16 ALERTS ===
+Active alerts: 1
+Highest severity: INFO
+- [INFO] Latest settled feedback is LOSS.

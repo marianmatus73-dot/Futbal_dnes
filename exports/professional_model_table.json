@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-13T13:04:35.100115+00:00",
+  "generated_at": "2026-10-13T15:02:51.396164+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -1406,7 +1406,7 @@
       "probability_samples": 0,
       "market_brier_score": null,
       "calibration_error": null,
-      "average_odds": 5.6229,
+      "average_odds": 5.6154,
       "minimum_events": 150,
       "readiness_pct": 0.0,
       "maturity": "COLLECTING",
@@ -1422,7 +1422,25 @@
         "yield_pct": null,
         "brier_score": null
       },
-      "generated_at": "2026-10-13T13:04:35.169824+00:00"
+      "generated_at": "2026-10-13T15:02:51.465933+00:00"
+    }
+  },
+  "experiments": {
+    "football_low_odds_watch": {
+      "all_time": {
+        "settled": 0,
+        "stake": 0,
+        "profit": 0,
+        "yield_pct": 0.0,
+        "average_clv_pct": null,
+        "clv_samples": 0,
+        "brier_score": null,
+        "calibration_error": null,
+        "probability_samples": 0,
+        "max_drawdown": 0.0
+      },
+      "by_market": {},
+      "status": "SHADOW_NOT_OFFICIAL"
     }
   }
 }
