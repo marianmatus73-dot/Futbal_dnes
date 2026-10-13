@@ -63,7 +63,9 @@ def init_sport_db(settings: Settings) -> None:
                 closing_odds REAL,
                 clv_pct REAL,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                settled_at TEXT
+                settled_at TEXT,
+                tracking_mode TEXT DEFAULT 'LIVE',
+                engine_version TEXT
             )
         """)
 
@@ -110,6 +112,23 @@ def init_sport_db(settings: Settings) -> None:
             conn.execute(
                 "ALTER TABLE sport_decision_audit "
                 "ADD COLUMN market TEXT DEFAULT 'h2h'"
+            )
+        for name, definition in {
+            "external_event_id": "TEXT",
+            "start_time": "TEXT",
+            "prob_model": "REAL",
+        }.items():
+            if name not in audit_columns:
+                conn.execute(
+                    f"ALTER TABLE sport_decision_audit ADD COLUMN {name} {definition}"
+                )
+
+        bet_columns = {
+            str(row[1]) for row in conn.execute("PRAGMA table_info(sport_bets)")
+        }
+        if "tracking_mode" not in bet_columns:
+            conn.execute(
+                "ALTER TABLE sport_bets ADD COLUMN tracking_mode TEXT DEFAULT 'LIVE'"
             )
 
         conn.execute("""

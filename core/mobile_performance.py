@@ -24,11 +24,16 @@ def export_mobile_performance(settings: Settings, *, export_dir: Path) -> Path:
             if {"result", "settled_at", "sport"}.issubset(columns):
                 profit = "COALESCE(profit, 0)" if "profit" in columns else "0"
                 clv = "clv_pct" if "clv_pct" in columns else "NULL"
+                tracking_filter = (
+                    "AND COALESCE(NULLIF(TRIM(tracking_mode), ''), 'LIVE')='LIVE'"
+                    if "tracking_mode" in columns else ""
+                )
                 rows = conn.execute(
                     f"""SELECT sport, result, {profit}, {clv}, settled_at
                     FROM sport_bets
                     WHERE UPPER(result) IN ('WON','LOST')
                       AND settled_at IS NOT NULL
+                      {tracking_filter}
                     ORDER BY datetime(settled_at), id"""
                 ).fetchall()
                 for sport, result, row_profit, row_clv, settled_at in rows[-365:]:

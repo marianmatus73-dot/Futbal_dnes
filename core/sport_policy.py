@@ -27,7 +27,7 @@ POLICIES: dict[str, SportPolicy] = {
     "football": SportPolicy(.04, .18, 68, 1.20, 4.00, 5, .0075, .020),
     "baseball": SportPolicy(.04, .18, 65, 1.35, 4.50, 5, .0100, .025),
     "basketball": SportPolicy(.06, .16, 68, 1.30, 3.50, 4, .0075, .020),
-    "hockey": SportPolicy(.07, .16, 70, 1.35, 4.00, 3, .0060, .015),
+    "hockey": SportPolicy(.08, .16, 70, 1.35, 4.00, 3, .0060, .015),
     # Handball remains shadow-only until its settlement and calibration gates
     # explicitly unlock publishing. These limits are ready for that later phase.
     "handball": SportPolicy(.07, .16, 70, 1.30, 3.50, 3, .0060, .015),

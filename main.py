@@ -57,6 +57,7 @@ from core.pro_tipper import (
 from core.top_tips import select_top_tips, select_telegram_tips
 from core.tip_card import (
     build_low_odds_watch,
+    persist_low_odds_watch,
     save_latest_rejected_candidates,
     save_latest_tip_card,
 )
@@ -680,6 +681,7 @@ def build_report(
     results: list,
     module_outputs: list[dict],
     *,
+    settings: Settings | None = None,
     write_tip_card: bool = True,
     risk_rejected_candidates: list[dict] | None = None,
 ) -> str:
@@ -716,6 +718,9 @@ def build_report(
             limit=max(3, int(os.getenv("LOW_ODDS_WATCH_LIMIT", "3"))),
             audit_candidates=audit_candidates,
         )
+        if settings is not None:
+            persisted = persist_low_odds_watch(settings, low_odds_watch)
+            log.info("Persisted %s low-odds watch selections for settlement", persisted)
         card_path = save_latest_tip_card(
             top_tips,
             rejected,
@@ -2188,8 +2193,23 @@ async def run() -> None:
         except Exception:
             log.exception("Historical unresolved cleanup failed")
 
-    # Persist history only after maintenance, otherwise the CSV would restore
-    # stale OPEN rows on the next isolated GitHub Actions runner.
+    successful_results = [
+        item["result"]
+        for item in module_outputs
+        if item["ok"] and item["result"] is not None
+    ]
+
+    report_text = build_report(
+        successful_results,
+        module_outputs,
+        settings=settings,
+        write_tip_card=(not args.dry_run and not args.analytics and not args.backtest),
+        risk_rejected_candidates=risk_rejected_candidates,
+    )
+
+    # Persist history after the report has also stored the observation-only
+    # low-odds selections. The next isolated Actions runner can then settle
+    # them instead of losing the experiment rows between runs.
     save_learning_history(settings)
 
     if not args.dry_run and not args.analytics and not args.backtest:
@@ -2207,19 +2227,6 @@ async def run() -> None:
             log.info("Saved mobile performance history: %s", performance_path)
         except Exception:
             log.exception("Mobile tip history export failed")
-
-    successful_results = [
-        item["result"]
-        for item in module_outputs
-        if item["ok"] and item["result"] is not None
-    ]
-
-    report_text = build_report(
-        successful_results,
-        module_outputs,
-        write_tip_card=(not args.dry_run and not args.analytics and not args.backtest),
-        risk_rejected_candidates=risk_rejected_candidates,
-    )
 
     report_text += audit_block_summary(settings)
     

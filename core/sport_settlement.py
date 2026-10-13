@@ -204,6 +204,7 @@ def ensure_settlement_columns(settings: Settings) -> None:
             "away_goals": "INTEGER",
             "final_score": "TEXT",
             "settlement_source": "TEXT",
+            "tracking_mode": "TEXT DEFAULT 'LIVE'",
         }.items():
             if name not in columns:
                 conn.execute(f"ALTER TABLE sport_bets ADD COLUMN {name} {definition}")

@@ -77,7 +77,8 @@ def export_mobile_tip_history(
                            {field('settlement_source')},
                            {field('start_time')}, {field('created_at')},
                            {field('settled_at')}, {field('final_score')},
-                           {field('home_goals')}, {field('away_goals')}
+                           {field('home_goals')}, {field('away_goals')},
+                           {field('tracking_mode', "'LIVE'")}
                     FROM sport_bets
                     WHERE TRIM(COALESCE(sport, '')) <> ''
                       AND TRIM(COALESCE(event, '')) <> ''
@@ -171,6 +172,8 @@ def export_mobile_tip_history(
                                     "start_time": row["start_time"],
                                     "created_at": row["created_at"],
                                     "settled_at": row["settled_at"],
+                                    "tracking_mode": str(row["tracking_mode"] or "LIVE"),
+                                    "observation_only": str(row["tracking_mode"] or "LIVE") != "LIVE",
                                 }
                             )
 

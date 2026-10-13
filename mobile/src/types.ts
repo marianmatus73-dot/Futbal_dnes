@@ -119,6 +119,8 @@ export type HistoryTip = {
   start_time?: string | null;
   created_at?: string | null;
   settled_at?: string | null;
+  tracking_mode?: "LIVE" | "LOW_ODDS_WATCH" | string;
+  observation_only?: boolean;
 };
 
 export type MobileHistory = {

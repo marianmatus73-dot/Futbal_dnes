@@ -241,7 +241,7 @@ function HistoryItem({ tip }: { tip: HistoryTip }) {
   return (
     <Pressable onPress={() => setExpanded((value) => !value)} style={styles.historyCard}>
       <View style={styles.historyTop}>
-        <View style={styles.historyHeading}><Text style={styles.league}>{tip.league}</Text><Text style={styles.historyMatch}>{tip.match}</Text><Text style={styles.startTime}>{formatStartTime(tip.start_time ?? undefined)}</Text></View>
+        <View style={styles.historyHeading}><Text style={styles.league}>{tip.league}{tip.observation_only ? " · SLEDOVANÝ TEST" : ""}</Text><Text style={styles.historyMatch}>{tip.match}</Text><Text style={styles.startTime}>{formatStartTime(tip.start_time ?? undefined)}</Text></View>
         <View style={[styles.historyBadge, { borderColor: status.color }]}><Text style={[styles.historyBadgeText, { color: status.color }]}>{status.label}</Text></View>
       </View>
       <View style={styles.historyBottom}><View><Text style={styles.label}>NAJSILNEJŠÍ VÝBER MODELU</Text><Text style={styles.historyPick}>{tip.pick} · {tip.odds > 1 ? tip.odds.toFixed(2) : "—"}</Text><Text style={styles.historyMarket}>{tip.market === "totals_2.5" ? "Góly nad/pod 2,5" : tip.market}</Text></View><View style={styles.scoreBox}><Text style={styles.label}>VÝSLEDOK</Text><Text style={[styles.finalScore, { color: status.color }]}>{tip.final_score || (tip.result === "OPEN" ? "Po zápase" : "—")}</Text></View></View>

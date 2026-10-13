@@ -10,6 +10,29 @@ from core.professional_model_table import build_professional_model_table
 
 
 class ProfessionalModelTableTests(unittest.TestCase):
+    def test_watch_experiment_does_not_change_live_football_metrics(self) -> None:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as directory:
+            db = Path(directory) / "bets.db"
+            with sqlite3.connect(db) as conn:
+                conn.execute("""CREATE TABLE sport_bets (
+                    sport TEXT, league TEXT, market TEXT, odds REAL,
+                    stake REAL, profit REAL, clv_pct REAL, prob_final REAL,
+                    result TEXT, start_time TEXT, settled_at TEXT,
+                    tracking_mode TEXT)""")
+                conn.executemany("INSERT INTO sport_bets VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", [
+                    ("football", "Liga", "h2h", 2.0, 1, -1, None, .55,
+                     "LOST", "2026-10-01", "2026-10-01", "LIVE"),
+                    ("football", "Liga", "double_chance", 1.3, 1, .3, None, .80,
+                     "WON", "2026-10-01", "2026-10-01", "LOW_ODDS_WATCH"),
+                ])
+            payload = build_professional_model_table(
+                Settings(db_file=str(db)), export_dir=Path(directory) / "exports"
+            )
+            self.assertEqual(payload["sports"]["football"]["all_time"]["settled"], 1)
+            experiment = payload["experiments"]["football_low_odds_watch"]
+            self.assertEqual(experiment["all_time"]["settled"], 1)
+            self.assertIn("double_chance", experiment["by_market"])
+
     def test_football_low_odds_only_counts_settled_h2h_in_exact_band(self) -> None:
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as directory:
             db = Path(directory) / "bets.db"
