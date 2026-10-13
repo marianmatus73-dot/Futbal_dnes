@@ -65,7 +65,6 @@ def init_sport_db(settings: Settings) -> None:
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 settled_at TEXT,
                 tracking_mode TEXT DEFAULT 'LIVE',
-                external_event_id TEXT,
                 engine_version TEXT
             )
         """)
