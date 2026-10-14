@@ -2187,7 +2187,7 @@ async def run() -> None:
         try:
             unresolved = expire_historical_unresolved(
                 settings,
-                older_than_days=int(os.getenv("HISTORICAL_UNRESOLVED_DAYS", "7")),
+                older_than_days=int(os.getenv("HISTORICAL_UNRESOLVED_DAYS", "4")),
             )
             if unresolved:
                 log.warning(

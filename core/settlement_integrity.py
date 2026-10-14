@@ -10,6 +10,9 @@ from core.config import Settings
 
 
 SETTLED = {"WON", "WIN", "LOST", "LOSS", "VOID", "PUSH", "V", "P"}
+DECISIVE = {"WON", "WIN", "LOST", "LOSS", "V", "P"}
+ACTIVE_OPEN = {"", "OPEN"}
+UNRESOLVED = {"UNRESOLVED"}
 
 
 def _time(value: Any) -> datetime | None:
@@ -66,9 +69,22 @@ def build_settlement_integrity(
             row for row in sport_rows
             if str(row["result"] or "").strip().upper() in SETTLED
         ]
+        decisive = [
+            row for row in sport_rows
+            if str(row["result"] or "").strip().upper() in DECISIVE
+        ]
         open_rows = [
             row for row in sport_rows
-            if str(row["result"] or "OPEN").strip().upper() not in SETTLED
+            if str(row["result"] or "").strip().upper() in ACTIVE_OPEN
+        ]
+        unresolved_rows = [
+            row for row in sport_rows
+            if str(row["result"] or "").strip().upper() in UNRESOLVED
+        ]
+        unknown_rows = [
+            row for row in sport_rows
+            if str(row["result"] or "").strip().upper()
+            not in SETTLED | ACTIVE_OPEN | UNRESOLVED
         ]
         overdue = sum(
             timestamp is not None and timestamp < cutoff
@@ -78,18 +94,19 @@ def build_settlement_integrity(
         missing_profit = sum(
             row["profit"] in (None, "") for row in settled
         ) if "profit" in columns else len(settled)
+        # VOID/PUSH rows legitimately have no final score when a provider could
+        # not recover the historical result. They are excluded from learning,
+        # so counting them as broken settlement would be a false alarm.
         missing_score = sum(
-            not str(row["final_score"] or "").strip() for row in settled
-        ) if "final_score" in columns else len(settled)
+            not str(row["final_score"] or "").strip() for row in decisive
+        ) if "final_score" in columns else len(decisive)
         closing_samples = sum(
             row["closing_odds"] not in (None, "") for row in settled
         ) if "closing_odds" in columns else 0
         closing_coverage = closing_samples / len(settled) if settled else 0.0
-        if missing_profit or missing_score:
+        if missing_profit or overdue or unknown_rows:
             status = "BLOCKED"
-        elif overdue:
-            status = "WARNING"
-        elif settled and closing_coverage < .80:
+        elif missing_score or (settled and closing_coverage < .80):
             status = "WARNING"
         else:
             status = "READY" if settled else "COLLECTING"
@@ -97,8 +114,11 @@ def build_settlement_integrity(
             "sport": sport,
             "status": status,
             "settled": len(settled),
+            "learning_eligible": len(decisive),
             "open": len(open_rows),
             "overdue_open": overdue,
+            "unresolved_excluded": len(unresolved_rows),
+            "unknown_result": len(unknown_rows),
             "settled_missing_profit": missing_profit,
             "settled_missing_final_score": missing_score,
             "closing_samples": closing_samples,
@@ -120,6 +140,8 @@ def settlement_integrity_report(payload: dict[str, Any]) -> str:
         lines.append(
             f"- {row['sport']}: {row['status']} | settled={row['settled']} | "
             f"open={row['open']} | overdue={row['overdue_open']} | "
+            f"unresolved excluded={row['unresolved_excluded']} | "
+            f"unknown={row['unknown_result']} | "
             f"missing score={row['settled_missing_final_score']} | "
             f"missing profit={row['settled_missing_profit']} | "
             f"closing={row['closing_coverage'] * 100:.1f}%"

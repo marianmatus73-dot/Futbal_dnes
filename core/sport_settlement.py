@@ -248,9 +248,14 @@ def backfill_settled_profit(settings: Settings) -> int:
 def expire_historical_unresolved(
     settings: Settings,
     *,
-    older_than_days: int = 7,
+    older_than_days: int = 4,
 ) -> int:
-    """Close irrecoverable old rows without teaching the model a fake result."""
+    """Close rows older than the provider's three-day score recovery window.
+
+    UNRESOLVED is deliberately excluded from learning and performance. Keeping
+    these rows OPEN for seven days cannot recover a score because The Odds API
+    exposes at most the previous three days.
+    """
     ensure_settlement_columns(settings)
     cutoff = (datetime.now(timezone.utc) - timedelta(days=max(3, older_than_days))).isoformat()
     with connect(settings) as conn:
