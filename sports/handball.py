@@ -15,11 +15,17 @@ from core.api_sports_handball import (
     ApiSportsHandballError,
     DEFAULT_PRIORITY_LEAGUES,
     league_allowed,
+    normalize_completed_game,
     normalize_game,
     upcoming_days,
 )
 from core.market import best_outlier_prices, consensus_h2h
-from core.learning_observation_settlement import settle_learning_observations
+from core.learning_observation_settlement import (
+    ObservationSettlementSummary,
+    open_external_event_ids,
+    settle_completed_events,
+    settle_learning_observations,
+)
 from core.odds_api import fetch_odds
 from core.sport_quant import (
     discover_active_sport_keys,
@@ -287,6 +293,26 @@ class HandballModule(SportModule):
             max_games = max(1, min(int(os.getenv("HANDBALL_API_MAX_GAMES", "20")), 30))
             client = ApiSportsHandballClient(api_sports_key, settings_timeout(settings))
             try:
+                api_settled_events: list[dict[str, Any]] = []
+                for external_id in sorted(open_external_event_ids(settings, self.name)):
+                    if not external_id.startswith("apisports:"):
+                        continue
+                    game = await client.game_by_id(external_id.split(":", 1)[1])
+                    normalized_result = normalize_completed_game(game or {})
+                    if normalized_result:
+                        api_settled_events.append(normalized_result)
+                api_settlement = settle_completed_events(
+                    settings, sport=self.name, events=api_settled_events
+                )
+                settlement = ObservationSettlementSummary(
+                    score_events=settlement.score_events + api_settlement.score_events,
+                    matched_events=settlement.matched_events + api_settlement.matched_events,
+                    settled_rows=settlement.settled_rows + api_settlement.settled_rows,
+                    won=settlement.won + api_settlement.won,
+                    lost=settlement.lost + api_settlement.lost,
+                    void=settlement.void + api_settlement.void,
+                    candidate_rows=settlement.candidate_rows + api_settlement.candidate_rows,
+                )
                 games: list[dict[str, Any]] = []
                 for day in upcoming_days(lookahead):
                     games.extend(await client.games_for_date(day))
