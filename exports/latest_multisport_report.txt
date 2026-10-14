@@ -7,47 +7,47 @@
 #1 BASEBALL | baseball_mlb
 Match: Cleveland Guardians vs Tampa Bay Rays
 Pick: Cleveland Guardians
-Odds: 1.81
-Bookmaker: Betfair
-Model probability: 58.8%
-Market probability: 55.2%
-Raw edge: 12.2%
-Consensus edge: 3.5%
-Confidence: 94/100
+Odds: 1.83
+Bookmaker: Unibet (SE)
+Model probability: 58.5%
+Market probability: 54.6%
+Raw edge: 12.8%
+Consensus edge: 3.8%
+Confidence: 96/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 19.72
-Reason: Raw edge 12.2% | Score 94.0 | Consensus: elo, xg, form, market
+Stake amount: 20.98
+Reason: Raw edge 12.8% | Score 96.0 | Consensus: elo, xg, form, market
 
 #2 BASEBALL | baseball_mlb
 Match: Los Angeles Dodgers vs Milwaukee Brewers
 Pick: Milwaukee Brewers
-Odds: 2.43
-Bookmaker: MyBookie.ag
+Odds: 2.45
+Bookmaker: LeoVegas (SE)
 Model probability: 43.5%
-Market probability: 41.2%
-Raw edge: 13.8%
-Consensus edge: 2.4%
-Confidence: 94/100
+Market probability: 40.8%
+Raw edge: 14.6%
+Consensus edge: 2.7%
+Confidence: 93/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 10.16
-Reason: Raw edge 13.8% | Score 94.0 | Consensus: elo, xg, form, market
+Stake amount: 11.41
+Reason: Raw edge 14.6% | Score 93.0 | Consensus: elo, xg, form, market
 
 #3 FOOTBALL | League Two
 Match: Newport County vs York City
 Pick: Newport County
 Odds: 4.00
 Bookmaker: Betfair
-Model probability: 28.3%
+Model probability: 28.2%
 Market probability: 25.0%
-Raw edge: 10.6%
-Consensus edge: 3.3%
+Raw edge: 10.5%
+Consensus edge: 3.2%
 Confidence: 75/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 10.85
-Reason: Raw edge 10.6% | Score 75.0 | Consensus: elo, xg, form, market
+Stake amount: 10.73
+Reason: Raw edge 10.5% | Score 75.0 | Consensus: elo, xg, form, market
 Release: EARLY
 
 
@@ -65,36 +65,36 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 0. Events scanned: 449. Snapshots saved: 2358. Candidate rows: 22156 -> 1326. Blocked: 1253. Stored candidates: 80. Risk pool: 80.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 0. Events scanned: 449. Snapshots saved: 2376. Candidate rows: 22225 -> 1326. Blocked: 1255. Stored candidates: 78. Risk pool: 78.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-10-17T14:00:00Z | League Two | Newport County vs York City | Newport County @ 4.00 | P 28.2% | Edge 10.6% | Stake 0.35 | Betfair | EARLY
+01. 2026-10-17T14:00:00Z | League Two | Newport County vs York City | Newport County @ 4.00 | P 28.1% | Edge 10.5% | Stake 0.35 | Betfair | EARLY
 
 [TENNIS] scan
-Tennis scan hotový. Events: 11, Stored: 3
+Tennis scan hotový. Events: 12, Stored: 2
 No bets found.
 
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 68. Snapshots saved: 1259. Blocked: 1235. Stored candidates: 3.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 68. Snapshots saved: 1251. Blocked: 1226. Stored candidates: 2.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 29. Snapshots saved: 879. Blocked: 875. Stored candidates: 4.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 29. Snapshots saved: 882. Blocked: 879. Stored candidates: 3.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [BASEBALL] scan
-Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 4. Snapshots saved: 116. Blocked: 74. Stored candidates: 3.
+Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 4. Snapshots saved: 124. Blocked: 83. Stored candidates: 2.
 BASEBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-10-15T00:00:00Z | baseball_mlb | Los Angeles Dodgers vs Milwaukee Brewers | Milwaukee Brewers @ 2.43 | P 47.7% | Edge 13.8% | Stake 0.90 | MyBookie.ag
-02. 2026-10-15T22:00:00Z | baseball_mlb | Cleveland Guardians vs Tampa Bay Rays | Cleveland Guardians @ 1.81 | P 63.1% | Edge 12.2% | Stake 1.37 | Betfair
+01. 2026-10-15T22:00:00Z | baseball_mlb | Cleveland Guardians vs Tampa Bay Rays | Cleveland Guardians @ 1.83 | P 62.7% | Edge 12.8% | Stake 1.39 | Unibet (SE)
+02. 2026-10-15T00:00:00Z | baseball_mlb | Los Angeles Dodgers vs Milwaukee Brewers | Milwaukee Brewers @ 2.45 | P 47.6% | Edge 14.6% | Stake 0.93 | LeoVegas (SE)
 
 [HANDBALL] shadow
-Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 8. Snapshots saved: 205. Learning observations saved: 24. New benchmark candidates: 8. Settled observations: 0 (0 won, 0 lost).
+Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 8. Snapshots saved: 208. Learning observations saved: 24. New benchmark candidates: 8. Settled observations: 0 (0 won, 0 lost).
 No bets found.
 
 [NFL] scan
@@ -107,13 +107,13 @@ Total bets: 3
 
 
 === ENGINE SUMMARY ===
-- football: OK (62.14s)
-- tennis: OK (4.13s)
-- basketball: OK (15.99s)
-- hockey: OK (20.60s)
-- baseball: OK (5.08s)
-- handball: OK (10.90s)
-- nfl: OK (9.64s)
+- football: OK (91.76s)
+- tennis: OK (6.40s)
+- basketball: OK (28.95s)
+- hockey: OK (33.82s)
+- baseball: OK (7.04s)
+- handball: OK (33.27s)
+- nfl: OK (19.04s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
@@ -196,14 +196,27 @@ Top leagues:
 - handball SHADOW: settled events=0/150 | open events=8 | canonical samples=24 | duplicates excluded=0 | market Brier=n/a | maturity=COLLECTING | publishing=LOCKED
   benchmark market_favourite_v1: settled=0 | open=8 | yield=n/a | Brier=None
 
+=== TIME-SPLIT CALIBRATION ===
+Segments: 34 | ready=17 | building=17 | calibration accepted=7 | rejected=10
+Calibration is evaluated chronologically and is never accepted when it worsens Brier score.
+
+=== SETTLEMENT INTEGRITY ===
+- baseball: BLOCKED | settled=1521 | open=732 | overdue=726 | missing score=914 | missing profit=0 | closing=0.0%
+- basketball: BLOCKED | settled=50 | open=13 | overdue=0 | missing score=25 | missing profit=0 | closing=0.0%
+- football: BLOCKED | settled=953 | open=451 | overdue=429 | missing score=12 | missing profit=0 | closing=57.0%
+- hockey: WARNING | settled=218 | open=131 | overdue=126 | missing score=0 | missing profit=0 | closing=0.0%
+- mma: BLOCKED | settled=20 | open=8 | overdue=8 | missing score=19 | missing profit=0 | closing=0.0%
+- nfl: WARNING | settled=13 | open=0 | overdue=0 | missing score=0 | missing profit=0 | closing=0.0%
+- tennis: WARNING | settled=90 | open=9 | overdue=5 | missing score=0 | missing profit=0 | closing=0.0%
+
 === OPERATIONAL HEALTH ===
-Funnel: candidates=92 | accepted=3 | rejected=89
-- football: READY | settled=955/100 | snapshots24h=2358 | mode=LIVE
+Funnel: candidates=87 | accepted=3 | rejected=84
+- football: READY | settled=955/100 | snapshots24h=2376 | mode=LIVE
 - tennis: ATTENTION | settled=90/75 | snapshots24h=0 | mode=LIVE
-- basketball: ATTENTION | settled=50/75 | snapshots24h=1259 | mode=LIVE
-- hockey: ATTENTION | settled=218/75 | snapshots24h=879 | mode=LIVE
-- baseball: ATTENTION | settled=1521/100 | snapshots24h=116 | mode=LIVE
-- handball: COLLECTING | settled=0/50 | snapshots24h=205 | mode=SHADOW
+- basketball: ATTENTION | settled=50/75 | snapshots24h=1251 | mode=LIVE
+- hockey: ATTENTION | settled=218/75 | snapshots24h=882 | mode=LIVE
+- baseball: ATTENTION | settled=1521/100 | snapshots24h=124 | mode=LIVE
+- handball: COLLECTING | settled=0/50 | snapshots24h=208 | mode=SHADOW
 - nfl: COLLECTING | settled=13/50 | snapshots24h=780 | mode=LIVE
 
 === MODEL GOVERNANCE ===
@@ -256,7 +269,7 @@ Feedback source: sqlite:sport_bets+runtime:module_outputs
 Previous result: WIN
 Previous profit: 1.1960
 Runtime health: 100.0%
-Average module latency: 18356 ms
+Average module latency: 31468 ms
 
 
 === V16 PRODUCTION DASHBOARD ===

@@ -6,6 +6,51 @@
     "split": "chronological_70_30",
     "raw_brier": 0.241547,
     "calibrated_brier": 0.237795,
+    "calibration_decision": "ACCEPT",
+    "status": "READY"
+  },
+  "baseball/market=h2h": {
+    "samples": 1521,
+    "train_samples": 1064,
+    "test_samples": 457,
+    "split": "chronological_70_30",
+    "raw_brier": 0.241547,
+    "calibrated_brier": 0.237795,
+    "calibration_decision": "ACCEPT",
+    "status": "READY"
+  },
+  "baseball/tier=BELOW_MINIMUM_<1.20": {
+    "samples": 4,
+    "status": "BUILDING"
+  },
+  "baseball/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 106,
+    "train_samples": 74,
+    "test_samples": 32,
+    "split": "chronological_70_30",
+    "raw_brier": 0.214744,
+    "calibrated_brier": 0.227639,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "baseball/tier=SAFE_1.20_1.60": {
+    "samples": 206,
+    "train_samples": 144,
+    "test_samples": 62,
+    "split": "chronological_70_30",
+    "raw_brier": 0.204372,
+    "calibrated_brier": 0.203803,
+    "calibration_decision": "ACCEPT",
+    "status": "READY"
+  },
+  "baseball/tier=VALUE_1.61_2.50": {
+    "samples": 1205,
+    "train_samples": 843,
+    "test_samples": 362,
+    "split": "chronological_70_30",
+    "raw_brier": 0.245246,
+    "calibrated_brier": 0.242472,
+    "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "basketball": {
@@ -15,16 +60,68 @@
     "split": "chronological_70_30",
     "raw_brier": 0.205387,
     "calibrated_brier": 0.250651,
+    "calibration_decision": "REJECT",
     "status": "READY"
   },
+  "basketball/market=h2h": {
+    "samples": 50,
+    "train_samples": 35,
+    "test_samples": 15,
+    "split": "chronological_70_30",
+    "raw_brier": 0.205387,
+    "calibrated_brier": 0.250651,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "basketball/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 24,
+    "status": "BUILDING"
+  },
+  "basketball/tier=SAFE_1.20_1.60": {
+    "samples": 6,
+    "status": "BUILDING"
+  },
+  "basketball/tier=VALUE_1.61_2.50": {
+    "samples": 20,
+    "status": "BUILDING"
+  },
   "football": {
-    "samples": 943,
-    "train_samples": 660,
+    "samples": 941,
+    "train_samples": 658,
     "test_samples": 283,
     "split": "chronological_70_30",
-    "raw_brier": 0.187181,
-    "calibrated_brier": 0.18696,
+    "raw_brier": 0.1876,
+    "calibrated_brier": 0.186389,
+    "calibration_decision": "ACCEPT",
     "status": "READY"
+  },
+  "football/market=h2h": {
+    "samples": 941,
+    "train_samples": 658,
+    "test_samples": 283,
+    "split": "chronological_70_30",
+    "raw_brier": 0.1876,
+    "calibrated_brier": 0.186389,
+    "calibration_decision": "ACCEPT",
+    "status": "READY"
+  },
+  "football/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 919,
+    "train_samples": 643,
+    "test_samples": 276,
+    "split": "chronological_70_30",
+    "raw_brier": 0.188245,
+    "calibrated_brier": 0.187012,
+    "calibration_decision": "ACCEPT",
+    "status": "READY"
+  },
+  "football/tier=SAFE_1.20_1.60": {
+    "samples": 7,
+    "status": "BUILDING"
+  },
+  "football/tier=VALUE_1.61_2.50": {
+    "samples": 15,
+    "status": "BUILDING"
   },
   "hockey": {
     "samples": 218,
@@ -33,14 +130,73 @@
     "split": "chronological_70_30",
     "raw_brier": 0.232428,
     "calibrated_brier": 0.24572,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "hockey/market=h2h": {
+    "samples": 218,
+    "train_samples": 152,
+    "test_samples": 66,
+    "split": "chronological_70_30",
+    "raw_brier": 0.232428,
+    "calibrated_brier": 0.24572,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "hockey/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 155,
+    "train_samples": 108,
+    "test_samples": 47,
+    "split": "chronological_70_30",
+    "raw_brier": 0.232569,
+    "calibrated_brier": 0.249422,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "hockey/tier=VALUE_1.61_2.50": {
+    "samples": 63,
+    "train_samples": 44,
+    "test_samples": 19,
+    "split": "chronological_70_30",
+    "raw_brier": 0.244096,
+    "calibrated_brier": 0.254042,
+    "calibration_decision": "REJECT",
     "status": "READY"
   },
   "mma": {
     "samples": 20,
     "status": "BUILDING"
   },
+  "mma/market=h2h": {
+    "samples": 20,
+    "status": "BUILDING"
+  },
+  "mma/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 15,
+    "status": "BUILDING"
+  },
+  "mma/tier=VALUE_1.61_2.50": {
+    "samples": 5,
+    "status": "BUILDING"
+  },
   "nfl": {
     "samples": 13,
+    "status": "BUILDING"
+  },
+  "nfl/market=h2h": {
+    "samples": 13,
+    "status": "BUILDING"
+  },
+  "nfl/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 4,
+    "status": "BUILDING"
+  },
+  "nfl/tier=SAFE_1.20_1.60": {
+    "samples": 4,
+    "status": "BUILDING"
+  },
+  "nfl/tier=VALUE_1.61_2.50": {
+    "samples": 5,
     "status": "BUILDING"
   },
   "tennis": {
@@ -50,6 +206,35 @@
     "split": "chronological_70_30",
     "raw_brier": 0.165282,
     "calibrated_brier": 0.192468,
+    "calibration_decision": "REJECT",
     "status": "READY"
+  },
+  "tennis/market=h2h": {
+    "samples": 90,
+    "train_samples": 62,
+    "test_samples": 28,
+    "split": "chronological_70_30",
+    "raw_brier": 0.165282,
+    "calibrated_brier": 0.192468,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "tennis/tier=EXPERIMENTAL_2.51_PLUS": {
+    "samples": 83,
+    "train_samples": 58,
+    "test_samples": 25,
+    "split": "chronological_70_30",
+    "raw_brier": 0.177431,
+    "calibrated_brier": 0.185295,
+    "calibration_decision": "REJECT",
+    "status": "READY"
+  },
+  "tennis/tier=SAFE_1.20_1.60": {
+    "samples": 2,
+    "status": "BUILDING"
+  },
+  "tennis/tier=VALUE_1.61_2.50": {
+    "samples": 5,
+    "status": "BUILDING"
   }
 }
