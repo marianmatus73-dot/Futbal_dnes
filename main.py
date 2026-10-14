@@ -118,7 +118,11 @@ from core.football_pipeline_metrics import (
 )
 from core.sport_policy import settings_for_sport
 from core.professional_risk import apply_professional_risk_controls
-from core.sport_walkforward import walkforward_report
+from core.sport_walkforward import walkforward_report, walkforward_summary
+from core.settlement_integrity import (
+    build_settlement_integrity,
+    settlement_integrity_report,
+)
 from core.sport_context import SportContextDatabase
 from core.types import SportResult
 from core.football_tip_release import (
@@ -2240,6 +2244,24 @@ async def run() -> None:
         report_text += professional_model_report(professional_table)
     except Exception:
         log.exception("Professional model table failed")
+
+    try:
+        calibration = walkforward_report(
+            settings,
+            export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+        )
+        report_text += walkforward_summary(calibration)
+    except Exception:
+        log.exception("Time-split calibration report failed")
+
+    try:
+        settlement_quality = build_settlement_integrity(
+            settings,
+            export_dir=Path(os.getenv("EXPORT_DIR", "exports")),
+        )
+        report_text += settlement_integrity_report(settlement_quality)
+    except Exception:
+        log.exception("Settlement integrity report failed")
 
     if not args.dry_run and not args.analytics and not args.backtest:
         try:
