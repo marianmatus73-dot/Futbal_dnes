@@ -4,7 +4,7 @@ import os
 import sqlite3
 from contextlib import closing
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -111,6 +111,42 @@ def open_external_event_ids(settings: Settings, sport: str) -> set[str]:
                 )
             )
         return result
+
+
+def open_external_event_dates(
+    settings: Settings,
+    sport: str,
+    *,
+    id_prefix: str = "",
+) -> set[date]:
+    """Return start dates for open events, optionally scoped to one provider."""
+    database = _db_path(settings)
+    if not database.exists():
+        return set()
+    with closing(sqlite3.connect(database)) as conn:
+        table = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' "
+            "AND name='sport_learning_observations'"
+        ).fetchone()
+        if not table:
+            return set()
+        rows = conn.execute(
+            """
+            SELECT DISTINCT start_time
+            FROM sport_learning_observations
+            WHERE sport=? AND result='OPEN'
+              AND external_event_id LIKE ?
+              AND TRIM(COALESCE(start_time, '')) <> ''
+            """,
+            (sport, f"{id_prefix}%"),
+        ).fetchall()
+    result: set[date] = set()
+    for (value,) in rows:
+        try:
+            result.add(datetime.fromisoformat(str(value).replace("Z", "+00:00")).date())
+        except ValueError:
+            continue
+    return result
 
 
 def settle_completed_events(

@@ -55,6 +55,15 @@ class ApiSportsHandballTests(unittest.TestCase):
             ],
         })
 
+    def test_does_not_treat_scheduled_game_as_finished(self) -> None:
+        game = {
+            "id": 43,
+            "status": {"short": "NS"},
+            "teams": {"home": {"name": "Kiel"}, "away": {"name": "Berlin"}},
+            "scores": {"home": 0, "away": 0},
+        }
+        self.assertIsNone(normalize_completed_game(game))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -22,6 +22,7 @@ from core.api_sports_handball import (
 from core.market import best_outlier_prices, consensus_h2h
 from core.learning_observation_settlement import (
     ObservationSettlementSummary,
+    open_external_event_dates,
     open_external_event_ids,
     settle_completed_events,
     settle_learning_observations,
@@ -294,13 +295,36 @@ class HandballModule(SportModule):
             client = ApiSportsHandballClient(api_sports_key, settings_timeout(settings))
             try:
                 api_settled_events: list[dict[str, Any]] = []
-                for external_id in sorted(open_external_event_ids(settings, self.name)):
-                    if not external_id.startswith("apisports:"):
+                open_api_ids = {
+                    event_id for event_id in open_external_event_ids(settings, self.name)
+                    if event_id.startswith("apisports:")
+                }
+                settlement_dates = sorted(
+                    open_external_event_dates(
+                        settings, self.name, id_prefix="apisports:"
+                    ),
+                    reverse=True,
+                )
+                # Free API-Sports plans expose only a narrow date window. Query
+                # dates independently so one old, unavailable event cannot stop
+                # settlement of all current matches.
+                for event_date in settlement_dates[:7]:
+                    try:
+                        completed_games = await client.games_for_date(event_date)
+                    except ApiSportsHandballError as exc:
+                        log.info(
+                            "API-Sports Handball settlement skipped unavailable date %s: %s",
+                            event_date,
+                            exc,
+                        )
                         continue
-                    game = await client.game_by_id(external_id.split(":", 1)[1])
-                    normalized_result = normalize_completed_game(game or {})
-                    if normalized_result:
-                        api_settled_events.append(normalized_result)
+                    for game in completed_games:
+                        normalized_result = normalize_completed_game(game)
+                        if (
+                            normalized_result
+                            and normalized_result["id"] in open_api_ids
+                        ):
+                            api_settled_events.append(normalized_result)
                 api_settlement = settle_completed_events(
                     settings, sport=self.name, events=api_settled_events
                 )
@@ -315,10 +339,25 @@ class HandballModule(SportModule):
                 )
                 games: list[dict[str, Any]] = []
                 for day in upcoming_days(lookahead):
-                    games.extend(await client.games_for_date(day))
+                    try:
+                        games.extend(await client.games_for_date(day))
+                    except ApiSportsHandballError as exc:
+                        log.info(
+                            "API-Sports Handball collection skipped unavailable date %s: %s",
+                            day,
+                            exc,
+                        )
                 games = [game for game in games if league_allowed(game, league_names)][:max_games]
                 for game in games:
-                    odds = await client.odds_for_game(game.get("id", ""))
+                    try:
+                        odds = await client.odds_for_game(game.get("id", ""))
+                    except ApiSportsHandballError as exc:
+                        log.info(
+                            "API-Sports Handball odds unavailable for game %s: %s",
+                            game.get("id", ""),
+                            exc,
+                        )
+                        continue
                     normalized = normalize_game(game, odds)
                     if normalized and normalized.get("bookmakers"):
                         api_sports_events.append(normalized)
