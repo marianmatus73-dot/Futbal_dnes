@@ -124,6 +124,18 @@ def _odds_bucket(value: Any) -> str:
     return "3.00+"
 
 
+def _strategy_tier(value: Any) -> str:
+    """Operational tiers must not be mixed when judging hit rate or yield."""
+    odds = _as_float(value) or 0.0
+    if odds < 1.20:
+        return "BELOW_MINIMUM_<1.20"
+    if odds <= 1.60:
+        return "SAFE_1.20_1.60"
+    if odds <= 2.50:
+        return "VALUE_1.61_2.50"
+    return "EXPERIMENTAL_2.51_PLUS"
+
+
 def _group(rows: list[sqlite3.Row], key) -> dict[str, dict[str, Any]]:
     grouped: dict[str, list[sqlite3.Row]] = {}
     for row in rows:
@@ -184,6 +196,9 @@ def build_professional_model_table(
             "periods": periods,
             "by_league": _group(sport_rows, lambda row: row["league"]),
             "by_odds": _group(sport_rows, lambda row: _odds_bucket(row["odds"])),
+            "by_strategy_tier": _group(
+                sport_rows, lambda row: _strategy_tier(row["odds"])
+            ),
             "by_market": _group(sport_rows, lambda row: row["market"]),
         }
         if sport == "football":
