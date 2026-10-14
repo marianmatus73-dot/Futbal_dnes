@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 import os
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 import aiohttp
@@ -19,6 +21,38 @@ from core.sport_quant import (
 
 def now_utc() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+_SPORT_KEY_PREFIXES = {
+    "baseball": ("baseball_",),
+    "basketball": ("basketball_",),
+    "esports": ("esports_",),
+    "football": ("soccer_",),
+    "hockey": ("icehockey_",),
+    "mma": ("mma_",),
+    "nfl": ("americanfootball_",),
+    "tennis": ("tennis_",),
+}
+
+
+def _valid_provider_key(sport: str, value: str) -> bool:
+    prefixes = _SPORT_KEY_PREFIXES.get(str(sport).strip().lower())
+    return bool(value and (not prefixes or value.startswith(prefixes)))
+
+
+def _write_settlement_diagnostics(sport: str, payload: dict[str, Any]) -> None:
+    enabled = os.getenv(
+        "SETTLEMENT_DIAGNOSTICS_ENABLED",
+        os.getenv("GITHUB_ACTIONS", "0"),
+    ) == "1"
+    if not enabled:
+        return
+    target = Path(os.getenv("EXPORT_DIR", "exports"))
+    target.mkdir(parents=True, exist_ok=True)
+    (target / f"{sport}_settlement_diagnostics.json").write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
 
 
 def _parse_time(value: Any) -> datetime | None:
@@ -324,11 +358,40 @@ async def settle_sport_bets(
     # those bets can still be settled during the provider's score window.
     settlement_keys = list(dict.fromkeys(
         [s.strip() for s in sport_keys if s.strip()]
-        + [key for key in rows_by_league if key]
+        + [
+            key
+            for key in rows_by_league
+            if _valid_provider_key(sport, key)
+        ]
     ))
+
+    diagnostics: dict[str, Any] = {
+        "generated_at": now_utc(),
+        "sport": sport,
+        "open_rows": len(open_rows),
+        "settlement_keys": settlement_keys,
+        "ignored_non_provider_leagues": sorted(
+            key
+            for key in rows_by_league
+            if key and not _valid_provider_key(sport, key)
+        ),
+        "keys": [],
+        "settled_rows": 0,
+    }
 
     for sport_key in settlement_keys:
         scores = await fetch_scores(api_key, sport_key, days_from=3)
+
+        key_diagnostics: dict[str, Any] = {
+            "sport_key": sport_key,
+            "open_rows": len(rows_by_league.get(sport_key, [])),
+            "events_received": len(scores),
+            "completed_events": 0,
+            "usable_score_events": 0,
+            "matched_rows": 0,
+            "settled_rows": 0,
+        }
+        diagnostics["keys"].append(key_diagnostics)
 
         if not scores:
             continue
@@ -338,6 +401,8 @@ async def settle_sport_bets(
         for event in scores:
             if not event.get("completed"):
                 continue
+
+            key_diagnostics["completed_events"] += 1
 
             home = str(event.get("home_team", ""))
             away = str(event.get("away_team", ""))
@@ -360,6 +425,8 @@ async def settle_sport_bets(
                     "away_score": away_score,
                 }
             )
+
+        key_diagnostics["usable_score_events"] = len(score_events)
 
         if not score_events:
             continue
@@ -394,6 +461,8 @@ async def settle_sport_bets(
 
             if not matched:
                 continue
+
+            key_diagnostics["matched_rows"] += 1
 
             winner = str(matched["winner"])
 
@@ -474,6 +543,7 @@ async def settle_sport_bets(
                 )
 
             settled += len(updates)
+            key_diagnostics["settled_rows"] = len(updates)
 
             for home, away, winner in elo_updates:
                 k = 20.0 if sport == "tennis" else 24.0
@@ -492,6 +562,14 @@ async def settle_sport_bets(
                     k=k,
                     home_adv=home_adv,
                 )
+
+    diagnostics["settled_rows"] = settled
+    _write_settlement_diagnostics(sport, diagnostics)
+    print(
+        f"SETTLEMENT | {sport}: open={len(open_rows)}, "
+        f"keys={len(settlement_keys)}, settled={settled}, "
+        f"ignored_leagues={len(diagnostics['ignored_non_provider_leagues'])}"
+    )
 
     update_closing_lines(settings, sport)
     refresh_bookmaker_stats(settings, sport)
