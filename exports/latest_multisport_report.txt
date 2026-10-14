@@ -9,30 +9,30 @@ Match: Cleveland Guardians vs Tampa Bay Rays
 Pick: Cleveland Guardians
 Odds: 1.83
 Bookmaker: Unibet (SE)
-Model probability: 58.5%
+Model probability: 58.4%
 Market probability: 54.6%
-Raw edge: 12.8%
+Raw edge: 12.7%
 Consensus edge: 3.8%
-Confidence: 96/100
+Confidence: 95/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 20.98
-Reason: Raw edge 12.8% | Score 96.0 | Consensus: elo, xg, form, market
+Stake amount: 20.85
+Reason: Raw edge 12.7% | Score 95.0 | Consensus: elo, xg, form, market
 
 #2 BASEBALL | baseball_mlb
 Match: Los Angeles Dodgers vs Milwaukee Brewers
 Pick: Milwaukee Brewers
-Odds: 2.45
-Bookmaker: LeoVegas (SE)
-Model probability: 43.5%
-Market probability: 40.8%
-Raw edge: 14.6%
+Odds: 2.46
+Bookmaker: BetAnything
+Model probability: 43.4%
+Market probability: 40.7%
+Raw edge: 14.7%
 Consensus edge: 2.7%
-Confidence: 93/100
+Confidence: 94/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 11.41
-Reason: Raw edge 14.6% | Score 93.0 | Consensus: elo, xg, form, market
+Stake amount: 11.56
+Reason: Raw edge 14.7% | Score 94.0 | Consensus: elo, xg, form, market
 
 #3 FOOTBALL | League Two
 Match: Newport County vs York City
@@ -41,13 +41,13 @@ Odds: 4.00
 Bookmaker: Betfair
 Model probability: 28.2%
 Market probability: 25.0%
-Raw edge: 10.5%
+Raw edge: 10.4%
 Consensus edge: 3.2%
 Confidence: 75/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 10.73
-Reason: Raw edge 10.5% | Score 75.0 | Consensus: elo, xg, form, market
+Stake amount: 10.70
+Reason: Raw edge 10.4% | Score 75.0 | Consensus: elo, xg, form, market
 Release: EARLY
 
 
@@ -65,33 +65,33 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 0. Events scanned: 449. Snapshots saved: 2376. Candidate rows: 22225 -> 1326. Blocked: 1255. Stored candidates: 78. Risk pool: 78.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 0. Events scanned: 449. Snapshots saved: 2376. Candidate rows: 22237 -> 1326. Blocked: 1255. Stored candidates: 78. Risk pool: 78.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-10-17T14:00:00Z | League Two | Newport County vs York City | Newport County @ 4.00 | P 28.1% | Edge 10.5% | Stake 0.35 | Betfair | EARLY
+01. 2026-10-17T14:00:00Z | League Two | Newport County vs York City | Newport County @ 4.00 | P 28.1% | Edge 10.4% | Stake 0.35 | Betfair | EARLY
 
 [TENNIS] scan
 Tennis scan hotový. Events: 12, Stored: 2
 No bets found.
 
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 68. Snapshots saved: 1251. Blocked: 1226. Stored candidates: 2.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 68. Snapshots saved: 1251. Blocked: 1226. Stored candidates: 1.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 29. Snapshots saved: 882. Blocked: 879. Stored candidates: 3.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 29. Snapshots saved: 882. Blocked: 877. Stored candidates: 4.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [BASEBALL] scan
-Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 4. Snapshots saved: 124. Blocked: 83. Stored candidates: 2.
+Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 4. Snapshots saved: 124. Blocked: 82. Stored candidates: 2.
 BASEBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-10-15T22:00:00Z | baseball_mlb | Cleveland Guardians vs Tampa Bay Rays | Cleveland Guardians @ 1.83 | P 62.7% | Edge 12.8% | Stake 1.39 | Unibet (SE)
-02. 2026-10-15T00:00:00Z | baseball_mlb | Los Angeles Dodgers vs Milwaukee Brewers | Milwaukee Brewers @ 2.45 | P 47.6% | Edge 14.6% | Stake 0.93 | LeoVegas (SE)
+01. 2026-10-15T22:00:00Z | baseball_mlb | Cleveland Guardians vs Tampa Bay Rays | Cleveland Guardians @ 1.83 | P 62.7% | Edge 12.7% | Stake 1.38 | Unibet (SE)
+02. 2026-10-15T00:00:00Z | baseball_mlb | Los Angeles Dodgers vs Milwaukee Brewers | Milwaukee Brewers @ 2.46 | P 47.4% | Edge 14.7% | Stake 0.92 | BetAnything
 
 [HANDBALL] shadow
 Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 8. Snapshots saved: 208. Learning observations saved: 24. New benchmark candidates: 8. Settled observations: 0 (0 won, 0 lost).
@@ -107,17 +107,17 @@ Total bets: 3
 
 
 === ENGINE SUMMARY ===
-- football: OK (91.76s)
-- tennis: OK (6.40s)
-- basketball: OK (28.95s)
-- hockey: OK (33.82s)
-- baseball: OK (7.04s)
-- handball: OK (33.27s)
-- nfl: OK (19.04s)
+- football: OK (93.83s)
+- tennis: OK (6.64s)
+- basketball: OK (23.17s)
+- hockey: OK (28.70s)
+- baseball: OK (8.06s)
+- handball: OK (27.43s)
+- nfl: OK (14.38s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
-- football: totals xG evidence insufficient = 101
+- football: totals xG evidence insufficient = 103
 - basketball: no market consensus = 23
 - football: totals edge gate; final=0.5627; reliability=0.000 = 22
 - football: totals edge gate; final=0.5148; reliability=0.000 = 20
@@ -125,8 +125,8 @@ Total bets: 3
 - football: totals edge gate; final=0.5178; reliability=0.000 = 19
 - football: totals edge gate; final=0.5233; reliability=0.000 = 19
 - football: totals edge gate; final=0.4872; reliability=0.000 = 18
-- football: totals edge gate; final=0.5213; reliability=0.000 = 18
 - football: totals edge gate; final=0.5239; reliability=0.000 = 18
+- football: totals edge gate; final=0.5242; reliability=0.000 = 18
 
 === BANKROLL SUMMARY ===
 Bankroll: 1000.00
@@ -142,14 +142,14 @@ Yield: 4.85%
 Profit: 97.67
 Stake sum: 2013.27
 
-Open bets: 72
+Open bets: 57
 Settled bets: 2853
 
 Result distribution:
 - LOST: 1645
-- UNRESOLVED: 1272
+- UNRESOLVED: 1287
 - WON: 1208
-- OPEN: 72
+- OPEN: 57
 - VOID: 12
 
 By sport:
@@ -201,16 +201,16 @@ Segments: 34 | ready=17 | building=17 | calibration accepted=7 | rejected=10
 Calibration is evaluated chronologically and is never accepted when it worsens Brier score.
 
 === SETTLEMENT INTEGRITY ===
-- baseball: BLOCKED | settled=1521 | open=732 | overdue=726 | missing score=914 | missing profit=0 | closing=0.0%
-- basketball: BLOCKED | settled=50 | open=13 | overdue=0 | missing score=25 | missing profit=0 | closing=0.0%
-- football: BLOCKED | settled=953 | open=451 | overdue=429 | missing score=12 | missing profit=0 | closing=57.0%
-- hockey: WARNING | settled=218 | open=131 | overdue=126 | missing score=0 | missing profit=0 | closing=0.0%
-- mma: BLOCKED | settled=20 | open=8 | overdue=8 | missing score=19 | missing profit=0 | closing=0.0%
-- nfl: WARNING | settled=13 | open=0 | overdue=0 | missing score=0 | missing profit=0 | closing=0.0%
-- tennis: WARNING | settled=90 | open=9 | overdue=5 | missing score=0 | missing profit=0 | closing=0.0%
+- baseball: BLOCKED | settled=1521 | open=13 | overdue=7 | unresolved excluded=719 | unknown=0 | missing score=914 | missing profit=0 | closing=0.0%
+- basketball: WARNING | settled=50 | open=13 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
+- football: WARNING | settled=953 | open=22 | overdue=0 | unresolved excluded=429 | unknown=0 | missing score=0 | missing profit=0 | closing=57.0%
+- hockey: WARNING | settled=218 | open=5 | overdue=0 | unresolved excluded=126 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- mma: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=8 | unknown=0 | missing score=19 | missing profit=0 | closing=0.0%
+- nfl: WARNING | settled=13 | open=0 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- tennis: WARNING | settled=90 | open=4 | overdue=0 | unresolved excluded=5 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 
 === OPERATIONAL HEALTH ===
-Funnel: candidates=87 | accepted=3 | rejected=84
+Funnel: candidates=86 | accepted=3 | rejected=83
 - football: READY | settled=955/100 | snapshots24h=2376 | mode=LIVE
 - tennis: ATTENTION | settled=90/75 | snapshots24h=0 | mode=LIVE
 - basketball: ATTENTION | settled=50/75 | snapshots24h=1251 | mode=LIVE
@@ -269,7 +269,7 @@ Feedback source: sqlite:sport_bets+runtime:module_outputs
 Previous result: WIN
 Previous profit: 1.1960
 Runtime health: 100.0%
-Average module latency: 31468 ms
+Average module latency: 28886 ms
 
 
 === V16 PRODUCTION DASHBOARD ===
