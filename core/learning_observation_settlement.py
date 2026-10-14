@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Any
 
 from core.config import Settings
-from core.sport_quant import norm
 from core.sport_settlement import fetch_scores
 
 
@@ -22,6 +21,11 @@ class ObservationSettlementSummary:
     lost: int = 0
     void: int = 0
     candidate_rows: int = 0
+
+
+def norm(value: str) -> str:
+    """Keep result settlement independent from optional HTTP dependencies."""
+    return " ".join(str(value).lower().strip().split())
 
 
 def _db_path(settings: Settings) -> Path:
@@ -67,30 +71,18 @@ def _h2h_result(
     return None
 
 
-async def settle_learning_observations(
-    settings: Settings,
-    *,
-    sport: str,
-    sport_keys: list[str],
-) -> ObservationSettlementSummary:
-    """Settle shadow observations using the provider's immutable event ID.
-
-    Team-name similarity is intentionally not a fallback. An unmatched row is
-    safer left OPEN than assigned a result from a different event.
-    """
-    api_key = settings.odds_api_key or os.getenv("ODDS_API_KEY", "")
+def open_external_event_ids(settings: Settings, sport: str) -> set[str]:
     database = _db_path(settings)
-    if not api_key or not database.exists():
-        return ObservationSettlementSummary()
-
+    if not database.exists():
+        return set()
     with closing(sqlite3.connect(database)) as conn:
         table = conn.execute(
             "SELECT 1 FROM sqlite_master WHERE type='table' "
             "AND name='sport_learning_observations'"
         ).fetchone()
         if not table:
-            return ObservationSettlementSummary()
-        open_ids = {
+            return set()
+        result = {
             str(row[0])
             for row in conn.execute(
                 """
@@ -107,7 +99,7 @@ async def settle_learning_observations(
             "AND name='sport_shadow_candidates'"
         ).fetchone()
         if candidate_table:
-            open_ids.update(
+            result.update(
                 str(row[0])
                 for row in conn.execute(
                     """
@@ -118,16 +110,24 @@ async def settle_learning_observations(
                     (sport,),
                 )
             )
-    if not open_ids:
+        return result
+
+
+def settle_completed_events(
+    settings: Settings,
+    *,
+    sport: str,
+    events: list[dict[str, Any]],
+) -> ObservationSettlementSummary:
+    """Settle already-normalized provider events by immutable external ID."""
+    database = _db_path(settings)
+    if not database.exists():
         return ObservationSettlementSummary()
-
-    completed: dict[str, dict[str, Any]] = {}
-    for sport_key in dict.fromkeys(key.strip() for key in sport_keys if key.strip()):
-        for event in await fetch_scores(api_key, sport_key, days_from=3):
-            event_id = str(event.get("id", "")).strip()
-            if event_id in open_ids and event.get("completed") is True:
-                completed[event_id] = event
-
+    completed = {
+        str(event.get("id", "")).strip(): event
+        for event in events
+        if str(event.get("id", "")).strip() and event.get("completed") is True
+    }
     settled_rows = won = lost = void = matched_events = candidate_rows = 0
     settled_at = _now_utc()
     with closing(sqlite3.connect(database)) as conn:
@@ -139,28 +139,19 @@ async def settle_learning_observations(
             home = str(event.get("home_team", ""))
             away = str(event.get("away_team", ""))
             rows = conn.execute(
-                """
-                SELECT id, market, selection
-                FROM sport_learning_observations
-                WHERE sport=? AND external_event_id=? AND result='OPEN'
-                """,
+                "SELECT id, market, selection FROM sport_learning_observations "
+                "WHERE sport=? AND external_event_id=? AND result='OPEN'",
                 (sport, event_id),
             ).fetchall()
             event_updates = 0
             for row_id, market, selection in rows:
-                result = None
-                if str(market) == "h2h":
-                    result = _h2h_result(
-                        str(selection), home, away, home_score, away_score
-                    )
+                result = _h2h_result(str(selection), home, away, home_score, away_score) \
+                    if str(market) == "h2h" else None
                 if result is None:
                     continue
                 conn.execute(
-                    """
-                    UPDATE sport_learning_observations
-                    SET result=?, final_score=?, settled_at=?
-                    WHERE id=? AND result='OPEN'
-                    """,
+                    "UPDATE sport_learning_observations SET result=?, final_score=?, "
+                    "settled_at=? WHERE id=? AND result='OPEN'",
                     (result, f"{home_score}-{away_score}", settled_at, row_id),
                 )
                 event_updates += 1
@@ -175,41 +166,55 @@ async def settle_learning_observations(
             ).fetchone()
             if candidate_table:
                 candidates = conn.execute(
-                    """
-                    SELECT id, market, selection, odds
-                    FROM sport_shadow_candidates
-                    WHERE sport=? AND external_event_id=? AND result='OPEN'
-                    """,
+                    "SELECT id, market, selection, odds FROM sport_shadow_candidates "
+                    "WHERE sport=? AND external_event_id=? AND result='OPEN'",
                     (sport, event_id),
                 ).fetchall()
                 for candidate_id, market, selection, odds in candidates:
-                    result = None
-                    if str(market) == "h2h":
-                        result = _h2h_result(
-                            str(selection), home, away, home_score, away_score
-                        )
+                    result = _h2h_result(str(selection), home, away, home_score, away_score) \
+                        if str(market) == "h2h" else None
                     if result is None:
                         continue
                     profit = float(odds) - 1.0 if result == "WON" else -1.0
                     conn.execute(
-                        """
-                        UPDATE sport_shadow_candidates
-                        SET result=?, profit_units=?, final_score=?, settled_at=?
-                        WHERE id=? AND result='OPEN'
-                        """,
+                        "UPDATE sport_shadow_candidates SET result=?, profit_units=?, "
+                        "final_score=?, settled_at=? WHERE id=? AND result='OPEN'",
                         (result, round(profit, 4), f"{home_score}-{away_score}",
                          settled_at, candidate_id),
                     )
                     candidate_rows += 1
         conn.commit()
-
     return ObservationSettlementSummary(
-        score_events=len(completed),
-        matched_events=matched_events,
-        settled_rows=settled_rows,
-        won=won,
-        lost=lost,
-        void=void,
+        score_events=len(completed), matched_events=matched_events,
+        settled_rows=settled_rows, won=won, lost=lost, void=void,
         candidate_rows=candidate_rows,
     )
+
+
+async def settle_learning_observations(
+    settings: Settings,
+    *,
+    sport: str,
+    sport_keys: list[str],
+) -> ObservationSettlementSummary:
+    """Settle shadow observations using the provider's immutable event ID.
+
+    Team-name similarity is intentionally not a fallback. An unmatched row is
+    safer left OPEN than assigned a result from a different event.
+    """
+    api_key = settings.odds_api_key or os.getenv("ODDS_API_KEY", "")
+    if not api_key:
+        return ObservationSettlementSummary()
+    open_ids = open_external_event_ids(settings, sport)
+    if not open_ids:
+        return ObservationSettlementSummary()
+
+    completed: dict[str, dict[str, Any]] = {}
+    for sport_key in dict.fromkeys(key.strip() for key in sport_keys if key.strip()):
+        for event in await fetch_scores(api_key, sport_key, days_from=3):
+            event_id = str(event.get("id", "")).strip()
+            if event_id in open_ids and event.get("completed") is True:
+                completed[event_id] = event
+
+    return settle_completed_events(settings, sport=sport, events=list(completed.values()))
 

@@ -54,6 +54,10 @@ class ApiSportsHandballClient:
     async def games_for_date(self, day: date) -> list[dict[str, Any]]:
         return await self.get("games", date=day.isoformat(), timezone="Europe/Bratislava")
 
+    async def game_by_id(self, game_id: int | str) -> dict[str, Any] | None:
+        games = await self.get("games", id=game_id, timezone="Europe/Bratislava")
+        return games[0] if games else None
+
     async def odds_for_game(self, game_id: int | str) -> list[dict[str, Any]]:
         return await self.get("odds", game=game_id)
 
@@ -78,7 +82,46 @@ def upcoming_days(days: int, now: datetime | None = None) -> list[date]:
 
 def league_allowed(game: dict[str, Any], league_names: set[str]) -> bool:
     league = str((game.get("league") or {}).get("name", "")).strip().casefold()
-    return not league_names or league in league_names
+    if not league_names:
+        return True
+    normalized = " ".join(league.replace("-", " ").split())
+    return any(
+        allowed == league
+        or " ".join(allowed.replace("-", " ").split()) == normalized
+        or allowed in league
+        for allowed in league_names
+    )
+
+
+def normalize_completed_game(game: dict[str, Any]) -> dict[str, Any] | None:
+    """Convert an API-Sports finished game to the strict settlement shape."""
+    game_id = game.get("id")
+    teams = game.get("teams") or {}
+    home = str((teams.get("home") or {}).get("name", "")).strip()
+    away = str((teams.get("away") or {}).get("name", "")).strip()
+    status = game.get("status") or {}
+    status_name = str(status.get("short", status.get("long", ""))).strip().casefold()
+    finished = status_name in {"ft", "aet", "after extra time", "finished", "match finished"}
+    scores = game.get("scores") or {}
+    home_score = scores.get("home")
+    away_score = scores.get("away")
+    try:
+        home_score = int(float(home_score))
+        away_score = int(float(away_score))
+    except (TypeError, ValueError):
+        return None
+    if game_id in (None, "") or not home or not away or not finished:
+        return None
+    return {
+        "id": f"apisports:{game_id}",
+        "completed": True,
+        "home_team": home,
+        "away_team": away,
+        "scores": [
+            {"name": home, "score": home_score},
+            {"name": away, "score": away_score},
+        ],
+    }
 
 
 def normalize_game(game: dict[str, Any], odds_payload: list[dict[str, Any]]) -> dict[str, Any] | None:
