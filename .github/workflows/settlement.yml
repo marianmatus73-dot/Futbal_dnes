@@ -70,6 +70,11 @@ jobs:
             echo "No settlement changes"
           else
             git commit -m "Settlement recovery update [skip ci]"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
+            # The settlement cycle also changes the local SQLite database and
+            # may refresh non-persistent helper exports. Keep those runner-only
+            # files out of the commit while allowing the history commit to
+            # rebase safely when main moved during this job.
+            git status --short
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
             git push origin HEAD:"${GITHUB_REF_NAME}"
           fi
