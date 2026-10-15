@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-15T19:57:22.605846+00:00",
+  "generated_at": "2026-10-15T23:09:33.658596+00:00",
   "sport": "baseball",
-  "open_rows": 13,
+  "open_rows": 12,
   "settlement_keys": [
     "baseball_mlb",
     "baseball_npb",
@@ -11,12 +11,12 @@
   "keys": [
     {
       "sport_key": "baseball_mlb",
-      "open_rows": 3,
-      "events_received": 7,
-      "completed_events": 5,
-      "usable_score_events": 5,
-      "matched_rows": 1,
-      "settled_rows": 1
+      "open_rows": 2,
+      "events_received": 6,
+      "completed_events": 4,
+      "usable_score_events": 4,
+      "matched_rows": 0,
+      "settled_rows": 0
     },
     {
       "sport_key": "baseball_npb",
@@ -37,5 +37,5 @@
       "settled_rows": 0
     }
   ],
-  "settled_rows": 1
+  "settled_rows": 0
 }
