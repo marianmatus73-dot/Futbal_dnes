@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-16T10:16:34+00:00",
+  "generated_at": "2026-10-16T19:07:10+00:00",
   "version": "v15",
-  "total_rows": 1010,
-  "training_ready_rows": 1010,
+  "total_rows": 1011,
+  "training_ready_rows": 1011,
   "wins": 275,
-  "losses": 735,
-  "hit_rate": 0.2722772277227723,
-  "brier_score": 0.1955626411008435,
-  "log_loss": 0.5801438410406422,
-  "average_clv_probability": 0.00853748760094249,
-  "average_consensus_safety": 0.8410990099009908,
+  "losses": 736,
+  "hit_rate": 0.27200791295746785,
+  "brier_score": 0.19551486688835554,
+  "log_loss": 0.580048842307382,
+  "average_clv_probability": 0.008564392150505033,
+  "average_consensus_safety": 0.8411078140455003,
   "by_league": [
     {
       "league": "MLS",
@@ -112,6 +112,16 @@
       "average_clv_probability": 0.02627702640911012
     },
     {
+      "league": "Danish Superliga",
+      "samples": 31,
+      "wins": 7,
+      "losses": 24,
+      "hit_rate": 0.22580645161290322,
+      "brier_score": 0.1670734615126397,
+      "log_loss": 0.5195754832967373,
+      "average_clv_probability": -0.006963935634885189
+    },
+    {
       "league": "2. Bundesliga",
       "samples": 30,
       "wins": 7,
@@ -120,16 +130,6 @@
       "brier_score": 0.18479434256858515,
       "log_loss": 0.5571570564243173,
       "average_clv_probability": 0.010665482133036383
-    },
-    {
-      "league": "Danish Superliga",
-      "samples": 30,
-      "wins": 7,
-      "losses": 23,
-      "hit_rate": 0.23333333333333334,
-      "brier_score": 0.16773381315387773,
-      "log_loss": 0.5207579953494763,
-      "average_clv_probability": -0.009396031667484513
     },
     {
       "league": "Turkish Super Lig",
@@ -435,13 +435,13 @@
     },
     {
       "bookmaker": "Unibet (NL)",
-      "samples": 28,
+      "samples": 29,
       "wins": 5,
-      "losses": 23,
-      "hit_rate": 0.17857142857142858,
-      "brier_score": 0.17002714882422115,
-      "log_loss": 0.527813443519708,
-      "average_clv_probability": 0.020625153247591985
+      "losses": 24,
+      "hit_rate": 0.1724137931034483,
+      "brier_score": 0.16924217515012727,
+      "log_loss": 0.526306087595393,
+      "average_clv_probability": 0.020780082460719447
     },
     {
       "bookmaker": "Betsson",
@@ -587,12 +587,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 1010,
+      "samples": 1011,
       "wins": 275,
-      "losses": 735,
-      "hit_rate": 0.2722772277227723,
-      "brier_score": 0.1955626411008435,
-      "log_loss": 0.5801438410406422
+      "losses": 736,
+      "hit_rate": 0.27200791295746785,
+      "brier_score": 0.19551486688835554,
+      "log_loss": 0.580048842307382
     }
   ],
   "by_consensus_safety": [
@@ -616,12 +616,12 @@
     },
     {
       "bucket": "0.85-0.94",
-      "samples": 565,
+      "samples": 566,
       "wins": 157,
-      "losses": 408,
-      "hit_rate": 0.2778761061946903,
-      "brier_score": 0.20175872816284204,
-      "log_loss": 0.593326939445821
+      "losses": 409,
+      "hit_rate": 0.2773851590106007,
+      "brier_score": 0.20166244580261705,
+      "log_loss": 0.5931339592024796
     },
     {
       "bucket": "0.95+",
@@ -690,12 +690,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 983,
+      "samples": 984,
       "wins": 258,
-      "losses": 725,
-      "hit_rate": 0.2624618514750763,
-      "brier_score": 0.1955670700723699,
-      "log_loss": 0.5802733038274162
+      "losses": 726,
+      "hit_rate": 0.2621951219512195,
+      "brier_score": 0.1955179804811129,
+      "log_loss": 0.5801755668537243
     }
   ],
   "metrics_reliable": true

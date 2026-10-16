@@ -54,27 +54,27 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 53,
+    "samples": 54,
     "train_samples": 37,
-    "test_samples": 16,
+    "test_samples": 17,
     "split": "chronological_70_30",
-    "raw_brier": 0.22802,
-    "calibrated_brier": 0.24509,
+    "raw_brier": 0.240096,
+    "calibrated_brier": 0.247275,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 53,
+    "samples": 54,
     "train_samples": 37,
-    "test_samples": 16,
+    "test_samples": 17,
     "split": "chronological_70_30",
-    "raw_brier": 0.22802,
-    "calibrated_brier": 0.24509,
+    "raw_brier": 0.240096,
+    "calibrated_brier": 0.247275,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "basketball/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 26,
+    "samples": 27,
     "status": "BUILDING"
   },
   "basketball/tier=SAFE_1.20_1.60": {
@@ -86,32 +86,32 @@
     "status": "BUILDING"
   },
   "football": {
-    "samples": 946,
+    "samples": 947,
     "train_samples": 662,
-    "test_samples": 284,
+    "test_samples": 285,
     "split": "chronological_70_30",
-    "raw_brier": 0.18861,
-    "calibrated_brier": 0.187271,
+    "raw_brier": 0.188417,
+    "calibrated_brier": 0.18691,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football/market=h2h": {
-    "samples": 946,
+    "samples": 947,
     "train_samples": 662,
-    "test_samples": 284,
+    "test_samples": 285,
     "split": "chronological_70_30",
-    "raw_brier": 0.18861,
-    "calibrated_brier": 0.187271,
+    "raw_brier": 0.188417,
+    "calibrated_brier": 0.18691,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 924,
-    "train_samples": 646,
+    "samples": 925,
+    "train_samples": 647,
     "test_samples": 278,
     "split": "chronological_70_30",
-    "raw_brier": 0.188881,
-    "calibrated_brier": 0.187646,
+    "raw_brier": 0.18911,
+    "calibrated_brier": 0.18767,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
@@ -200,32 +200,32 @@
     "status": "BUILDING"
   },
   "tennis": {
-    "samples": 94,
-    "train_samples": 65,
+    "samples": 95,
+    "train_samples": 66,
     "test_samples": 29,
     "split": "chronological_70_30",
-    "raw_brier": 0.165252,
-    "calibrated_brier": 0.194883,
+    "raw_brier": 0.14415,
+    "calibrated_brier": 0.170253,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "tennis/market=h2h": {
-    "samples": 94,
-    "train_samples": 65,
+    "samples": 95,
+    "train_samples": 66,
     "test_samples": 29,
     "split": "chronological_70_30",
-    "raw_brier": 0.165252,
-    "calibrated_brier": 0.194883,
+    "raw_brier": 0.14415,
+    "calibrated_brier": 0.170253,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "tennis/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 87,
-    "train_samples": 60,
+    "samples": 88,
+    "train_samples": 61,
     "test_samples": 27,
     "split": "chronological_70_30",
-    "raw_brier": 0.136142,
-    "calibrated_brier": 0.164346,
+    "raw_brier": 0.136801,
+    "calibrated_brier": 0.162323,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
