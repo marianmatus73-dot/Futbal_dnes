@@ -1,21 +1,31 @@
 {
-  "generated_at": "2026-10-16T13:24:15.302709+00:00",
+  "generated_at": "2026-10-16T19:37:48.841686+00:00",
   "sport": "tennis",
-  "open_rows": 1,
+  "open_rows": 2,
   "settlement_keys": [
+    "tennis_atp_shanghai_masters",
     "tennis_wta_wuhan_open"
   ],
   "ignored_non_provider_leagues": [],
   "keys": [
     {
+      "sport_key": "tennis_atp_shanghai_masters",
+      "open_rows": 1,
+      "events_received": 10,
+      "completed_events": 8,
+      "usable_score_events": 8,
+      "matched_rows": 0,
+      "settled_rows": 0
+    },
+    {
       "sport_key": "tennis_wta_wuhan_open",
       "open_rows": 1,
-      "events_received": 27,
+      "events_received": 28,
       "completed_events": 26,
       "usable_score_events": 26,
-      "matched_rows": 1,
-      "settled_rows": 1
+      "matched_rows": 0,
+      "settled_rows": 0
     }
   ],
-  "settled_rows": 1
+  "settled_rows": 0
 }
