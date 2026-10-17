@@ -1,13 +1,13 @@
 {
-  "total_bets": 2881,
-  "wins": 1220,
-  "losses": 1661,
+  "total_bets": 2888,
+  "wins": 1223,
+  "losses": 1665,
   "winrate": 42.35,
-  "yield": 5.05,
-  "profit": 102.33,
-  "stake_sum": 2027.19,
-  "open_bets": 51,
-  "settled_bets": 2881,
+  "yield": 5.1,
+  "profit": 103.55,
+  "stake_sum": 2029.14,
+  "open_bets": 49,
+  "settled_bets": 2888,
   "by_sport": {
     "baseball": {
       "total": 1524,
@@ -28,13 +28,13 @@
       "yield": 22.57
     },
     "football": {
-      "total": 948,
+      "total": 952,
       "wins": 261,
-      "losses": 687,
-      "winrate": 27.53,
-      "profit": 5.02,
-      "stake_sum": 227.5,
-      "yield": 2.21
+      "losses": 691,
+      "winrate": 27.42,
+      "profit": 3.85,
+      "stake_sum": 228.67,
+      "yield": 1.69
     },
     "nfl": {
       "total": 13,
@@ -46,13 +46,13 @@
       "yield": 13.17
     },
     "tennis": {
-      "total": 95,
-      "wins": 20,
+      "total": 98,
+      "wins": 23,
       "losses": 75,
-      "winrate": 21.05,
-      "profit": -0.85,
-      "stake_sum": 26.24,
-      "yield": -3.23
+      "winrate": 23.47,
+      "profit": 1.54,
+      "stake_sum": 27.02,
+      "yield": 5.72
     },
     "mma": {
       "total": 20,
@@ -102,13 +102,13 @@
       "yield": 47.34
     },
     "LeoVegas (SE)": {
-      "total": 78,
+      "total": 79,
       "wins": 30,
-      "losses": 48,
-      "winrate": 38.46,
-      "profit": 9.56,
-      "stake_sum": 26.09,
-      "yield": 36.66
+      "losses": 49,
+      "winrate": 37.97,
+      "profit": 9.22,
+      "stake_sum": 26.43,
+      "yield": 34.9
     },
     "Betclic (FR)": {
       "total": 45,
@@ -120,22 +120,22 @@
       "yield": 25.56
     },
     "1xBet": {
-      "total": 443,
+      "total": 444,
       "wins": 176,
-      "losses": 267,
-      "winrate": 39.73,
-      "profit": 7.48,
-      "stake_sum": 267.98,
-      "yield": 2.79
+      "losses": 268,
+      "winrate": 39.64,
+      "profit": 7.31,
+      "stake_sum": 268.15,
+      "yield": 2.73
     },
     "Coolbet": {
-      "total": 101,
+      "total": 102,
       "wins": 30,
-      "losses": 71,
-      "winrate": 29.7,
-      "profit": 3.91,
-      "stake_sum": 40.67,
-      "yield": 9.62
+      "losses": 72,
+      "winrate": 29.41,
+      "profit": 3.6,
+      "stake_sum": 40.98,
+      "yield": 8.79
     },
     "BetAnything": {
       "total": 9,
@@ -290,6 +290,15 @@
       "stake_sum": 14.31,
       "yield": -50.69
     },
+    "Betfair": {
+      "total": 353,
+      "wins": 109,
+      "losses": 244,
+      "winrate": 30.88,
+      "profit": -8.26,
+      "stake_sum": 138.58,
+      "yield": -5.96
+    },
     "MyBookie.ag": {
       "total": 47,
       "wins": 21,
@@ -298,15 +307,6 @@
       "profit": -8.57,
       "stake_sum": 44.64,
       "yield": -19.19
-    },
-    "Betfair": {
-      "total": 349,
-      "wins": 106,
-      "losses": 243,
-      "winrate": 30.37,
-      "profit": -10.3,
-      "stake_sum": 137.45,
-      "yield": -7.49
     }
   },
   "by_league": {
@@ -418,6 +418,15 @@
       "stake_sum": 9.93,
       "yield": 16.9
     },
+    "tennis_atp_shanghai_masters": {
+      "total": 19,
+      "wins": 5,
+      "losses": 14,
+      "winrate": 26.32,
+      "profit": 1.64,
+      "stake_sum": 4.02,
+      "yield": 40.85
+    },
     "Eliteserien": {
       "total": 41,
       "wins": 13,
@@ -481,24 +490,6 @@
       "stake_sum": 2.43,
       "yield": 44.1
     },
-    "tennis_atp_shanghai_masters": {
-      "total": 18,
-      "wins": 4,
-      "losses": 14,
-      "winrate": 22.22,
-      "profit": 1.03,
-      "stake_sum": 3.83,
-      "yield": 27.0
-    },
-    "Championship": {
-      "total": 46,
-      "wins": 13,
-      "losses": 33,
-      "winrate": 28.26,
-      "profit": 0.88,
-      "stake_sum": 11.6,
-      "yield": 7.58
-    },
     "FIFA World Cup": {
       "total": 3,
       "wins": 2,
@@ -525,6 +516,24 @@
       "profit": 0.72,
       "stake_sum": 3.28,
       "yield": 22.08
+    },
+    "tennis_wta_wuhan_open": {
+      "total": 15,
+      "wins": 4,
+      "losses": 11,
+      "winrate": 26.67,
+      "profit": 0.71,
+      "stake_sum": 7.67,
+      "yield": 9.28
+    },
+    "Championship": {
+      "total": 47,
+      "wins": 13,
+      "losses": 34,
+      "winrate": 27.66,
+      "profit": 0.54,
+      "stake_sum": 11.94,
+      "yield": 4.52
     },
     "UEFA Europa League": {
       "total": 7,
@@ -562,6 +571,15 @@
       "stake_sum": 0.88,
       "yield": -31.42
     },
+    "A-League": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.31,
+      "stake_sum": 0.31,
+      "yield": -100.0
+    },
     "Argentina Primera Division": {
       "total": 82,
       "wins": 22,
@@ -588,15 +606,6 @@
       "profit": -0.4,
       "stake_sum": 0.81,
       "yield": -49.07
-    },
-    "League Two": {
-      "total": 34,
-      "wins": 11,
-      "losses": 23,
-      "winrate": 32.35,
-      "profit": -0.48,
-      "stake_sum": 8.82,
-      "yield": -5.39
     },
     "UEFA Champions League": {
       "total": 11,
@@ -625,6 +634,15 @@
       "stake_sum": 4.97,
       "yield": -14.51
     },
+    "League Two": {
+      "total": 35,
+      "wins": 11,
+      "losses": 24,
+      "winrate": 31.43,
+      "profit": -0.83,
+      "stake_sum": 9.17,
+      "yield": -9.01
+    },
     "Ligue 2": {
       "total": 21,
       "wins": 5,
@@ -633,15 +651,6 @@
       "profit": -0.92,
       "stake_sum": 4.22,
       "yield": -21.72
-    },
-    "tennis_wta_wuhan_open": {
-      "total": 13,
-      "wins": 2,
-      "losses": 11,
-      "winrate": 15.38,
-      "profit": -1.07,
-      "stake_sum": 7.08,
-      "yield": -15.14
     },
     "Danish Superliga": {
       "total": 30,
@@ -698,13 +707,13 @@
       "yield": -28.47
     },
     "Premier League": {
-      "total": 19,
+      "total": 20,
       "wins": 3,
-      "losses": 16,
-      "winrate": 15.79,
-      "profit": -1.92,
-      "stake_sum": 3.9,
-      "yield": -49.11
+      "losses": 17,
+      "winrate": 15.0,
+      "profit": -2.09,
+      "stake_sum": 4.07,
+      "yield": -51.23
     },
     "Ligue 1": {
       "total": 21,
@@ -761,5 +770,5 @@
       "yield": -80.85
     }
   },
-  "last_update": "2026-10-17T09:50:09.154972+00:00"
+  "last_update": "2026-10-17T18:02:58.654244+00:00"
 }
