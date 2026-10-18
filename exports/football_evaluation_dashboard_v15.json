@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-10-17T18:02:56+00:00",
+  "generated_at": "2026-10-18T10:01:58+00:00",
   "version": "v15",
-  "total_rows": 1016,
-  "training_ready_rows": 1016,
+  "total_rows": 1018,
+  "training_ready_rows": 1018,
   "wins": 275,
-  "losses": 741,
-  "hit_rate": 0.2706692913385827,
-  "brier_score": 0.19506827704341725,
-  "log_loss": 0.5791148120328774,
-  "average_clv_probability": 0.008644505219680854,
-  "average_consensus_safety": 0.841156496062993,
+  "losses": 743,
+  "hit_rate": 0.27013752455795675,
+  "brier_score": 0.1949408632143372,
+  "log_loss": 0.5788563831663769,
+  "average_clv_probability": 0.008695879879555606,
+  "average_consensus_safety": 0.8410638506876237,
   "by_league": [
     {
       "league": "MLS",
-      "samples": 147,
+      "samples": 149,
       "wins": 42,
-      "losses": 105,
-      "hit_rate": 0.2857142857142857,
-      "brier_score": 0.2056330273740838,
-      "log_loss": 0.6018363262810569,
-      "average_clv_probability": 0.017317555843433974
+      "losses": 107,
+      "hit_rate": 0.28187919463087246,
+      "brier_score": 0.20462070000049434,
+      "log_loss": 0.5997656979951923,
+      "average_clv_probability": 0.017535580731953306
     },
     {
       "league": "Argentina Primera Division",
@@ -365,13 +365,13 @@
     },
     {
       "bookmaker": "1xBet",
-      "samples": 193,
+      "samples": 194,
       "wins": 56,
-      "losses": 137,
-      "hit_rate": 0.29015544041450775,
-      "brier_score": 0.20819687971454698,
-      "log_loss": 0.6074423965103491,
-      "average_clv_probability": 0.013100151766059841
+      "losses": 138,
+      "hit_rate": 0.28865979381443296,
+      "brier_score": 0.20776902066914987,
+      "log_loss": 0.606562204364628,
+      "average_clv_probability": 0.01303346096248529
     },
     {
       "bookmaker": "Pinnacle",
@@ -425,13 +425,13 @@
     },
     {
       "bookmaker": "LeoVegas (SE)",
-      "samples": 54,
+      "samples": 55,
       "wins": 13,
-      "losses": 41,
-      "hit_rate": 0.24074074074074073,
-      "brier_score": 0.18556013549714545,
-      "log_loss": 0.558209839666209,
-      "average_clv_probability": 0.020704645903502482
+      "losses": 42,
+      "hit_rate": 0.23636363636363636,
+      "brier_score": 0.1846451703276671,
+      "log_loss": 0.5563962774491474,
+      "average_clv_probability": 0.021281010913692593
     },
     {
       "bookmaker": "Codere (IT)",
@@ -597,12 +597,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 1016,
+      "samples": 1018,
       "wins": 275,
-      "losses": 741,
-      "hit_rate": 0.2706692913385827,
-      "brier_score": 0.19506827704341725,
-      "log_loss": 0.5791148120328774
+      "losses": 743,
+      "hit_rate": 0.27013752455795675,
+      "brier_score": 0.1949408632143372,
+      "log_loss": 0.5788563831663769
     }
   ],
   "by_consensus_safety": [
@@ -617,12 +617,12 @@
     },
     {
       "bucket": "0.70-0.84",
-      "samples": 214,
+      "samples": 216,
       "wins": 43,
-      "losses": 171,
-      "hit_rate": 0.20093457943925233,
-      "brier_score": 0.16788417738102543,
-      "log_loss": 0.5215364898437888
+      "losses": 173,
+      "hit_rate": 0.19907407407407407,
+      "brier_score": 0.16753538535010548,
+      "log_loss": 0.5208516567802735
     },
     {
       "bucket": "0.85-0.94",
@@ -700,12 +700,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 989,
+      "samples": 991,
       "wins": 258,
-      "losses": 731,
-      "hit_rate": 0.2608695652173913,
-      "brier_score": 0.19505918285682464,
-      "log_loss": 0.5792153965992971
+      "losses": 733,
+      "hit_rate": 0.260343087790111,
+      "brier_score": 0.19492831596516946,
+      "log_loss": 0.5789497237887721
     }
   ],
   "metrics_reliable": true
