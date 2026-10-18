@@ -6,7 +6,7 @@
     "average_loop_score": 0.981,
     "average_runtime_health": 1.0,
     "latest": {
-      "created_at": "2026-10-18T10:01:58.343452+00:00",
+      "created_at": "2026-10-18T18:21:39.109798+00:00",
       "cycle_id": 1,
       "status": "READY",
       "stages_completed": 17,
@@ -16,14 +16,14 @@
       "monitor_score": 0.952,
       "errors_count": 0,
       "previous_result": "LOSS",
-      "previous_profit": -1.0,
+      "previous_profit": -0.38,
       "runtime_health": 1.0,
-      "latency_ms": 26068
+      "latency_ms": 25718
     }
   },
   "cycles": [
     {
-      "created_at": "2026-10-18T10:01:58.343452+00:00",
+      "created_at": "2026-10-18T18:21:39.109798+00:00",
       "cycle_id": 1,
       "status": "READY",
       "stages_completed": 17,
@@ -33,9 +33,9 @@
       "monitor_score": 0.952,
       "errors_count": 0,
       "previous_result": "LOSS",
-      "previous_profit": -1.0,
+      "previous_profit": -0.38,
       "runtime_health": 1.0,
-      "latency_ms": 26068
+      "latency_ms": 25718
     }
   ]
 }
