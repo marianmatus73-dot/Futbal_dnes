@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 1021,
+  "training_samples": 1023,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 1021,
-      "wins": 276,
-      "losses": 745,
-      "winrate": 0.2703,
+      "samples": 1023,
+      "wins": 277,
+      "losses": 746,
+      "winrate": 0.2708,
       "average_value": 0.8412
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 1021,
-      "wins": 276,
-      "losses": 745,
-      "winrate": 0.2703,
+      "samples": 1023,
+      "wins": 277,
+      "losses": 746,
+      "winrate": 0.2708,
       "average_value": 0.117
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 1021,
-      "wins": 276,
-      "losses": 745,
-      "winrate": 0.2703,
-      "average_value": -13.0068
+      "samples": 1023,
+      "wins": 277,
+      "losses": 746,
+      "winrate": 0.2708,
+      "average_value": -13.1208
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 1021,
-      "wins": 276,
-      "losses": 745,
-      "winrate": 0.2703,
-      "average_value": -0.035
+      "samples": 1023,
+      "wins": 277,
+      "losses": 746,
+      "winrate": 0.2708,
+      "average_value": -0.0355
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 1021,
-      "wins": 276,
-      "losses": 745,
-      "winrate": 0.2703,
-      "average_value": 0.695
+      "samples": 1023,
+      "wins": 277,
+      "losses": 746,
+      "winrate": 0.2708,
+      "average_value": 0.6953
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 1021,
-      "wins": 276,
-      "losses": 745,
-      "winrate": 0.2703,
-      "average_value": 0.5214
+      "samples": 1023,
+      "wins": 277,
+      "losses": 746,
+      "winrate": 0.2708,
+      "average_value": 0.5215
     }
   ],
   "warning": null,
