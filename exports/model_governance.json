@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-19T15:06:26.695177+00:00",
+  "generated_at": "2026-10-19T20:47:47.218017+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -973,11 +973,11 @@
     },
     {
       "sport": "handball",
-      "score": 80,
-      "status": "GOOD",
-      "odds_feed": true,
+      "score": 65,
+      "status": "PARTIAL",
+      "odds_feed": false,
       "stable_event_ids": true,
-      "settlement_samples": 0
+      "settlement_samples": 1
     },
     {
       "sport": "nfl",
