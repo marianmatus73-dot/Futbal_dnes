@@ -49,6 +49,142 @@ def _hash(*parts: Any) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
 
 
+def ensure_handball_learning_tables(settings: Settings) -> None:
+    """Create persistent shadow tables before CSV history is restored."""
+    database = Path(settings.db_file or os.getenv("DB_FILE", "bets.db"))
+    with closing(sqlite3.connect(database)) as conn:
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS sport_learning_observations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                observed_at TEXT NOT NULL,
+                sport TEXT NOT NULL,
+                league TEXT NOT NULL,
+                external_event_id TEXT,
+                event TEXT NOT NULL,
+                home_team TEXT,
+                away_team TEXT,
+                market TEXT NOT NULL,
+                selection TEXT NOT NULL,
+                bookmaker TEXT,
+                odds REAL NOT NULL,
+                market_probability REAL,
+                start_time TEXT,
+                mode TEXT NOT NULL DEFAULT 'SHADOW',
+                result TEXT NOT NULL DEFAULT 'OPEN',
+                final_score TEXT,
+                settled_at TEXT,
+                source_hash TEXT NOT NULL UNIQUE
+            )
+            """
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_learning_observations_lookup "
+            "ON sport_learning_observations(sport, league, external_event_id, result)"
+        )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS sport_shadow_candidates (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                created_at TEXT NOT NULL,
+                sport TEXT NOT NULL,
+                league TEXT NOT NULL,
+                external_event_id TEXT NOT NULL,
+                event TEXT NOT NULL,
+                home_team TEXT,
+                away_team TEXT,
+                market TEXT NOT NULL,
+                selection TEXT NOT NULL,
+                bookmaker TEXT,
+                odds REAL NOT NULL,
+                probability REAL NOT NULL,
+                start_time TEXT,
+                model_version TEXT NOT NULL,
+                result TEXT NOT NULL DEFAULT 'OPEN',
+                profit_units REAL,
+                final_score TEXT,
+                settled_at TEXT,
+                UNIQUE(sport, external_event_id, market, model_version)
+            )
+            """
+        )
+        conn.commit()
+
+
+async def settle_handball_observations(
+    settings: Settings,
+    *,
+    configured_keys: list[str] | None = None,
+) -> ObservationSettlementSummary:
+    """Settle both Odds API and API-Sports handball observations.
+
+    This is intentionally independent from a full handball scan so the
+    four-hour recovery workflow can close results before provider history
+    expires.
+    """
+    configured = configured_keys or [
+        value.strip()
+        for value in os.getenv(
+            "HANDBALL_SPORT_KEYS", "handball_germany_bundesliga"
+        ).split(",")
+        if value.strip()
+    ]
+    settlement = await settle_learning_observations(
+        settings,
+        sport="handball",
+        sport_keys=configured,
+    )
+    api_sports_key = os.getenv("API_SPORTS_KEY", "").strip()
+    if not api_sports_key:
+        return settlement
+
+    client = ApiSportsHandballClient(api_sports_key, settings_timeout(settings))
+    completed_events: list[dict[str, Any]] = []
+    open_ids = {
+        event_id
+        for event_id in open_external_event_ids(settings, "handball")
+        if event_id.startswith("apisports:")
+    }
+    settlement_dates = sorted(
+        open_external_event_dates(
+            settings,
+            "handball",
+            id_prefix="apisports:",
+        ),
+        reverse=True,
+    )
+    for event_date in settlement_dates[:7]:
+        try:
+            games = await client.games_for_date(event_date)
+        except ApiSportsHandballError as exc:
+            log.info(
+                "API-Sports Handball settlement skipped unavailable date %s: %s",
+                event_date,
+                exc,
+            )
+            continue
+        for game in games:
+            normalized = normalize_completed_game(game)
+            if normalized and normalized["id"] in open_ids:
+                completed_events.append(normalized)
+
+    api_summary = settle_completed_events(
+        settings,
+        sport="handball",
+        events=completed_events,
+    )
+    return ObservationSettlementSummary(
+        score_events=settlement.score_events + api_summary.score_events,
+        matched_events=settlement.matched_events + api_summary.matched_events,
+        settled_rows=settlement.settled_rows + api_summary.settled_rows,
+        won=settlement.won + api_summary.won,
+        lost=settlement.lost + api_summary.lost,
+        void=settlement.void + api_summary.void,
+        candidate_rows=settlement.candidate_rows + api_summary.candidate_rows,
+    )
+
+
 class HandballModule(SportModule):
     """Handball data collector running in observation-only mode.
 
@@ -68,63 +204,7 @@ class HandballModule(SportModule):
         return conn
 
     def _ensure_tables(self, settings: Settings) -> None:
-        with closing(self._connect(settings)) as conn:
-            conn.execute(
-                """
-                CREATE TABLE IF NOT EXISTS sport_learning_observations (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    observed_at TEXT NOT NULL,
-                    sport TEXT NOT NULL,
-                    league TEXT NOT NULL,
-                    external_event_id TEXT,
-                    event TEXT NOT NULL,
-                    home_team TEXT,
-                    away_team TEXT,
-                    market TEXT NOT NULL,
-                    selection TEXT NOT NULL,
-                    bookmaker TEXT,
-                    odds REAL NOT NULL,
-                    market_probability REAL,
-                    start_time TEXT,
-                    mode TEXT NOT NULL DEFAULT 'SHADOW',
-                    result TEXT NOT NULL DEFAULT 'OPEN',
-                    final_score TEXT,
-                    settled_at TEXT,
-                    source_hash TEXT NOT NULL UNIQUE
-                )
-                """
-            )
-            conn.execute(
-                "CREATE INDEX IF NOT EXISTS idx_learning_observations_lookup "
-                "ON sport_learning_observations(sport, league, external_event_id, result)"
-            )
-            conn.execute(
-                """
-                CREATE TABLE IF NOT EXISTS sport_shadow_candidates (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    created_at TEXT NOT NULL,
-                    sport TEXT NOT NULL,
-                    league TEXT NOT NULL,
-                    external_event_id TEXT NOT NULL,
-                    event TEXT NOT NULL,
-                    home_team TEXT,
-                    away_team TEXT,
-                    market TEXT NOT NULL,
-                    selection TEXT NOT NULL,
-                    bookmaker TEXT,
-                    odds REAL NOT NULL,
-                    probability REAL NOT NULL,
-                    start_time TEXT,
-                    model_version TEXT NOT NULL,
-                    result TEXT NOT NULL DEFAULT 'OPEN',
-                    profit_units REAL,
-                    final_score TEXT,
-                    settled_at TEXT,
-                    UNIQUE(sport, external_event_id, market, model_version)
-                )
-                """
-            )
-            conn.commit()
+        ensure_handball_learning_tables(settings)
 
     def _save_snapshot_rows(
         self,
@@ -267,10 +347,9 @@ class HandballModule(SportModule):
             ).split(",")
             if value.strip()
         ]
-        settlement = await settle_learning_observations(
+        settlement = await settle_handball_observations(
             settings,
-            sport=self.name,
-            sport_keys=configured,
+            configured_keys=configured,
         )
         if os.getenv("SPORT_KEY_AUTO_DISCOVERY", "1") == "1":
             active = await discover_active_sport_keys(
@@ -294,49 +373,6 @@ class HandballModule(SportModule):
             max_games = max(1, min(int(os.getenv("HANDBALL_API_MAX_GAMES", "20")), 30))
             client = ApiSportsHandballClient(api_sports_key, settings_timeout(settings))
             try:
-                api_settled_events: list[dict[str, Any]] = []
-                open_api_ids = {
-                    event_id for event_id in open_external_event_ids(settings, self.name)
-                    if event_id.startswith("apisports:")
-                }
-                settlement_dates = sorted(
-                    open_external_event_dates(
-                        settings, self.name, id_prefix="apisports:"
-                    ),
-                    reverse=True,
-                )
-                # Free API-Sports plans expose only a narrow date window. Query
-                # dates independently so one old, unavailable event cannot stop
-                # settlement of all current matches.
-                for event_date in settlement_dates[:7]:
-                    try:
-                        completed_games = await client.games_for_date(event_date)
-                    except ApiSportsHandballError as exc:
-                        log.info(
-                            "API-Sports Handball settlement skipped unavailable date %s: %s",
-                            event_date,
-                            exc,
-                        )
-                        continue
-                    for game in completed_games:
-                        normalized_result = normalize_completed_game(game)
-                        if (
-                            normalized_result
-                            and normalized_result["id"] in open_api_ids
-                        ):
-                            api_settled_events.append(normalized_result)
-                api_settlement = settle_completed_events(
-                    settings, sport=self.name, events=api_settled_events
-                )
-                settlement = ObservationSettlementSummary(
-                    score_events=settlement.score_events + api_settlement.score_events,
-                    matched_events=settlement.matched_events + api_settlement.matched_events,
-                    settled_rows=settlement.settled_rows + api_settlement.settled_rows,
-                    won=settlement.won + api_settlement.won,
-                    lost=settlement.lost + api_settlement.lost,
-                    void=settlement.void + api_settlement.void,
-                    candidate_rows=settlement.candidate_rows + api_settlement.candidate_rows,
-                )
                 games: list[dict[str, Any]] = []
                 for day in upcoming_days(lookahead):
                     try:
