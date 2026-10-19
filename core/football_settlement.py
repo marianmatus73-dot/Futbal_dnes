@@ -64,6 +64,27 @@ def split_event(event: str) -> tuple[str, str] | None:
     return None
 
 
+def football_sport_key(league: Any) -> str:
+    """Resolve a display league back to its Odds API key.
+
+    Observation-only totals and double-chance rows are stored directly in
+    ``sport_bets`` and therefore do not always have a matching feature-history
+    row.  Their league registry is still authoritative and lets settlement
+    recover the immutable provider event while it remains available.
+    """
+    value = normalize_text(league)
+    if value.startswith("soccer_"):
+        return value
+    try:
+        # Lazy import avoids a module cycle during application startup.
+        from sports.football import LIGY
+
+        config = LIGY.get(value) or {}
+        return normalize_text(config.get("api"))
+    except (ImportError, AttributeError, TypeError):
+        return ""
+
+
 def safe_int(value: Any) -> int | None:
     try:
         return int(value)
@@ -327,6 +348,9 @@ class FootballSettlementEngine:
                         )
 
                 if not sport_key:
+                    sport_key = football_sport_key(row["league"])
+
+                if not sport_key:
                     continue
 
                 home_team, away_team = teams
@@ -560,6 +584,15 @@ class FootballSettlementEngine:
                 bet.selection, game.home_goals, game.away_goals
             )
             return "VOID" if won is None else "WON" if won else "LOST"
+
+        if bet.market.casefold() in {"totals", "totals_2.5", "over_under"}:
+            selection = normalize_team(bet.selection)
+            total_goals = game.home_goals + game.away_goals
+            if "over" in selection or "nad" in selection:
+                return "WON" if total_goals > 2.5 else "LOST"
+            if "under" in selection or "pod" in selection:
+                return "WON" if total_goals < 2.5 else "LOST"
+            return "VOID"
 
         if bet.market.casefold() not in {"h2h", "1x2"}:
             return "VOID"

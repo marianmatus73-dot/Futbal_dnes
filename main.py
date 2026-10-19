@@ -150,7 +150,7 @@ from sports.tennis import TennisModule
 from sports.basketball import BasketballModule
 from sports.hockey import HockeyModule
 from sports.baseball import BaseballModule
-from sports.handball import HandballModule
+from sports.handball import HandballModule, ensure_handball_learning_tables
 from sports.nfl import NFLModule
 
 try:
@@ -413,6 +413,14 @@ def restore_learning_history(settings: Settings) -> None:
         SportContextDatabase(settings).init_db()
     except Exception as e:
         log.warning("Could not init verified sport context table: %s", e)
+
+    # These shadow tables must exist before their CSV exports are imported.
+    # Creating them later inside HandballModule.scan made every isolated
+    # GitHub Actions runner lose the accumulated handball learning history.
+    try:
+        ensure_handball_learning_tables(settings)
+    except Exception as e:
+        log.warning("Could not init handball learning tables: %s", e)
 
     total = 0
 

@@ -9,6 +9,7 @@ from core.football_settlement import settle_football_bets
 from core.settlement_integrity import build_settlement_integrity
 from core.sport_settlement import expire_historical_unresolved, settle_sport_bets
 from main import restore_learning_history, save_learning_history
+from sports.handball import settle_handball_observations
 
 
 log = logging.getLogger("settlement-cycle")
@@ -48,6 +49,16 @@ async def run_cycle() -> None:
         days_from=int(os.getenv("FOOTBALL_SETTLEMENT_DAYS_FROM", "3")),
     )
     total += football.settled_won + football.settled_lost + football.settled_void
+
+    handball = await settle_handball_observations(settings)
+    total += handball.settled_rows
+    log.info(
+        "handball shadow settlement: events=%s matched=%s rows=%s candidates=%s",
+        handball.score_events,
+        handball.matched_events,
+        handball.settled_rows,
+        handball.candidate_rows,
+    )
 
     unresolved = expire_historical_unresolved(
         settings,

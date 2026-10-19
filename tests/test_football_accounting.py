@@ -17,6 +17,7 @@ from core.football_settlement import (
     CompletedFootballGame,
     FootballSettlementEngine,
     OpenFootballBet,
+    football_sport_key,
 )
 from core.sport_quant import init_sport_db
 from core.sport_settlement import backfill_settled_profit
@@ -70,6 +71,49 @@ class FootballAccountingTests(unittest.TestCase):
         self.assertEqual(result, "WON")
         self.assertAlmostEqual(profit, 1.8)
         self.assertAlmostEqual(units, 1.5)
+
+    def test_totals_and_double_chance_are_settled_from_score(self) -> None:
+        game = CompletedFootballGame(
+            event_id="event-1", sport_key="soccer_test", home_team="A",
+            away_team="B", commence_time="2026-08-10T10:00:00Z",
+            home_goals=2, away_goals=1, last_update="2026-08-10T12:00:00Z",
+        )
+        base = dict(
+            bet_id=1, source_hash="hash", sport_key="soccer_test",
+            league="Test", event="A vs B", start_time=game.commence_time,
+            home_team="A", away_team="B", odds=1.5, stake=1.0,
+        )
+        over = OpenFootballBet(**base, market="totals_2.5", selection="Over 2.5 gólu")
+        under = OpenFootballBet(**base, market="totals_2.5", selection="Under 2.5 gólu")
+        chance = OpenFootballBet(**base, market="double_chance", selection="1X")
+        self.assertEqual(FootballSettlementEngine._settle_result(over, game), "WON")
+        self.assertEqual(FootballSettlementEngine._settle_result(under, game), "LOST")
+        self.assertEqual(FootballSettlementEngine._settle_result(chance, game), "WON")
+
+    def test_display_league_resolves_to_provider_key(self) -> None:
+        self.assertEqual(
+            football_sport_key("UEFA Conference League"),
+            "soccer_uefa_europa_conference_league",
+        )
+        self.assertEqual(football_sport_key("soccer_epl"), "soccer_epl")
+
+    def test_open_totals_without_feature_row_is_still_loaded(self) -> None:
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute(
+                """
+                INSERT INTO sport_bets (
+                    sport, league, event, market, selection, odds, stake,
+                    start_time, source_hash, result
+                ) VALUES (
+                    'football', 'UEFA Conference League', 'A vs B',
+                    'totals_2.5', 'Over 2.5 gólu', 1.6, 1.0,
+                    '2026-10-15T19:00:00Z', 'totals-without-feature', 'OPEN'
+                )
+                """
+            )
+        rows = FootballSettlementEngine(self.settings).load_open_bets()
+        row = next(item for item in rows if item.source_hash == "totals-without-feature")
+        self.assertEqual(row.sport_key, "soccer_uefa_europa_conference_league")
 
     def test_backfill_repairs_legacy_wins_and_losses(self) -> None:
         won_id = self._insert_bet("WON")

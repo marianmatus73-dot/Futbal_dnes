@@ -1,11 +1,30 @@
 from __future__ import annotations
 
 import unittest
+import sqlite3
+import tempfile
+from pathlib import Path
 
 from core.api_sports_handball import league_allowed, normalize_completed_game, normalize_game
+from core.config import Settings
+from sports.handball import ensure_handball_learning_tables
 
 
 class ApiSportsHandballTests(unittest.TestCase):
+    def test_learning_tables_exist_before_history_restore(self) -> None:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as directory:
+            database = Path(directory) / "bets.db"
+            ensure_handball_learning_tables(Settings(db_file=str(database)))
+            with sqlite3.connect(database) as conn:
+                names = {
+                    row[0]
+                    for row in conn.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table'"
+                    )
+                }
+            self.assertIn("sport_learning_observations", names)
+            self.assertIn("sport_shadow_candidates", names)
+
     def test_normalizes_match_winner_odds(self) -> None:
         game = {
             "id": 42,
