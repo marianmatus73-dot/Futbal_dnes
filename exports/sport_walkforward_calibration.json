@@ -1,21 +1,21 @@
 {
   "baseball": {
-    "samples": 1526,
+    "samples": 1527,
     "train_samples": 1068,
-    "test_samples": 458,
+    "test_samples": 459,
     "split": "chronological_70_30",
-    "raw_brier": 0.242088,
-    "calibrated_brier": 0.238198,
+    "raw_brier": 0.242078,
+    "calibrated_brier": 0.238056,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "baseball/market=h2h": {
-    "samples": 1526,
+    "samples": 1527,
     "train_samples": 1068,
-    "test_samples": 458,
+    "test_samples": 459,
     "split": "chronological_70_30",
-    "raw_brier": 0.242088,
-    "calibrated_brier": 0.238198,
+    "raw_brier": 0.242078,
+    "calibrated_brier": 0.238056,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
@@ -44,32 +44,32 @@
     "status": "READY"
   },
   "baseball/tier=VALUE_1.61_2.50": {
-    "samples": 1210,
+    "samples": 1211,
     "train_samples": 847,
-    "test_samples": 363,
+    "test_samples": 364,
     "split": "chronological_70_30",
-    "raw_brier": 0.245134,
-    "calibrated_brier": 0.242177,
+    "raw_brier": 0.245112,
+    "calibrated_brier": 0.242015,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "basketball": {
-    "samples": 60,
+    "samples": 61,
     "train_samples": 42,
-    "test_samples": 18,
+    "test_samples": 19,
     "split": "chronological_70_30",
-    "raw_brier": 0.198248,
-    "calibrated_brier": 0.238715,
+    "raw_brier": 0.207643,
+    "calibrated_brier": 0.239309,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 60,
+    "samples": 61,
     "train_samples": 42,
-    "test_samples": 18,
+    "test_samples": 19,
     "split": "chronological_70_30",
-    "raw_brier": 0.198248,
-    "calibrated_brier": 0.238715,
+    "raw_brier": 0.207643,
+    "calibrated_brier": 0.239309,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
@@ -82,7 +82,7 @@
     "status": "BUILDING"
   },
   "basketball/tier=VALUE_1.61_2.50": {
-    "samples": 24,
+    "samples": 25,
     "status": "BUILDING"
   },
   "football": {
@@ -124,32 +124,32 @@
     "status": "BUILDING"
   },
   "hockey": {
-    "samples": 228,
-    "train_samples": 159,
+    "samples": 230,
+    "train_samples": 161,
     "test_samples": 69,
     "split": "chronological_70_30",
-    "raw_brier": 0.240449,
-    "calibrated_brier": 0.260147,
+    "raw_brier": 0.241511,
+    "calibrated_brier": 0.260667,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/market=h2h": {
-    "samples": 228,
-    "train_samples": 159,
+    "samples": 230,
+    "train_samples": 161,
     "test_samples": 69,
     "split": "chronological_70_30",
-    "raw_brier": 0.240449,
-    "calibrated_brier": 0.260147,
+    "raw_brier": 0.241511,
+    "calibrated_brier": 0.260667,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 164,
-    "train_samples": 114,
+    "samples": 166,
+    "train_samples": 116,
     "test_samples": 50,
     "split": "chronological_70_30",
-    "raw_brier": 0.249009,
-    "calibrated_brier": 0.274262,
+    "raw_brier": 0.25051,
+    "calibrated_brier": 0.275567,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
