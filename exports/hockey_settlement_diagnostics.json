@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T21:11:39.925838+00:00",
+  "generated_at": "2026-10-20T05:04:52.809849+00:00",
   "sport": "hockey",
   "open_rows": 9,
   "settlement_keys": [
@@ -15,16 +15,16 @@
     {
       "sport_key": "icehockey_nhl",
       "open_rows": 3,
-      "events_received": 33,
-      "completed_events": 18,
-      "usable_score_events": 18,
-      "matched_rows": 0,
-      "settled_rows": 0
+      "events_received": 31,
+      "completed_events": 20,
+      "usable_score_events": 20,
+      "matched_rows": 2,
+      "settled_rows": 2
     },
     {
       "sport_key": "icehockey_ahl",
       "open_rows": 0,
-      "events_received": 0,
+      "events_received": 1,
       "completed_events": 0,
       "usable_score_events": 0,
       "matched_rows": 0,
@@ -67,5 +67,5 @@
       "settled_rows": 0
     }
   ],
-  "settled_rows": 0
+  "settled_rows": 2
 }
