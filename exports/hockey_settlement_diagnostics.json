@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-20T05:04:52.809849+00:00",
+  "generated_at": "2026-10-20T13:44:26.339942+00:00",
   "sport": "hockey",
-  "open_rows": 9,
+  "open_rows": 7,
   "settlement_keys": [
     "icehockey_nhl",
     "icehockey_ahl",
@@ -14,17 +14,17 @@
   "keys": [
     {
       "sport_key": "icehockey_nhl",
-      "open_rows": 3,
+      "open_rows": 1,
       "events_received": 31,
       "completed_events": 20,
       "usable_score_events": 20,
-      "matched_rows": 2,
-      "settled_rows": 2
+      "matched_rows": 0,
+      "settled_rows": 0
     },
     {
       "sport_key": "icehockey_ahl",
       "open_rows": 0,
-      "events_received": 1,
+      "events_received": 3,
       "completed_events": 0,
       "usable_score_events": 0,
       "matched_rows": 0,
@@ -33,9 +33,9 @@
     {
       "sport_key": "icehockey_sweden_hockey_league",
       "open_rows": 0,
-      "events_received": 13,
-      "completed_events": 7,
-      "usable_score_events": 7,
+      "events_received": 10,
+      "completed_events": 2,
+      "usable_score_events": 2,
       "matched_rows": 0,
       "settled_rows": 0
     },
@@ -67,5 +67,5 @@
       "settled_rows": 0
     }
   ],
-  "settled_rows": 2
+  "settled_rows": 0
 }
