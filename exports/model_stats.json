@@ -1,13 +1,13 @@
 {
-  "total_bets": 2913,
+  "total_bets": 2915,
   "wins": 1230,
-  "losses": 1683,
-  "winrate": 42.22,
-  "yield": 4.83,
-  "profit": 98.8,
-  "stake_sum": 2043.96,
-  "open_bets": 30,
-  "settled_bets": 2913,
+  "losses": 1685,
+  "winrate": 42.2,
+  "yield": 4.8,
+  "profit": 98.09,
+  "stake_sum": 2044.67,
+  "open_bets": 26,
+  "settled_bets": 2915,
   "by_sport": {
     "baseball": {
       "total": 1527,
@@ -64,13 +64,13 @@
       "yield": -20.22
     },
     "hockey": {
-      "total": 230,
+      "total": 232,
       "wins": 78,
-      "losses": 152,
-      "winrate": 33.91,
-      "profit": -5.82,
-      "stake_sum": 84.26,
-      "yield": -6.91
+      "losses": 154,
+      "winrate": 33.62,
+      "profit": -6.53,
+      "stake_sum": 84.97,
+      "yield": -7.68
     }
   },
   "by_bookmaker": {
@@ -120,13 +120,13 @@
       "yield": 28.34
     },
     "1xBet": {
-      "total": 449,
+      "total": 451,
       "wins": 178,
-      "losses": 271,
-      "winrate": 39.64,
-      "profit": 7.4,
-      "stake_sum": 270.09,
-      "yield": 2.74
+      "losses": 273,
+      "winrate": 39.47,
+      "profit": 6.69,
+      "stake_sum": 270.8,
+      "yield": 2.47
     },
     "Coolbet": {
       "total": 102,
@@ -499,15 +499,6 @@
       "stake_sum": 3.28,
       "yield": 22.08
     },
-    "icehockey_nhl": {
-      "total": 194,
-      "wins": 73,
-      "losses": 121,
-      "winrate": 37.63,
-      "profit": 0.72,
-      "stake_sum": 72.07,
-      "yield": 1.0
-    },
     "tennis_wta_wuhan_open": {
       "total": 15,
       "wins": 4,
@@ -552,6 +543,15 @@
       "profit": 0.02,
       "stake_sum": 5.06,
       "yield": 0.48
+    },
+    "icehockey_nhl": {
+      "total": 196,
+      "wins": 73,
+      "losses": 123,
+      "winrate": 37.24,
+      "profit": 0.01,
+      "stake_sum": 72.78,
+      "yield": 0.01
     },
     "tennis_atp_us_open": {
       "total": 4,
@@ -779,5 +779,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-10-20T19:44:09.486365+00:00"
+  "last_update": "2026-10-21T10:44:49.428014+00:00"
 }
