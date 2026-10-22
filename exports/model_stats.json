@@ -1,13 +1,13 @@
 {
-  "total_bets": 2924,
+  "total_bets": 2926,
   "wins": 1232,
-  "losses": 1692,
-  "winrate": 42.13,
-  "yield": 4.73,
-  "profit": 96.88,
-  "stake_sum": 2047.37,
-  "open_bets": 20,
-  "settled_bets": 2924,
+  "losses": 1694,
+  "winrate": 42.11,
+  "yield": 4.72,
+  "profit": 96.62,
+  "stake_sum": 2047.63,
+  "open_bets": 22,
+  "settled_bets": 2926,
   "by_sport": {
     "baseball": {
       "total": 1527,
@@ -37,13 +37,13 @@
       "yield": 1.41
     },
     "tennis": {
-      "total": 102,
+      "total": 104,
       "wins": 25,
-      "losses": 77,
-      "winrate": 24.51,
-      "profit": 2.71,
-      "stake_sum": 27.93,
-      "yield": 9.69
+      "losses": 79,
+      "winrate": 24.04,
+      "profit": 2.45,
+      "stake_sum": 28.19,
+      "yield": 8.68
     },
     "nfl": {
       "total": 15,
@@ -209,15 +209,6 @@
       "stake_sum": 8.17,
       "yield": -3.81
     },
-    "Winamax (DE)": {
-      "total": 24,
-      "wins": 9,
-      "losses": 15,
-      "winrate": 37.5,
-      "profit": -0.32,
-      "stake_sum": 22.11,
-      "yield": -1.44
-    },
     "Marathon Bet": {
       "total": 71,
       "wins": 24,
@@ -227,14 +218,23 @@
       "stake_sum": 26.41,
       "yield": -1.59
     },
+    "Winamax (DE)": {
+      "total": 25,
+      "wins": 9,
+      "losses": 16,
+      "winrate": 36.0,
+      "profit": -0.47,
+      "stake_sum": 22.26,
+      "yield": -2.11
+    },
     "Pinnacle": {
-      "total": 115,
+      "total": 116,
       "wins": 38,
-      "losses": 77,
-      "winrate": 33.04,
-      "profit": -0.84,
-      "stake_sum": 66.71,
-      "yield": -1.26
+      "losses": 78,
+      "winrate": 32.76,
+      "profit": -0.95,
+      "stake_sum": 66.82,
+      "yield": -1.42
     },
     "Matchbook": {
       "total": 185,
@@ -535,15 +535,6 @@
       "stake_sum": 1.36,
       "yield": 19.89
     },
-    "tennis_wta_ningbo_open": {
-      "total": 3,
-      "wins": 1,
-      "losses": 2,
-      "winrate": 33.33,
-      "profit": 0.07,
-      "stake_sum": 0.65,
-      "yield": 10.77
-    },
     "tennis_wta_china_open": {
       "total": 30,
       "wins": 6,
@@ -570,6 +561,15 @@
       "profit": 0.01,
       "stake_sum": 0.98,
       "yield": 0.61
+    },
+    "tennis_wta_ningbo_open": {
+      "total": 5,
+      "wins": 1,
+      "losses": 4,
+      "winrate": 20.0,
+      "profit": -0.19,
+      "stake_sum": 0.91,
+      "yield": -20.88
     },
     "UEFA Conference League": {
       "total": 4,
@@ -788,5 +788,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-10-22T10:46:09.608541+00:00"
+  "last_update": "2026-10-22T19:38:11.806597+00:00"
 }
