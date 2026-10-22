@@ -1,15 +1,15 @@
 {
-  "generated_at": "2026-10-21T19:45:52+00:00",
+  "generated_at": "2026-10-22T10:46:07+00:00",
   "version": "v15",
-  "total_rows": 1023,
-  "training_ready_rows": 1023,
+  "total_rows": 1024,
+  "training_ready_rows": 1024,
   "wins": 277,
-  "losses": 746,
-  "hit_rate": 0.270772238514174,
-  "brier_score": 0.195174818894917,
-  "log_loss": 0.57935601223925,
-  "average_clv_probability": 0.00887419029054201,
-  "average_consensus_safety": 0.8411808406647125,
+  "losses": 747,
+  "hit_rate": 0.2705078125,
+  "brier_score": 0.19509936594556088,
+  "log_loss": 0.5792010282611496,
+  "average_clv_probability": 0.0087793978041528,
+  "average_consensus_safety": 0.841146484375001,
   "by_league": [
     {
       "league": "MLS",
@@ -92,6 +92,16 @@
       "average_clv_probability": 0.01450023131194512
     },
     {
+      "league": "Liga MX",
+      "samples": 38,
+      "wins": 13,
+      "losses": 25,
+      "hit_rate": 0.34210526315789475,
+      "brier_score": 0.2248935730739478,
+      "log_loss": 0.642495954058306,
+      "average_clv_probability": 0.020000272633912183
+    },
+    {
       "league": "League One",
       "samples": 37,
       "wins": 7,
@@ -100,16 +110,6 @@
       "brier_score": 0.15621006223844727,
       "log_loss": 0.49543652846824515,
       "average_clv_probability": 0.011971903959345345
-    },
-    {
-      "league": "Liga MX",
-      "samples": 37,
-      "wins": 13,
-      "losses": 24,
-      "hit_rate": 0.35135135135135137,
-      "brier_score": 0.2277849940015071,
-      "log_loss": 0.6484917252851681,
-      "average_clv_probability": 0.02627702640911012
     },
     {
       "league": "Danish Superliga",
@@ -475,13 +475,13 @@
     },
     {
       "bookmaker": "GTbets",
-      "samples": 16,
+      "samples": 17,
       "wins": 4,
-      "losses": 12,
-      "hit_rate": 0.25,
-      "brier_score": 0.1494806267552624,
-      "log_loss": 0.48189238159639985,
-      "average_clv_probability": 0.007075596462547939
+      "losses": 13,
+      "hit_rate": 0.23529411764705882,
+      "brier_score": 0.14762358981402662,
+      "log_loss": 0.4782900308356943,
+      "average_clv_probability": 0.002398961849563515
     },
     {
       "bookmaker": "Marathon Bet",
@@ -597,12 +597,12 @@
   "by_confidence": [
     {
       "bucket": "missing",
-      "samples": 1023,
+      "samples": 1024,
       "wins": 277,
-      "losses": 746,
-      "hit_rate": 0.270772238514174,
-      "brier_score": 0.195174818894917,
-      "log_loss": 0.57935601223925
+      "losses": 747,
+      "hit_rate": 0.2705078125,
+      "brier_score": 0.19509936594556088,
+      "log_loss": 0.5792010282611496
     }
   ],
   "by_consensus_safety": [
@@ -617,12 +617,12 @@
     },
     {
       "bucket": "0.70-0.84",
-      "samples": 218,
+      "samples": 219,
       "wins": 44,
-      "losses": 174,
-      "hit_rate": 0.2018348623853211,
-      "brier_score": 0.16882501220150337,
-      "log_loss": 0.5236288699227527
+      "losses": 175,
+      "hit_rate": 0.2009132420091324,
+      "brier_score": 0.16859252812183556,
+      "log_loss": 0.5231586578165501
     },
     {
       "bucket": "0.85-0.94",
@@ -700,12 +700,12 @@
     },
     {
       "bucket": "<0.40",
-      "samples": 996,
+      "samples": 997,
       "wins": 260,
-      "losses": 736,
-      "hit_rate": 0.26104417670682734,
-      "brier_score": 0.1951686768060118,
-      "log_loss": 0.5794624284458376
+      "losses": 737,
+      "hit_rate": 0.26078234704112335,
+      "brier_score": 0.19509118665751454,
+      "log_loss": 0.5793031405724359
     }
   ],
   "metrics_reliable": true
