@@ -1,13 +1,13 @@
 {
-  "total_bets": 2940,
+  "total_bets": 2941,
   "wins": 1235,
-  "losses": 1705,
-  "winrate": 42.01,
+  "losses": 1706,
+  "winrate": 41.99,
   "yield": 4.54,
-  "profit": 93.41,
-  "stake_sum": 2055.79,
-  "open_bets": 21,
-  "settled_bets": 2940,
+  "profit": 93.3,
+  "stake_sum": 2055.9,
+  "open_bets": 19,
+  "settled_bets": 2941,
   "by_sport": {
     "baseball": {
       "total": 1528,
@@ -37,13 +37,13 @@
       "yield": 5.96
     },
     "tennis": {
-      "total": 106,
+      "total": 107,
       "wins": 25,
-      "losses": 81,
-      "winrate": 23.58,
-      "profit": 2.2,
-      "stake_sum": 28.44,
-      "yield": 7.72
+      "losses": 82,
+      "winrate": 23.36,
+      "profit": 2.09,
+      "stake_sum": 28.55,
+      "yield": 7.31
     },
     "nfl": {
       "total": 15,
@@ -228,13 +228,13 @@
       "yield": -2.26
     },
     "Matchbook": {
-      "total": 185,
+      "total": 186,
       "wins": 72,
-      "losses": 113,
-      "winrate": 38.92,
-      "profit": -1.58,
-      "stake_sum": 110.37,
-      "yield": -1.43
+      "losses": 114,
+      "winrate": 38.71,
+      "profit": -1.69,
+      "stake_sum": 110.48,
+      "yield": -1.53
     },
     "Unibet (SE)": {
       "total": 101,
@@ -598,15 +598,6 @@
       "stake_sum": 0.81,
       "yield": -49.07
     },
-    "tennis_wta_ningbo_open": {
-      "total": 7,
-      "wins": 1,
-      "losses": 6,
-      "winrate": 14.29,
-      "profit": -0.44,
-      "stake_sum": 1.16,
-      "yield": -37.93
-    },
     "UEFA Champions League": {
       "total": 11,
       "wins": 2,
@@ -624,6 +615,15 @@
       "profit": -0.5,
       "stake_sum": 73.29,
       "yield": -0.68
+    },
+    "tennis_wta_ningbo_open": {
+      "total": 8,
+      "wins": 1,
+      "losses": 7,
+      "winrate": 12.5,
+      "profit": -0.55,
+      "stake_sum": 1.27,
+      "yield": -43.31
     },
     "Serie B": {
       "total": 15,
@@ -788,5 +788,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-10-24T08:49:12.298085+00:00"
+  "last_update": "2026-10-24T09:56:20.398520+00:00"
 }
