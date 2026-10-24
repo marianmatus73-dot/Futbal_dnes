@@ -10,6 +10,12 @@ from typing import Any
 
 from core.config import Settings
 from core.market import consensus_h2h, best_outlier_prices, dedupe_best_bets
+from core.nflverse_context import (
+    NFLVerseSignal,
+    build_signal,
+    load_schedule_rows,
+    refresh_schedule_cache,
+)
 from core.odds_api import fetch_odds
 from core.monte_carlo import simulate_single_bet
 from core.sport_quant import (
@@ -261,6 +267,18 @@ class NFLModule(SportModule):
         snapshots_saved = 0
         blocked = 0
         scanned_events = 0
+        nflverse_rows: list[dict[str, str]] = []
+        nflverse_status = "disabled"
+        cache_path, nflverse_status = refresh_schedule_cache(
+            Path(os.getenv("NFLVERSE_CACHE_FILE", "cache/nflverse_games.csv"))
+        )
+        if cache_path is not None:
+            try:
+                nflverse_rows = load_schedule_rows(
+                    cache_path.read_text(encoding="utf-8")
+                )
+            except (OSError, UnicodeError):
+                nflverse_status = "cache unreadable"
 
         for sport_key in clean_sport_keys:
             data = await fetch_odds(
@@ -333,9 +351,27 @@ class NFLModule(SportModule):
                         league=league,
                     )
 
+                    nflverse_signal = NFLVerseSignal()
+                    if nflverse_rows:
+                        nflverse_signal = build_signal(
+                            nflverse_rows,
+                            home_name=home,
+                            away_name=away,
+                            selection=selection,
+                            commence_time=start,
+                        )
+                    nflverse_applied = (
+                        nflverse_signal.adjustment
+                        if os.getenv("NFLVERSE_CONTEXT_APPLY", "0") == "1"
+                        else 0.0
+                    )
+
                     fallback_probability = max(
                         0.01,
-                        min(0.99, prob_market + elo_adj + extra_adj),
+                        min(
+                            0.99,
+                            prob_market + elo_adj + extra_adj + nflverse_applied,
+                        ),
                     )
 
                     current_sport_weight = sport_weight(self.name)
@@ -353,7 +389,7 @@ class NFLModule(SportModule):
                         features = MetaFeatures(
                             market_probability=prob_market,
                             elo_adjustment=elo_adj,
-                            form_adjustment=0.0,
+                            form_adjustment=nflverse_applied,
                             clv_adjustment=0.0,
                             bookmaker_grade=grade,
                             sport_weight=current_sport_weight,
@@ -385,7 +421,8 @@ class NFLModule(SportModule):
                             (
                                 "edge below minimum; "
                                 f"probability_source={probability_source}; "
-                                f"probability_reason={probability_reason}"
+                                f"probability_reason={probability_reason}; "
+                                f"nflverse={nflverse_signal.reason}"
                             ),
                         )
                         continue
@@ -405,7 +442,8 @@ class NFLModule(SportModule):
                             (
                                 "edge above max guard; "
                                 f"probability_source={probability_source}; "
-                                f"probability_reason={probability_reason}"
+                                f"probability_reason={probability_reason}; "
+                                f"nflverse={nflverse_signal.reason}"
                             ),
                         )
                         continue
@@ -425,7 +463,8 @@ class NFLModule(SportModule):
                             (
                                 "odds above max odds; "
                                 f"probability_source={probability_source}; "
-                                f"probability_reason={probability_reason}"
+                                f"probability_reason={probability_reason}; "
+                                f"nflverse={nflverse_signal.reason}"
                             ),
                         )
                         continue
@@ -450,7 +489,8 @@ class NFLModule(SportModule):
                             (
                                 "stake <= 0; "
                                 f"probability_source={probability_source}; "
-                                f"probability_reason={probability_reason}"
+                                f"probability_reason={probability_reason}; "
+                                f"nflverse={nflverse_signal.reason}"
                             ),
                         )
                         continue
@@ -485,7 +525,12 @@ class NFLModule(SportModule):
                         prob_market,
                         edge,
                         "PASS",
-                        f"bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, extra_adj {extra_adj:.3f}, probability_source={probability_source}, probability_reason={probability_reason}",
+                        f"bookmaker grade {grade:.2f}, elo_adj {elo_adj:.3f}, "
+                        f"extra_adj {extra_adj:.3f}, "
+                        f"nflverse_applied={nflverse_applied:+.4f}, "
+                        f"nflverse={nflverse_signal.reason}, "
+                        f"probability_source={probability_source}, "
+                        f"probability_reason={probability_reason}",
                     )
 
         bets = dedupe_best_bets(bets)
@@ -505,6 +550,8 @@ class NFLModule(SportModule):
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Blocked: {blocked}. "
                 f"Stored candidates: {len(bets)}.\n"
+                f"NFLverse: {nflverse_status}; rows: {len(nflverse_rows)}; "
+                f"apply: {os.getenv('NFLVERSE_CONTEXT_APPLY', '0')}.\n"
                 f"{analytics}"
             ),
         )

@@ -1,14 +1,57 @@
 from __future__ import annotations
 
+import os
 from collections import defaultdict
+from typing import Callable
+
+try:
+    from shin import calculate_implied_probabilities as _shin_calculate
+except ImportError:  # Safe local/offline fallback; production installs shin.
+    _shin_calculate: Callable | None = None
 
 
-def no_vig_probs(prices: dict[str, float]) -> dict[str, float]:
+def no_vig_probs(
+    prices: dict[str, float],
+    *,
+    method: str | None = None,
+) -> dict[str, float]:
+    """Remove bookmaker margin from a complete market.
+
+    Shin is the production default because it accounts for favourite-longshot
+    bias. Proportional normalization remains a deterministic fallback when the
+    optional package is unavailable or the optimizer cannot converge.
+    """
     inv = {k: 1.0 / v for k, v in prices.items() if v and v > 1.01}
     total = sum(inv.values())
 
     if total <= 0:
         return {}
+
+    active_method = str(
+        method or os.getenv("MARKET_DEVIG_METHOD", "shin")
+    ).strip().lower()
+    clean_prices = {key: float(prices[key]) for key in inv}
+    if active_method == "shin" and _shin_calculate is not None and len(inv) >= 2:
+        try:
+            result = _shin_calculate(clean_prices)
+            probabilities = {
+                key: float(result[key])
+                for key in clean_prices
+            }
+            result_total = sum(probabilities.values())
+            if (
+                result_total > 0
+                and all(
+                    0.0 < probability < 1.0
+                    for probability in probabilities.values()
+                )
+            ):
+                return {
+                    key: probability / result_total
+                    for key, probability in probabilities.items()
+                }
+        except (ArithmeticError, KeyError, TypeError, ValueError):
+            pass
 
     return {k: v / total for k, v in inv.items()}
 
