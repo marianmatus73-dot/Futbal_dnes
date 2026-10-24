@@ -7,6 +7,7 @@ import unittest
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 from core.config import Settings
 from core.market import no_vig_probs
@@ -41,6 +42,23 @@ class ProfessionalControlsTests(unittest.TestCase):
         probabilities = no_vig_probs({"A": 1.80, "B": 2.10})
         self.assertAlmostEqual(sum(probabilities.values()), 1.0)
         self.assertNotAlmostEqual(probabilities["A"], 1 / 1.80)
+
+    def test_shin_probabilities_are_used_when_available(self) -> None:
+        expected = {"A": 0.57, "B": 0.43}
+        with patch("core.market._shin_calculate", return_value=expected) as shin:
+            probabilities = no_vig_probs(
+                {"A": 1.70, "B": 2.30},
+                method="shin",
+            )
+        self.assertEqual(probabilities, expected)
+        shin.assert_called_once_with({"A": 1.70, "B": 2.30})
+
+    def test_shin_failure_falls_back_to_proportional_devig(self) -> None:
+        prices = {"A": 1.80, "B": 2.10}
+        with patch("core.market._shin_calculate", side_effect=ValueError):
+            fallback = no_vig_probs(prices, method="shin")
+        proportional = no_vig_probs(prices, method="proportional")
+        self.assertEqual(fallback, proportional)
 
     def test_each_sport_has_independent_limits(self) -> None:
         self.assertNotEqual(sport_policy("baseball"), sport_policy("handball"))

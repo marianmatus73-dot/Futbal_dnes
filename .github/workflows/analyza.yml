@@ -140,6 +140,7 @@ jobs:
           FORM_WEIGHT: "0.20"
           MARKET_WEIGHT: "0.20"
           CONTEXT_WEIGHT: "0.10"
+          MARKET_DEVIG_METHOD: "shin"
 
           LEARNING_ENABLED: "1"
           LEARNING_MIN_SAMPLES: "20"
