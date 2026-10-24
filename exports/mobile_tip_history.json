@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-24T08:21:45.955870+00:00",
+  "generated_at": "2026-10-24T08:49:12.233674+00:00",
   "limit_per_sport": 5,
   "sports": {
     "football": [
@@ -81,8 +81,8 @@
         "model_probability": 0.6186,
         "edge": -0.06591399999999992,
         "stake": 1.0,
-        "closing_odds": null,
-        "clv_pct": null,
+        "closing_odds": 1.51,
+        "clv_pct": 0.0,
         "settlement_source": "",
         "result": "OPEN",
         "final_score": null,
@@ -203,6 +203,30 @@
         "start_time": "2026-10-24T00:00:00Z",
         "created_at": "2026-10-20 10:31:00",
         "settled_at": "2026-10-24T04:51:50.759444+00:00",
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      }
+    ],
+    "tennis": [
+      {
+        "sport": "tennis",
+        "league": "tennis_wta_ningbo_open",
+        "match": "Leylah Fernandez vs Marie Bouzkova",
+        "pick": "Marie Bouzkova",
+        "market": "h2h",
+        "odds": 7.0,
+        "bookmaker": "Matchbook",
+        "model_probability": 0.1558776434515835,
+        "edge": 0.09114350416108463,
+        "stake": 0.11,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-10-24T07:28:16Z",
+        "created_at": "2026-10-24 08:46:24",
+        "settled_at": null,
         "tracking_mode": "LIVE",
         "observation_only": false
       }

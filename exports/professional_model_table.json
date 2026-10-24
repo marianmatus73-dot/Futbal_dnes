@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T08:21:46.036174+00:00",
+  "generated_at": "2026-10-24T08:49:12.311354+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -28,15 +28,15 @@
           "max_drawdown": 10.4387
         },
         "90": {
-          "settled": 1293,
-          "stake": 1396.96,
-          "profit": 68.7281,
-          "yield_pct": 4.92,
+          "settled": 1291,
+          "stake": 1396.43,
+          "profit": 68.5451,
+          "yield_pct": 4.909,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.242214,
-          "calibration_error": 0.05417,
-          "probability_samples": 1293,
+          "brier_score": 0.242124,
+          "calibration_error": 0.054444,
+          "probability_samples": 1291,
           "max_drawdown": 20.2872
         },
         "365": {
@@ -442,15 +442,15 @@
           "max_drawdown": 7.5723
         },
         "90": {
-          "settled": 892,
-          "stake": 210.23,
-          "profit": -0.1134,
-          "yield_pct": -0.054,
+          "settled": 880,
+          "stake": 207.56,
+          "profit": 1.1346,
+          "yield_pct": 0.547,
           "average_clv_pct": 3.757,
           "clv_samples": 559,
-          "brier_score": 0.196037,
-          "calibration_error": 0.02807,
-          "probability_samples": 892,
+          "brier_score": 0.196663,
+          "calibration_error": 0.026995,
+          "probability_samples": 880,
           "max_drawdown": 21.0472
         },
         "365": {
@@ -1204,16 +1204,16 @@
           "max_drawdown": 0.0
         },
         "90": {
-          "settled": 15,
-          "stake": 6.71,
-          "profit": -2.7618,
-          "yield_pct": -41.159,
+          "settled": 7,
+          "stake": 3.53,
+          "profit": -0.4788,
+          "yield_pct": -13.564,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.185065,
-          "calibration_error": 0.174872,
-          "probability_samples": 15,
-          "max_drawdown": 2.987
+          "brier_score": 0.234431,
+          "calibration_error": 0.322221,
+          "probability_samples": 7,
+          "max_drawdown": 1.95
         },
         "365": {
           "settled": 20,
@@ -1814,7 +1814,7 @@
         "yield_pct": -24.25,
         "brier_score": 0.238878
       },
-      "generated_at": "2026-10-24T08:21:46.118027+00:00"
+      "generated_at": "2026-10-24T08:49:12.391654+00:00"
     }
   },
   "experiments": {
