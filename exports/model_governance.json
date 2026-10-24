@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-24T12:06:25.269628+00:00",
+  "generated_at": "2026-10-24T18:28:09.139728+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -39,16 +39,16 @@
       "sport": "football",
       "mode": "LIVE",
       "metrics": {
-        "settled": 960,
-        "stake": 232.02,
-        "profit": 3.2816,
-        "yield_pct": 1.414,
-        "average_clv_pct": 3.757,
-        "clv_samples": 559,
-        "brier_score": 0.195236,
-        "calibration_error": 0.026962,
-        "probability_samples": 960,
-        "max_drawdown": 21.0472
+        "settled": 962,
+        "stake": 232.79,
+        "profit": 2.5116,
+        "yield_pct": 1.079,
+        "average_clv_pct": 3.744,
+        "clv_samples": 561,
+        "brier_score": 0.195023,
+        "calibration_error": 0.02754,
+        "probability_samples": 962,
+        "max_drawdown": 21.4072
       }
     },
     {
@@ -105,16 +105,16 @@
       "market": "1X2",
       "mode": "LIVE",
       "metrics": {
-        "settled": 960,
-        "stake": 232.02,
-        "profit": 3.2816,
-        "yield_pct": 1.414,
-        "average_clv_pct": 3.757,
-        "clv_samples": 559,
-        "brier_score": 0.195236,
-        "calibration_error": 0.026962,
-        "probability_samples": 960,
-        "max_drawdown": 21.0472
+        "settled": 962,
+        "stake": 232.79,
+        "profit": 2.5116,
+        "yield_pct": 1.079,
+        "average_clv_pct": 3.744,
+        "clv_samples": 561,
+        "brier_score": 0.195023,
+        "calibration_error": 0.02754,
+        "probability_samples": 962,
+        "max_drawdown": 21.4072
       }
     },
     {
@@ -256,6 +256,22 @@
       }
     },
     {
+      "league": "League Two",
+      "mode": "BLOCKED",
+      "metrics": {
+        "settled": 36,
+        "stake": 9.57,
+        "profit": -1.2258,
+        "yield_pct": -12.809,
+        "average_clv_pct": 4.298,
+        "clv_samples": 32,
+        "brier_score": 0.224619,
+        "calibration_error": 0.101785,
+        "probability_samples": 36,
+        "max_drawdown": 3.5396
+      }
+    },
+    {
       "league": "Liga MX",
       "mode": "SHADOW",
       "metrics": {
@@ -269,22 +285,6 @@
         "calibration_error": 0.053473,
         "probability_samples": 36,
         "max_drawdown": 2.3149
-      }
-    },
-    {
-      "league": "League Two",
-      "mode": "SHADOW",
-      "metrics": {
-        "settled": 35,
-        "stake": 9.17,
-        "profit": -0.8258,
-        "yield_pct": -9.005,
-        "average_clv_pct": 4.436,
-        "clv_samples": 31,
-        "brier_score": 0.228301,
-        "calibration_error": 0.095851,
-        "probability_samples": 35,
-        "max_drawdown": 3.4425
       }
     },
     {
@@ -368,6 +368,22 @@
       }
     },
     {
+      "league": "Segunda Division",
+      "mode": "SHADOW",
+      "metrics": {
+        "settled": 25,
+        "stake": 7.92,
+        "profit": 1.9843,
+        "yield_pct": 25.054,
+        "average_clv_pct": 2.186,
+        "clv_samples": 22,
+        "brier_score": 0.204326,
+        "calibration_error": 0.133169,
+        "probability_samples": 25,
+        "max_drawdown": 1.81
+      }
+    },
+    {
       "league": "Swiss Super League",
       "mode": "SHADOW",
       "metrics": {
@@ -397,22 +413,6 @@
         "calibration_error": 0.223003,
         "probability_samples": 24,
         "max_drawdown": 1.375
-      }
-    },
-    {
-      "league": "Segunda Division",
-      "mode": "SHADOW",
-      "metrics": {
-        "settled": 24,
-        "stake": 7.55,
-        "profit": 2.3543,
-        "yield_pct": 31.183,
-        "average_clv_pct": 2.29,
-        "clv_samples": 21,
-        "brier_score": 0.209081,
-        "calibration_error": 0.126203,
-        "probability_samples": 24,
-        "max_drawdown": 1.44
       }
     },
     {
@@ -713,7 +713,7 @@
       "segment": "football",
       "status": "READY",
       "auto_apply": false,
-      "samples": 960,
+      "samples": 962,
       "minimum_samples": 100,
       "recommendations": [
         "Ponechať prahy bez zmeny."
@@ -753,7 +753,7 @@
       "segment": "football/1X2",
       "status": "READY",
       "auto_apply": false,
-      "samples": 960,
+      "samples": 962,
       "minimum_samples": 50,
       "recommendations": [
         "Ponechať prahy bez zmeny."
@@ -840,21 +840,21 @@
     {
       "sport": "football",
       "champion": {
-        "settled": 960,
-        "stake": 232.02,
-        "profit": 3.2816,
-        "yield_pct": 1.414,
-        "average_clv_pct": 3.757,
-        "clv_samples": 559,
-        "brier_score": 0.195236,
-        "calibration_error": 0.026962,
-        "probability_samples": 960,
-        "max_drawdown": 21.0472
+        "settled": 962,
+        "stake": 232.79,
+        "profit": 2.5116,
+        "yield_pct": 1.079,
+        "average_clv_pct": 3.744,
+        "clv_samples": 561,
+        "brier_score": 0.195023,
+        "calibration_error": 0.02754,
+        "probability_samples": 962,
+        "max_drawdown": 21.4072
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 960,
+        "evaluated_samples": 962,
         "minimum_samples": 75
       },
       "decision": "EVALUATE",
@@ -937,7 +937,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 993
+      "settlement_samples": 1040
     },
     {
       "sport": "tennis",
@@ -977,7 +977,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 4
+      "settlement_samples": 5
     },
     {
       "sport": "nfl",
