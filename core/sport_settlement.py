@@ -171,6 +171,40 @@ def _winner_from_scores(event: dict[str, Any]) -> str | None:
     return result[0] if result else None
 
 
+def _score_event_is_settleable(
+    event: dict[str, Any],
+    sport: str,
+    *,
+    reference_time: datetime | None = None,
+) -> bool:
+    """Accept explicit finals plus stale hockey events with usable scores.
+
+    The Odds API occasionally leaves European hockey events with
+    ``completed=false`` after the game has ended. Those rows used to remain
+    OPEN until they fell out of the provider's three-day recovery window.
+    Scores are used as a recovery fallback only for hockey, only when both
+    sides have a valid score, and only well after the scheduled start.
+    """
+    if event.get("completed") is True:
+        return True
+    if str(sport).strip().lower() != "hockey" or _score_result(event) is None:
+        return False
+
+    commence_time = _parse_time(event.get("commence_time"))
+    if commence_time is None:
+        return False
+    now = reference_time or datetime.now(timezone.utc)
+    if now.tzinfo is None:
+        now = now.replace(tzinfo=timezone.utc)
+    recovery_hours = max(
+        6,
+        int(os.getenv("HOCKEY_STALE_SCORE_RECOVERY_HOURS", "8")),
+    )
+    return now.astimezone(timezone.utc) - commence_time >= timedelta(
+        hours=recovery_hours
+    )
+
+
 def _profit_for_result(result: str, odds: float, stake: float) -> float:
     if result == "WON":
         return round((odds - 1.0) * stake, 4)
@@ -387,6 +421,7 @@ async def settle_sport_bets(
             "open_rows": len(rows_by_league.get(sport_key, [])),
             "events_received": len(scores),
             "completed_events": 0,
+            "stale_score_recoveries": 0,
             "usable_score_events": 0,
             "matched_rows": 0,
             "settled_rows": 0,
@@ -399,10 +434,14 @@ async def settle_sport_bets(
         score_events = []
 
         for event in scores:
-            if not event.get("completed"):
+            explicitly_completed = event.get("completed") is True
+            if not _score_event_is_settleable(event, sport):
                 continue
 
-            key_diagnostics["completed_events"] += 1
+            if explicitly_completed:
+                key_diagnostics["completed_events"] += 1
+            else:
+                key_diagnostics["stale_score_recoveries"] += 1
 
             home = str(event.get("home_team", ""))
             away = str(event.get("away_team", ""))

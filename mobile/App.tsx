@@ -208,7 +208,7 @@ function Candidates({ tips }: { tips: Tip[] }) {
   );
 }
 
-function LowOddsWatch({ tips }: { tips: Tip[] }) {
+function LowOddsWatch({ tips, sport }: { tips: Tip[]; sport?: Sport }) {
   const marketLabel = (market?: string) => ({
     h2h: "FAVORIT / 1X2",
     double_chance: "DVOJTIP",
@@ -216,14 +216,14 @@ function LowOddsWatch({ tips }: { tips: Tip[] }) {
   }[market || "h2h"] || market || "TRH");
   return (
     <View style={styles.candidatesSection}>
-      <Text style={styles.lowOddsTitle}>Futbal · denný experiment 1,20–1,60</Text>
-      <Text style={styles.candidatesSubtitle}>Každý deň až 3 najsilnejšie možnosti naprieč trhmi favorit, dvojtip a Under/Over 2,5. Nie sú súčasťou ostrého value výberu; odporúčaný skúšobný vklad je najviac 0,10 jednotky.</Text>
+      <Text style={styles.lowOddsTitle}>{sport ? sportMeta[sport].label : "Multisport"} · sledovanie kurzov 1,20–1,60</Text>
+      <Text style={styles.candidatesSubtitle}>Všetky vhodné unikátne možnosti, ktoré analýza nájde. Nie sú súčasťou ostrého value výberu; odporúčaný skúšobný vklad je najviac 0,10 jednotky.</Text>
       {tips.length ? tips.map((tip, index) => (
         <View key={`low-odds-${tip.match}-${index}`}>
           <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{marketLabel(tip.market)} · {tip.decision === "ACCEPT" ? "PREŠIEL FILTROM" : "DENNÝ EXPERIMENT"}</Text></View>
           <TipItem tip={tip} />
         </View>
-      )) : <Text style={styles.historyEmpty}>Dnes poskytovateľ neposlal vhodný kurz 1,20–1,60 pre favorit, dvojtip ani Under/Over.</Text>}
+      )) : <Text style={styles.historyEmpty}>Dnes poskytovateľ neposlal vhodný kurz 1,20–1,60.</Text>}
     </View>
   );
 }
@@ -311,7 +311,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
   const orderedSports = [...SPORTS].sort((a, b) => Number(favorites.includes(b)) - Number(favorites.includes(a)));
   const tips = data.tipCard.selected.filter((tip) => tip.sport === selected);
   const candidates = (data.tipCard.rejected_sample ?? []).filter((tip) => tip.sport === selected);
-  const lowOdds = selected === "football" ? (data.tipCard.low_odds_watch ?? []) : [];
+  const lowOdds = (data.tipCard.low_odds_watch ?? []).filter((tip) => tip.sport === selected);
   const row = data.modelRows.find((item) => item.sport === selected);
   const history = (data.historyBySport[selected] ?? []).filter((tip) => historyFilter === "all" || (historyFilter === "open" && tip.result === "OPEN") || (historyFilter === "won" && tip.result === "WON") || (historyFilter === "lost" && tip.result === "LOST"));
   const recentResults = data.resultsBySport[selected] ?? [];
@@ -338,9 +338,9 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
         <Summary label="Yield" value={formatPercent(row?.yield_pct ?? row?.yield)} positive />
         <Summary label="Zisk" value={formatNumber(row?.net_profit ?? row?.profit)} />
       </View>
-      {selected === "football" && (
+      {row?.low_odds_1_20_1_60 && (
         <View style={styles.graphCard}>
-          <Text style={styles.graphTitle}>Futbal · kurzy 1,20–1,60</Text>
+          <Text style={styles.graphTitle}>{sportMeta[selected].label} · kurzy 1,20–1,60</Text>
           <Text style={styles.sectionSubtitle}>Samostatné výsledky uzavretých ostrých tipov 1X2. Zamietnuté analýzy sa nezapočítavajú.</Text>
           {row?.low_odds_1_20_1_60?.settled ? (
             <View style={styles.summaryGrid}>
@@ -352,7 +352,7 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
           ) : <Text style={styles.historyEmpty}>Zatiaľ nemáme uzavreté ostré tipy v tomto intervale.</Text>}
         </View>
       )}
-      {selected === "football" ? <LowOddsWatch tips={lowOdds} /> : null}
+      {selected !== "handball" ? <LowOddsWatch tips={lowOdds} sport={selected} /> : null}
       {selected === "handball" && (
         <View style={styles.graphCard}>
           <Text style={styles.graphTitle}>Hádzaná · sledovací režim</Text>

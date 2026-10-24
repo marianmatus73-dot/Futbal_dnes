@@ -3,6 +3,7 @@ import sqlite3
 import tempfile
 import unittest
 import sys
+from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock, patch
@@ -11,10 +12,46 @@ sys.modules.setdefault("aiohttp", SimpleNamespace())
 
 from core.config import Settings
 from core.sport_quant import init_sport_db
-from core.sport_settlement import settle_sport_bets
+from core.sport_settlement import _score_event_is_settleable, settle_sport_bets
 
 
 class SportSettlementTotalsTests(unittest.TestCase):
+    def test_stale_hockey_score_recovers_when_provider_flag_is_false(self):
+        event = {
+            "completed": False,
+            "commence_time": "2026-10-20T15:30:00Z",
+            "home_team": "TPS",
+            "away_team": "Ilves",
+            "scores": [
+                {"name": "TPS", "score": "2"},
+                {"name": "Ilves", "score": "4"},
+            ],
+        }
+        reference = datetime.fromisoformat("2026-10-21T00:00:00+00:00")
+        self.assertTrue(
+            _score_event_is_settleable(
+                event,
+                "hockey",
+                reference_time=reference,
+            )
+        )
+        self.assertFalse(
+            _score_event_is_settleable(
+                event,
+                "football",
+                reference_time=reference,
+            )
+        )
+        self.assertFalse(
+            _score_event_is_settleable(
+                event,
+                "hockey",
+                reference_time=datetime.fromisoformat(
+                    "2026-10-20T20:00:00+00:00"
+                ),
+            )
+        )
+
     def test_double_chance_draw_settles_1x_and_loses_12(self):
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
             db = Path(tmp) / "bets.db"

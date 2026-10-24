@@ -727,7 +727,9 @@ def build_report(
         low_odds_watch = build_low_odds_watch(
             all_tips,
             risk_rejected_candidates or [],
-            limit=max(3, int(os.getenv("LOW_ODDS_WATCH_LIMIT", "3"))),
+            # Zero means no daily cap: publish every eligible unique low-odds
+            # observation. Operators may still set a positive safety cap.
+            limit=max(0, int(os.getenv("LOW_ODDS_WATCH_LIMIT", "0"))),
             audit_candidates=audit_candidates,
         )
         if settings is not None:
