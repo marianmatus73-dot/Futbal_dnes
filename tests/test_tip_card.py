@@ -85,6 +85,20 @@ class TipCardTests(unittest.TestCase):
         self.assertTrue(all(row["stake_units"] == 0.10 for row in rows))
         self.assertEqual(rows[0]["match"], "Home 0 vs Away 0")
 
+    def test_low_odds_watch_has_no_daily_cap_by_default(self) -> None:
+        audit = [
+            {
+                "league": "league", "event": f"Home {index} vs Away {index}",
+                "selection": f"Home {index}", "bookmaker": "Book",
+                "odds": 1.30 + index * 0.02, "prob_market": 0.70,
+                "reason": f"edge below minimum; final={0.78 - index * 0.01:.2f}",
+            }
+            for index in range(6)
+        ]
+        rows = build_low_odds_watch([], [], audit_candidates=audit)
+        self.assertEqual(len(rows), 6)
+        self.assertEqual(len({row["match"] for row in rows}), 6)
+
     def test_low_odds_watch_keeps_only_one_side_per_match_from_audit(self) -> None:
         rows = build_low_odds_watch([], [], audit_candidates=[
             {"league": "league", "event": "A vs B", "selection": "A",

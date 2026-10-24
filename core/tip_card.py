@@ -39,14 +39,16 @@ def build_low_odds_watch(
     accepted: list,
     rejected: list[dict],
     *,
-    limit: int = 3,
+    limit: int = 0,
     audit_candidates: list[dict] | None = None,
 ) -> list[dict]:
     """Build a separate daily football experiment for odds 1.20-1.60.
 
     The production filter remains untouched.  When it provides fewer than the
     requested number of low-price rows, the current scan audit supplies the
-    most probable unique matches as observation-only selections.
+    most probable unique matches as observation-only selections. A non-positive
+    limit keeps every eligible unique selection; production can still set a
+    positive safety cap through ``LOW_ODDS_WATCH_LIMIT``.
     """
     rows: list[dict] = []
     for tip in accepted:
@@ -167,16 +169,19 @@ def build_low_odds_watch(
     # double-chance observations even when those markets were collected.
     selected: list[dict] = []
     selected_ids: set[int] = set()
+    selection_limit = max(1, limit) if limit > 0 else None
     for market in ("h2h", "double_chance", "totals_2.5"):
         candidate = next(
             (row for row in ranked if str(row.get("market")) == market),
             None,
         )
-        if candidate is not None and len(selected) < max(1, limit):
+        if candidate is not None and (
+            selection_limit is None or len(selected) < selection_limit
+        ):
             selected.append(candidate)
             selected_ids.add(id(candidate))
     for candidate in ranked:
-        if len(selected) >= max(1, limit):
+        if selection_limit is not None and len(selected) >= selection_limit:
             break
         if id(candidate) not in selected_ids:
             selected.append(candidate)
