@@ -15,6 +15,16 @@ from core.rejection_explanations import enrich_rejection
 from core.config import Settings
 
 
+LOW_ODDS_WATCH_SPORTS = {
+    "football",
+    "tennis",
+    "basketball",
+    "hockey",
+    "baseball",
+    "nfl",
+}
+
+
 def _tip_payload(tip, decision: str) -> dict:
     payload = asdict(tip)
     payload.update(
@@ -42,7 +52,7 @@ def build_low_odds_watch(
     limit: int = 0,
     audit_candidates: list[dict] | None = None,
 ) -> list[dict]:
-    """Build a separate daily football experiment for odds 1.20-1.60.
+    """Build a separate daily multisport experiment for odds 1.20-1.60.
 
     The production filter remains untouched.  When it provides fewer than the
     requested number of low-price rows, the current scan audit supplies the
@@ -52,7 +62,7 @@ def build_low_odds_watch(
     """
     rows: list[dict] = []
     for tip in accepted:
-        if str(getattr(tip, "sport", "")).lower() != "football":
+        if str(getattr(tip, "sport", "")).lower() not in LOW_ODDS_WATCH_SPORTS:
             continue
         odds = float(getattr(tip, "odds", 0) or 0)
         if 1.20 <= odds <= 1.60:
@@ -61,7 +71,7 @@ def build_low_odds_watch(
             rows.append(item)
 
     for candidate in rejected:
-        if str(candidate.get("sport", "")).lower() != "football":
+        if str(candidate.get("sport", "")).lower() not in LOW_ODDS_WATCH_SPORTS:
             continue
         odds = float(candidate.get("odds", 0) or 0)
         if not 1.20 <= odds <= 1.60:
@@ -135,9 +145,10 @@ def build_low_odds_watch(
             "rejected_reasons": ["Denný experiment; neprešiel ostrým value filtrom"],
         })
 
-    best: dict[tuple[str, str], dict] = {}
+    best: dict[tuple[str, str, str], dict] = {}
     for row in rows:
         key = (
+            str(row.get("sport") or "football").strip().casefold(),
             str(row.get("event") or row.get("match") or "").strip().casefold(),
             str(row.get("market") or "h2h").strip().casefold(),
         )
@@ -190,7 +201,7 @@ def build_low_odds_watch(
 
 
 def persist_low_odds_watch(settings: Settings, rows: list[dict]) -> int:
-    """Persist observation-only football picks so they can be settled.
+    """Persist observation-only multisport picks so they can be settled.
 
     These rows use a dedicated tracking mode and never count as LIVE tips.
     One unit is used only for comparable experiment yield; no real stake is
@@ -210,6 +221,9 @@ def persist_low_odds_watch(settings: Settings, rows: list[dict]) -> int:
                 conn.execute(f"ALTER TABLE sport_bets ADD COLUMN {name} {definition}")
         before = conn.total_changes
         for row in rows:
+            sport = str(row.get("sport") or "football").strip().lower()
+            if sport not in LOW_ODDS_WATCH_SPORTS:
+                continue
             event = str(row.get("event") or row.get("match") or "").strip()
             selection = str(row.get("selection") or row.get("pick") or "").strip()
             market = str(row.get("market") or "h2h").strip().casefold()
@@ -235,18 +249,18 @@ def persist_low_odds_watch(settings: Settings, rows: list[dict]) -> int:
                     edge, stake, bookmaker, start_time, score, source_hash,
                     result, external_event_id, engine_version, tracking_mode
                 ) VALUES (
-                    'football', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1.0, ?, ?, ?,
-                    ?, 'OPEN', ?, 'football-2.0-low-odds-watch', 'LOW_ODDS_WATCH'
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1.0, ?, ?, ?,
+                    ?, 'OPEN', ?, ?, 'LOW_ODDS_WATCH'
                 )
                 """,
                 (
-                    str(row.get("league") or "football"), event, home,
+                    sport, str(row.get("league") or sport), event, home,
                     away if separator else "", market, selection, odds,
                     probability, market_probability, probability,
                     probability * odds - 1.0,
                     str(row.get("bookmaker") or "market"), start_time,
                     float(row.get("confidence") or probability * 100),
-                    source_hash, external_id,
+                    source_hash, external_id, f"{sport}-low-odds-watch",
                 ),
             )
         return conn.total_changes - before

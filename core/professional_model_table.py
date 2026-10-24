@@ -201,24 +201,29 @@ def build_professional_model_table(
             ),
             "by_market": _group(sport_rows, lambda row: row["market"]),
         }
-        if sport == "football":
-            low_odds_rows = [
-                row for row in sport_rows
-                if str(row["market"] or "") == "h2h"
-                and (odds := _as_float(row["odds"])) is not None
-                and 1.20 <= odds <= 1.60
-            ]
-            low_odds_metrics = asdict(_metrics(low_odds_rows))
-            low_odds_metrics["wins"] = sum(_target(row["result"]) == 1 for row in low_odds_rows)
-            low_odds_metrics["losses"] = sum(_target(row["result"]) == 0 for row in low_odds_rows)
-            low_odds_metrics["hit_rate_pct"] = (
-                round(low_odds_metrics["wins"] / len(low_odds_rows) * 100, 1)
-                if low_odds_rows else None
-            )
-            sports[sport]["low_odds_1_20_1_60"] = low_odds_metrics
+        low_odds_rows = [
+            row for row in sport_rows
+            if str(row["market"] or "") == "h2h"
+            and (odds := _as_float(row["odds"])) is not None
+            and 1.20 <= odds <= 1.60
+        ]
+        low_odds_metrics = asdict(_metrics(low_odds_rows))
+        low_odds_metrics["wins"] = sum(_target(row["result"]) == 1 for row in low_odds_rows)
+        low_odds_metrics["losses"] = sum(_target(row["result"]) == 0 for row in low_odds_rows)
+        low_odds_metrics["hit_rate_pct"] = (
+            round(low_odds_metrics["wins"] / len(low_odds_rows) * 100, 1)
+            if low_odds_rows else None
+        )
+        sports[sport]["low_odds_1_20_1_60"] = low_odds_metrics
 
     football_watch = [row for row in watch_rows if str(row["sport"]) == "football"]
     experiments = {
+        "multisport_low_odds_watch": {
+            "all_time": asdict(_metrics(watch_rows)),
+            "by_sport": _group(watch_rows, lambda row: row["sport"]),
+            "by_market": _group(watch_rows, lambda row: row["market"]),
+            "status": "SHADOW_NOT_OFFICIAL",
+        },
         "football_low_odds_watch": {
             "all_time": asdict(_metrics(football_watch)),
             "by_market": _group(football_watch, lambda row: row["market"]),

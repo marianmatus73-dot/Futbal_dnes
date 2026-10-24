@@ -19,7 +19,7 @@ from core.sport_quant import init_sport_db
 
 class TipCardTests(unittest.TestCase):
     def test_low_odds_watch_is_persisted_once_for_settlement(self) -> None:
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as temp:
             database = Path(temp) / "bets.db"
             settings = Settings(db_file=str(database))
             init_sport_db(settings)
@@ -98,6 +98,41 @@ class TipCardTests(unittest.TestCase):
         rows = build_low_odds_watch([], [], audit_candidates=audit)
         self.assertEqual(len(rows), 6)
         self.assertEqual(len({row["match"] for row in rows}), 6)
+
+    def test_low_odds_watch_includes_supported_non_football_sports(self) -> None:
+        tennis = build_pro_tip(
+            sport="tennis", league="tennis_test", match="A vs B", pick="A",
+            odds=1.45, model_probability=0.74, model_score=77,
+        )
+        hockey = build_pro_tip(
+            sport="hockey", league="icehockey_test", match="C vs D", pick="C",
+            odds=1.55, model_probability=0.69, model_score=73,
+        )
+        rows = build_low_odds_watch([tennis, hockey], [])
+        self.assertEqual({row["sport"] for row in rows}, {"tennis", "hockey"})
+
+    def test_low_odds_watch_persists_original_sport(self) -> None:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as temp:
+            database = Path(temp) / "bets.db"
+            settings = Settings(db_file=str(database))
+            init_sport_db(settings)
+            rows = [{
+                "sport": "basketball", "league": "basketball_nba",
+                "event": "A vs B", "selection": "A", "market": "h2h",
+                "odds": 1.45, "model_probability": .74,
+                "market_probability": .69, "bookmaker": "Book",
+                "start_time": "2026-10-25T18:00:00Z",
+                "external_event_id": "basketball-123", "confidence": 74,
+            }]
+            self.assertEqual(persist_low_odds_watch(settings, rows), 1)
+            with sqlite3.connect(database) as conn:
+                saved = conn.execute(
+                    "SELECT sport, engine_version FROM sport_bets"
+                ).fetchone()
+            self.assertEqual(
+                saved,
+                ("basketball", "basketball-low-odds-watch"),
+            )
 
     def test_low_odds_watch_keeps_only_one_side_per_match_from_audit(self) -> None:
         rows = build_low_odds_watch([], [], audit_candidates=[
