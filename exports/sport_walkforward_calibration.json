@@ -98,32 +98,32 @@
     "status": "READY"
   },
   "football": {
-    "samples": 963,
-    "train_samples": 674,
-    "test_samples": 289,
+    "samples": 965,
+    "train_samples": 675,
+    "test_samples": 290,
     "split": "chronological_70_30",
-    "raw_brier": 0.187258,
-    "calibrated_brier": 0.185466,
+    "raw_brier": 0.185587,
+    "calibrated_brier": 0.18386,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football/market=h2h": {
-    "samples": 963,
-    "train_samples": 674,
-    "test_samples": 289,
+    "samples": 965,
+    "train_samples": 675,
+    "test_samples": 290,
     "split": "chronological_70_30",
-    "raw_brier": 0.187258,
-    "calibrated_brier": 0.185466,
+    "raw_brier": 0.185587,
+    "calibrated_brier": 0.18386,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 941,
-    "train_samples": 658,
+    "samples": 943,
+    "train_samples": 660,
     "test_samples": 283,
     "split": "chronological_70_30",
-    "raw_brier": 0.18488,
-    "calibrated_brier": 0.18302,
+    "raw_brier": 0.184663,
+    "calibrated_brier": 0.18273,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
@@ -136,32 +136,32 @@
     "status": "BUILDING"
   },
   "hockey": {
-    "samples": 235,
-    "train_samples": 164,
+    "samples": 236,
+    "train_samples": 165,
     "test_samples": 71,
     "split": "chronological_70_30",
-    "raw_brier": 0.244861,
-    "calibrated_brier": 0.267025,
+    "raw_brier": 0.244654,
+    "calibrated_brier": 0.267581,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/market=h2h": {
-    "samples": 235,
-    "train_samples": 164,
+    "samples": 236,
+    "train_samples": 165,
     "test_samples": 71,
     "split": "chronological_70_30",
-    "raw_brier": 0.244861,
-    "calibrated_brier": 0.267025,
+    "raw_brier": 0.244654,
+    "calibrated_brier": 0.267581,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 171,
-    "train_samples": 119,
+    "samples": 172,
+    "train_samples": 120,
     "test_samples": 52,
     "split": "chronological_70_30",
-    "raw_brier": 0.248352,
-    "calibrated_brier": 0.275385,
+    "raw_brier": 0.24266,
+    "calibrated_brier": 0.263804,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
@@ -192,15 +192,15 @@
     "status": "BUILDING"
   },
   "nfl": {
-    "samples": 15,
+    "samples": 18,
     "status": "BUILDING"
   },
   "nfl/market=h2h": {
-    "samples": 15,
+    "samples": 18,
     "status": "BUILDING"
   },
   "nfl/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 4,
+    "samples": 5,
     "status": "BUILDING"
   },
   "nfl/tier=SAFE_1.20_1.60": {
@@ -208,7 +208,7 @@
     "status": "BUILDING"
   },
   "nfl/tier=VALUE_1.61_2.50": {
-    "samples": 5,
+    "samples": 7,
     "status": "BUILDING"
   },
   "tennis": {

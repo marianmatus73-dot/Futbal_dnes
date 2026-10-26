@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 1027,
+  "training_samples": 1029,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,56 +16,56 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 1027,
+      "samples": 1029,
       "wins": 277,
-      "losses": 750,
-      "winrate": 0.2697,
-      "average_value": 0.8413
+      "losses": 752,
+      "winrate": 0.2692,
+      "average_value": 0.8412
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 1027,
+      "samples": 1029,
       "wins": 277,
-      "losses": 750,
-      "winrate": 0.2697,
-      "average_value": 0.1171
+      "losses": 752,
+      "winrate": 0.2692,
+      "average_value": 0.1172
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 1027,
+      "samples": 1029,
       "wins": 277,
-      "losses": 750,
-      "winrate": 0.2697,
-      "average_value": -13.3644
+      "losses": 752,
+      "winrate": 0.2692,
+      "average_value": -13.4627
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 1027,
+      "samples": 1029,
       "wins": 277,
-      "losses": 750,
-      "winrate": 0.2697,
-      "average_value": -0.036
+      "losses": 752,
+      "winrate": 0.2692,
+      "average_value": -0.0356
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 1027,
+      "samples": 1029,
       "wins": 277,
-      "losses": 750,
-      "winrate": 0.2697,
+      "losses": 752,
+      "winrate": 0.2692,
       "average_value": 0.6952
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 1027,
+      "samples": 1029,
       "wins": 277,
-      "losses": 750,
-      "winrate": 0.2697,
-      "average_value": 0.5216
+      "losses": 752,
+      "winrate": 0.2692,
+      "average_value": 0.5217
     }
   ],
   "warning": null,
