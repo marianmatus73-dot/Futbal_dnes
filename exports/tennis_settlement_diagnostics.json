@@ -1,21 +1,22 @@
 {
-  "generated_at": "2026-10-23T13:40:26.571884+00:00",
+  "generated_at": "2026-10-27T14:46:29.469624+00:00",
   "sport": "tennis",
-  "open_rows": 2,
+  "open_rows": 1,
   "settlement_keys": [
-    "tennis_wta_ningbo_open"
+    "tennis_atp_swiss_indoors"
   ],
   "ignored_non_provider_leagues": [],
   "keys": [
     {
-      "sport_key": "tennis_wta_ningbo_open",
-      "open_rows": 2,
-      "events_received": 13,
-      "completed_events": 11,
-      "usable_score_events": 11,
-      "matched_rows": 1,
-      "settled_rows": 1
+      "sport_key": "tennis_atp_swiss_indoors",
+      "open_rows": 1,
+      "events_received": 17,
+      "completed_events": 7,
+      "stale_score_recoveries": 0,
+      "usable_score_events": 7,
+      "matched_rows": 0,
+      "settled_rows": 0
     }
   ],
-  "settled_rows": 1
+  "settled_rows": 0
 }
