@@ -1,21 +1,21 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-26T20:50:38.942154+00:00",
+  "generated_at": "2026-10-27T11:12:15.893744+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
       "sport": "baseball",
       "mode": "LIVE",
       "metrics": {
-        "settled": 1529,
-        "stake": 1638.15,
-        "profit": 94.2636,
-        "yield_pct": 5.754,
+        "settled": 1530,
+        "stake": 1639.19,
+        "profit": 95.3556,
+        "yield_pct": 5.817,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.241965,
-        "calibration_error": 0.052133,
-        "probability_samples": 1529,
+        "brier_score": 0.241934,
+        "calibration_error": 0.05181,
+        "probability_samples": 1530,
         "max_drawdown": 21.4735
       }
     },
@@ -693,7 +693,7 @@
       "segment": "baseball",
       "status": "READY",
       "auto_apply": false,
-      "samples": 1529,
+      "samples": 1530,
       "minimum_samples": 100,
       "recommendations": [
         "Ponechať prahy bez zmeny."
@@ -794,21 +794,21 @@
     {
       "sport": "baseball",
       "champion": {
-        "settled": 1529,
-        "stake": 1638.15,
-        "profit": 94.2636,
-        "yield_pct": 5.754,
+        "settled": 1530,
+        "stake": 1639.19,
+        "profit": 95.3556,
+        "yield_pct": 5.817,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.241965,
-        "calibration_error": 0.052133,
-        "probability_samples": 1529,
+        "brier_score": 0.241934,
+        "calibration_error": 0.05181,
+        "probability_samples": 1530,
         "max_drawdown": 21.4735
       },
       "challenger": {
         "name": "calibrated-conservative-v1",
         "mode": "SHADOW",
-        "evaluated_samples": 1529,
+        "evaluated_samples": 1530,
         "minimum_samples": 75
       },
       "decision": "EVALUATE",
@@ -937,7 +937,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 1150
+      "settlement_samples": 1156
     },
     {
       "sport": "tennis",
@@ -969,7 +969,7 @@
       "status": "PARTIAL",
       "odds_feed": true,
       "stable_event_ids": false,
-      "settlement_samples": 1529
+      "settlement_samples": 1530
     },
     {
       "sport": "handball",
