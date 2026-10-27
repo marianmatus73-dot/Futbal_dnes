@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-27T11:12:15.746267+00:00",
+  "generated_at": "2026-10-27T20:20:41.142276+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -28,15 +28,15 @@
           "max_drawdown": 10.4387
         },
         "90": {
-          "settled": 1228,
-          "stake": 1331.1,
-          "profit": 81.0945,
-          "yield_pct": 6.092,
+          "settled": 1209,
+          "stake": 1313.21,
+          "profit": 84.9132,
+          "yield_pct": 6.466,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.239513,
-          "calibration_error": 0.048669,
-          "probability_samples": 1228,
+          "brier_score": 0.238946,
+          "calibration_error": 0.046927,
+          "probability_samples": 1209,
           "max_drawdown": 20.2872
         },
         "365": {
@@ -430,16 +430,16 @@
       },
       "periods": {
         "30": {
-          "settled": 43,
-          "stake": 14.54,
-          "profit": -9.0723,
-          "yield_pct": -62.395,
-          "average_clv_pct": 3.447,
-          "clv_samples": 42,
-          "brier_score": 0.133162,
-          "calibration_error": 0.186583,
-          "probability_samples": 43,
-          "max_drawdown": 9.0723
+          "settled": 42,
+          "stake": 14.36,
+          "profit": -8.8923,
+          "yield_pct": -61.924,
+          "average_clv_pct": 4.038,
+          "clv_samples": 41,
+          "brier_score": 0.134627,
+          "calibration_error": 0.184653,
+          "probability_samples": 42,
+          "max_drawdown": 8.8923
         },
         "90": {
           "settled": 869,
@@ -1793,8 +1793,8 @@
       "settled_events": 10,
       "open_events": 9,
       "canonical_samples": 57,
-      "raw_rows": 345,
-      "duplicate_snapshots_excluded": 288,
+      "raw_rows": 372,
+      "duplicate_snapshots_excluded": 315,
       "probability_samples": 30,
       "market_brier_score": 0.14282,
       "calibration_error": 0.14762,
@@ -1814,7 +1814,7 @@
         "yield_pct": -0.5,
         "brier_score": 0.185307
       },
-      "generated_at": "2026-10-27T11:12:15.828142+00:00"
+      "generated_at": "2026-10-27T20:20:41.227411+00:00"
     }
   },
   "experiments": {

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-27T11:12:15.666866+00:00",
+  "generated_at": "2026-10-27T20:20:41.058436+00:00",
   "limit_per_sport": 5,
   "sports": {
     "football": [
@@ -115,6 +115,30 @@
         "observation_only": true
       }
     ],
+    "basketball": [
+      {
+        "sport": "basketball",
+        "league": "basketball_euroleague",
+        "match": "FC Bayern München vs FC Barcelona Bàsquet",
+        "pick": "FC Barcelona Bàsquet",
+        "market": "h2h",
+        "odds": 1.95,
+        "bookmaker": "MyBookie.ag",
+        "model_probability": 0.5647795312630683,
+        "edge": 0.10132008596298325,
+        "stake": 0.8,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-10-27T19:00:00Z",
+        "created_at": "2026-10-27 20:17:45",
+        "settled_at": null,
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      }
+    ],
     "tennis": [
       {
         "sport": "tennis",
@@ -134,6 +158,28 @@
         "final_score": null,
         "start_time": "2026-10-27T18:10:00Z",
         "created_at": "2026-10-27 11:09:23",
+        "settled_at": null,
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      },
+      {
+        "sport": "tennis",
+        "league": "tennis_atp_vienna_open",
+        "match": "Alexander Zverev vs Martin Landaluce",
+        "pick": "Martin Landaluce",
+        "market": "h2h",
+        "odds": 7.6,
+        "bookmaker": "Marathon Bet",
+        "model_probability": 0.1502619974040645,
+        "edge": 0.1419911802708902,
+        "stake": 0.16,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-10-27T16:58:04Z",
+        "created_at": "2026-10-27 20:17:43",
         "settled_at": null,
         "tracking_mode": "LIVE",
         "observation_only": false
