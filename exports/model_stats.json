@@ -1,13 +1,13 @@
 {
-  "total_bets": 2962,
-  "wins": 1241,
+  "total_bets": 2963,
+  "wins": 1242,
   "losses": 1721,
-  "winrate": 41.9,
-  "yield": 4.43,
-  "profit": 91.57,
-  "stake_sum": 2067.15,
-  "open_bets": 21,
-  "settled_bets": 2962,
+  "winrate": 41.92,
+  "yield": 4.47,
+  "profit": 92.34,
+  "stake_sum": 2067.55,
+  "open_bets": 22,
+  "settled_bets": 2963,
   "by_sport": {
     "baseball": {
       "total": 1531,
@@ -28,13 +28,13 @@
       "yield": 7.56
     },
     "tennis": {
-      "total": 109,
-      "wins": 25,
+      "total": 110,
+      "wins": 26,
       "losses": 84,
-      "winrate": 22.94,
-      "profit": 1.82,
-      "stake_sum": 28.82,
-      "yield": 6.3
+      "winrate": 23.64,
+      "profit": 2.58,
+      "stake_sum": 29.22,
+      "yield": 8.85
     },
     "football": {
       "total": 966,
@@ -245,6 +245,15 @@
       "stake_sum": 35.55,
       "yield": -4.53
     },
+    "Pinnacle": {
+      "total": 119,
+      "wins": 39,
+      "losses": 80,
+      "winrate": 32.77,
+      "profit": -2.48,
+      "stake_sum": 69.52,
+      "yield": -3.57
+    },
     "Unibet (FR)": {
       "total": 104,
       "wins": 50,
@@ -253,15 +262,6 @@
       "profit": -2.75,
       "stake_sum": 92.47,
       "yield": -2.98
-    },
-    "Pinnacle": {
-      "total": 118,
-      "wins": 38,
-      "losses": 80,
-      "winrate": 32.2,
-      "profit": -3.25,
-      "stake_sum": 69.12,
-      "yield": -4.7
     },
     "Tipico": {
       "total": 86,
@@ -508,6 +508,15 @@
       "stake_sum": 2.79,
       "yield": 25.51
     },
+    "tennis_atp_swiss_indoors": {
+      "total": 2,
+      "wins": 1,
+      "losses": 1,
+      "winrate": 50.0,
+      "profit": 0.66,
+      "stake_sum": 0.51,
+      "yield": 129.02
+    },
     "Championship": {
       "total": 47,
       "wins": 13,
@@ -552,15 +561,6 @@
       "profit": 0.01,
       "stake_sum": 0.98,
       "yield": 0.61
-    },
-    "tennis_atp_swiss_indoors": {
-      "total": 1,
-      "wins": 0,
-      "losses": 1,
-      "winrate": 0.0,
-      "profit": -0.11,
-      "stake_sum": 0.11,
-      "yield": -100.0
     },
     "tennis_atp_vienna_open": {
       "total": 1,
@@ -806,5 +806,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-10-28T14:23:28.319129+00:00"
+  "last_update": "2026-10-28T20:43:02.147724+00:00"
 }
