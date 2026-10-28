@@ -371,7 +371,14 @@ class HandballModule(SportModule):
             }
             lookahead = max(1, min(int(os.getenv("HANDBALL_LOOKAHEAD_DAYS", "4")), 7))
             max_games = max(1, min(int(os.getenv("HANDBALL_API_MAX_GAMES", "20")), 30))
-            client = ApiSportsHandballClient(api_sports_key, settings_timeout(settings))
+            client = ApiSportsHandballClient(
+                api_sports_key,
+                settings_timeout(settings),
+                min_interval_seconds=max(
+                    0.0,
+                    float(os.getenv("HANDBALL_API_MIN_INTERVAL_SECONDS", "6.2")),
+                ),
+            )
             try:
                 games: list[dict[str, Any]] = []
                 for day in upcoming_days(lookahead):

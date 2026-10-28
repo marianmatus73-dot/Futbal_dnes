@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import asyncio
 import json
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta, timezone
 from typing import Any
 
@@ -17,10 +18,13 @@ class ApiSportsHandballError(RuntimeError):
     pass
 
 
-@dataclass(frozen=True)
+@dataclass
 class ApiSportsHandballClient:
     api_key: str
     timeout: int = 30
+    min_interval_seconds: float = 6.2
+    _last_request_started: float = field(default=0.0, init=False, repr=False)
+    _request_lock: asyncio.Lock = field(default_factory=asyncio.Lock, init=False, repr=False)
 
     def _get_sync(self, endpoint: str, params: dict[str, Any]) -> list[dict[str, Any]]:
         if not self.api_key:
@@ -49,7 +53,15 @@ class ApiSportsHandballClient:
         return response if isinstance(response, list) else []
 
     async def get(self, endpoint: str, **params: Any) -> list[dict[str, Any]]:
-        return await asyncio.to_thread(self._get_sync, endpoint, params)
+        # The entry plan allows ten calls per minute. Serialize and space calls
+        # so a wider league scan does not exhaust the quota before odds load.
+        async with self._request_lock:
+            elapsed = time.monotonic() - self._last_request_started
+            wait_for = max(0.0, self.min_interval_seconds - elapsed)
+            if wait_for:
+                await asyncio.sleep(wait_for)
+            self._last_request_started = time.monotonic()
+            return await asyncio.to_thread(self._get_sync, endpoint, params)
 
     async def games_for_date(self, day: date) -> list[dict[str, Any]]:
         return await self.get("games", date=day.isoformat(), timezone="Europe/Bratislava")

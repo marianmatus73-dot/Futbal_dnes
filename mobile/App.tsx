@@ -61,6 +61,13 @@ const startTimeWithCountdown = (iso?: string) => {
   return `${formatted} · o ${hours} h${rest ? ` ${rest} min` : ""}`;
 };
 
+const startsWithinNext24Hours = (tip: Tip) => {
+  if (!tip.start_time) return false;
+  const start = new Date(tip.start_time).getTime();
+  const now = Date.now();
+  return Number.isFinite(start) && start >= now && start <= now + 24 * 60 * 60 * 1000;
+};
+
 const stageLabel = (tip: Tip, rejected = false) => {
   if (rejected) return "ZAMIETNUTÝ";
   if (tip.release_stage === "FINAL") return "FINAL";
@@ -217,7 +224,7 @@ function LowOddsWatch({ tips, sport }: { tips: Tip[]; sport?: Sport }) {
   return (
     <View style={styles.candidatesSection}>
       <Text style={styles.lowOddsTitle}>{sport ? sportMeta[sport].label : "Multisport"} · sledovanie kurzov 1,20–1,60</Text>
-      <Text style={styles.candidatesSubtitle}>Všetky vhodné unikátne možnosti, ktoré analýza nájde. Nie sú súčasťou ostrého value výberu; odporúčaný skúšobný vklad je najviac 0,10 jednotky.</Text>
+      <Text style={styles.candidatesSubtitle}>Zobrazené sú iba zápasy, ktoré sa začnú v nasledujúcich 24 hodinách. Nie sú súčasťou ostrého value výberu; odporúčaný skúšobný vklad je najviac 0,10 jednotky.</Text>
       {tips.length ? tips.map((tip, index) => (
         <View key={`low-odds-${tip.match}-${index}`}>
           <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{marketLabel(tip.market)} · {tip.decision === "ACCEPT" ? "PREŠIEL FILTROM" : "DENNÝ EXPERIMENT"}</Text></View>
@@ -278,7 +285,7 @@ function Today({ data }: { data: AppData }) {
   const tips = [...(data.tipCard.selected ?? [])].sort(sorter);
   const candidates = [...(data.tipCard.rejected_sample ?? [])].sort(sorter);
   const allTips = [...tips, ...candidates];
-  const lowOdds = data.tipCard.low_odds_watch ?? [];
+  const lowOdds = (data.tipCard.low_odds_watch ?? []).filter(startsWithinNext24Hours);
   return (
     <>
       <View style={styles.hero}>
@@ -311,7 +318,9 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
   const orderedSports = [...SPORTS].sort((a, b) => Number(favorites.includes(b)) - Number(favorites.includes(a)));
   const tips = data.tipCard.selected.filter((tip) => tip.sport === selected);
   const candidates = (data.tipCard.rejected_sample ?? []).filter((tip) => tip.sport === selected);
-  const lowOdds = (data.tipCard.low_odds_watch ?? []).filter((tip) => tip.sport === selected);
+  const lowOdds = (data.tipCard.low_odds_watch ?? [])
+    .filter((tip) => tip.sport === selected)
+    .filter(startsWithinNext24Hours);
   const row = data.modelRows.find((item) => item.sport === selected);
   const history = (data.historyBySport[selected] ?? []).filter((tip) => historyFilter === "all" || (historyFilter === "open" && tip.result === "OPEN") || (historyFilter === "won" && tip.result === "WON") || (historyFilter === "lost" && tip.result === "LOST"));
   const recentResults = data.resultsBySport[selected] ?? [];
