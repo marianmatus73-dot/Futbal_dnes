@@ -1,30 +1,19 @@
 {
-  "generated_at": "2026-10-27T20:50:10.342737+00:00",
+  "generated_at": "2026-10-28T06:00:19.886250+00:00",
   "sport": "tennis",
-  "open_rows": 2,
+  "open_rows": 1,
   "settlement_keys": [
-    "tennis_atp_swiss_indoors",
-    "tennis_atp_vienna_open"
+    "tennis_atp_swiss_indoors"
   ],
   "ignored_non_provider_leagues": [],
   "keys": [
     {
       "sport_key": "tennis_atp_swiss_indoors",
       "open_rows": 1,
-      "events_received": 20,
-      "completed_events": 11,
+      "events_received": 22,
+      "completed_events": 12,
       "stale_score_recoveries": 0,
-      "usable_score_events": 11,
-      "matched_rows": 0,
-      "settled_rows": 0
-    },
-    {
-      "sport_key": "tennis_atp_vienna_open",
-      "open_rows": 1,
-      "events_received": 19,
-      "completed_events": 11,
-      "stale_score_recoveries": 0,
-      "usable_score_events": 11,
+      "usable_score_events": 12,
       "matched_rows": 1,
       "settled_rows": 1
     }
