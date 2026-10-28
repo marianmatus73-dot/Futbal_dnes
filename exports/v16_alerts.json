@@ -1,11 +1,15 @@
 {
   "alerts": [
     {
+      "severity": "WARNING",
+      "message": "Average module latency exceeded 60 seconds."
+    },
+    {
       "severity": "INFO",
       "message": "Latest settled feedback is LOSS."
     }
   ],
-  "count": 1,
-  "highest_severity": "INFO",
+  "count": 2,
+  "highest_severity": "WARNING",
   "status": "READY"
 }

@@ -7,33 +7,32 @@
 #1 BASEBALL | baseball_mlb
 Match: Tampa Bay Rays vs Milwaukee Brewers
 Pick: Milwaukee Brewers
-Odds: 1.70
-Bookmaker: Betfair
-Model probability: 62.5%
-Market probability: 58.8%
-Raw edge: 11.8%
-Consensus edge: 3.6%
-Confidence: 95/100
-Risk: medium
-Stake: 0.25u
-Stake amount: 22.05
-Reason: Raw edge 11.8% | Score 95.0 | Consensus: elo, xg, form, market
-
-#2 FOOTBALL | Serie B
-Match: Carrarese vs Arezzo
-Pick: Arezzo
-Odds: 4.00
+Odds: 1.69
 Bookmaker: Matchbook
-Model probability: 28.1%
-Market probability: 25.0%
-Raw edge: 10.0%
-Consensus edge: 3.1%
+Model probability: 63.6%
+Market probability: 59.2%
+Raw edge: 13.0%
+Consensus edge: 4.4%
+Confidence: 96/100
+Risk: medium
+Stake: 0.27u
+Stake amount: 27.00
+Reason: Raw edge 13.0% | Score 96.0 | Consensus: elo, xg, form, market
+
+#2 TENNIS | tennis_atp_swiss_indoors
+Match: Nuno Borges vs Casper Ruud
+Pick: Nuno Borges
+Odds: 2.92
+Bookmaker: Pinnacle
+Model probability: 37.8%
+Market probability: 34.2%
+Raw edge: 8.3%
+Consensus edge: 3.5%
 Confidence: 75/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 10.17
-Reason: Raw edge 10.0% | Score 75.0 | Consensus: elo, xg, form, market
-Release: EARLY
+Stake amount: 13.41
+Reason: Raw edge 8.3% | Score 75.0 | Consensus: elo, xg, form, market
 
 
 === CANDIDATES REJECTED BY PRO FILTER ===
@@ -50,35 +49,35 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 8. Events scanned: 452. Snapshots saved: 1866. Candidate rows: 22602 -> 1353. Blocked: 1287. Stored candidates: 67. Risk pool: 67.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 3. Events scanned: 452. Snapshots saved: 1991. Candidate rows: 22743 -> 1353. Blocked: 1284. Stored candidates: 70. Risk pool: 70.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-10-28T19:00:00Z | Serie B | Carrarese vs Arezzo | Arezzo @ 4.00 | P 28.0% | Edge 10.0% | Stake 0.31 | Matchbook | EARLY
-
-[TENNIS] scan
-Tennis scan hotový. Events: 24, Stored: 0
 No bets found.
 
+[TENNIS] scan
+Tennis scan hotový. Events: 23, Stored: 1
+01. 2026-10-28T13:07:53Z | tennis_atp_swiss_indoors | Nuno Borges vs Casper Ruud | Nuno Borges @ 2.92 | P 37.8% | Edge 8.3% | Stake 0.40 | Pinnacle
+
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 37. Snapshots saved: 1165. Blocked: 1165. Stored candidates: 0.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 39. Snapshots saved: 1226. Blocked: 1226. Stored candidates: 0.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 37. Snapshots saved: 1193. Blocked: 1190. Stored candidates: 2.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 37. Snapshots saved: 1193. Blocked: 1189. Stored candidates: 1.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [BASEBALL] scan
-Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 2. Snapshots saved: 54. Blocked: 25. Stored candidates: 2.
+Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 2. Snapshots saved: 58. Blocked: 31. Stored candidates: 2.
 BASEBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-10-29T00:00:00Z | baseball_mlb | Tampa Bay Rays vs Milwaukee Brewers | Milwaukee Brewers @ 1.70 | P 66.9% | Edge 11.8% | Stake 1.54 | Betfair
+01. 2026-10-29T00:00:00Z | baseball_mlb | Tampa Bay Rays vs Milwaukee Brewers | Milwaukee Brewers @ 1.69 | P 68.1% | Edge 13.0% | Stake 1.70 | Matchbook
 
 [HANDBALL] shadow
-Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 9. Snapshots saved: 229. Learning observations saved: 27. New benchmark candidates: 0. Settled observations: 0 (0 won, 0 lost).
+Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 9. Snapshots saved: 232. Learning observations saved: 27. New benchmark candidates: 0. Settled observations: 0 (0 won, 0 lost).
 No bets found.
 
 [NFL] scan
@@ -92,17 +91,17 @@ Total bets: 2
 
 
 === ENGINE SUMMARY ===
-- football: OK (138.18s)
-- tennis: OK (9.32s)
-- basketball: OK (54.10s)
-- hockey: OK (54.73s)
-- baseball: OK (9.52s)
-- handball: OK (60.39s)
-- nfl: OK (37.75s)
+- football: OK (113.16s)
+- tennis: OK (6.29s)
+- basketball: OK (37.79s)
+- hockey: OK (44.27s)
+- baseball: OK (12.50s)
+- handball: OK (200.28s)
+- nfl: OK (23.18s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
-- football: totals xG evidence insufficient = 103
+- football: totals xG evidence insufficient = 105
 - football: totals edge gate; final=0.5196; reliability=0.000 = 21
 - football: totals edge gate; final=0.5128; reliability=0.000 = 20
 - football: totals edge gate; final=0.4804; reliability=0.000 = 19
@@ -111,7 +110,7 @@ Total bets: 2
 - football: totals edge gate; final=0.5224; reliability=0.000 = 18
 - football: totals edge gate; final=0.5242; reliability=0.000 = 18
 - football: totals edge gate; final=0.5254; reliability=0.000 = 18
-- football: totals edge gate; final=0.4761; reliability=0.000 = 17
+- football: totals edge gate; final=0.4776; reliability=0.000 = 17
 
 === BANKROLL SUMMARY ===
 Bankroll: 1000.00
@@ -132,7 +131,7 @@ Settled bets: 2962
 
 Result distribution:
 - LOST: 1721
-- UNRESOLVED: 1325
+- UNRESOLVED: 1326
 - WON: 1241
 - OPEN: 21
 - VOID: 12
@@ -178,7 +177,7 @@ Top leagues:
 - mma: settled=20 | yield=-20.22% | profit=-1.76 | CLV=n/a (0) | Brier=0.1758 | max DD=3.16
 - nfl: settled=18 | yield=2.10% | profit=0.47 | CLV=n/a (0) | Brier=0.2354 | max DD=3.01
 - tennis: settled=109 | yield=6.30% | profit=1.82 | CLV=n/a (0) | Brier=0.1674 | max DD=3.20
-- handball SHADOW: settled events=10/150 | open events=9 | canonical samples=57 | duplicates excluded=342 | market Brier=0.1428 | maturity=EARLY | publishing=LOCKED
+- handball SHADOW: settled events=10/150 | open events=9 | canonical samples=57 | duplicates excluded=369 | market Brier=0.1428 | maturity=EARLY | publishing=LOCKED
   benchmark market_favourite_v1: settled=10 | open=9 | yield=-0.50% | Brier=0.185307
 
 === TIME-SPLIT CALIBRATION ===
@@ -189,19 +188,19 @@ Calibration is evaluated chronologically and is never accepted when it worsens B
 - baseball: BLOCKED | settled=1531 | open=7 | overdue=4 | unresolved excluded=740 | unknown=0 | missing score=914 | missing profit=0 | closing=0.0%
 - basketball: WARNING | settled=79 | open=4 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
 - football: WARNING | settled=978 | open=4 | overdue=0 | unresolved excluded=436 | unknown=0 | missing score=0 | missing profit=0 | closing=58.0%
-- hockey: BLOCKED | settled=239 | open=5 | overdue=1 | unresolved excluded=136 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- hockey: WARNING | settled=239 | open=4 | overdue=0 | unresolved excluded=137 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 - mma: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=8 | unknown=0 | missing score=19 | missing profit=0 | closing=0.0%
 - nfl: WARNING | settled=18 | open=0 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
-- tennis: WARNING | settled=109 | open=1 | overdue=0 | unresolved excluded=5 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- tennis: WARNING | settled=109 | open=2 | overdue=0 | unresolved excluded=5 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 
 === OPERATIONAL HEALTH ===
-Funnel: candidates=71 | accepted=2 | rejected=69
-- football: READY | settled=1171/100 | snapshots24h=1866 | mode=LIVE
+Funnel: candidates=74 | accepted=2 | rejected=72
+- football: READY | settled=1171/100 | snapshots24h=1991 | mode=LIVE
 - tennis: ATTENTION | settled=109/75 | snapshots24h=0 | mode=LIVE
-- basketball: READY | settled=79/75 | snapshots24h=1165 | mode=LIVE
+- basketball: READY | settled=79/75 | snapshots24h=1226 | mode=LIVE
 - hockey: ATTENTION | settled=239/75 | snapshots24h=1193 | mode=LIVE
-- baseball: ATTENTION | settled=1531/100 | snapshots24h=54 | mode=LIVE
-- handball: COLLECTING | settled=10/50 | snapshots24h=229 | mode=SHADOW
+- baseball: ATTENTION | settled=1531/100 | snapshots24h=58 | mode=LIVE
+- handball: COLLECTING | settled=10/50 | snapshots24h=232 | mode=SHADOW
 - nfl: COLLECTING | settled=18/50 | snapshots24h=764 | mode=LIVE
 
 === MODEL GOVERNANCE ===
@@ -230,8 +229,8 @@ Sports completed: 6
 Sports ready: 6
 Status: READY
 - baseball: samples=1531 | winrate=0.5395 | yield=0.0465 | profit=93.6756 | maturity=READY | health=BUILDING | weight=0.2689
-- basketball: samples=79 | winrate=0.4177 | yield=0.0731 | profit=3.3533 | maturity=DEVELOPING | health=BUILDING | weight=0.1627
-- tennis: samples=109 | winrate=0.2294 | yield=0.0558 | profit=1.8167 | maturity=DEVELOPING | health=BUILDING | weight=0.1989
+- basketball: samples=79 | winrate=0.4177 | yield=0.0731 | profit=3.3533 | maturity=DEVELOPING | health=BUILDING | weight=0.1628
+- tennis: samples=109 | winrate=0.2294 | yield=0.0551 | profit=1.8167 | maturity=DEVELOPING | health=BUILDING | weight=0.1988
 - hockey: samples=239 | winrate=0.3347 | yield=-0.0511 | profit=-7.0605 | maturity=READY | health=GOOD | weight=0.2745
 - handball: samples=0 | winrate=None | yield=None | profit=0.0 | maturity=EMPTY | health=EMPTY | weight=0.0182
 - nfl: samples=18 | winrate=0.5 | yield=0.021 | profit=0.4731 | maturity=EARLY | health=BUILDING | weight=0.0767
@@ -254,7 +253,7 @@ Feedback source: sqlite:sport_bets+runtime:module_outputs
 Previous result: LOSS
 Previous profit: -0.1100
 Runtime health: 100.0%
-Average module latency: 51999 ms
+Average module latency: 62496 ms
 
 
 === V16 PRODUCTION DASHBOARD ===
@@ -266,6 +265,7 @@ Dashboard HTML: exports/v16_dashboard.html
 
 
 === V16 ALERTS ===
-Active alerts: 1
-Highest severity: INFO
+Active alerts: 2
+Highest severity: WARNING
+- [WARNING] Average module latency exceeded 60 seconds.
 - [INFO] Latest settled feedback is LOSS.

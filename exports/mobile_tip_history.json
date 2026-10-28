@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T11:47:35.897832+00:00",
+  "generated_at": "2026-10-28T14:23:28.266980+00:00",
   "limit_per_sport": 5,
   "sports": {
     "football": [
@@ -113,6 +113,30 @@
         "settled_at": null,
         "tracking_mode": "LOW_ODDS_WATCH",
         "observation_only": true
+      }
+    ],
+    "tennis": [
+      {
+        "sport": "tennis",
+        "league": "tennis_atp_swiss_indoors",
+        "match": "Nuno Borges vs Casper Ruud",
+        "pick": "Nuno Borges",
+        "market": "h2h",
+        "odds": 2.92,
+        "bookmaker": "Pinnacle",
+        "model_probability": 0.3777315400605094,
+        "edge": 0.10297609697668753,
+        "stake": 0.4,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-10-28T13:07:53Z",
+        "created_at": "2026-10-28 14:19:18",
+        "settled_at": null,
+        "tracking_mode": "LIVE",
+        "observation_only": false
       }
     ],
     "baseball": [
