@@ -114,7 +114,8 @@ jobs:
           HANDBALL_API_MAX_GAMES: "20"
           HANDBALL_API_SPORTS_LEAGUES: "Champions League,EHF European League,Bundesliga,Starligue,Liga ASOBAL,Herre Handbold Ligaen,REMA 1000-ligaen,Handbollsligan,Extraliga"
           SPORTMONKS_SYNC_ENABLED: "1"
-          SPORTMONKS_INCLUDE_XG: "0"
+          SPORTMONKS_INCLUDE_XG: "1"
+          HANDBALL_API_MIN_INTERVAL_SECONDS: "6.2"
           SPORT_CONTEXT_MAX_AGE_HOURS: "24"
 
           MIN_EDGE: "0.06"
