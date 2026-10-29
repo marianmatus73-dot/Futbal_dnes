@@ -1,10 +1,10 @@
 {
   "model_type": "football_meta_v14_hist_gradient_boosting",
-  "trained_at": "2026-09-08T10:12:11+00:00",
-  "samples": 782,
+  "trained_at": "2026-10-29T11:55:39+00:00",
+  "samples": 1032,
   "feature_count": 55,
-  "positive_rate": 0.28005115089514065,
-  "validation_score": 0.4257201446404715,
+  "positive_rate": 0.2693798449612403,
+  "validation_score": 0.44090963909290215,
   "version": "v14",
   "feature_order": [
     "odds",
@@ -63,5 +63,5 @@
     "confidence_input",
     "reliability_input"
   ],
-  "milestone": 1000
+  "milestone": 1250
 }

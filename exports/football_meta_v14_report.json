@@ -1,41 +1,41 @@
 {
-  "trained_at": "2026-09-08T10:12:11+00:00",
-  "samples": 782,
-  "wins": 219,
-  "losses": 563,
-  "positive_rate": 0.28005115089514065,
-  "milestone": 1000,
+  "trained_at": "2026-10-29T11:55:39+00:00",
+  "samples": 1032,
+  "wins": 278,
+  "losses": 754,
+  "positive_rate": 0.2693798449612403,
+  "milestone": 1250,
   "selected_model": "hist_gradient_boosting",
-  "selected_validation_score": 0.4257201446404715,
+  "selected_validation_score": 0.44090963909290215,
   "selected_metrics": {
-    "accuracy": 0.7388535031847133,
-    "brier_score": 0.20067411224375023,
-    "log_loss": 0.6269992988213977
+    "accuracy": 0.7391304347826086,
+    "brier_score": 0.1936353727272511,
+    "log_loss": 0.6094262109149869
   },
   "candidate_models": [
     {
       "model_type": "logistic_regression",
-      "accuracy": 0.643312101910828,
-      "brier_score": 0.2269379763416668,
-      "log_loss": 0.6440424640702594,
-      "validation_score": 0.3370161170519652
+      "accuracy": 0.5410628019323671,
+      "brier_score": 0.2476028247383961,
+      "log_loss": 0.6850654914585333,
+      "validation_score": 0.24906261458805193
     },
     {
       "model_type": "random_forest",
-      "accuracy": 0.7006369426751592,
-      "brier_score": 0.21072759985964917,
-      "log_loss": 0.6117302360089157,
-      "validation_score": 0.3957414032662668
+      "accuracy": 0.6280193236714976,
+      "brier_score": 0.22057279940134103,
+      "log_loss": 0.6304851835381748,
+      "validation_score": 0.3432525039217728
     },
     {
       "model_type": "hist_gradient_boosting",
-      "accuracy": 0.7388535031847133,
-      "brier_score": 0.20067411224375023,
-      "log_loss": 0.6269992988213977,
-      "validation_score": 0.4257201446404715
+      "accuracy": 0.7391304347826086,
+      "brier_score": 0.1936353727272511,
+      "log_loss": 0.6094262109149869,
+      "validation_score": 0.44090963909290215
     }
   ],
-  "next_milestone": 1000,
+  "next_milestone": 1250,
   "model_path": "models/football_meta_model.pkl",
   "metadata_path": "models/football_meta_model.json",
   "importance_path": "exports/football_meta_v14_feature_importance.json"
