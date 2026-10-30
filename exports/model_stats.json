@@ -1,13 +1,13 @@
 {
-  "total_bets": 2973,
-  "wins": 1248,
+  "total_bets": 2974,
+  "wins": 1249,
   "losses": 1725,
-  "winrate": 41.98,
-  "yield": 4.6,
-  "profit": 95.45,
-  "stake_sum": 2073.73,
-  "open_bets": 15,
-  "settled_bets": 2973,
+  "winrate": 42.0,
+  "yield": 4.64,
+  "profit": 96.3,
+  "stake_sum": 2074.22,
+  "open_bets": 17,
+  "settled_bets": 2974,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -28,13 +28,13 @@
       "yield": 11.55
     },
     "basketball": {
-      "total": 83,
-      "wins": 34,
+      "total": 84,
+      "wins": 35,
       "losses": 49,
-      "winrate": 40.96,
-      "profit": 2.28,
-      "stake_sum": 46.99,
-      "yield": 4.86
+      "winrate": 41.67,
+      "profit": 3.14,
+      "stake_sum": 47.48,
+      "yield": 6.62
     },
     "football": {
       "total": 968,
@@ -155,6 +155,15 @@
       "stake_sum": 146.57,
       "yield": 2.04
     },
+    "William Hill": {
+      "total": 19,
+      "wins": 9,
+      "losses": 10,
+      "winrate": 47.37,
+      "profit": 2.14,
+      "stake_sum": 14.3,
+      "yield": 14.97
+    },
     "Winamax (FR)": {
       "total": 15,
       "wins": 7,
@@ -163,15 +172,6 @@
       "profit": 2.0,
       "stake_sum": 9.98,
       "yield": 19.99
-    },
-    "William Hill": {
-      "total": 18,
-      "wins": 8,
-      "losses": 10,
-      "winrate": 44.44,
-      "profit": 1.28,
-      "stake_sum": 13.81,
-      "yield": 9.29
     },
     "PMU (FR)": {
       "total": 6,
@@ -391,6 +391,15 @@
       "stake_sum": 1.68,
       "yield": 117.67
     },
+    "basketball_euroleague": {
+      "total": 39,
+      "wins": 19,
+      "losses": 20,
+      "winrate": 48.72,
+      "profit": 1.88,
+      "stake_sum": 26.99,
+      "yield": 6.96
+    },
     "basketball_wnba": {
       "total": 33,
       "wins": 13,
@@ -462,15 +471,6 @@
       "profit": 1.09,
       "stake_sum": 5.71,
       "yield": 19.16
-    },
-    "basketball_euroleague": {
-      "total": 38,
-      "wins": 18,
-      "losses": 20,
-      "winrate": 47.37,
-      "profit": 1.02,
-      "stake_sum": 26.5,
-      "yield": 3.86
     },
     "icehockey_nhl": {
       "total": 205,
@@ -806,5 +806,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-10-30T11:49:43.093740+00:00"
+  "last_update": "2026-10-30T20:19:16.179687+00:00"
 }
