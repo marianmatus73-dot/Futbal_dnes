@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-29T21:17:27.050104+00:00",
+  "generated_at": "2026-10-30T06:08:30.484816+00:00",
   "overdue_hours": 8,
   "sports": [
     {
@@ -19,9 +19,9 @@
     {
       "sport": "basketball",
       "status": "WARNING",
-      "settled": 81,
-      "learning_eligible": 81,
-      "open": 4,
+      "settled": 83,
+      "learning_eligible": 83,
+      "open": 2,
       "overdue_open": 0,
       "unresolved_excluded": 0,
       "unknown_result": 0,
@@ -46,11 +46,11 @@
     },
     {
       "sport": "hockey",
-      "status": "WARNING",
-      "settled": 240,
-      "learning_eligible": 240,
-      "open": 5,
-      "overdue_open": 0,
+      "status": "BLOCKED",
+      "settled": 241,
+      "learning_eligible": 241,
+      "open": 4,
+      "overdue_open": 2,
       "unresolved_excluded": 137,
       "unknown_result": 0,
       "settled_missing_profit": 0,
