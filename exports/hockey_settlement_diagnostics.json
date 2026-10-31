@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T14:38:38.583850+00:00",
+  "generated_at": "2026-10-31T20:09:44.476675+00:00",
   "sport": "hockey",
   "open_rows": 6,
   "settlement_keys": [
@@ -15,10 +15,10 @@
     {
       "sport_key": "icehockey_nhl",
       "open_rows": 2,
-      "events_received": 30,
-      "completed_events": 18,
+      "events_received": 33,
+      "completed_events": 20,
       "stale_score_recoveries": 0,
-      "usable_score_events": 18,
+      "usable_score_events": 20,
       "matched_rows": 0,
       "settled_rows": 0
     },
@@ -36,16 +36,6 @@
       "sport_key": "icehockey_sweden_hockey_league",
       "open_rows": 0,
       "events_received": 14,
-      "completed_events": 7,
-      "stale_score_recoveries": 0,
-      "usable_score_events": 7,
-      "matched_rows": 0,
-      "settled_rows": 0
-    },
-    {
-      "sport_key": "icehockey_sweden_allsvenskan",
-      "open_rows": 0,
-      "events_received": 20,
       "completed_events": 14,
       "stale_score_recoveries": 0,
       "usable_score_events": 14,
@@ -53,9 +43,19 @@
       "settled_rows": 0
     },
     {
+      "sport_key": "icehockey_sweden_allsvenskan",
+      "open_rows": 0,
+      "events_received": 13,
+      "completed_events": 9,
+      "stale_score_recoveries": 0,
+      "usable_score_events": 9,
+      "matched_rows": 0,
+      "settled_rows": 0
+    },
+    {
       "sport_key": "icehockey_liiga",
       "open_rows": 1,
-      "events_received": 7,
+      "events_received": 1,
       "completed_events": 0,
       "stale_score_recoveries": 0,
       "usable_score_events": 0,
@@ -65,7 +65,7 @@
     {
       "sport_key": "icehockey_mestis",
       "open_rows": 3,
-      "events_received": 4,
+      "events_received": 0,
       "completed_events": 0,
       "stale_score_recoveries": 0,
       "usable_score_events": 0,

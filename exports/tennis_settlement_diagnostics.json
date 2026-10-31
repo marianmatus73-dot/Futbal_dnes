@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-10-29T21:17:24.239903+00:00",
+  "generated_at": "2026-10-31T20:09:45.236954+00:00",
   "sport": "tennis",
-  "open_rows": 1,
+  "open_rows": 2,
   "settlement_keys": [
-    "tennis_atp_swiss_indoors"
+    "tennis_atp_paris_masters"
   ],
   "ignored_non_provider_leagues": [],
   "keys": [
     {
-      "sport_key": "tennis_atp_swiss_indoors",
-      "open_rows": 1,
-      "events_received": 21,
-      "completed_events": 18,
+      "sport_key": "tennis_atp_paris_masters",
+      "open_rows": 2,
+      "events_received": 18,
+      "completed_events": 0,
       "stale_score_recoveries": 0,
-      "usable_score_events": 18,
-      "matched_rows": 1,
-      "settled_rows": 1
+      "usable_score_events": 0,
+      "matched_rows": 0,
+      "settled_rows": 0
     }
   ],
-  "settled_rows": 1
+  "settled_rows": 0
 }
