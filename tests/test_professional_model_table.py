@@ -94,6 +94,7 @@ class ProfessionalModelTableTests(unittest.TestCase):
             self.assertIn("1.50-1.99", football["by_odds"])
             self.assertIn("VALUE_1.61_2.50", football["by_strategy_tier"])
             self.assertIn("totals", football["by_market"])
+            self.assertIn("NEZAZNAMENANÝ", football["by_bookmaker"])
             self.assertTrue((exports / "professional_model_table.json").exists())
             self.assertTrue((exports / "professional_model_table.csv").exists())
             self.assertTrue((exports / "professional_model_table.html").exists())

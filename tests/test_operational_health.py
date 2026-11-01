@@ -13,6 +13,28 @@ from core.operational_health import build_operational_health
 
 
 class OperationalHealthTests(unittest.TestCase):
+    def test_flags_open_result_more_than_twelve_hours_after_start(self) -> None:
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            db = root / "bets.db"
+            with closing(sqlite3.connect(db)) as conn:
+                conn.execute(
+                    "CREATE TABLE sport_bets "
+                    "(sport TEXT, result TEXT, external_event_id TEXT, start_time TEXT)"
+                )
+                conn.execute(
+                    "INSERT INTO sport_bets VALUES ('hockey','OPEN','game-1',?)",
+                    ("2020-01-01T12:00:00+00:00",),
+                )
+                conn.commit()
+            payload = build_operational_health(
+                Settings(db_file=str(db)), export_dir=root / "exports"
+            )
+            hockey = next(row for row in payload["sports"] if row["sport"] == "hockey")
+            self.assertEqual(hockey["overdue_open"], 1)
+            self.assertTrue(hockey["settlement_recovery_required"])
+            self.assertEqual(hockey["status"], "ATTENTION")
+
     def test_exports_health_funnel_and_xg_free_modes(self) -> None:
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
@@ -51,6 +73,8 @@ class OperationalHealthTests(unittest.TestCase):
             football = next(row for row in payload["sports"] if row["sport"] == "football")
             tennis = next(row for row in payload["sports"] if row["sport"] == "tennis")
             self.assertEqual(football["snapshots_24h"], 1)
+            self.assertEqual(football["freshness"], "FRESH")
+            self.assertFalse(football["settlement_recovery_required"])
             self.assertEqual(tennis["status"], "ATTENTION")
             self.assertTrue((root / "exports" / "operational_health.json").exists())
 

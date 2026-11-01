@@ -46,7 +46,7 @@ def _sport_health(
 ) -> dict[str, Any]:
     bet_columns = _columns(conn, "sport_bets")
     snapshot_columns = _columns(conn, "sport_odds_snapshots")
-    settled = open_bets = missing_identity = snapshots_24h = 0
+    settled = open_bets = missing_identity = snapshots_24h = overdue_open = 0
     latest_snapshot = None
 
     if {"sport", "result"}.issubset(bet_columns):
@@ -69,6 +69,16 @@ def _sport_health(
                 "AND UPPER(TRIM(COALESCE(result,'OPEN'))) NOT IN (?,?,?,?,?,?,?,?) "
                 "AND TRIM(COALESCE(external_event_id,''))=''",
                 (sport, *SETTLED_RESULTS),
+            ) or 0)
+        if "start_time" in bet_columns:
+            overdue_cutoff = (now - timedelta(hours=12)).isoformat()
+            overdue_open = int(_scalar(
+                conn,
+                "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
+                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) NOT IN (?,?,?,?,?,?,?,?) "
+                "AND TRIM(COALESCE(start_time,''))<>'' "
+                "AND datetime(start_time)<datetime(?)",
+                (sport, *SETTLED_RESULTS, overdue_cutoff),
             ) or 0)
 
     if {"sport", "captured_at"}.issubset(snapshot_columns):
@@ -99,7 +109,30 @@ def _sport_health(
     minimum = MINIMUM_SETTLED[sport]
     publishing_mode = "SHADOW" if sport == "handball" else "LIVE"
 
-    if missing_identity:
+    latest_snapshot_time = None
+    try:
+        latest_snapshot_time = (
+            datetime.fromisoformat(str(latest_snapshot).replace("Z", "+00:00"))
+            if latest_snapshot else None
+        )
+        if latest_snapshot_time and latest_snapshot_time.tzinfo is None:
+            latest_snapshot_time = latest_snapshot_time.replace(tzinfo=timezone.utc)
+    except ValueError:
+        latest_snapshot_time = None
+    snapshot_age_minutes = (
+        max(0, int((now - latest_snapshot_time.astimezone(timezone.utc)).total_seconds() / 60))
+        if latest_snapshot_time else None
+    )
+    freshness = (
+        "FRESH" if snapshot_age_minutes is not None and snapshot_age_minutes <= 180
+        else "AGING" if snapshot_age_minutes is not None and snapshot_age_minutes <= 24 * 60
+        else "STALE"
+    )
+
+    if overdue_open:
+        status = "ATTENTION"
+        message = f"{overdue_open} zápasov čaká na výsledok dlhšie než 12 hodín"
+    elif missing_identity:
         status = "ATTENTION"
         message = f"{missing_identity} otvorených záznamov nemá stabilné ID"
     elif settled < minimum:
@@ -127,7 +160,20 @@ def _sport_health(
         "settled_bets": settled,
         "minimum_settled": minimum,
         "missing_event_id": missing_identity,
+        "overdue_open": overdue_open,
+        "settlement_recovery_required": overdue_open > 0,
+        "snapshot_age_minutes": snapshot_age_minutes,
+        "freshness": freshness,
         "yield_pct": round(yield_pct, 2),
+        "top_bookmakers": sorted(
+            (
+                {"bookmaker": name, **metrics}
+                for name, metrics in professional_table.get("sports", {})
+                .get(sport, {}).get("by_bookmaker", {}).items()
+            ),
+            key=lambda item: int(item.get("settled", 0) or 0),
+            reverse=True,
+        )[:5],
         "rules": {
             "min_edge_pct": round(policy.min_edge * 100, 1),
             "min_confidence": policy.min_confidence,
