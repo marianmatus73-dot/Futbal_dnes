@@ -180,6 +180,82 @@ def export_mobile_tip_history(
                 append_grouped(grouped, sports)
                 append_grouped(results_grouped, results_sports)
 
+            # Handball deliberately learns in a shadow table until its sample
+            # and calibration gates are satisfied, so it does not have rows in
+            # sport_bets yet.  Export its single benchmark choice per match as
+            # an observation (zero stake) so the mobile app can still show the
+            # analysed fixtures and their verified results.
+            shadow_table_exists = conn.execute(
+                "SELECT 1 FROM sqlite_master "
+                "WHERE type='table' AND name='sport_shadow_candidates'"
+            ).fetchone()
+            if shadow_table_exists:
+                shadow_rows = conn.execute(
+                    """
+                    SELECT id, league, event, selection, market, odds,
+                           bookmaker, probability, result, final_score,
+                           start_time, created_at, settled_at
+                    FROM sport_shadow_candidates
+                    WHERE LOWER(TRIM(COALESCE(sport, ''))) = 'handball'
+                      AND TRIM(COALESCE(event, '')) <> ''
+                    ORDER BY COALESCE(start_time, created_at, '') DESC, id DESC
+                    """
+                ).fetchall()
+
+                current_handball: list[dict] = []
+                result_handball: list[dict] = []
+                for row in shadow_rows:
+                    starts_at = _parse_datetime(row["start_time"])
+                    if starts_at is None:
+                        continue
+                    event_date = starts_at.astimezone(local_timezone).date()
+                    normalized_result = _result(row["result"])
+                    include_today = event_date == local_today
+                    if normalized_result == "OPEN" and starts_at < open_event_cutoff:
+                        include_today = False
+                    include_result = (
+                        normalized_result in {"WON", "LOST", "VOID"}
+                        and local_today - timedelta(days=6) <= event_date <= local_today
+                    )
+                    if not include_today and not include_result:
+                        continue
+
+                    probability = float(row["probability"] or 0)
+                    odds = float(row["odds"] or 0)
+                    item = {
+                        "sport": "handball",
+                        "league": str(row["league"] or ""),
+                        "match": str(row["event"] or ""),
+                        "pick": str(row["selection"] or ""),
+                        "market": str(row["market"] or "h2h"),
+                        "odds": odds,
+                        "bookmaker": str(row["bookmaker"] or ""),
+                        "model_probability": probability,
+                        "edge": probability * odds - 1.0,
+                        "stake": 0.0,
+                        "closing_odds": None,
+                        "clv_pct": None,
+                        "settlement_source": (
+                            "handball_shadow_scores" if include_result else ""
+                        ),
+                        "result": normalized_result,
+                        "final_score": str(row["final_score"] or "").strip() or None,
+                        "start_time": row["start_time"],
+                        "created_at": row["created_at"],
+                        "settled_at": row["settled_at"],
+                        "tracking_mode": "SHADOW",
+                        "observation_only": True,
+                    }
+                    if include_today:
+                        current_handball.append(item)
+                    if include_result:
+                        result_handball.append(item)
+
+                if current_handball:
+                    sports["handball"] = current_handball[:limit_per_sport]
+                if result_handball:
+                    results_sports["handball"] = result_handball[:limit_per_sport]
+
     payload = {
         "schema_version": 1,
         "generated_at": generated_at.isoformat(),

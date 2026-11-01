@@ -54,6 +54,28 @@ class MobileHistoryTests(unittest.TestCase):
                               '2024-09-27T18:45:00Z', '2024-09-27T09:00:00Z',
                               .55, .05, 1.0)"""
                 )
+                conn.execute(
+                    """CREATE TABLE sport_shadow_candidates (
+                    id INTEGER PRIMARY KEY, created_at TEXT, sport TEXT,
+                    league TEXT, external_event_id TEXT, event TEXT,
+                    home_team TEXT, away_team TEXT, market TEXT,
+                    selection TEXT, bookmaker TEXT, odds REAL,
+                    probability REAL, start_time TEXT, model_version TEXT,
+                    result TEXT, profit_units REAL, final_score TEXT,
+                    settled_at TEXT)"""
+                )
+                conn.executemany(
+                    """INSERT INTO sport_shadow_candidates (
+                    id, created_at, sport, league, external_event_id, event,
+                    market, selection, bookmaker, odds, probability,
+                    start_time, model_version, result, final_score, settled_at
+                    ) VALUES (?, ?, 'handball', 'Bundesliga', ?, ?, 'h2h', ?,
+                              'Example Book', ?, ?, ?, 'shadow-v1', ?, ?, ?)""",
+                    [
+                        (300, "2026-08-31T08:00:00Z", "hb-1", "Kiel vs Berlin", "Kiel", 1.55, .70, "2026-08-31T18:00:00Z", "OPEN", None, None),
+                        (301, "2026-08-30T08:00:00Z", "hb-2", "Flensburg vs Leipzig", "Flensburg", 1.70, .65, "2026-08-30T18:00:00Z", "WON", "31-27", "2026-08-30T20:00:00Z"),
+                    ],
+                )
             path = export_mobile_tip_history(
                 Settings(db_file=str(db)),
                 export_dir=root / "exports",
@@ -68,6 +90,11 @@ class MobileHistoryTests(unittest.TestCase):
             self.assertNotIn("football", payload["sports"])
             self.assertEqual(len(payload["results_sports"]["tennis"]), 5)
             self.assertTrue(all(item["result"] in {"WON", "LOST", "VOID"} for item in payload["results_sports"]["tennis"]))
+            self.assertEqual(payload["sports"]["handball"][0]["match"], "Kiel vs Berlin")
+            self.assertEqual(payload["sports"]["handball"][0]["tracking_mode"], "SHADOW")
+            self.assertTrue(payload["sports"]["handball"][0]["observation_only"])
+            self.assertEqual(payload["results_sports"]["handball"][0]["result"], "WON")
+            self.assertEqual(payload["results_sports"]["handball"][0]["final_score"], "31-27")
 
 
 if __name__ == "__main__":
