@@ -406,6 +406,9 @@ function Performance({ data }: { data: AppData }) {
   const points = data.performance.points ?? [];
   const clv = points.map((point) => point.clv_pct).filter((value): value is number => value != null);
   const worstDrawdown = points.length ? Math.min(...points.map((point) => point.drawdown_pct)) : 0;
+  const bookmakerRows = rows.flatMap((row) =>
+    (row.top_bookmakers ?? []).map((bookmaker) => ({ ...bookmaker, sport: row.sport }))
+  ).sort((a, b) => b.settled - a.settled).slice(0, 12);
   return (
     <>
       <View style={styles.sectionHeader}>
@@ -431,6 +434,18 @@ function Performance({ data }: { data: AppData }) {
           </View>
         );
       })}
+      <View style={styles.systemSection}>
+        <Text style={styles.infoTitle}>Výkon podľa bookmakerov</Text>
+        <Text style={styles.infoText}>Výsledky sa zobrazujú až po uzavretí tipov. Malá vzorka nemení automaticky váhu bookmakera.</Text>
+        {bookmakerRows.length ? bookmakerRows.map((item) => (
+          <StatusRow
+            key={`${item.sport}-${item.bookmaker}`}
+            label={`${item.bookmaker} · ${item.sport}`}
+            value={`${item.settled} tipov · yield ${item.yield_pct.toFixed(1)} % · zisk ${item.profit.toFixed(2)}`}
+            ok={item.settled < 20 || item.yield_pct >= 0}
+          />
+        )) : <Text style={styles.historyEmpty}>Rebríček sa vytvorí po prvých vyhodnotených tipoch s bookmakerom.</Text>}
+      </View>
     </>
   );
 }
@@ -462,11 +477,22 @@ function System({ data }: { data: AppData }) {
               <StatusRow
                 key={item.sport}
                 label={({ football: "Futbal", tennis: "Tenis", basketball: "Basketbal", hockey: "Hokej", baseball: "Baseball", handball: "Hádzaná", nfl: "NFL" } as Record<string, string>)[item.sport] ?? item.sport}
-                value={`${item.status === "READY" ? "Pripravené" : item.status === "COLLECTING" ? "Zbiera dáta" : item.status === "IDLE" ? "Bez dnešných udalostí" : item.status === "CAUTION" ? "Opatrný režim" : "Treba skontrolovať"} · ${item.settled_bets}/${item.minimum_settled} uzavretých · ${item.publishing_mode}`}
+                value={`${item.status === "READY" ? "Pripravené" : item.status === "COLLECTING" ? "Zbiera dáta" : item.status === "IDLE" ? "Bez dnešných udalostí" : item.status === "CAUTION" ? "Opatrný režim" : "Treba skontrolovať"} · ${item.settled_bets}/${item.minimum_settled} uzavretých · dáta ${item.freshness === "FRESH" ? "čerstvé" : item.freshness === "AGING" ? "starnú" : "staré"}${item.overdue_open ? ` · ${item.overdue_open} čaká na výsledok` : ""}`}
                 ok={item.status === "READY" || item.status === "IDLE"}
               />
             ))}
           </View>
+          {Object.keys(data.operationalHealth.funnel.rejection_reasons ?? {}).length > 0 && (
+            <View style={styles.systemSection}>
+              <Text style={styles.infoTitle}>Prečo kandidáti neprešli</Text>
+              {Object.entries(data.operationalHealth.funnel.rejection_reasons ?? {})
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 8)
+                .map(([reason, count]) => (
+                  <StatusRow key={reason} label={reason} value={`${count} kandidátov`} ok={false} />
+                ))}
+            </View>
+          )}
           <View style={styles.infoCard}>
             <Text style={styles.infoTitle}>Futbal bez plateného xG</Text>
             <Text style={styles.infoText}>1X2 a dvojtip sú aktívne. Over/Under sa bez xG bezpečne sleduje a vyhodnocuje, ale neposiela sa automaticky ako ostrý tip. Platené xG teda nie je podmienkou fungovania futbalu.</Text>

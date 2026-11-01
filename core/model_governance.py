@@ -94,7 +94,14 @@ def build_model_governance(professional_table: dict[str, Any], operational_healt
         samples = int(champion.get("settled", 0) or 0)
         comparisons.append({
             "sport": sport, "champion": champion,
-            "challenger": {"name": "calibrated-conservative-v1", "mode": "SHADOW", "evaluated_samples": samples, "minimum_samples": MIN_SAMPLES["challenger"]},
+            "challenger": {
+                "name": "MBE-Lab independent challenger",
+                "data_source": "MBE-Lab",
+                "mode": "SHADOW",
+                "evaluated_samples": samples,
+                "minimum_samples": MIN_SAMPLES["challenger"],
+                "comparison_rule": "rovnaký zápas, trh a časové okno; iba uzavreté výsledky",
+            },
             "decision": "EVALUATE" if samples >= MIN_SAMPLES["challenger"] else "COLLECTING",
             "auto_promote": False,
         })

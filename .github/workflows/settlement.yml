@@ -4,7 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     # Offset from the top of the hour to reduce GitHub scheduler congestion.
-    - cron: "25 */4 * * *"
+    # Two-hour recovery keeps mobile results current without waiting for the
+    # next full prediction run.
+    - cron: "25 */2 * * *"
 
 concurrency:
   group: production-history-writer

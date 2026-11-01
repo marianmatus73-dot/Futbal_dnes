@@ -34,6 +34,10 @@ function rowsFrom(table: ModelTable) {
       sport,
       ...(value.all_time ?? {}),
       low_odds_1_20_1_60: value.low_odds_1_20_1_60,
+      top_bookmakers: Object.entries(value.by_bookmaker ?? {})
+        .map(([bookmaker, metrics]) => ({ bookmaker, ...metrics }))
+        .sort((a, b) => (b.settled ?? 0) - (a.settled ?? 0))
+        .slice(0, 5),
     }));
   }
   if (Array.isArray(table.rows)) return table.rows;

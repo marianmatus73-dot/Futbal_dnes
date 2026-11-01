@@ -77,6 +77,7 @@ export type ModelRow = {
   average_clv_pct?: number | null;
   brier_score?: number | null;
   max_drawdown?: number | null;
+  top_bookmakers?: BookmakerPerformance[];
   low_odds_1_20_1_60?: {
     settled: number;
     wins: number;
@@ -87,9 +88,18 @@ export type ModelRow = {
   };
 };
 
+export type BookmakerPerformance = {
+  bookmaker: string;
+  settled: number;
+  profit: number;
+  yield_pct: number;
+  average_clv_pct?: number | null;
+  brier_score?: number | null;
+};
+
 export type ModelTable = {
   generated_at?: string;
-  sports?: ModelRow[] | Record<string, { all_time?: ModelRow; low_odds_1_20_1_60?: ModelRow["low_odds_1_20_1_60"] }>;
+  sports?: ModelRow[] | Record<string, { all_time?: ModelRow; low_odds_1_20_1_60?: ModelRow["low_odds_1_20_1_60"]; by_bookmaker?: Record<string, Omit<BookmakerPerformance, "bookmaker">> }>;
   rows?: ModelRow[];
   shadow_models?: Record<string, {
     settled_events: number;
@@ -159,6 +169,10 @@ export type SportHealth = {
   settled_bets: number;
   minimum_settled: number;
   missing_event_id: number;
+  overdue_open?: number;
+  settlement_recovery_required?: boolean;
+  snapshot_age_minutes?: number | null;
+  freshness?: "FRESH" | "AGING" | "STALE" | string;
   yield_pct: number;
 };
 

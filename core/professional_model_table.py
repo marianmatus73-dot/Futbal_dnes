@@ -165,11 +165,12 @@ def build_professional_model_table(
             "COALESCE(NULLIF(TRIM(tracking_mode), ''), 'LIVE')"
             if "tracking_mode" in columns else "'LIVE'"
         )
+        bookmaker = "COALESCE(bookmaker, '')" if "bookmaker" in columns else "''"
         rows = conn.execute(
             f"""
             SELECT sport, league, market, odds, stake, profit, clv_pct,
                    prob_final, result, start_time, settled_at,
-                   {tracking} AS tracking_mode
+                   {tracking} AS tracking_mode, {bookmaker} AS bookmaker
             FROM sport_bets
             WHERE UPPER(TRIM(COALESCE(result, ''))) IN
                   ('WON', 'WIN', 'LOST', 'LOSS', 'V', 'P')
@@ -200,6 +201,10 @@ def build_professional_model_table(
                 sport_rows, lambda row: _strategy_tier(row["odds"])
             ),
             "by_market": _group(sport_rows, lambda row: row["market"]),
+            "by_bookmaker": _group(
+                sport_rows,
+                lambda row: row["bookmaker"] or "NEZAZNAMENANÝ",
+            ),
         }
         low_odds_rows = [
             row for row in sport_rows
