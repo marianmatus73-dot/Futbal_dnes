@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T23:32:13.791553+00:00",
+  "generated_at": "2026-11-01T06:33:18.183483+00:00",
   "overdue_hours": 8,
   "sports": [
     {
@@ -33,23 +33,23 @@
     {
       "sport": "football",
       "status": "WARNING",
-      "settled": 982,
-      "learning_eligible": 970,
-      "open": 2,
+      "settled": 983,
+      "learning_eligible": 971,
+      "open": 1,
       "overdue_open": 0,
       "unresolved_excluded": 436,
       "unknown_result": 0,
       "settled_missing_profit": 0,
       "settled_missing_final_score": 0,
-      "closing_samples": 571,
-      "closing_coverage": 0.5815
+      "closing_samples": 572,
+      "closing_coverage": 0.5819
     },
     {
       "sport": "hockey",
       "status": "BLOCKED",
-      "settled": 241,
-      "learning_eligible": 241,
-      "open": 6,
+      "settled": 243,
+      "learning_eligible": 243,
+      "open": 4,
       "overdue_open": 4,
       "unresolved_excluded": 137,
       "unknown_result": 0,
@@ -88,11 +88,11 @@
     },
     {
       "sport": "tennis",
-      "status": "WARNING",
+      "status": "BLOCKED",
       "settled": 111,
       "learning_eligible": 111,
       "open": 2,
-      "overdue_open": 0,
+      "overdue_open": 1,
       "unresolved_excluded": 5,
       "unknown_result": 0,
       "settled_missing_profit": 0,
