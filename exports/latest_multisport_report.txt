@@ -5,34 +5,34 @@
 === PRO TIPPER VALUE BETS ===
 
 #1 TENNIS | tennis_atp_paris_masters
-Match: Cameron Norrie vs Matteo Arnaldi
-Pick: Cameron Norrie
-Odds: 1.45
-Bookmaker: 1xBet
-Model probability: 76.2%
-Market probability: 69.0%
-Raw edge: 8.5%
-Consensus edge: 7.3%
-Confidence: 76/100
+Match: Ugo Humbert vs Botic van de Zandschulp
+Pick: Botic van de Zandschulp
+Odds: 3.05
+Bookmaker: Betfair
+Model probability: 36.8%
+Market probability: 32.8%
+Raw edge: 10.1%
+Consensus edge: 4.0%
+Confidence: 77/100
 Risk: medium
-Stake: 0.59u
-Stake amount: 30.00
-Reason: Raw edge 8.5% | Score 76.0 | Consensus: elo, xg, form, market
+Stake: 0.25u
+Stake amount: 14.79
+Reason: Raw edge 10.1% | Score 77.0 | Consensus: elo, xg, form, market
 
-#2 FOOTBALL | Allsvenskan
-Match: Degerfors IF vs GAIS
-Pick: Degerfors IF
-Odds: 3.70
-Bookmaker: Unibet (SE)
-Model probability: 30.5%
-Market probability: 27.0%
-Raw edge: 10.8%
-Consensus edge: 3.4%
+#2 FOOTBALL | La Liga
+Match: Atlético Madrid vs Barcelona
+Pick: Atlético Madrid
+Odds: 3.85
+Bookmaker: 1xBet
+Model probability: 29.8%
+Market probability: 26.0%
+Raw edge: 15.5%
+Consensus edge: 3.8%
 Confidence: 75/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 11.81
-Reason: Raw edge 10.8% | Score 75.0 | Consensus: elo, xg, form, market
+Stake amount: 12.88
+Reason: Raw edge 15.5% | Score 75.0 | Consensus: elo, xg, form, market
 Release: EARLY
 
 
@@ -50,29 +50,29 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 6. Events scanned: 369. Snapshots saved: 1509. Candidate rows: 19470 -> 1104. Blocked: 1043. Stored candidates: 62. Risk pool: 62.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 6. CLV updated: 0. Events scanned: 351. Snapshots saved: 1557. Candidate rows: 19062 -> 1050. Blocked: 984. Stored candidates: 66. Risk pool: 66.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-11-07T16:30:00Z | Allsvenskan | Degerfors IF vs GAIS | Degerfors IF @ 3.70 | P 30.5% | Edge 10.8% | Stake 0.37 | Unibet (SE) | EARLY
+01. 2026-11-08T20:00:00Z | La Liga | Atlético Madrid vs Barcelona | Atlético Madrid @ 3.85 | P 30.5% | Edge 15.5% | Stake 0.34 | 1xBet | EARLY
 
 [TENNIS] scan
-Tennis scan hotový. Events: 19, Stored: 2
-01. 2026-11-02T13:48:00Z | tennis_atp_paris_masters | Cameron Norrie vs Matteo Arnaldi | Cameron Norrie @ 1.45 | P 76.2% | Edge 8.5% | Stake 1.76 | 1xBet
+Tennis scan hotový. Events: 17, Stored: 1
+01. 2026-11-02T20:00:00Z | tennis_atp_paris_masters | Ugo Humbert vs Botic van de Zandschulp | Botic van de Zandschulp @ 3.05 | P 36.8% | Edge 10.1% | Stake 0.44 | Betfair
 
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 164. Snapshots saved: 2053. Blocked: 2055. Stored candidates: 0.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 169. Snapshots saved: 2054. Blocked: 2047. Stored candidates: 1.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 12. Snapshots saved: 380. Blocked: 380. Stored candidates: 0.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 23. Snapshots saved: 895. Blocked: 895. Stored candidates: 0.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [BASEBALL] scan
-Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 1. Snapshots saved: 16. Blocked: 15. Stored candidates: 1.
+Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 1. Snapshots saved: 18. Blocked: 16. Stored candidates: 1.
 BASEBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
@@ -82,7 +82,7 @@ Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 0. Snapshots sa
 No bets found.
 
 [NFL] scan
-NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 14. Snapshots saved: 488. Blocked: 488. Stored candidates: 0.
+NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 16. Snapshots saved: 608. Blocked: 608. Stored candidates: 0.
 NFLverse: refreshed; rows: 7548; apply: 0.
 NFL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
@@ -92,22 +92,22 @@ Total bets: 2
 
 
 === ENGINE SUMMARY ===
-- football: OK (133.21s)
-- tennis: OK (8.39s)
-- basketball: OK (43.82s)
-- hockey: OK (44.07s)
-- baseball: OK (6.85s)
-- handball: OK (44.96s)
-- nfl: OK (19.43s)
+- football: OK (132.52s)
+- tennis: OK (7.95s)
+- basketball: OK (47.20s)
+- hockey: OK (48.73s)
+- baseball: OK (6.63s)
+- handball: OK (41.95s)
+- nfl: OK (20.20s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
-- football: totals xG evidence insufficient = 79
-- basketball: no market consensus = 61
-- football: totals edge gate; final=0.5234; reliability=0.000 = 20
+- football: totals xG evidence insufficient = 78
+- basketball: no market consensus = 63
 - football: totals edge gate; final=0.4804; reliability=0.000 = 19
-- football: totals edge gate; final=0.5178; reliability=0.000 = 19
 - football: totals edge gate; final=0.5196; reliability=0.000 = 19
+- football: totals edge gate; final=0.5234; reliability=0.000 = 19
+- football: totals edge gate; final=0.5178; reliability=0.000 = 18
 - football: totals edge gate; final=0.5192; reliability=0.000 = 18
 - football: totals edge gate; final=0.5224; reliability=0.000 = 18
 - football: totals edge gate; final=0.5208; reliability=0.000 = 17
@@ -132,7 +132,7 @@ Settled bets: 2982
 
 Result distribution:
 - LOST: 1730
-- UNRESOLVED: 1332
+- UNRESOLVED: 1334
 - WON: 1252
 - OPEN: 18
 - VOID: 12
@@ -187,22 +187,22 @@ Calibration is evaluated chronologically and is never accepted when it worsens B
 
 === SETTLEMENT INTEGRITY ===
 - baseball: BLOCKED | settled=1532 | open=3 | overdue=2 | unresolved excluded=746 | unknown=0 | missing score=914 | missing profit=0 | closing=0.0%
-- basketball: WARNING | settled=85 | open=3 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
+- basketball: WARNING | settled=85 | open=4 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
 - football: WARNING | settled=983 | open=2 | overdue=0 | unresolved excluded=436 | unknown=0 | missing score=0 | missing profit=0 | closing=58.2%
-- hockey: BLOCKED | settled=243 | open=4 | overdue=4 | unresolved excluded=137 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- hockey: BLOCKED | settled=243 | open=2 | overdue=2 | unresolved excluded=139 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 - mma: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=8 | unknown=0 | missing score=19 | missing profit=0 | closing=0.0%
 - nfl: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
-- tennis: BLOCKED | settled=111 | open=6 | overdue=2 | unresolved excluded=5 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- tennis: BLOCKED | settled=111 | open=7 | overdue=4 | unresolved excluded=5 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 
 === OPERATIONAL HEALTH ===
-Funnel: candidates=65 | accepted=2 | rejected=63
-- football: ATTENTION | settled=1403/100 | snapshots24h=1509 | mode=LIVE
+Funnel: candidates=68 | accepted=2 | rejected=66
+- football: ATTENTION | settled=1412/100 | snapshots24h=1557 | mode=LIVE
 - tennis: ATTENTION | settled=111/75 | snapshots24h=0 | mode=LIVE
-- basketball: READY | settled=85/75 | snapshots24h=2053 | mode=LIVE
-- hockey: ATTENTION | settled=243/75 | snapshots24h=380 | mode=LIVE
-- baseball: ATTENTION | settled=1532/100 | snapshots24h=16 | mode=LIVE
+- basketball: READY | settled=85/75 | snapshots24h=2054 | mode=LIVE
+- hockey: ATTENTION | settled=243/75 | snapshots24h=895 | mode=LIVE
+- baseball: ATTENTION | settled=1532/100 | snapshots24h=18 | mode=LIVE
 - handball: COLLECTING | settled=20/50 | snapshots24h=0 | mode=SHADOW
-- nfl: COLLECTING | settled=21/50 | snapshots24h=488 | mode=LIVE
+- nfl: COLLECTING | settled=21/50 | snapshots24h=608 | mode=LIVE
 
 === MODEL GOVERNANCE ===
 Football markets: 1X2=LIVE, DOUBLE_CHANCE=SHADOW, OVER_UNDER=SHADOW, BTTS=SHADOW
@@ -215,7 +215,7 @@ Training samples: 1035
 Meta AI status: UNLOCKED
 Weight tuning: True
 Top feature: Consensus safety
-Explainability records: 1104
+Explainability records: 1050
 
 === FOOTBALL LEARNING PROGRESS V15.3 ===
 Settled samples: 1035
@@ -229,12 +229,12 @@ Readiness: READY
 Sports completed: 6
 Sports ready: 6
 Status: READY
-- baseball: samples=1532 | winrate=0.5398 | yield=0.047 | profit=94.7536 | maturity=READY | health=BUILDING | weight=0.2648
-- basketball: samples=85 | winrate=0.4118 | yield=0.0558 | profit=2.732 | maturity=DEVELOPING | health=BUILDING | weight=0.1651
-- tennis: samples=111 | winrate=0.2432 | yield=0.0852 | profit=3.4379 | maturity=DEVELOPING | health=BUILDING | weight=0.2
-- hockey: samples=243 | winrate=0.3374 | yield=-0.0445 | profit=-6.2125 | maturity=READY | health=GOOD | weight=0.2708
-- handball: samples=0 | winrate=None | yield=None | profit=0.0 | maturity=EMPTY | health=EMPTY | weight=0.018
-- nfl: samples=21 | winrate=0.5238 | yield=0.0594 | profit=1.6363 | maturity=EARLY | health=BUILDING | weight=0.0813
+- baseball: samples=1532 | winrate=0.5398 | yield=0.0469 | profit=94.7536 | maturity=READY | health=BUILDING | weight=0.2632
+- basketball: samples=85 | winrate=0.4118 | yield=0.0556 | profit=2.732 | maturity=DEVELOPING | health=BUILDING | weight=0.1704
+- tennis: samples=111 | winrate=0.2432 | yield=0.0822 | profit=3.4379 | maturity=DEVELOPING | health=BUILDING | weight=0.1986
+- hockey: samples=243 | winrate=0.3374 | yield=-0.0445 | profit=-6.2125 | maturity=READY | health=GOOD | weight=0.2692
+- handball: samples=0 | winrate=None | yield=None | profit=0.0 | maturity=EMPTY | health=EMPTY | weight=0.0179
+- nfl: samples=21 | winrate=0.5238 | yield=0.0594 | profit=1.6363 | maturity=EARLY | health=BUILDING | weight=0.0809
 
 
 === V16.16 LEAGUE PROFILE ===
@@ -252,9 +252,9 @@ Errors: 0
 Status: READY
 Feedback source: sqlite:sport_bets+runtime:module_outputs
 Previous result: WIN
-Previous profit: 0.5600
+Previous profit: 0.4000
 Runtime health: 100.0%
-Average module latency: 42961 ms
+Average module latency: 43597 ms
 
 
 === V16 PRODUCTION DASHBOARD ===
