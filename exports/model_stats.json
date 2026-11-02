@@ -1,13 +1,13 @@
 {
-  "total_bets": 2980,
-  "wins": 1251,
-  "losses": 1729,
-  "winrate": 41.98,
-  "yield": 4.68,
-  "profit": 97.22,
-  "stake_sum": 2076.48,
-  "open_bets": 17,
-  "settled_bets": 2980,
+  "total_bets": 2982,
+  "wins": 1252,
+  "losses": 1730,
+  "winrate": 41.99,
+  "yield": 4.71,
+  "profit": 98.08,
+  "stake_sum": 2080.5,
+  "open_bets": 18,
+  "settled_bets": 2982,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -46,13 +46,13 @@
       "yield": 5.7
     },
     "nfl": {
-      "total": 18,
-      "wins": 9,
-      "losses": 9,
+      "total": 20,
+      "wins": 10,
+      "losses": 10,
       "winrate": 50.0,
-      "profit": 0.47,
-      "stake_sum": 22.54,
-      "yield": 2.1
+      "profit": 1.33,
+      "stake_sum": 26.56,
+      "yield": 4.99
     },
     "mma": {
       "total": 20,
@@ -291,13 +291,13 @@
       "yield": -40.46
     },
     "Betfair": {
-      "total": 366,
-      "wins": 114,
-      "losses": 252,
-      "winrate": 31.15,
-      "profit": -8.05,
-      "stake_sum": 146.28,
-      "yield": -5.51
+      "total": 368,
+      "wins": 115,
+      "losses": 253,
+      "winrate": 31.25,
+      "profit": -7.2,
+      "stake_sum": 150.3,
+      "yield": -4.79
     },
     "MyBookie.ag": {
       "total": 50,
@@ -454,6 +454,15 @@
       "stake_sum": 27.4,
       "yield": 5.36
     },
+    "americanfootball_nfl": {
+      "total": 20,
+      "wins": 10,
+      "losses": 10,
+      "winrate": 50.0,
+      "profit": 1.33,
+      "stake_sum": 26.56,
+      "yield": 4.99
+    },
     "tennis_atp_japan_open": {
       "total": 7,
       "wins": 2,
@@ -525,15 +534,6 @@
       "profit": 0.54,
       "stake_sum": 11.94,
       "yield": 4.52
-    },
-    "americanfootball_nfl": {
-      "total": 18,
-      "wins": 9,
-      "losses": 9,
-      "winrate": 50.0,
-      "profit": 0.47,
-      "stake_sum": 22.54,
-      "yield": 2.1
     },
     "icehockey_nhl": {
       "total": 207,
@@ -806,5 +806,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-01T20:00:03.009379+00:00"
+  "last_update": "2026-11-02T14:01:39.529379+00:00"
 }
