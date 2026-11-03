@@ -1,13 +1,13 @@
 {
-  "total_bets": 2982,
+  "total_bets": 2983,
   "wins": 1252,
-  "losses": 1730,
-  "winrate": 41.99,
-  "yield": 4.71,
-  "profit": 98.08,
-  "stake_sum": 2080.5,
-  "open_bets": 18,
-  "settled_bets": 2982,
+  "losses": 1731,
+  "winrate": 41.97,
+  "yield": 4.7,
+  "profit": 97.85,
+  "stake_sum": 2080.73,
+  "open_bets": 17,
+  "settled_bets": 2983,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -37,13 +37,13 @@
       "yield": 11.55
     },
     "basketball": {
-      "total": 85,
+      "total": 86,
       "wins": 35,
-      "losses": 50,
-      "winrate": 41.18,
-      "profit": 2.73,
-      "stake_sum": 47.89,
-      "yield": 5.7
+      "losses": 51,
+      "winrate": 40.7,
+      "profit": 2.5,
+      "stake_sum": 48.12,
+      "yield": 5.2
     },
     "nfl": {
       "total": 20,
@@ -255,13 +255,13 @@
       "yield": -2.98
     },
     "Pinnacle": {
-      "total": 120,
+      "total": 121,
       "wins": 39,
-      "losses": 81,
-      "winrate": 32.5,
-      "profit": -2.89,
-      "stake_sum": 69.93,
-      "yield": -4.14
+      "losses": 82,
+      "winrate": 32.23,
+      "profit": -3.12,
+      "stake_sum": 70.16,
+      "yield": -4.45
     },
     "Tipico": {
       "total": 86,
@@ -589,6 +589,15 @@
       "stake_sum": 0.16,
       "yield": -100.0
     },
+    "basketball_ncaab": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "winrate": 0.0,
+      "profit": -0.23,
+      "stake_sum": 0.23,
+      "yield": -100.0
+    },
     "UEFA Conference League": {
       "total": 4,
       "wins": 1,
@@ -806,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-02T23:18:49.435944+00:00"
+  "last_update": "2026-11-03T13:09:56.372077+00:00"
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-02T23:18:49.627745+00:00",
+  "generated_at": "2026-11-03T13:09:56.515829+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -23,15 +23,15 @@
       "sport": "basketball",
       "mode": "SHADOW",
       "metrics": {
-        "settled": 85,
-        "stake": 47.89,
-        "profit": 2.732,
-        "yield_pct": 5.705,
+        "settled": 86,
+        "stake": 48.12,
+        "profit": 2.502,
+        "yield_pct": 5.2,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.219691,
-        "calibration_error": 0.078433,
-        "probability_samples": 85,
+        "brier_score": 0.218261,
+        "calibration_error": 0.073904,
+        "probability_samples": 86,
         "max_drawdown": 6.5341
       }
     },
@@ -703,10 +703,10 @@
       "segment": "basketball",
       "status": "HOLD",
       "auto_apply": false,
-      "samples": 85,
+      "samples": 86,
       "minimum_samples": 100,
       "recommendations": [
-        "Zbierať dáta: 85/100 uzavretých tipov."
+        "Zbierať dáta: 86/100 uzavretých tipov."
       ]
     },
     {
@@ -819,22 +819,22 @@
     {
       "sport": "basketball",
       "champion": {
-        "settled": 85,
-        "stake": 47.89,
-        "profit": 2.732,
-        "yield_pct": 5.705,
+        "settled": 86,
+        "stake": 48.12,
+        "profit": 2.502,
+        "yield_pct": 5.2,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.219691,
-        "calibration_error": 0.078433,
-        "probability_samples": 85,
+        "brier_score": 0.218261,
+        "calibration_error": 0.073904,
+        "probability_samples": 86,
         "max_drawdown": 6.5341
       },
       "challenger": {
         "name": "MBE-Lab independent challenger",
         "data_source": "MBE-Lab",
         "mode": "SHADOW",
-        "evaluated_samples": 85,
+        "evaluated_samples": 86,
         "minimum_samples": 75,
         "comparison_rule": "rovnaký zápas, trh a časové okno; iba uzavreté výsledky"
       },
@@ -949,11 +949,11 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 1412
+      "settlement_samples": 1417
     },
     {
       "sport": "tennis",
-      "score": 45,
+      "score": 40,
       "status": "MISSING",
       "odds_feed": false,
       "stable_event_ids": false,
@@ -965,7 +965,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 85
+      "settlement_samples": 86
     },
     {
       "sport": "hockey",
