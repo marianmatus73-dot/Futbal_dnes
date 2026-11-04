@@ -242,7 +242,21 @@ jobs:
             echo "No changes"
           else
             git commit -m "Multisport update [skip ci]"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push origin HEAD:"${GITHUB_REF_NAME}"
+            # Retry transient server failures without rerunning the engine.
+            for attempt in 1 2 3 4; do
+              # Stop on conflicts; never force-push or discard history.
+              git pull --rebase origin "${GITHUB_REF_NAME}"
+              if git push origin HEAD:"${GITHUB_REF_NAME}"; then
+                break
+              else
+                push_status=$?
+                if [ "$attempt" -eq 4 ]; then
+                  echo "::error::Push failed after 4 attempts. Reports are available in workflow artifacts."
+                  exit "$push_status"
+                fi
+                echo "::warning::Push attempt $attempt failed; retrying shortly."
+                sleep "$((attempt * 5))"
+              fi
+            done
           fi
 
