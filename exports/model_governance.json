@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-04T13:24:26.351428+00:00",
+  "generated_at": "2026-11-04T21:39:07.563778+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -949,7 +949,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 1438
+      "settlement_samples": 1442
     },
     {
       "sport": "tennis",
@@ -977,9 +977,9 @@
     },
     {
       "sport": "baseball",
-      "score": 60,
-      "status": "PARTIAL",
-      "odds_feed": true,
+      "score": 25,
+      "status": "MISSING",
+      "odds_feed": false,
       "stable_event_ids": false,
       "settlement_samples": 1532
     },
