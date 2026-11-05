@@ -1,13 +1,13 @@
 {
-  "total_bets": 2983,
-  "wins": 1252,
-  "losses": 1731,
-  "winrate": 41.97,
-  "yield": 4.7,
-  "profit": 97.85,
-  "stake_sum": 2080.73,
-  "open_bets": 22,
-  "settled_bets": 2983,
+  "total_bets": 2985,
+  "wins": 1253,
+  "losses": 1732,
+  "winrate": 41.98,
+  "yield": 4.72,
+  "profit": 98.34,
+  "stake_sum": 2082.41,
+  "open_bets": 20,
+  "settled_bets": 2985,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -37,13 +37,13 @@
       "yield": 11.55
     },
     "basketball": {
-      "total": 86,
-      "wins": 35,
+      "total": 87,
+      "wins": 36,
       "losses": 51,
-      "winrate": 40.7,
-      "profit": 2.5,
-      "stake_sum": 48.12,
-      "yield": 5.2
+      "winrate": 41.38,
+      "profit": 3.36,
+      "stake_sum": 49.44,
+      "yield": 6.8
     },
     "nfl": {
       "total": 20,
@@ -64,13 +64,13 @@
       "yield": -20.22
     },
     "hockey": {
-      "total": 243,
+      "total": 244,
       "wins": 82,
-      "losses": 161,
-      "winrate": 33.74,
-      "profit": -6.21,
-      "stake_sum": 89.07,
-      "yield": -6.97
+      "losses": 162,
+      "winrate": 33.61,
+      "profit": -6.57,
+      "stake_sum": 89.43,
+      "yield": -7.35
     }
   },
   "by_bookmaker": {
@@ -119,23 +119,23 @@
       "stake_sum": 29.6,
       "yield": 24.35
     },
-    "1xBet": {
-      "total": 472,
-      "wins": 184,
-      "losses": 288,
-      "winrate": 38.98,
-      "profit": 4.39,
-      "stake_sum": 280.45,
-      "yield": 1.56
-    },
     "Coolbet": {
-      "total": 103,
-      "wins": 30,
+      "total": 104,
+      "wins": 31,
       "losses": 73,
-      "winrate": 29.13,
-      "profit": 3.41,
-      "stake_sum": 41.17,
-      "yield": 8.29
+      "winrate": 29.81,
+      "profit": 4.27,
+      "stake_sum": 42.49,
+      "yield": 10.05
+    },
+    "1xBet": {
+      "total": 473,
+      "wins": 184,
+      "losses": 289,
+      "winrate": 38.9,
+      "profit": 4.03,
+      "stake_sum": 280.81,
+      "yield": 1.43
     },
     "BetAnything": {
       "total": 9,
@@ -373,6 +373,15 @@
       "stake_sum": 10.8,
       "yield": 23.41
     },
+    "basketball_euroleague": {
+      "total": 41,
+      "wins": 20,
+      "losses": 21,
+      "winrate": 48.78,
+      "profit": 2.33,
+      "stake_sum": 28.72,
+      "yield": 8.1
+    },
     "Segunda Division": {
       "total": 25,
       "wins": 8,
@@ -444,15 +453,6 @@
       "profit": 1.49,
       "stake_sum": 5.71,
       "yield": 26.04
-    },
-    "basketball_euroleague": {
-      "total": 40,
-      "wins": 19,
-      "losses": 21,
-      "winrate": 47.5,
-      "profit": 1.47,
-      "stake_sum": 27.4,
-      "yield": 5.36
     },
     "americanfootball_nfl": {
       "total": 20,
@@ -535,15 +535,6 @@
       "stake_sum": 11.94,
       "yield": 4.52
     },
-    "icehockey_nhl": {
-      "total": 207,
-      "wins": 77,
-      "losses": 130,
-      "winrate": 37.2,
-      "profit": 0.32,
-      "stake_sum": 76.88,
-      "yield": 0.42
-    },
     "UEFA Europa League": {
       "total": 7,
       "wins": 2,
@@ -579,6 +570,15 @@
       "profit": -0.02,
       "stake_sum": 9.98,
       "yield": -0.16
+    },
+    "icehockey_nhl": {
+      "total": 208,
+      "wins": 77,
+      "losses": 131,
+      "winrate": 37.02,
+      "profit": -0.04,
+      "stake_sum": 77.24,
+      "yield": -0.05
     },
     "tennis_atp_vienna_open": {
       "total": 1,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-04T21:39:07.449810+00:00"
+  "last_update": "2026-11-05T13:39:02.717369+00:00"
 }
