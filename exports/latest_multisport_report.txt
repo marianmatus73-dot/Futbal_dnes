@@ -4,20 +4,20 @@
 
 === PRO TIPPER VALUE BETS ===
 
-#1 FOOTBALL | La Liga
-Match: Atlético Madrid vs Barcelona
-Pick: Atlético Madrid
-Odds: 3.90
+#1 FOOTBALL | Championship
+Match: Charlton Athletic vs Sheffield United
+Pick: Charlton Athletic
+Odds: 3.85
 Bookmaker: Matchbook
-Model probability: 29.7%
-Market probability: 25.6%
-Raw edge: 17.6%
-Consensus edge: 4.0%
+Model probability: 29.2%
+Market probability: 26.0%
+Raw edge: 10.2%
+Consensus edge: 3.2%
 Confidence: 75/100
 Risk: medium
 Stake: 0.25u
-Stake amount: 13.58
-Reason: Raw edge 17.6% | Score 75.0 | Consensus: elo, xg, form, market
+Stake amount: 10.79
+Reason: Raw edge 10.2% | Score 75.0 | Consensus: elo, xg, form, market
 Release: EARLY
 
 
@@ -35,29 +35,29 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 19. Events scanned: 370. Snapshots saved: 2370. Candidate rows: 19887 -> 1107. Blocked: 1057. Stored candidates: 50. Risk pool: 50.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 18. CLV updated: 1. Events scanned: 352. Snapshots saved: 2569. Candidate rows: 18880 -> 1052. Blocked: 999. Stored candidates: 54. Risk pool: 54.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-11-08T20:00:00Z | La Liga | Atlético Madrid vs Barcelona | Atlético Madrid @ 3.90 | P 30.7% | Edge 17.6% | Stake 0.34 | Matchbook | EARLY
+01. 2026-11-07T15:00:00Z | Championship | Charlton Athletic vs Sheffield United | Charlton Athletic @ 3.85 | P 29.2% | Edge 10.2% | Stake 0.36 | Matchbook | EARLY
 
 [TENNIS] scan
-Tennis scan hotový. Events: 6, Stored: 0
+Tennis scan hotový. Events: 4, Stored: 0
 No bets found.
 
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 59. Snapshots saved: 1068. Blocked: 1068. Stored candidates: 0.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 2. CLV updated: 0. Events scanned: 97. Snapshots saved: 1039. Blocked: 1009. Stored candidates: 1.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 34. Snapshots saved: 1279. Blocked: 1278. Stored candidates: 1.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 41. Snapshots saved: 1521. Blocked: 1521. Stored candidates: 0.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [BASEBALL] scan
-Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 1. Snapshots saved: 18. Blocked: 17. Stored candidates: 1.
+Baseball v12: meta-model/fallback/CLV/ELO/Bayesian/adaptive confidence/Monte Carlo model. Settled: 0. CLV updated: 0. Events scanned: 1. Snapshots saved: 22. Blocked: 21. Stored candidates: 1.
 BASEBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
@@ -77,26 +77,26 @@ Total bets: 1
 
 
 === ENGINE SUMMARY ===
-- football: OK (142.51s)
-- tennis: OK (10.96s)
-- basketball: OK (51.95s)
-- hockey: OK (43.55s)
-- baseball: OK (10.62s)
-- handball: OK (57.78s)
-- nfl: OK (29.31s)
+- football: OK (128.48s)
+- tennis: OK (6.44s)
+- basketball: OK (37.45s)
+- hockey: OK (49.26s)
+- baseball: OK (6.17s)
+- handball: OK (51.48s)
+- nfl: OK (25.73s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
-- football: totals xG evidence insufficient = 74
-- football: totals edge gate; final=0.5234; reliability=0.000 = 20
-- football: totals edge gate; final=0.4809; reliability=0.000 = 19
-- football: totals edge gate; final=0.5191; reliability=0.000 = 17
-- football: totals edge gate; final=0.5208; reliability=0.000 = 17
+- football: totals xG evidence insufficient = 72
+- basketball: no market consensus = 43
+- football: totals edge gate; final=0.4809; reliability=0.000 = 22
+- football: totals edge gate; final=0.5191; reliability=0.000 = 19
+- football: totals edge gate; final=0.5234; reliability=0.000 = 19
 - football: totals edge gate; final=0.4761; reliability=0.000 = 16
 - football: totals edge gate; final=0.4766; reliability=0.000 = 16
-- football: totals edge gate; final=0.5192; reliability=0.000 = 16
 - football: totals edge gate; final=0.5202; reliability=0.000 = 16
 - football: totals edge gate; final=0.5212; reliability=0.000 = 16
+- football: totals edge gate; final=0.5254; reliability=0.000 = 16
 
 === BANKROLL SUMMARY ===
 Bankroll: 1000.00
@@ -104,29 +104,29 @@ Kelly fraction: 0.25
 Max stake %: 3.0%
 
 === MODEL PERFORMANCE ===
-Total bets: 2985
-Wins: 1253
+Total bets: 2987
+Wins: 1255
 Losses: 1732
-Winrate: 41.98%
-Yield: 4.72%
-Profit: 98.34
-Stake sum: 2082.41
+Winrate: 42.02%
+Yield: 4.79%
+Profit: 99.84
+Stake sum: 2083.13
 
 Open bets: 20
-Settled bets: 2985
+Settled bets: 2987
 
 Result distribution:
 - LOST: 1732
 - UNRESOLVED: 1340
-- WON: 1253
+- WON: 1255
 - OPEN: 20
 - VOID: 12
 
 By sport:
 - baseball: 827-705 | profit 94.75 | yield 5.77% | bets 1532
+- basketball: 38-51 | profit 4.86 | yield 9.69% | bets 89
 - football: 266-705 | profit 3.80 | yield 1.61% | bets 971
 - tennis: 27-84 | profit 3.44 | yield 11.55% | bets 111
-- basketball: 36-51 | profit 3.36 | yield 6.80% | bets 87
 - nfl: 10-10 | profit 1.33 | yield 4.99% | bets 20
 - mma: 5-15 | profit -1.76 | yield -20.22% | bets 20
 - hockey: 82-162 | profit -6.57 | yield -7.35% | bets 244
@@ -137,8 +137,8 @@ Top bookmakers:
 - Betsson: 19-17 | profit 10.68 | yield 45.88% | bets 36
 - Betclic (FR): 26-19 | profit 8.65 | yield 25.56% | bets 45
 - LeoVegas (SE): 31-57 | profit 7.21 | yield 24.35% | bets 88
+- 1xBet: 186-289 | profit 5.53 | yield 1.96% | bets 475
 - Coolbet: 31-73 | profit 4.27 | yield 10.05% | bets 104
-- 1xBet: 184-289 | profit 4.03 | yield 1.43% | bets 473
 - BetAnything: 5-4 | profit 3.05 | yield 50.56% | bets 9
 - GTbets: 71-87 | profit 2.99 | yield 2.04% | bets 158
 - William Hill: 9-10 | profit 2.14 | yield 14.97% | bets 19
@@ -147,17 +147,17 @@ Top leagues:
 - baseball_mlb: 827-705 | profit 94.75 | yield 5.77% | bets 1532
 - MLS: 44-104 | profit 5.16 | yield 16.51% | bets 148
 - Allsvenskan: 15-24 | profit 4.31 | yield 29.96% | bets 39
+- basketball_euroleague: 22-21 | profit 3.83 | yield 13.00% | bets 43
 - Liga MX: 12-24 | profit 3.01 | yield 35.67% | bets 36
 - Turkish Super Lig: 11-17 | profit 2.88 | yield 34.49% | bets 28
 - tennis_atp_shanghai_masters: 6-14 | profit 2.73 | yield 63.88% | bets 20
 - Brazil Serie A: 15-35 | profit 2.53 | yield 23.41% | bets 50
-- basketball_euroleague: 20-21 | profit 2.33 | yield 8.10% | bets 41
 - Segunda Division: 8-17 | profit 1.98 | yield 25.05% | bets 25
 - tennis_wta_singapore_open: 4-4 | profit 1.98 | yield 117.67% | bets 8
 
 === PROFESSIONAL MODEL TABLE ===
 - baseball: settled=1532 | yield=5.77% | profit=94.75 | CLV=n/a (0) | Brier=0.2420 | max DD=21.47
-- basketball: settled=87 | yield=6.80% | profit=3.36 | CLV=n/a (0) | Brier=0.2170 | max DD=6.53
+- basketball: settled=89 | yield=9.69% | profit=4.86 | CLV=n/a (0) | Brier=0.2214 | max DD=6.53
 - football: settled=971 | yield=1.61% | profit=3.80 | CLV=3.63% (570) | Brier=0.1953 | max DD=23.16
 - hockey: settled=244 | yield=-7.35% | profit=-6.57 | CLV=n/a (0) | Brier=0.2188 | max DD=17.73
 - mma: settled=20 | yield=-20.22% | profit=-1.76 | CLV=n/a (0) | Brier=0.1758 | max DD=3.16
@@ -172,20 +172,20 @@ Calibration is evaluated chronologically and is never accepted when it worsens B
 
 === SETTLEMENT INTEGRITY ===
 - baseball: BLOCKED | settled=1532 | open=3 | overdue=2 | unresolved excluded=748 | unknown=0 | missing score=914 | missing profit=0 | closing=0.0%
-- basketball: WARNING | settled=87 | open=3 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
-- football: WARNING | settled=983 | open=3 | overdue=0 | unresolved excluded=436 | unknown=0 | missing score=0 | missing profit=0 | closing=58.2%
+- basketball: WARNING | settled=89 | open=2 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
+- football: WARNING | settled=983 | open=4 | overdue=0 | unresolved excluded=436 | unknown=0 | missing score=0 | missing profit=0 | closing=58.2%
 - hockey: WARNING | settled=244 | open=1 | overdue=0 | unresolved excluded=141 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 - mma: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=8 | unknown=0 | missing score=19 | missing profit=0 | closing=0.0%
 - nfl: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 - tennis: BLOCKED | settled=111 | open=10 | overdue=9 | unresolved excluded=7 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 
 === OPERATIONAL HEALTH ===
-Funnel: candidates=52 | accepted=1 | rejected=51
-- football: ATTENTION | settled=1458/100 | snapshots24h=2370 | mode=LIVE
+Funnel: candidates=55 | accepted=1 | rejected=54
+- football: ATTENTION | settled=1476/100 | snapshots24h=2569 | mode=LIVE
 - tennis: ATTENTION | settled=111/75 | snapshots24h=0 | mode=LIVE
-- basketball: READY | settled=87/75 | snapshots24h=1068 | mode=LIVE
-- hockey: ATTENTION | settled=244/75 | snapshots24h=1279 | mode=LIVE
-- baseball: ATTENTION | settled=1532/100 | snapshots24h=18 | mode=LIVE
+- basketball: READY | settled=89/75 | snapshots24h=1039 | mode=LIVE
+- hockey: ATTENTION | settled=244/75 | snapshots24h=1521 | mode=LIVE
+- baseball: ATTENTION | settled=1532/100 | snapshots24h=22 | mode=LIVE
 - handball: COLLECTING | settled=20/50 | snapshots24h=0 | mode=SHADOW
 - nfl: COLLECTING | settled=21/50 | snapshots24h=810 | mode=LIVE
 
@@ -200,7 +200,7 @@ Training samples: 1035
 Meta AI status: UNLOCKED
 Weight tuning: True
 Top feature: Consensus safety
-Explainability records: 1107
+Explainability records: 1051
 
 === FOOTBALL LEARNING PROGRESS V15.3 ===
 Settled samples: 1035
@@ -214,12 +214,12 @@ Readiness: READY
 Sports completed: 6
 Sports ready: 6
 Status: READY
-- baseball: samples=1532 | winrate=0.5398 | yield=0.0469 | profit=94.7536 | maturity=READY | health=BUILDING | weight=0.2628
-- basketball: samples=87 | winrate=0.4138 | yield=0.0666 | profit=3.36 | maturity=DEVELOPING | health=BUILDING | weight=0.1729
-- tennis: samples=111 | winrate=0.2432 | yield=0.0657 | profit=3.4379 | maturity=DEVELOPING | health=BUILDING | weight=0.1971
-- hockey: samples=244 | winrate=0.3361 | yield=-0.0469 | profit=-6.5725 | maturity=READY | health=GOOD | weight=0.2686
+- baseball: samples=1532 | winrate=0.5398 | yield=0.0469 | profit=94.7536 | maturity=READY | health=BUILDING | weight=0.2617
+- basketball: samples=89 | winrate=0.427 | yield=0.0953 | profit=4.8598 | maturity=DEVELOPING | health=BUILDING | weight=0.1763
+- tennis: samples=111 | winrate=0.2432 | yield=0.0657 | profit=3.4379 | maturity=DEVELOPING | health=BUILDING | weight=0.1963
+- hockey: samples=244 | winrate=0.3361 | yield=-0.0469 | profit=-6.5725 | maturity=READY | health=GOOD | weight=0.2675
 - handball: samples=0 | winrate=None | yield=None | profit=0.0 | maturity=EMPTY | health=EMPTY | weight=0.0178
-- nfl: samples=21 | winrate=0.5238 | yield=0.0594 | profit=1.6363 | maturity=EARLY | health=BUILDING | weight=0.0807
+- nfl: samples=21 | winrate=0.5238 | yield=0.0594 | profit=1.6363 | maturity=EARLY | health=BUILDING | weight=0.0804
 
 
 === V16.16 LEAGUE PROFILE ===
@@ -231,26 +231,25 @@ Status: READY
 Cycle ID: 1
 Stages completed: 17
 Loop state: AUTONOMOUS_ACTIVE
-Loop score: 0.981
+Loop score: 0.992
 Decision: EXECUTE_NOW
 Errors: 0
 Status: READY
 Feedback source: sqlite:sport_bets+runtime:module_outputs
-Previous result: LOSS
-Previous profit: -0.3600
+Previous result: WIN
+Previous profit: 0.5700
 Runtime health: 100.0%
-Average module latency: 49527 ms
+Average module latency: 43574 ms
 
 
 === V16 PRODUCTION DASHBOARD ===
 Stored cycles: 1
 Ready cycles: 1
 Error cycles: 0
-Average loop score: 0.981
+Average loop score: 0.992
 Dashboard HTML: exports/v16_dashboard.html
 
 
 === V16 ALERTS ===
-Active alerts: 1
-Highest severity: INFO
-- [INFO] Latest settled feedback is LOSS.
+Active alerts: 0
+Highest severity: NONE
