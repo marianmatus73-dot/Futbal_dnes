@@ -54,22 +54,22 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 89,
+    "samples": 90,
     "train_samples": 62,
-    "test_samples": 27,
+    "test_samples": 28,
     "split": "chronological_70_30",
-    "raw_brier": 0.22263,
-    "calibrated_brier": 0.231606,
+    "raw_brier": 0.222336,
+    "calibrated_brier": 0.228136,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 89,
+    "samples": 90,
     "train_samples": 62,
-    "test_samples": 27,
+    "test_samples": 28,
     "split": "chronological_70_30",
-    "raw_brier": 0.22263,
-    "calibrated_brier": 0.231606,
+    "raw_brier": 0.222336,
+    "calibrated_brier": 0.228136,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
@@ -88,13 +88,13 @@
     "status": "BUILDING"
   },
   "basketball/tier=VALUE_1.61_2.50": {
-    "samples": 35,
-    "train_samples": 24,
+    "samples": 36,
+    "train_samples": 25,
     "test_samples": 11,
     "split": "chronological_70_30",
-    "raw_brier": 0.246861,
-    "calibrated_brier": 0.252992,
-    "calibration_decision": "REJECT",
+    "raw_brier": 0.232101,
+    "calibrated_brier": 0.218798,
+    "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football": {
@@ -136,32 +136,32 @@
     "status": "BUILDING"
   },
   "hockey": {
-    "samples": 244,
-    "train_samples": 170,
+    "samples": 245,
+    "train_samples": 171,
     "test_samples": 74,
     "split": "chronological_70_30",
-    "raw_brier": 0.238377,
-    "calibrated_brier": 0.250295,
+    "raw_brier": 0.23432,
+    "calibrated_brier": 0.243496,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/market=h2h": {
-    "samples": 244,
-    "train_samples": 170,
+    "samples": 245,
+    "train_samples": 171,
     "test_samples": 74,
     "split": "chronological_70_30",
-    "raw_brier": 0.238377,
-    "calibrated_brier": 0.250295,
+    "raw_brier": 0.23432,
+    "calibrated_brier": 0.243496,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 179,
+    "samples": 180,
     "train_samples": 125,
-    "test_samples": 54,
+    "test_samples": 55,
     "split": "chronological_70_30",
-    "raw_brier": 0.235527,
-    "calibrated_brier": 0.244375,
+    "raw_brier": 0.232612,
+    "calibrated_brier": 0.240933,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
