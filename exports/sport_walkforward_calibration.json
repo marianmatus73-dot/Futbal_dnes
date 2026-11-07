@@ -54,22 +54,22 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 90,
-    "train_samples": 62,
+    "samples": 91,
+    "train_samples": 63,
     "test_samples": 28,
     "split": "chronological_70_30",
-    "raw_brier": 0.222336,
-    "calibrated_brier": 0.228136,
+    "raw_brier": 0.214508,
+    "calibrated_brier": 0.224305,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 90,
-    "train_samples": 62,
+    "samples": 91,
+    "train_samples": 63,
     "test_samples": 28,
     "split": "chronological_70_30",
-    "raw_brier": 0.222336,
-    "calibrated_brier": 0.228136,
+    "raw_brier": 0.214508,
+    "calibrated_brier": 0.224305,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
@@ -84,7 +84,7 @@
     "status": "READY"
   },
   "basketball/tier=SAFE_1.20_1.60": {
-    "samples": 8,
+    "samples": 9,
     "status": "BUILDING"
   },
   "basketball/tier=VALUE_1.61_2.50": {
@@ -136,32 +136,32 @@
     "status": "BUILDING"
   },
   "hockey": {
-    "samples": 245,
-    "train_samples": 171,
+    "samples": 246,
+    "train_samples": 172,
     "test_samples": 74,
     "split": "chronological_70_30",
-    "raw_brier": 0.23432,
-    "calibrated_brier": 0.243496,
+    "raw_brier": 0.232788,
+    "calibrated_brier": 0.24256,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/market=h2h": {
-    "samples": 245,
-    "train_samples": 171,
+    "samples": 246,
+    "train_samples": 172,
     "test_samples": 74,
     "split": "chronological_70_30",
-    "raw_brier": 0.23432,
-    "calibrated_brier": 0.243496,
+    "raw_brier": 0.232788,
+    "calibrated_brier": 0.24256,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 180,
-    "train_samples": 125,
+    "samples": 181,
+    "train_samples": 126,
     "test_samples": 55,
     "split": "chronological_70_30",
-    "raw_brier": 0.232612,
-    "calibrated_brier": 0.240933,
+    "raw_brier": 0.228745,
+    "calibrated_brier": 0.239182,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
