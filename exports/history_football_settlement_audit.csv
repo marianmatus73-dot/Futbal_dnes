@@ -1,17 +1,13 @@
 id,bet_id,source_hash,sport_key,event,selection,home_goals,away_goals,result,external_event_id,settled_at,created_at
-1,66326,40dffa288d07cf14d738ca18,soccer_spain_la_liga,Valencia vs Real Madrid,Real Madrid,0,3,WON,5b386dfdf6f76705116fbb4120ee8493,2026-11-07T22:02:59Z,2026-11-07T22:03:18+00:00
-2,66458,37f91ebdedca6df07df05bba,soccer_france_ligue_one,Paris Saint Germain vs Troyes,Over 2.5 gólu,1,0,LOST,f7b240389fa5ec055c58a48ab153dcdd,2026-11-07T22:02:59Z,2026-11-07T22:03:18+00:00
-3,66939,5687f6e9ee5051d7e62fc712,soccer_netherlands_eredivisie,Excelsior vs Go Ahead Eagles,Over 2.5 gólu,0,1,LOST,5d4dbfdacb0b931ba7b8d771bfed5e0e,2026-11-07T22:03:07Z,2026-11-07T22:03:18+00:00
-4,66952,a2839c6455b8a5c68e35dc75,soccer_spain_la_liga,Valencia vs Real Madrid,Over 2.5 gólu,0,3,WON,5b386dfdf6f76705116fbb4120ee8493,2026-11-07T22:02:59Z,2026-11-07T22:03:18+00:00
-5,69006,3cdbd60cd6fba0ee2f0b8c1d,soccer_spl,St Mirren vs Rangers,Rangers,0,2,WON,972070a557d435f7f7a07bb9db18261d,2026-11-07T22:03:13Z,2026-11-07T22:03:18+00:00
-6,69153,be025db698fca78414f825ed,soccer_austria_bundesliga,Ried vs LASK,Over 2.5 gólu,2,4,WON,328536a210997eb2595077031a250747,2026-11-07T22:03:03Z,2026-11-07T22:03:18+00:00
-7,69163,fb3608fcb1eee49928a96a80,soccer_spl,St Mirren vs Rangers,Over 2.5 gólu,0,2,LOST,972070a557d435f7f7a07bb9db18261d,2026-11-07T22:03:13Z,2026-11-07T22:03:18+00:00
-8,69223,69377930bc61d8bfbac788e4,soccer_austria_bundesliga,Ried vs LASK,LASK,2,4,WON,328536a210997eb2595077031a250747,2026-11-07T22:03:03Z,2026-11-07T22:03:18+00:00
-9,69312,422f0a964a00ad2c58dafac4,soccer_belgium_first_div,Royal Antwerp vs Lommel SK,Over 2.5 gólu,2,2,WON,55129ba3a50af7761828c774c793385a,2026-11-07T22:02:58Z,2026-11-07T22:03:18+00:00
-10,69349,7c0b0a40dca78cebd9e95ae1,soccer_germany_bundesliga2,Hertha Berlin vs VfL Wolfsburg,Over 2.5 gólu,2,1,WON,e02e046c5d6a79723c46af703304de02,2026-11-07T22:03:02Z,2026-11-07T22:03:18+00:00
-11,69398,07b3679bb3837e58e7d44b9e,soccer_italy_serie_a,AS Roma vs Sassuolo,AS Roma,3,0,WON,f110107bca066ac1a598c89661c88fa3,2026-11-07T22:03:01Z,2026-11-07T22:03:18+00:00
-12,69400,19b8c5ae6589f031d2fa5229,soccer_france_ligue_two,Saint Etienne vs Stade Lavallois,Saint Etienne,2,0,WON,cb1988f7950962d316571dd0ed98b540,2026-11-07T22:03:14Z,2026-11-07T22:03:18+00:00
-13,69562,342a9cb21802337fa1f5dfcd,soccer_france_ligue_two,Saint Etienne vs Stade Lavallois,Over 2.5 gólu,2,0,LOST,cb1988f7950962d316571dd0ed98b540,2026-11-07T22:03:14Z,2026-11-07T22:03:18+00:00
-14,69901,3e8717a926065f783a8cd177,soccer_italy_serie_a,AS Roma vs Sassuolo,Over 2.5 gólu,3,0,WON,f110107bca066ac1a598c89661c88fa3,2026-11-07T22:03:01Z,2026-11-07T22:03:18+00:00
-15,71900,17e3f9fe7d220cbd2cd0c280,soccer_france_ligue_two,Pau FC vs Nantes,Nantes,0,2,WON,b34ca990cb7daf96d0a96dc33f609250,2026-11-07T22:03:14Z,2026-11-07T22:03:18+00:00
-16,71926,6217ce2af4ee6845e9fe538b,soccer_portugal_primeira_liga,Alverca vs Casa Pia,Draw,1,1,WON,d9d924bf6388e1288f06e04041b3fe33,2026-11-07T22:03:11Z,2026-11-07T22:03:18+00:00
+1,69143,f306ede85cac8a4c43cd4c8d,soccer_portugal_primeira_liga,Sporting Lisbon vs Moreirense FC,Over 2.5 gólu,1,0,LOST,ba0a2d492dfcc89ab465eddd7a9e98c2,2026-11-08T01:33:00Z,2026-11-08T01:33:13+00:00
+2,69206,3184b9c168eb8d65537c69c6,soccer_usa_mls,Philadelphia Union vs Toronto FC,Philadelphia Union,4,1,WON,c0c73d9305b8e399fb6cf9a234a7b9e4,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+3,69240,2865e83720c658ff1e1a8d34,soccer_usa_mls,Inter Miami CF vs Charlotte FC,Inter Miami CF,3,3,LOST,4e4cd20d205e8bd0cd8ba54391b62257,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+4,69254,3b60e2d0daeb7b937add2b89,soccer_usa_mls,CF Montreal vs Vancouver Whitecaps FC,Vancouver Whitecaps FC,0,2,WON,1cecab6721bb9ac477e36301c2c5412b,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+5,69257,13d76b1e11d6b56aeef09512,soccer_usa_mls,Chicago Fire vs Columbus Crew SC,Over 2.5 gólu,3,4,WON,666fea65b8706a9b975d3dad9ffea2b7,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+6,70259,d34768cc4192018995e79bfb,soccer_usa_mls,FC Cincinnati vs Nashville SC,Over 2.5 gólu,0,2,LOST,e373abc8622b9853aa4fbd3d01c33d8e,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+7,70261,603e5f2ae52fb530ff4343df,soccer_usa_mls,CF Montreal vs Vancouver Whitecaps FC,Over 2.5 gólu,0,2,LOST,1cecab6721bb9ac477e36301c2c5412b,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+8,70264,f745b9be9567c7a57861d338,soccer_usa_mls,New York Red Bulls vs Atlanta United FC,Over 2.5 gólu,3,0,WON,f5ca1b83c89f16c83a63977c741ed93d,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+9,70265,5fbeb525f08dc0f2b1e70be5,soccer_usa_mls,Philadelphia Union vs Toronto FC,Over 2.5 gólu,4,1,WON,c0c73d9305b8e399fb6cf9a234a7b9e4,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+10,70266,f88447a25de8ff794c8cf5e2,soccer_usa_mls,Orlando City SC vs New England Revolution,Over 2.5 gólu,1,0,LOST,2999abe7822c923b29c9fd21905c1723,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+11,70268,43d69243b3e99121f34b88e3,soccer_usa_mls,Inter Miami CF vs Charlotte FC,Over 2.5 gólu,3,3,WON,4e4cd20d205e8bd0cd8ba54391b62257,2026-11-08T01:33:11Z,2026-11-08T01:33:13+00:00
+12,71715,5002669cfa48b59f4a9d3d71,soccer_france_ligue_one,Paris Saint Germain vs Troyes,Paris Saint Germain,1,0,WON,f7b240389fa5ec055c58a48ab153dcdd,2026-11-08T01:33:00Z,2026-11-08T01:33:13+00:00
