@@ -1,8 +1,8 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 5
-Score events: 19
+Open bets: 7
+Score events: 41
 
 === OPEN BETS ===
 soccer_spain_segunda_division | 2026-11-06T19:30:00Z | CD Castellón vs SD Eibar | pick=Over 2.5 gólu
@@ -10,9 +10,10 @@ soccer_argentina_primera_division | 2026-11-08T00:00:00Z | Aldosivi Mar del Plat
 soccer_norway_eliteserien | 2026-11-07T15:00:00Z | Kristiansund BK vs Vålerenga | pick=Over 2.5 gólu
 soccer_argentina_primera_division | 2026-11-08T00:00:00Z | Central Córdoba vs Lanus | pick=Under 2.5 gólu
 soccer_argentina_primera_division | 2026-11-08T00:00:00Z | Barracas Central vs Racing Club | pick=Under 2.5 gólu
+soccer_sweden_allsvenskan | 2026-11-08T15:30:00Z | Kalmar FF vs IK Sirius | pick=Kalmar FF
+soccer_france_ligue_one | 2026-11-08T16:15:00Z | Angers vs Nice | pick=Angers
 
 === SCORE EVENTS ===
-soccer_argentina_primera_division | 2026-11-05T18:00:00Z | Aldosivi Mar del Plata vs River Plate | 0-2
 soccer_argentina_primera_division | 2026-11-05T22:15:00Z | Gimnasia La Plata vs Belgrano de Cordoba | 2-1
 soccer_argentina_primera_division | 2026-11-06T18:00:00Z | Barracas Central vs Racing Club | 2-0
 soccer_argentina_primera_division | 2026-11-06T22:15:00Z | Independiente vs Deportivo Riestra | 2-1
@@ -26,15 +27,40 @@ soccer_argentina_primera_division | 2026-11-07T20:30:00Z | Argentinos Juniors vs
 soccer_argentina_primera_division | 2026-11-07T20:30:00Z | Boca Juniors vs Defensa y Justicia | 1-0
 soccer_argentina_primera_division | 2026-11-07T20:30:00Z | Rosario Central vs Estudiantes de Río Cuarto | 2-0
 soccer_argentina_primera_division | 2026-11-08T01:00:00Z | Instituto de Córdoba vs Newells Old Boys | 2-2
+soccer_france_ligue_one | 2026-11-06T19:45:00Z | Toulouse vs Strasbourg | 3-1
+soccer_france_ligue_one | 2026-11-07T18:00:00Z | Auxerre vs Paris FC | 0-1
+soccer_france_ligue_one | 2026-11-07T20:05:00Z | Paris Saint Germain vs Troyes | 1-0
+soccer_france_ligue_one | 2026-11-08T14:00:00Z | Rennes vs Lille | 1-2
+soccer_france_ligue_one | 2026-11-08T16:15:00Z | Le Mans FC vs AS Monaco | 1-1
+soccer_france_ligue_one | 2026-11-08T16:15:00Z | Angers vs Nice | 0-2
+soccer_france_ligue_one | 2026-11-08T16:15:00Z | Brest vs Lyon | 2-0
+soccer_france_ligue_one | 2026-11-08T16:15:00Z | Le Havre vs Lorient | 0-2
 soccer_norway_eliteserien | 2026-11-07T17:00:00Z | Rosenborg vs IK Start | 4-1
+soccer_norway_eliteserien | 2026-11-08T13:30:00Z | Tromso vs Bodø/Glimt | 0-2
+soccer_norway_eliteserien | 2026-11-08T16:00:00Z | HamKam vs Sarpsborg FK | 3-0
+soccer_norway_eliteserien | 2026-11-08T16:00:00Z | Viking FK vs KFUM | 5-1
+soccer_norway_eliteserien | 2026-11-08T16:00:00Z | Sandefjord vs Molde | 5-5
+soccer_norway_eliteserien | 2026-11-08T16:01:00Z | Lillestrom vs Aalesund | 3-2
 soccer_spain_segunda_division | 2026-11-07T13:00:00Z | Burgos CF vs Celta Fortuna | 2-1
 soccer_spain_segunda_division | 2026-11-07T15:19:00Z | Cádiz CF vs Oviedo | 1-2
 soccer_spain_segunda_division | 2026-11-07T17:30:00Z | Leganés vs Albacete | 1-3
 soccer_spain_segunda_division | 2026-11-07T17:32:00Z | Córdoba vs AD Ceuta FC | 3-0
+soccer_spain_segunda_division | 2026-11-08T15:15:00Z | Girona FC vs Almería | 0-1
+soccer_spain_segunda_division | 2026-11-08T17:31:00Z | Sporting Gijón vs Real Valladolid CF | 1-2
+soccer_sweden_allsvenskan | 2026-11-06T18:14:00Z | Hammarby IF vs IF Elfsborg | 4-1
+soccer_sweden_allsvenskan | 2026-11-07T16:30:00Z | Degerfors IF vs GAIS | 1-2
+soccer_sweden_allsvenskan | 2026-11-07T16:30:00Z | Örgryte IS vs Västerås SK | 0-0
+soccer_sweden_allsvenskan | 2026-11-08T13:00:00Z | Halmstads BK vs Djurgardens IF | 2-1
+soccer_sweden_allsvenskan | 2026-11-08T13:00:00Z | IFK Goteborg vs Malmo FF | 0-0
+soccer_sweden_allsvenskan | 2026-11-08T15:30:00Z | AIK vs BK Hacken | 3-2
+soccer_sweden_allsvenskan | 2026-11-08T15:30:00Z | IF Brommapojkarna vs Mjällby AIF | 0-0
+soccer_sweden_allsvenskan | 2026-11-08T15:30:00Z | Kalmar FF vs IK Sirius | 1-0
 
 === CLOSEST CANDIDATES ===
 soccer_spain_segunda_division | CD Castellón vs SD Eibar -> Córdoba vs AD Ceuta FC | combined=0.355 min=0.211 | bet_time=2026-11-06T19:30:00Z score_time=2026-11-07T17:32:00Z
-soccer_argentina_primera_division | Aldosivi Mar del Plata vs River Plate -> Aldosivi Mar del Plata vs River Plate | combined=1.000 min=1.000 | bet_time=2026-11-08T00:00:00Z score_time=2026-11-05T18:00:00Z
-soccer_norway_eliteserien | Kristiansund BK vs Vålerenga -> Rosenborg vs IK Start | combined=0.284 min=0.235 | bet_time=2026-11-07T15:00:00Z score_time=2026-11-07T17:00:00Z
+soccer_argentina_primera_division | Aldosivi Mar del Plata vs River Plate -> Gimnasia La Plata vs Belgrano de Cordoba | combined=0.441 min=0.267 | bet_time=2026-11-08T00:00:00Z score_time=2026-11-05T22:15:00Z
+soccer_norway_eliteserien | Kristiansund BK vs Vålerenga -> Lillestrom vs Aalesund | combined=0.355 min=0.240 | bet_time=2026-11-07T15:00:00Z score_time=2026-11-08T16:01:00Z
 soccer_argentina_primera_division | Central Córdoba vs Lanus -> San Lorenzo vs Platense | combined=0.500 min=0.385 | bet_time=2026-11-08T00:00:00Z score_time=2026-11-06T22:15:00Z
 soccer_argentina_primera_division | Barracas Central vs Racing Club -> Barracas Central vs Racing Club | combined=1.000 min=1.000 | bet_time=2026-11-08T00:00:00Z score_time=2026-11-06T18:00:00Z
+soccer_sweden_allsvenskan | Kalmar FF vs IK Sirius -> Kalmar FF vs IK Sirius | combined=1.000 min=1.000 | bet_time=2026-11-08T15:30:00Z score_time=2026-11-08T15:30:00Z
+soccer_france_ligue_one | Angers vs Nice -> Angers vs Nice | combined=1.000 min=1.000 | bet_time=2026-11-08T16:15:00Z score_time=2026-11-08T16:15:00Z
