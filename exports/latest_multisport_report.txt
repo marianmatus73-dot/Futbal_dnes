@@ -21,7 +21,7 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 1. Events scanned: 334. Snapshots saved: 1020. Candidate rows: 12591 -> 987. Blocked: 951. Stored candidates: 41. Risk pool: 41.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 0. Events scanned: 338. Snapshots saved: 1062. Candidate rows: 13032 -> 1002. Blocked: 962. Stored candidates: 44. Risk pool: 44.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
@@ -31,13 +31,13 @@ Tennis: No active events. Settled: 0.
 No bets found.
 
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 60. Snapshots saved: 1200. Blocked: 1193. Stored candidates: 0.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 99. Snapshots saved: 1369. Blocked: 1318. Stored candidates: 0.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 29. Snapshots saved: 940. Blocked: 938. Stored candidates: 1.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 43. Snapshots saved: 1421. Blocked: 1413. Stored candidates: 0.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
@@ -53,7 +53,7 @@ Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 0. Snapshots sa
 No bets found.
 
 [NFL] scan
-NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 15. Snapshots saved: 522. Blocked: 522. Stored candidates: 0.
+NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 15. Snapshots saved: 570. Blocked: 570. Stored candidates: 0.
 NFLverse: refreshed; rows: 7548; apply: 0.
 NFL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
@@ -63,17 +63,18 @@ Total bets: 0
 
 
 === ENGINE SUMMARY ===
-- football: OK (121.87s)
-- tennis: OK (2.76s)
-- basketball: OK (17.73s)
-- hockey: OK (40.43s)
-- baseball: OK (19.78s)
-- handball: OK (43.74s)
-- nfl: OK (19.81s)
+- football: OK (134.89s)
+- tennis: OK (3.14s)
+- basketball: OK (42.36s)
+- hockey: OK (47.77s)
+- baseball: OK (10.88s)
+- handball: OK (47.71s)
+- nfl: OK (28.82s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
-- football: totals xG evidence insufficient = 64
+- football: totals xG evidence insufficient = 65
+- basketball: no market consensus = 40
 - football: totals edge gate; final=0.5198; reliability=0.000 = 26
 - football: totals edge gate; final=0.5191; reliability=0.000 = 22
 - football: totals edge gate; final=0.4802; reliability=0.000 = 21
@@ -81,8 +82,7 @@ Total bets: 0
 - football: totals edge gate; final=0.5234; reliability=0.000 = 18
 - football: totals edge gate; final=0.5224; reliability=0.000 = 17
 - football: totals edge gate; final=0.4776; reliability=0.000 = 16
-- football: totals edge gate; final=0.5212; reliability=0.000 = 16
-- football: totals edge gate; final=0.4766; reliability=0.000 = 15
+- football: totals edge gate; final=0.5215; reliability=0.000 = 16
 
 === BANKROLL SUMMARY ===
 Bankroll: 1000.00
@@ -166,14 +166,14 @@ Calibration is evaluated chronologically and is never accepted when it worsens B
 - tennis: BLOCKED | settled=111 | open=2 | overdue=1 | unresolved excluded=16 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 
 === OPERATIONAL HEALTH ===
-Funnel: candidates=42 | accepted=0 | rejected=42
-- football: ATTENTION | settled=1668/100 | snapshots24h=1020 | mode=LIVE
+Funnel: candidates=44 | accepted=0 | rejected=44
+- football: ATTENTION | settled=1669/100 | snapshots24h=1062 | mode=LIVE
 - tennis: ATTENTION | settled=111/75 | snapshots24h=0 | mode=LIVE
-- basketball: READY | settled=93/75 | snapshots24h=1200 | mode=LIVE
-- hockey: ATTENTION | settled=247/75 | snapshots24h=940 | mode=LIVE
+- basketball: READY | settled=93/75 | snapshots24h=1369 | mode=LIVE
+- hockey: ATTENTION | settled=247/75 | snapshots24h=1421 | mode=LIVE
 - baseball: ATTENTION | settled=1532/100 | snapshots24h=0 | mode=LIVE
 - handball: COLLECTING | settled=20/50 | snapshots24h=0 | mode=SHADOW
-- nfl: COLLECTING | settled=23/50 | snapshots24h=522 | mode=LIVE
+- nfl: COLLECTING | settled=23/50 | snapshots24h=570 | mode=LIVE
 
 === MODEL GOVERNANCE ===
 Football markets: 1X2=LIVE, DOUBLE_CHANCE=SHADOW, OVER_UNDER=SHADOW, BTTS=SHADOW
@@ -186,7 +186,7 @@ Training samples: 1042
 Meta AI status: UNLOCKED
 Weight tuning: True
 Top feature: Consensus safety
-Explainability records: 987
+Explainability records: 1002
 
 === FOOTBALL LEARNING PROGRESS V15.3 ===
 Settled samples: 1042
@@ -217,25 +217,26 @@ Status: READY
 Cycle ID: 1
 Stages completed: 17
 Loop state: AUTONOMOUS_ACTIVE
-Loop score: 0.992
+Loop score: 0.981
 Decision: EXECUTE_NOW
 Errors: 0
 Status: READY
 Feedback source: sqlite:sport_bets+runtime:module_outputs
-Previous result: WIN
-Previous profit: 0.6000
+Previous result: LOSS
+Previous profit: -1.0000
 Runtime health: 100.0%
-Average module latency: 38018 ms
+Average module latency: 45083 ms
 
 
 === V16 PRODUCTION DASHBOARD ===
 Stored cycles: 1
 Ready cycles: 1
 Error cycles: 0
-Average loop score: 0.992
+Average loop score: 0.981
 Dashboard HTML: exports/v16_dashboard.html
 
 
 === V16 ALERTS ===
-Active alerts: 0
-Highest severity: NONE
+Active alerts: 1
+Highest severity: INFO
+- [INFO] Latest settled feedback is LOSS.

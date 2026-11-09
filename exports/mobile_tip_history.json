@@ -1,8 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-09T14:33:10.479216+00:00",
+  "generated_at": "2026-11-09T23:56:56.264880+00:00",
   "limit_per_sport": 5,
-  "sports": {
+  "sports": {},
+  "results_sports": {
     "football": [
       {
         "sport": "football",
@@ -17,19 +18,15 @@
         "stake": 1.0,
         "closing_odds": null,
         "clv_pct": null,
-        "settlement_source": "",
-        "result": "OPEN",
-        "final_score": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "LOST",
+        "final_score": "1-0",
         "start_time": "2026-11-09T18:00:00Z",
         "created_at": "2026-11-08 12:21:44",
-        "settled_at": null,
+        "settled_at": "2026-11-09T20:53:14Z",
         "tracking_mode": "LOW_ODDS_WATCH",
         "observation_only": true
-      }
-    ]
-  },
-  "results_sports": {
-    "football": [
+      },
       {
         "sport": "football",
         "league": "soccer_portugal_primeira_liga",
@@ -117,28 +114,6 @@
         "settled_at": "2026-11-08T22:17:19Z",
         "tracking_mode": "LOW_ODDS_WATCH",
         "observation_only": true
-      },
-      {
-        "sport": "football",
-        "league": "La Liga",
-        "match": "Atlético Madrid vs Barcelona",
-        "pick": "Atlético Madrid",
-        "market": "h2h",
-        "odds": 3.85,
-        "bookmaker": "1xBet",
-        "model_probability": 0.2916736115717846,
-        "edge": 0.10294340455137085,
-        "stake": 0.36,
-        "closing_odds": 3.38,
-        "clv_pct": 0.13905,
-        "settlement_source": "the_odds_api_scores",
-        "result": "LOST",
-        "final_score": "1-2",
-        "start_time": "2026-11-08T20:00:00Z",
-        "created_at": "2026-10-27 11:11:22",
-        "settled_at": "2026-11-08T22:17:19Z",
-        "tracking_mode": "LIVE",
-        "observation_only": false
       }
     ],
     "basketball": [
