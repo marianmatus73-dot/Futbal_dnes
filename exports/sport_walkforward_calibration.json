@@ -54,22 +54,22 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 91,
-    "train_samples": 63,
+    "samples": 92,
+    "train_samples": 64,
     "test_samples": 28,
     "split": "chronological_70_30",
-    "raw_brier": 0.214508,
-    "calibrated_brier": 0.224305,
+    "raw_brier": 0.21612,
+    "calibrated_brier": 0.222055,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 91,
-    "train_samples": 63,
+    "samples": 92,
+    "train_samples": 64,
     "test_samples": 28,
     "split": "chronological_70_30",
-    "raw_brier": 0.214508,
-    "calibrated_brier": 0.224305,
+    "raw_brier": 0.21612,
+    "calibrated_brier": 0.222055,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
@@ -88,42 +88,42 @@
     "status": "BUILDING"
   },
   "basketball/tier=VALUE_1.61_2.50": {
-    "samples": 36,
+    "samples": 37,
     "train_samples": 25,
-    "test_samples": 11,
+    "test_samples": 12,
     "split": "chronological_70_30",
-    "raw_brier": 0.232101,
-    "calibrated_brier": 0.218798,
+    "raw_brier": 0.224426,
+    "calibrated_brier": 0.214511,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football": {
-    "samples": 976,
-    "train_samples": 683,
-    "test_samples": 293,
+    "samples": 978,
+    "train_samples": 684,
+    "test_samples": 294,
     "split": "chronological_70_30",
-    "raw_brier": 0.188563,
-    "calibrated_brier": 0.186903,
+    "raw_brier": 0.18822,
+    "calibrated_brier": 0.186446,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football/market=h2h": {
-    "samples": 976,
-    "train_samples": 683,
-    "test_samples": 293,
+    "samples": 978,
+    "train_samples": 684,
+    "test_samples": 294,
     "split": "chronological_70_30",
-    "raw_brier": 0.188563,
-    "calibrated_brier": 0.186903,
+    "raw_brier": 0.18822,
+    "calibrated_brier": 0.186446,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "football/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 954,
-    "train_samples": 667,
+    "samples": 956,
+    "train_samples": 669,
     "test_samples": 287,
     "split": "chronological_70_30",
-    "raw_brier": 0.187384,
-    "calibrated_brier": 0.185527,
+    "raw_brier": 0.185912,
+    "calibrated_brier": 0.183959,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
@@ -192,11 +192,11 @@
     "status": "BUILDING"
   },
   "nfl": {
-    "samples": 20,
+    "samples": 21,
     "status": "BUILDING"
   },
   "nfl/market=h2h": {
-    "samples": 20,
+    "samples": 21,
     "status": "BUILDING"
   },
   "nfl/tier=EXPERIMENTAL_2.51_PLUS": {
@@ -204,7 +204,7 @@
     "status": "BUILDING"
   },
   "nfl/tier=SAFE_1.20_1.60": {
-    "samples": 7,
+    "samples": 8,
     "status": "BUILDING"
   },
   "nfl/tier=VALUE_1.61_2.50": {
