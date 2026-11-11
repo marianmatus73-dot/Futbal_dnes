@@ -1,8 +1,55 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T21:34:47.210414+00:00",
+  "generated_at": "2026-11-11T13:05:22.458745+00:00",
   "limit_per_sport": 5,
-  "sports": {},
+  "sports": {
+    "hockey": [
+      {
+        "sport": "hockey",
+        "league": "icehockey_sweden_allsvenskan",
+        "match": "Södertälje SK vs IK Oskarshamn",
+        "pick": "IK Oskarshamn",
+        "market": "h2h",
+        "odds": 3.15,
+        "bookmaker": "LeoVegas (SE)",
+        "model_probability": 0.34664996097304884,
+        "edge": 0.09194737706510381,
+        "stake": 0.32,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-11-11T18:00:00Z",
+        "created_at": "2026-11-09 14:30:38",
+        "settled_at": null,
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      },
+      {
+        "sport": "hockey",
+        "league": "icehockey_liiga",
+        "match": "JYP vs Kärpät",
+        "pick": "Kärpät",
+        "market": "h2h",
+        "odds": 3.35,
+        "bookmaker": "Coolbet",
+        "model_probability": 0.32419541959189113,
+        "edge": 0.08605465563283543,
+        "stake": 0.27,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-11-11T16:30:00Z",
+        "created_at": "2026-11-08 20:01:25",
+        "settled_at": null,
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      }
+    ]
+  },
   "results_sports": {
     "football": [
       {
