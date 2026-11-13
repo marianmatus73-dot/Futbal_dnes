@@ -105,6 +105,50 @@ def league_allowed(game: dict[str, Any], league_names: set[str]) -> bool:
     )
 
 
+def select_balanced_games(
+    games: list[dict[str, Any]],
+    *,
+    league_names: set[str],
+    per_league_limit: int,
+    total_limit: int,
+    known_event_ids: set[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Select upcoming games fairly across leagues, preferring unseen events."""
+    known = known_event_ids or set()
+    buckets: dict[str, list[dict[str, Any]]] = {}
+    seen_ids: set[str] = set()
+    for game in games:
+        if league_names and not league_allowed(game, league_names):
+            continue
+        game_id = str(game.get("id", "")).strip()
+        if not game_id or game_id in seen_ids:
+            continue
+        seen_ids.add(game_id)
+        league = str((game.get("league") or {}).get("name", "Handball")).strip()
+        buckets.setdefault(league.casefold(), []).append(game)
+
+    def priority(game: dict[str, Any]) -> tuple[int, str, str]:
+        game_id = str(game.get("id", "")).strip()
+        return (
+            1 if f"apisports:{game_id}" in known else 0,
+            str(game.get("date", "")),
+            game_id,
+        )
+
+    for league_games in buckets.values():
+        league_games.sort(key=priority)
+
+    selected: list[dict[str, Any]] = []
+    for position in range(max(1, per_league_limit)):
+        for league_key in sorted(buckets):
+            league_games = buckets[league_key]
+            if position < len(league_games):
+                selected.append(league_games[position])
+                if len(selected) >= max(1, total_limit):
+                    return selected
+    return selected
+
+
 def normalize_completed_game(game: dict[str, Any]) -> dict[str, Any] | None:
     """Convert an API-Sports finished game to the strict settlement shape."""
     game_id = game.get("id")
