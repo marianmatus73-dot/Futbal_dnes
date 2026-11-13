@@ -30,7 +30,8 @@ export type Tip = {
   raw_edge?: number;
   rejected_reasons?: string[];
   decision?: "ACCEPT" | "REJECT" | string;
-  watch_status?: "PASSED_PRO_FILTER" | "WATCH_ONLY" | string;
+  watch_status?: "LIVE_LOW_ODDS" | "PASSED_PRO_FILTER" | "WATCH_ONLY" | string;
+  not_official_tip?: boolean;
   start_time?: string;
   bookmaker_weight?: number;
   bookmaker_samples?: number;

@@ -17,6 +17,7 @@ class ProTip:
     pick: str
     odds: float
     model_probability: float
+    market: str = "h2h"
     bookmaker: str = ""
     reason: str = ""
 
@@ -178,6 +179,7 @@ def build_pro_tip(
     pick: str,
     odds: float,
     model_probability: float,
+    market: str = "h2h",
     bookmaker: str = "",
     reason: str = "",
     raw_edge: float | None = None,
@@ -232,6 +234,7 @@ def build_pro_tip(
         pick=pick,
         odds=odds,
         model_probability=model_probability,
+        market=str(market or "h2h").strip().casefold(),
         bookmaker=bookmaker,
         reason=reason,
         raw_edge=raw_edge,

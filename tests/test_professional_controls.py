@@ -104,6 +104,25 @@ class ProfessionalControlsTests(unittest.TestCase):
         self.assertEqual(summary.accepted, 1)
         self.assertEqual(len(output["result"].bets), 1)
         self.assertGreaterEqual(output["result"].bets[0].edge, .04)
+        self.assertLessEqual(output["result"].bets[0].stake, 2.5)
+
+    def test_football_totals_remain_shadow_only(self) -> None:
+        bet = Bet(
+            sport="football", league="L", event="A vs B",
+            market="totals_2.5", selection="Under 2.5", odds=1.50,
+            prob_model=.75, prob_market=2 / 3, prob_final=.75,
+            edge=.125, stake=5, bookmaker="Book",
+            start_time="2026-11-14T18:00:00Z", score=80,
+        )
+        output = {"result": SportResult(sport="football", mode="scan", bets=[bet])}
+        summary = apply_professional_risk_controls([output], self.settings)
+        self.assertEqual(summary.accepted, 0)
+        self.assertEqual(
+            summary.rejected_reasons.get(
+                "football: totals market remains shadow-only"
+            ),
+            1,
+        )
 
     def test_early_football_confidence_cannot_claim_certainty(self) -> None:
         bet = Bet(
