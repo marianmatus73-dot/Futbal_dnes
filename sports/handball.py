@@ -17,6 +17,7 @@ from core.api_sports_handball import (
     league_allowed,
     normalize_completed_game,
     normalize_game,
+    select_balanced_games,
     upcoming_days,
 )
 from core.market import best_outlier_prices, consensus_h2h
@@ -110,6 +111,21 @@ def ensure_handball_learning_tables(settings: Settings) -> None:
             """
         )
         conn.commit()
+
+
+def _known_api_sports_event_ids(settings: Settings) -> set[str]:
+    database = Path(settings.db_file or os.getenv("DB_FILE", "bets.db"))
+    if not database.exists():
+        return set()
+    with closing(sqlite3.connect(database)) as conn:
+        rows = conn.execute(
+            """
+            SELECT DISTINCT external_event_id
+            FROM sport_learning_observations
+            WHERE sport = 'handball' AND external_event_id LIKE 'apisports:%'
+            """
+        ).fetchall()
+    return {str(row[0]) for row in rows if row and row[0]}
 
 
 async def settle_handball_observations(
@@ -369,8 +385,13 @@ class HandballModule(SportModule):
                 ).split(",")
                 if value.strip()
             }
-            lookahead = max(1, min(int(os.getenv("HANDBALL_LOOKAHEAD_DAYS", "4")), 7))
-            max_games = max(1, min(int(os.getenv("HANDBALL_API_MAX_GAMES", "20")), 30))
+            include_all_leagues = os.getenv("HANDBALL_API_INCLUDE_ALL_LEAGUES", "0") == "1"
+            lookahead = max(1, min(int(os.getenv("HANDBALL_LOOKAHEAD_DAYS", "7")), 10))
+            max_games = max(1, min(int(os.getenv("HANDBALL_API_MAX_GAMES", "30")), 50))
+            per_league_limit = max(
+                1,
+                min(int(os.getenv("HANDBALL_API_MAX_GAMES_PER_LEAGUE", "5")), 10),
+            )
             client = ApiSportsHandballClient(
                 api_sports_key,
                 settings_timeout(settings),
@@ -390,7 +411,13 @@ class HandballModule(SportModule):
                             day,
                             exc,
                         )
-                games = [game for game in games if league_allowed(game, league_names)][:max_games]
+                games = select_balanced_games(
+                    games,
+                    league_names=set() if include_all_leagues else league_names,
+                    per_league_limit=per_league_limit,
+                    total_limit=max_games,
+                    known_event_ids=_known_api_sports_event_ids(settings),
+                )
                 for game in games:
                     try:
                         odds = await client.odds_for_game(game.get("id", ""))
