@@ -67,7 +67,15 @@ def build_low_odds_watch(
         odds = float(getattr(tip, "odds", 0) or 0)
         if 1.20 <= odds <= 1.60:
             item = _tip_payload(tip, "ACCEPT")
-            item["watch_status"] = "PASSED_PRO_FILTER"
+            market = str(item.get("market") or "h2h").strip().casefold()
+            is_live_low_odds = (
+                str(item.get("sport") or "").strip().casefold() == "football"
+                and market in {"h2h", "double_chance"}
+            )
+            item["watch_status"] = (
+                "LIVE_LOW_ODDS" if is_live_low_odds else "PASSED_PRO_FILTER"
+            )
+            item["not_official_tip"] = not is_live_low_odds
             rows.append(item)
 
     for candidate in rejected:
@@ -223,6 +231,11 @@ def persist_low_odds_watch(settings: Settings, rows: list[dict]) -> int:
         for row in rows:
             sport = str(row.get("sport") or "football").strip().lower()
             if sport not in LOW_ODDS_WATCH_SPORTS:
+                continue
+            # LIVE_LOW_ODDS rows already survived the professional risk layer
+            # and were persisted as LIVE by the sport module. Inserting them
+            # again as watch observations would duplicate the same decision.
+            if str(row.get("watch_status") or "") == "LIVE_LOW_ODDS":
                 continue
             event = str(row.get("event") or row.get("match") or "").strip()
             selection = str(row.get("selection") or row.get("pick") or "").strip()

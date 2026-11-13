@@ -221,13 +221,14 @@ function LowOddsWatch({ tips, sport }: { tips: Tip[]; sport?: Sport }) {
     double_chance: "DVOJTIP",
     "totals_2.5": "UNDER / OVER 2,5",
   }[market || "h2h"] || market || "TRH");
+  const isLive = (tip: Tip) => tip.watch_status === "LIVE_LOW_ODDS";
   return (
     <View style={styles.candidatesSection}>
-      <Text style={styles.lowOddsTitle}>{sport ? sportMeta[sport].label : "Multisport"} · sledovanie kurzov 1,20–1,60</Text>
-      <Text style={styles.candidatesSubtitle}>Zobrazené sú iba zápasy, ktoré sa začnú v nasledujúcich 24 hodinách. Nie sú súčasťou ostrého value výberu; odporúčaný skúšobný vklad je najviac 0,10 jednotky.</Text>
+      <Text style={styles.lowOddsTitle}>{sport ? sportMeta[sport].label : "Multisport"} · nízke kurzy 1,20–1,60</Text>
+      <Text style={styles.candidatesSubtitle}>Zobrazené sú iba zápasy do 24 hodín. H2H a dvojtip označené OSTRÝ TIP prešli všetkými filtrami a majú obmedzený vklad. Under/Over a ostatné položky zostávajú iba na sledovanie.</Text>
       {tips.length ? tips.map((tip, index) => (
         <View key={`low-odds-${tip.match}-${index}`}>
-          <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{marketLabel(tip.market)} · {tip.decision === "ACCEPT" ? "PREŠIEL FILTROM" : "DENNÝ EXPERIMENT"}</Text></View>
+          <View style={styles.watchBadge}><Text style={styles.watchBadgeText}>{marketLabel(tip.market)} · {isLive(tip) ? "OSTRÝ TIP · NÍZKY VKLAD" : "SLEDOVANÝ TEST"}</Text></View>
           <TipItem tip={tip} />
         </View>
       )) : <Text style={styles.historyEmpty}>Dnes poskytovateľ neposlal vhodný kurz 1,20–1,60.</Text>}

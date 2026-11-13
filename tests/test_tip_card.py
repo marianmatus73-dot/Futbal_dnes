@@ -56,7 +56,32 @@ class TipCardTests(unittest.TestCase):
         rows = build_low_odds_watch([accepted], [rejected])
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]["pick"], "A")
-        self.assertEqual(rows[0]["watch_status"], "PASSED_PRO_FILTER")
+        self.assertEqual(rows[0]["watch_status"], "LIVE_LOW_ODDS")
+        self.assertFalse(rows[0]["not_official_tip"])
+
+    def test_double_chance_market_survives_professional_conversion(self) -> None:
+        accepted = build_pro_tip(
+            sport="football", league="test", match="A vs B", pick="1X",
+            market="double_chance", odds=1.35,
+            model_probability=0.79, model_score=79,
+        )
+        rows = build_low_odds_watch([accepted], [])
+        self.assertEqual(rows[0]["market"], "double_chance")
+        self.assertEqual(rows[0]["watch_status"], "LIVE_LOW_ODDS")
+
+    def test_live_low_odds_is_not_duplicated_as_watch_observation(self) -> None:
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as temp:
+            database = Path(temp) / "bets.db"
+            settings = Settings(db_file=str(database))
+            init_sport_db(settings)
+            rows = [{
+                "sport": "football", "league": "test", "event": "A vs B",
+                "selection": "A", "market": "h2h", "odds": 1.45,
+                "model_probability": .74, "market_probability": .69,
+                "bookmaker": "Book", "start_time": "2026-11-14T18:00:00Z",
+                "watch_status": "LIVE_LOW_ODDS",
+            }]
+            self.assertEqual(persist_low_odds_watch(settings, rows), 0)
 
     def test_low_odds_watch_keeps_rejected_observation_without_publishing(self) -> None:
         rows = build_low_odds_watch([], [{

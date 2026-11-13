@@ -305,6 +305,7 @@ def apply_professional_risk_controls(
         seen_events: set[tuple[str, str]] = set()
         accepted_odds_bands: dict[tuple[float, float | None], int] = {}
         football_high_odds_accepted = 0
+        football_low_odds_accepted = 0
 
         for bet in sorted(result.bets, key=lambda item: (item.score, item.edge), reverse=True):
             summary.candidates += 1
@@ -357,6 +358,21 @@ def apply_professional_risk_controls(
                 )
             league_clv = league_clv_cache[league_clv_key]
             stake_cap = settings.bank * policy.max_stake_pct
+            is_football_low_odds = (
+                result.sport == "football"
+                and bet.market in {"h2h", "double_chance"}
+                and 1.20 <= bet.odds <= 1.60
+            )
+            low_odds_daily_limit = max(
+                1, int(os.getenv("FOOTBALL_LOW_ODDS_DAILY_LIMIT", "3"))
+            )
+            if is_football_low_odds:
+                stake_cap = min(
+                    stake_cap,
+                    settings.bank * float(
+                        os.getenv("FOOTBALL_LOW_ODDS_MAX_STAKE_PCT", "0.0025")
+                    ),
+                )
             stake = (
                 existing_allocation[1]
                 if repeats_same_selection
@@ -376,6 +392,12 @@ def apply_professional_risk_controls(
                 reason = "daily loss limit reached"
             elif not policy.min_odds <= bet.odds <= policy.max_odds:
                 reason = "odds outside sport limits"
+            elif (
+                result.sport == "football"
+                and bet.market == "totals_2.5"
+                and os.getenv("FOOTBALL_TOTALS_LIVE_ENABLED", "0") != "1"
+            ):
+                reason = "totals market remains shadow-only"
             elif (
                 league_clv.samples >= min_league_clv_samples
                 and league_clv.average < min_league_clv
@@ -414,7 +436,15 @@ def apply_professional_risk_controls(
                 reason = "correlated event exposure reached"
             elif (
                 result.sport == "football"
-                and accepted_odds_bands.get(odds_band, 0) >= 2
+                and is_football_low_odds
+                and football_low_odds_accepted >= low_odds_daily_limit
+            ):
+                reason = "low odds daily limit reached"
+            elif (
+                result.sport == "football"
+                and accepted_odds_bands.get(odds_band, 0) >= (
+                    low_odds_daily_limit if is_football_low_odds else 2
+                )
             ):
                 reason = "odds band tip limit reached"
             elif len(accepted) >= policy.max_tips:
@@ -464,6 +494,8 @@ def apply_professional_risk_controls(
             accepted_odds_bands[odds_band] = accepted_odds_bands.get(odds_band, 0) + 1
             if result.sport == "football" and bet.odds > 2.20:
                 football_high_odds_accepted += 1
+            if is_football_low_odds:
+                football_low_odds_accepted += 1
             if not repeats_same_selection:
                 accepted_daily += stake
                 sport_exposure += stake
