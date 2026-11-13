@@ -110,6 +110,9 @@ jobs:
           SPORT_MODE: "all"
           SPORT_CONCURRENCY: "5"
           SPORT_KEY_AUTO_DISCOVERY: "1"
+          HOCKEY_SPORT_KEYS: "icehockey_nhl,icehockey_ahl,icehockey_sweden_hockey_league,icehockey_sweden_allsvenskan,icehockey_liiga,icehockey_mestis"
+          MIN_HOCKEY_BOOKMAKERS: "3"
+          HOCKEY_SECONDARY_MIN_BOOKMAKERS: "2"
           HANDBALL_LOOKAHEAD_DAYS: "4"
           HANDBALL_API_MAX_GAMES: "20"
           HANDBALL_API_SPORTS_LEAGUES: "Champions League,EHF European League,Bundesliga,Starligue,Liga ASOBAL,Herre Handbold Ligaen,REMA 1000-ligaen,Handbollsligan,Extraliga"
@@ -233,7 +236,7 @@ jobs:
           git rm --cached bets.db-wal 2>/dev/null || true
           git rm --cached bets.db-shm 2>/dev/null || true
 
-          git add exports/*.csv exports/*.json exports/*.txt exports/*.html 2>/dev/null || true
+          git add exports/*.csv exports/*.csv.gz exports/*.json exports/*.txt exports/*.html 2>/dev/null || true
           # Persist the trained football model so the next isolated Actions
           # runner can actually use what the previous run learned.
           git add models/football_meta_model.pkl models/football_meta_model.json 2>/dev/null || true

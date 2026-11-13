@@ -10,10 +10,36 @@ from core.config import Settings
 from core.sport_quant import init_sport_db
 from core.sport_settlement import ensure_settlement_columns
 from core.types import Bet
-from sports.hockey import HockeyModule, hockey_selection_score
+from sports.hockey import (
+    HockeyModule,
+    hockey_min_bookmakers,
+    hockey_selection_score,
+    select_hockey_sport_keys,
+)
 
 
 class HockeyEventIdentityTests(unittest.TestCase):
+    def test_discovery_adds_active_secondary_leagues_and_excludes_outrights(self) -> None:
+        selected = select_hockey_sport_keys(
+            ["icehockey_nhl"],
+            {
+                "icehockey_nhl",
+                "icehockey_ahl",
+                "icehockey_sweden_hockey_league",
+                "icehockey_nhl_championship_winner",
+                "basketball_nba",
+            },
+        )
+        self.assertEqual(selected, [
+            "icehockey_nhl",
+            "icehockey_ahl",
+            "icehockey_sweden_hockey_league",
+        ])
+
+    def test_secondary_leagues_require_two_bookmakers(self) -> None:
+        self.assertEqual(hockey_min_bookmakers("icehockey_nhl"), 3)
+        self.assertEqual(hockey_min_bookmakers("icehockey_liiga"), 2)
+
     def test_selection_score_uses_probability_not_edge(self) -> None:
         self.assertEqual(hockey_selection_score(0.72), 72.0)
         self.assertAlmostEqual(hockey_selection_score(0.14), 14.0)
