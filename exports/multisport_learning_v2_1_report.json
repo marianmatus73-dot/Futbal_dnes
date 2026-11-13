@@ -1,6 +1,6 @@
 {
   "version": "V2.1",
-  "generated_at": "2026-11-12T22:01:43.132005+00:00",
+  "generated_at": "2026-11-13T13:34:42.591060+00:00",
   "sports": {
     "baseball": {
       "total_bets": 2288,
@@ -66,21 +66,21 @@
       "status": "READY"
     },
     "hockey": {
-      "total_bets": 392,
+      "total_bets": 393,
       "settled_bets": 248,
-      "open_bets": 144,
+      "open_bets": 145,
       "wins": 84,
       "losses": 164,
       "win_rate": 0.3387,
       "profit": -5.542,
-      "stake_sum": 141.94,
+      "stake_sum": 142.28,
       "yield": -0.039,
       "probability_samples": 0,
       "brier_score": null,
       "log_loss": null,
       "average_confidence": null,
-      "leagues": 5,
-      "bookmakers": 11,
+      "leagues": 6,
+      "bookmakers": 12,
       "data_quality": 0.75,
       "maturity": "READY",
       "ai_health": "GOOD",

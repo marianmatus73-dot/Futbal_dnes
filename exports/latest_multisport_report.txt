@@ -2,23 +2,9 @@
 === TOP TIPS OF THE DAY ===
 
 
-=== PRO TIPPER VALUE BETS ===
-
-#1 FOOTBALL | League One
-Match: Wycombe Wanderers vs Huddersfield Town
-Pick: Wycombe Wanderers
-Odds: 3.80
-Bookmaker: Matchbook
-Model probability: 30.4%
-Market probability: 26.3%
-Raw edge: 13.2%
-Consensus edge: 4.0%
-Confidence: 75/100
-Risk: medium
-Stake: 0.25u
-Stake amount: 13.73
-Reason: Raw edge 13.2% | Score 75.0 | Consensus: elo, xg, form, market
-Release: EARLY
+=== PRO TIPPER ===
+Dnes nebol nájdený žiadny dostatočne kvalitný value bet.
+NO BET je tiež profi rozhodnutie.
 
 
 === CANDIDATES REJECTED BY PRO FILTER ===
@@ -35,23 +21,23 @@ MULTISPORT BETTING ENGINE REPORT
 ==========================================
 
 [FOOTBALL] scan
-Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 9. CLV updated: 0. Events scanned: 363. Snapshots saved: 1443. Candidate rows: 14871 -> 1077. Blocked: 1033. Stored candidates: 48. Risk pool: 48.
+Football v14 Candidate Optimized: league registry/xG/dynamic ELO/form/Dixon-Coles/football meta/fallback model. Settled: 0. CLV updated: 5. Events scanned: 367. Snapshots saved: 1455. Candidate rows: 14763 -> 1098. Blocked: 1053. Stored candidates: 46. Risk pool: 46.
 FOOTBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
-01. 2026-11-14T15:00:00Z | League One | Wycombe Wanderers vs Huddersfield Town | Wycombe Wanderers @ 3.80 | P 30.3% | Edge 13.2% | Stake 0.42 | Matchbook | EARLY
+No bets found.
 
 [TENNIS] scan
-Tennis scan hotový. Events: 4, Stored: 0
+Tennis scan hotový. Events: 6, Stored: 0
 No bets found.
 
 [BASKETBALL] scan
-Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 19. Snapshots saved: 466. Blocked: 467. Stored candidates: 0.
+Basketball v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 80. Snapshots saved: 1244. Blocked: 1234. Stored candidates: 0.
 BASKETBALL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HOCKEY] scan
-Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 46. Snapshots saved: 1648. Blocked: 1648. Stored candidates: 0.
+Hockey v12: meta-model/fallback/CLV/ELO/Poisson model. Settled: 0. CLV updated: 0. Events scanned: 42. Snapshots saved: 1245. Blocked: 1244. Stored candidates: 1.
 HOCKEY ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
@@ -63,40 +49,40 @@ Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
 [HANDBALL] shadow
-Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 8. Snapshots saved: 228. Learning observations saved: 24. New benchmark candidates: 0. Settled observations: 0 (0 won, 0 lost).
+Handball Engine 2.0 SHADOW: no publishable tips. Events scanned: 8. Snapshots saved: 223. Learning observations saved: 24. New benchmark candidates: 0. Settled observations: 0 (0 won, 0 lost).
 No bets found.
 
 [NFL] scan
-NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 27. Snapshots saved: 791. Blocked: 791. Stored candidates: 0.
+NFL v12: meta-model/fallback/CLV/ELO market model. Settled: 0. CLV updated: 0. Events scanned: 26. Snapshots saved: 727. Blocked: 727. Stored candidates: 0.
 NFLverse: refreshed; rows: 7548; apply: 0.
 NFL ANALYTICS
 Settled: 0 | W-L: 0-0 | Winrate: 0.0% | P/L: 0.00 | Yield: 0.0% | Avg CLV: 0.00%
 No bets found.
 
-Total bets: 1
+Total bets: 0
 
 
 === ENGINE SUMMARY ===
-- football: OK (151.48s)
-- tennis: OK (3.84s)
-- basketball: OK (40.95s)
-- hockey: OK (57.84s)
-- baseball: OK (4.08s)
-- handball: OK (166.79s)
-- nfl: OK (36.44s)
+- football: OK (107.79s)
+- tennis: OK (3.45s)
+- basketball: OK (33.08s)
+- hockey: OK (40.36s)
+- baseball: OK (3.59s)
+- handball: OK (203.99s)
+- nfl: OK (25.72s)
 
 
 === BLOCKED DECISIONS SUMMARY ===
-- football: totals xG evidence insufficient = 65
+- football: totals xG evidence insufficient = 67
+- football: totals edge gate; final=0.5191; reliability=0.000 = 24
 - football: totals edge gate; final=0.5198; reliability=0.000 = 24
+- football: totals edge gate; final=0.4809; reliability=0.000 = 22
 - football: totals edge gate; final=0.4802; reliability=0.000 = 21
-- football: totals edge gate; final=0.4809; reliability=0.000 = 20
-- football: totals edge gate; final=0.5191; reliability=0.000 = 19
+- football: totals edge gate; final=0.5215; reliability=0.000 = 18
+- football: totals edge gate; final=0.5224; reliability=0.000 = 18
+- football: totals edge gate; final=0.4776; reliability=0.000 = 17
+- football: totals edge gate; final=0.5192; reliability=0.000 = 17
 - football: totals edge gate; final=0.5234; reliability=0.000 = 17
-- football: totals edge gate; final=0.5192; reliability=0.000 = 16
-- football: totals edge gate; final=0.5215; reliability=0.000 = 16
-- football: totals edge gate; final=0.4759; reliability=0.000 = 15
-- football: totals edge gate; final=0.4766; reliability=0.000 = 14
 
 === BANKROLL SUMMARY ===
 Bankroll: 1000.00
@@ -112,7 +98,7 @@ Yield: 4.87%
 Profit: 101.95
 Stake sum: 2092.16
 
-Open bets: 6
+Open bets: 7
 Settled bets: 3003
 
 Result distribution:
@@ -120,7 +106,7 @@ Result distribution:
 - UNRESOLVED: 1354
 - WON: 1262
 - VOID: 12
-- OPEN: 6
+- OPEN: 7
 
 By sport:
 - baseball: 827-705 | profit 94.75 | yield 5.77% | bets 1532
@@ -163,7 +149,7 @@ Top leagues:
 - mma: settled=20 | yield=-20.22% | profit=-1.76 | CLV=n/a (0) | Brier=0.1758 | max DD=3.16
 - nfl: settled=21 | yield=6.56% | profit=1.90 | CLV=n/a (0) | Brier=0.2101 | max DD=3.01
 - tennis: settled=111 | yield=11.55% | profit=3.44 | CLV=n/a (0) | Brier=0.1708 | max DD=3.20
-- handball SHADOW: settled events=20/150 | open events=8 | canonical samples=84 | duplicates excluded=629 | market Brier=0.0940 | maturity=EARLY | publishing=LOCKED
+- handball SHADOW: settled events=20/150 | open events=8 | canonical samples=84 | duplicates excluded=653 | market Brier=0.0940 | maturity=EARLY | publishing=LOCKED
   benchmark market_favourite_v1: settled=20 | open=8 | yield=16.70% | Brier=0.133549
 
 === TIME-SPLIT CALIBRATION ===
@@ -174,20 +160,20 @@ Calibration is evaluated chronologically and is never accepted when it worsens B
 - baseball: WARNING | settled=1532 | open=0 | overdue=0 | unresolved excluded=752 | unknown=0 | missing score=914 | missing profit=0 | closing=0.0%
 - basketball: WARNING | settled=93 | open=1 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=25 | missing profit=0 | closing=0.0%
 - football: WARNING | settled=990 | open=1 | overdue=0 | unresolved excluded=436 | unknown=0 | missing score=0 | missing profit=0 | closing=58.5%
-- hockey: BLOCKED | settled=248 | open=3 | overdue=1 | unresolved excluded=141 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
+- hockey: BLOCKED | settled=248 | open=4 | overdue=3 | unresolved excluded=141 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 - mma: WARNING | settled=20 | open=0 | overdue=0 | unresolved excluded=8 | unknown=0 | missing score=19 | missing profit=0 | closing=0.0%
 - nfl: WARNING | settled=21 | open=0 | overdue=0 | unresolved excluded=0 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 - tennis: WARNING | settled=111 | open=1 | overdue=0 | unresolved excluded=17 | unknown=0 | missing score=0 | missing profit=0 | closing=0.0%
 
 === OPERATIONAL HEALTH ===
-Funnel: candidates=48 | accepted=1 | rejected=47
-- football: ATTENTION | settled=1678/100 | snapshots24h=1443 | mode=LIVE
+Funnel: candidates=47 | accepted=0 | rejected=47
+- football: ATTENTION | settled=1678/100 | snapshots24h=1455 | mode=LIVE
 - tennis: ATTENTION | settled=111/75 | snapshots24h=0 | mode=LIVE
-- basketball: READY | settled=94/75 | snapshots24h=466 | mode=LIVE
-- hockey: ATTENTION | settled=248/75 | snapshots24h=1648 | mode=LIVE
+- basketball: READY | settled=94/75 | snapshots24h=1244 | mode=LIVE
+- hockey: ATTENTION | settled=248/75 | snapshots24h=1245 | mode=LIVE
 - baseball: ATTENTION | settled=1532/100 | snapshots24h=0 | mode=LIVE
-- handball: COLLECTING | settled=20/50 | snapshots24h=228 | mode=SHADOW
-- nfl: COLLECTING | settled=23/50 | snapshots24h=791 | mode=LIVE
+- handball: COLLECTING | settled=20/50 | snapshots24h=223 | mode=SHADOW
+- nfl: COLLECTING | settled=23/50 | snapshots24h=727 | mode=LIVE
 
 === MODEL GOVERNANCE ===
 Football markets: 1X2=LIVE, DOUBLE_CHANCE=SHADOW, OVER_UNDER=SHADOW, BTTS=SHADOW
@@ -200,7 +186,7 @@ Training samples: 1042
 Meta AI status: UNLOCKED
 Weight tuning: True
 Top feature: Consensus safety
-Explainability records: 1077
+Explainability records: 1098
 
 === FOOTBALL LEARNING PROGRESS V15.3 ===
 Settled samples: 1042
@@ -239,7 +225,7 @@ Feedback source: sqlite:sport_bets+runtime:module_outputs
 Previous result: WIN
 Previous profit: 0.5700
 Runtime health: 100.0%
-Average module latency: 65918 ms
+Average module latency: 59710 ms
 
 
 === V16 PRODUCTION DASHBOARD ===
@@ -251,6 +237,5 @@ Dashboard HTML: exports/v16_dashboard.html
 
 
 === V16 ALERTS ===
-Active alerts: 1
-Highest severity: WARNING
-- [WARNING] Average module latency exceeded 60 seconds.
+Active alerts: 0
+Highest severity: NONE
