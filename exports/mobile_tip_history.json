@@ -1,9 +1,31 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T13:34:44.715453+00:00",
+  "generated_at": "2026-11-13T17:16:25.161960+00:00",
   "limit_per_sport": 5,
   "sports": {
     "football": [
+      {
+        "sport": "football",
+        "league": "soccer_uefa_nations_league",
+        "match": "Scotland vs North Macedonia",
+        "pick": "Over 2.5 gólu",
+        "market": "totals_2.5",
+        "odds": 1.57,
+        "bookmaker": "Unibet (SE)",
+        "model_probability": 0.5191,
+        "edge": -0.18501299999999998,
+        "stake": 1.0,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-11-13T19:45:00Z",
+        "created_at": "2026-11-13 17:16:22",
+        "settled_at": null,
+        "tracking_mode": "LOW_ODDS_WATCH",
+        "observation_only": true
+      },
       {
         "sport": "football",
         "league": "soccer_uefa_nations_league",
@@ -91,28 +113,30 @@
         "settled_at": null,
         "tracking_mode": "LOW_ODDS_WATCH",
         "observation_only": true
-      },
+      }
+    ],
+    "hockey": [
       {
-        "sport": "football",
-        "league": "soccer_uefa_nations_league",
-        "match": "Liechtenstein vs Azerbaijan",
-        "pick": "Azerbaijan",
+        "sport": "hockey",
+        "league": "icehockey_mestis",
+        "match": "Kiekko-Vantaa vs IPK",
+        "pick": "Kiekko-Vantaa",
         "market": "h2h",
-        "odds": 1.27,
-        "bookmaker": "Betclic (FR)",
-        "model_probability": 0.7376,
-        "edge": -0.06324799999999997,
-        "stake": 1.0,
-        "closing_odds": 1.16,
-        "clv_pct": 0.09483,
+        "odds": 2.75,
+        "bookmaker": "Unibet (SE)",
+        "model_probability": 0.3942532708594537,
+        "edge": 0.08419649486349767,
+        "stake": 0.36,
+        "closing_odds": null,
+        "clv_pct": null,
         "settlement_source": "",
         "result": "OPEN",
         "final_score": null,
-        "start_time": "2026-11-13T19:45:00Z",
-        "created_at": "2026-11-03 13:09:54",
+        "start_time": "2026-11-13T16:32:00Z",
+        "created_at": "2026-11-13 17:11:25",
         "settled_at": null,
-        "tracking_mode": "LOW_ODDS_WATCH",
-        "observation_only": true
+        "tracking_mode": "LIVE",
+        "observation_only": false
       }
     ]
   },
