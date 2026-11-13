@@ -16,7 +16,6 @@ from core.sport_quant import (
     bookmaker_grade,
     discover_active_sport_keys,
     elo_adjustment,
-    filter_active_keys,
     init_sport_db,
     refresh_bookmaker_stats,
     sport_analytics_report,
@@ -33,6 +32,45 @@ from core.adaptive_weights import (
     bookmaker_weight,
     league_weight,
 )
+
+
+DEFAULT_HOCKEY_SPORT_KEYS = (
+    "icehockey_nhl",
+    "icehockey_ahl",
+    "icehockey_sweden_hockey_league",
+    "icehockey_sweden_allsvenskan",
+    "icehockey_liiga",
+    "icehockey_mestis",
+)
+
+
+def select_hockey_sport_keys(
+    configured_keys: list[str],
+    active_keys: set[str],
+) -> list[str]:
+    """Keep configured leagues and add every active non-outright hockey league."""
+    configured = list(dict.fromkeys(
+        key.strip() for key in configured_keys if key.strip()
+    ))
+    if not active_keys:
+        return configured
+
+    active_hockey = {
+        key for key in active_keys
+        if key.startswith("icehockey_")
+        and not key.endswith("_winner")
+        and "championship_winner" not in key
+    }
+    selected = [key for key in configured if key in active_hockey]
+    selected.extend(sorted(active_hockey.difference(selected)))
+    return selected
+
+
+def hockey_min_bookmakers(sport_key: str) -> int:
+    """European/AHL markets are thinner than NHL but still need consensus."""
+    if sport_key == "icehockey_nhl":
+        return max(2, int(os.getenv("MIN_HOCKEY_BOOKMAKERS", "3")))
+    return max(2, int(os.getenv("HOCKEY_SECONDARY_MIN_BOOKMAKERS", "2")))
 
 
 
@@ -139,20 +177,22 @@ class HockeyModule(SportModule):
 
         configured_keys = os.getenv(
             "HOCKEY_SPORT_KEYS",
-            "icehockey_nhl,icehockey_ahl,icehockey_sweden_hockey_league,icehockey_sweden_allsvenskan,icehockey_liiga,icehockey_mestis",
+            ",".join(DEFAULT_HOCKEY_SPORT_KEYS),
         ).split(",")
 
         clean_sport_keys = [s.strip() for s in configured_keys if s.strip()]
 
         if os.getenv("SPORT_KEY_AUTO_DISCOVERY", "1") == "1":
             active_keys = await discover_active_sport_keys(settings.odds_api_key, ["Ice Hockey"])
-            clean_sport_keys = filter_active_keys(clean_sport_keys, active_keys)
+            clean_sport_keys = select_hockey_sport_keys(
+                clean_sport_keys,
+                active_keys,
+            )
 
         settled = await settle_sport_bets(settings=settings, sport=self.name, sport_keys=clean_sport_keys)
         updated_clv = update_closing_lines(settings, self.name)
         refresh_bookmaker_stats(settings, self.name)
 
-        min_books = int(os.getenv("MIN_HOCKEY_BOOKMAKERS", "3"))
         top_n = int(os.getenv("TOP_N_REPORT", "8"))
         grade_min_samples = int(os.getenv("HOCKEY_BOOKMAKER_GRADE_MIN_SAMPLES", "20"))
 
@@ -160,9 +200,12 @@ class HockeyModule(SportModule):
         snapshots_saved = 0
         blocked = 0
         scanned_events = 0
+        scanned_by_league: dict[str, int] = {}
 
         for sport_key in clean_sport_keys:
             data = await fetch_odds(settings.odds_api_key, sport_key, markets="h2h")
+            min_books = hockey_min_bookmakers(sport_key)
+            scanned_by_league[sport_key] = len(data)
 
             for event in data:
                 league = sport_key
@@ -269,6 +312,8 @@ class HockeyModule(SportModule):
                 f"Settled: {settled}. "
                 f"CLV updated: {updated_clv}. "
                 f"Events scanned: {scanned_events}. "
+                f"Active leagues: {len(clean_sport_keys)}. "
+                f"Events by league: {scanned_by_league}. "
                 f"Snapshots saved: {snapshots_saved}. "
                 f"Blocked: {blocked}. "
                 f"Stored candidates: {len(bets)}.\n"

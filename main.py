@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import csv
+import gzip
 import json
 import logging
 import os
@@ -203,7 +204,7 @@ HISTORY_EXPORTS = {
     "football_team_elo_v14": "exports/history_football_team_elo_v14.csv",
     "football_team_elo_v14_history": "exports/history_football_team_elo_v14_matches.csv",
     "football_market_snapshots_v14": "exports/history_football_market_snapshots_v14.csv",
-    "football_market_closing": "exports/history_football_market_closing.csv",
+    "football_market_closing": "exports/history_football_market_closing.csv.gz",
     "football_clv_audit": "exports/history_football_clv_audit.csv",
     "football_xg_history_v14": "exports/history_football_xg_history_v14.csv",
     "football_postmatch_dataset_v14": "exports/history_football_postmatch_dataset_v14.csv",
@@ -249,43 +250,48 @@ def import_csv_to_table(settings: Settings, table: str, csv_file: str) -> int:
         if not table_exists(conn, table):
             return 0
 
-        with path.open("r", encoding="utf-8", newline="") as f:
+        if path.suffix == ".gz":
+            handle = gzip.open(path, "rt", encoding="utf-8", newline="")
+        else:
+            handle = path.open("r", encoding="utf-8", newline="")
+
+        with handle as f:
             reader = csv.DictReader(f)
-            rows = list(reader)
+            columns = list(reader.fieldnames or [])
+            if not columns:
+                return 0
+            placeholders = ",".join(["?"] * len(columns))
+            col_sql = ",".join(columns)
 
-        if not rows:
-            return 0
+            sql = f"""
+                INSERT OR IGNORE INTO {table}
+                ({col_sql})
+                VALUES ({placeholders})
+            """
 
-        columns = list(rows[0].keys())
-        placeholders = ",".join(["?"] * len(columns))
-        col_sql = ",".join(columns)
-
-        sql = f"""
-            INSERT OR IGNORE INTO {table}
-            ({col_sql})
-            VALUES ({placeholders})
-        """
-
-        nullable_sport_bet_columns = {
-            "closing_odds", "clv_pct", "settled_at", "external_event_id",
-            "home_goals", "away_goals", "final_score", "settlement_source",
-            "profit", "profit_units",
-            "opening_odds", "final_odds", "early_released_at",
-            "final_confirmed_at",
-        }
-        values = []
-        for row in rows:
-            values.append([
-                None
-                if table == "sport_bets"
-                and col in nullable_sport_bet_columns
-                and not str(row.get(col, "")).strip()
-                else row.get(col, "")
-                for col in columns
-            ])
-
-        before = conn.total_changes
-        conn.executemany(sql, values)
+            nullable_sport_bet_columns = {
+                "closing_odds", "clv_pct", "settled_at", "external_event_id",
+                "home_goals", "away_goals", "final_score", "settlement_source",
+                "profit", "profit_units",
+                "opening_odds", "final_odds", "early_released_at",
+                "final_confirmed_at",
+            }
+            before = conn.total_changes
+            batch = []
+            for row in reader:
+                batch.append([
+                    None
+                    if table == "sport_bets"
+                    and col in nullable_sport_bet_columns
+                    and not str(row.get(col, "")).strip()
+                    else row.get(col, "")
+                    for col in columns
+                ])
+                if len(batch) >= 1000:
+                    conn.executemany(sql, batch)
+                    batch.clear()
+            if batch:
+                conn.executemany(sql, batch)
         conn.commit()
 
         return conn.total_changes - before
@@ -301,15 +307,24 @@ def export_table_to_csv(settings: Settings, table: str, csv_file: str) -> int:
             return 0
 
         cursor = conn.execute(f"SELECT * FROM {table}")
-        rows = cursor.fetchall()
         columns = [desc[0] for desc in cursor.description]
+        opener = gzip.open if path.suffix == ".gz" else path.open
+        if path.suffix == ".gz":
+            handle = opener(path, "wt", encoding="utf-8", newline="")
+        else:
+            handle = opener("w", encoding="utf-8", newline="")
+        row_count = 0
+        with handle as f:
+            writer = csv.writer(f)
+            writer.writerow(columns)
+            while True:
+                rows = cursor.fetchmany(2000)
+                if not rows:
+                    break
+                writer.writerows(rows)
+                row_count += len(rows)
 
-    with path.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(columns)
-        writer.writerows(rows)
-
-    return len(rows)
+    return row_count
 
 
 

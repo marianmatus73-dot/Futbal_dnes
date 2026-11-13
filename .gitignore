@@ -7,6 +7,9 @@ bets.db-shm
 
 cache/
 
+# The full closing-line history is persisted as a compressed CSV.
+exports/history_football_market_closing.csv
+
 # Local secrets
 .env
 .env.*
