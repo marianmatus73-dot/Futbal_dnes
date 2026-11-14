@@ -1,13 +1,13 @@
 {
-  "total_bets": 3003,
+  "total_bets": 3004,
   "wins": 1262,
-  "losses": 1741,
-  "winrate": 42.02,
-  "yield": 4.87,
-  "profit": 101.95,
-  "stake_sum": 2092.16,
-  "open_bets": 10,
-  "settled_bets": 3003,
+  "losses": 1742,
+  "winrate": 42.01,
+  "yield": 4.86,
+  "profit": 101.69,
+  "stake_sum": 2092.42,
+  "open_bets": 11,
+  "settled_bets": 3004,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -19,13 +19,13 @@
       "yield": 5.77
     },
     "basketball": {
-      "total": 93,
+      "total": 94,
       "wins": 40,
-      "losses": 53,
-      "winrate": 43.01,
-      "profit": 5.02,
-      "stake_sum": 53.05,
-      "yield": 9.45
+      "losses": 54,
+      "winrate": 42.55,
+      "profit": 4.76,
+      "stake_sum": 53.31,
+      "yield": 8.92
     },
     "football": {
       "total": 978,
@@ -227,15 +227,6 @@
       "stake_sum": 22.26,
       "yield": -2.11
     },
-    "Marathon Bet": {
-      "total": 75,
-      "wins": 25,
-      "losses": 50,
-      "winrate": 33.33,
-      "profit": -0.54,
-      "stake_sum": 28.11,
-      "yield": -1.94
-    },
     "Unibet (SE)": {
       "total": 107,
       "wins": 32,
@@ -244,6 +235,15 @@
       "profit": -0.58,
       "stake_sum": 37.09,
       "yield": -1.57
+    },
+    "Marathon Bet": {
+      "total": 76,
+      "wins": 25,
+      "losses": 51,
+      "winrate": 32.89,
+      "profit": -0.8,
+      "stake_sum": 28.37,
+      "yield": -2.84
     },
     "Unibet (FR)": {
       "total": 104,
@@ -338,13 +338,13 @@
       "yield": 32.87
     },
     "basketball_euroleague": {
-      "total": 45,
+      "total": 46,
       "wins": 23,
-      "losses": 22,
-      "winrate": 51.11,
-      "profit": 3.84,
-      "stake_sum": 31.0,
-      "yield": 12.39
+      "losses": 23,
+      "winrate": 50.0,
+      "profit": 3.58,
+      "stake_sum": 31.26,
+      "yield": 11.46
     },
     "Liga MX": {
       "total": 36,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-13T21:48:12.662468+00:00"
+  "last_update": "2026-11-14T12:41:34.304622+00:00"
 }
