@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-15T13:08:39.024238+00:00",
+  "generated_at": "2026-11-15T20:45:28.920914+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -949,7 +949,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 1711
+      "settlement_samples": 1713
     },
     {
       "sport": "tennis",
@@ -985,11 +985,11 @@
     },
     {
       "sport": "handball",
-      "score": 100,
-      "status": "GOOD",
-      "odds_feed": true,
+      "score": 65,
+      "status": "PARTIAL",
+      "odds_feed": false,
       "stable_event_ids": true,
-      "settlement_samples": 25
+      "settlement_samples": 28
     },
     {
       "sport": "nfl",
