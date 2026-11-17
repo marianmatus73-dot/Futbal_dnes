@@ -1,13 +1,13 @@
 {
-  "total_bets": 3009,
+  "total_bets": 3010,
   "wins": 1265,
-  "losses": 1744,
-  "winrate": 42.04,
-  "yield": 4.95,
-  "profit": 103.8,
-  "stake_sum": 2095.1,
+  "losses": 1745,
+  "winrate": 42.03,
+  "yield": 4.94,
+  "profit": 103.49,
+  "stake_sum": 2095.41,
   "open_bets": 13,
-  "settled_bets": 3009,
+  "settled_bets": 3010,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -19,13 +19,13 @@
       "yield": 5.77
     },
     "basketball": {
-      "total": 95,
+      "total": 96,
       "wins": 41,
-      "losses": 54,
-      "winrate": 43.16,
-      "profit": 5.9,
-      "stake_sum": 54.45,
-      "yield": 10.83
+      "losses": 55,
+      "winrate": 42.71,
+      "profit": 5.59,
+      "stake_sum": 54.76,
+      "yield": 10.2
     },
     "football": {
       "total": 979,
@@ -137,15 +137,6 @@
       "stake_sum": 42.49,
       "yield": 10.05
     },
-    "William Hill": {
-      "total": 20,
-      "wins": 10,
-      "losses": 10,
-      "winrate": 50.0,
-      "profit": 3.28,
-      "stake_sum": 15.44,
-      "yield": 21.25
-    },
     "BetAnything": {
       "total": 9,
       "wins": 5,
@@ -163,6 +154,15 @@
       "profit": 2.99,
       "stake_sum": 146.57,
       "yield": 2.04
+    },
+    "William Hill": {
+      "total": 21,
+      "wins": 10,
+      "losses": 11,
+      "winrate": 47.62,
+      "profit": 2.97,
+      "stake_sum": 15.75,
+      "yield": 18.86
     },
     "Winamax (FR)": {
       "total": 15,
@@ -338,13 +338,13 @@
       "yield": 32.87
     },
     "basketball_euroleague": {
-      "total": 46,
+      "total": 47,
       "wins": 23,
-      "losses": 23,
-      "winrate": 50.0,
-      "profit": 3.58,
-      "stake_sum": 31.26,
-      "yield": 11.46
+      "losses": 24,
+      "winrate": 48.94,
+      "profit": 3.27,
+      "stake_sum": 31.57,
+      "yield": 10.36
     },
     "americanfootball_nfl": {
       "total": 22,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-17T15:06:33.266213+00:00"
+  "last_update": "2026-11-17T23:18:47.793285+00:00"
 }
