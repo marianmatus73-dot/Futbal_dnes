@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-16T23:59:23.713740+00:00",
+  "generated_at": "2026-11-17T15:06:33.283877+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -16,27 +16,27 @@
       },
       "periods": {
         "30": {
-          "settled": 8,
-          "stake": 10.21,
-          "profit": -0.5294,
-          "yield_pct": -5.185,
+          "settled": 7,
+          "stake": 8.94,
+          "profit": 0.7406,
+          "yield_pct": 8.284,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.230658,
-          "calibration_error": 0.191408,
-          "probability_samples": 8,
-          "max_drawdown": 3.15
+          "brier_score": 0.215503,
+          "calibration_error": 0.135852,
+          "probability_samples": 7,
+          "max_drawdown": 1.88
         },
         "90": {
-          "settled": 828,
-          "stake": 926.48,
-          "profit": 44.3055,
-          "yield_pct": 4.782,
+          "settled": 817,
+          "stake": 914.75,
+          "profit": 42.3129,
+          "yield_pct": 4.626,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.234719,
-          "calibration_error": 0.061677,
-          "probability_samples": 828,
+          "brier_score": 0.235176,
+          "calibration_error": 0.063015,
+          "probability_samples": 817,
           "max_drawdown": 15.5173
         },
         "365": {
@@ -926,15 +926,15 @@
       },
       "periods": {
         "30": {
-          "settled": 27,
-          "stake": 10.35,
-          "profit": -0.1322,
-          "yield_pct": -1.277,
-          "average_clv_pct": 2.904,
-          "clv_samples": 27,
-          "brier_score": 0.192729,
-          "calibration_error": 0.041556,
-          "probability_samples": 27,
+          "settled": 24,
+          "stake": 9.05,
+          "profit": 0.1094,
+          "yield_pct": 1.209,
+          "average_clv_pct": 1.307,
+          "clv_samples": 24,
+          "brier_score": 0.190179,
+          "calibration_error": 0.044037,
+          "probability_samples": 24,
           "max_drawdown": 3.4
         },
         "90": {
@@ -1795,16 +1795,16 @@
       },
       "periods": {
         "30": {
-          "settled": 27,
-          "stake": 9.66,
-          "profit": 0.5686,
-          "yield_pct": 5.886,
+          "settled": 22,
+          "stake": 7.72,
+          "profit": 0.0405,
+          "yield_pct": 0.525,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.213536,
-          "calibration_error": 0.078918,
-          "probability_samples": 27,
-          "max_drawdown": 2.3304
+          "brier_score": 0.208043,
+          "calibration_error": 0.03995,
+          "probability_samples": 22,
+          "max_drawdown": 1.864
         },
         "90": {
           "settled": 250,
@@ -2638,15 +2638,15 @@
       },
       "periods": {
         "30": {
-          "settled": 13,
-          "stake": 2.74,
-          "profit": 1.8932,
-          "yield_pct": 69.095,
+          "settled": 12,
+          "stake": 2.48,
+          "profit": 0.8012,
+          "yield_pct": 32.306,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.189145,
-          "calibration_error": 0.138578,
-          "probability_samples": 13,
+          "brier_score": 0.154214,
+          "calibration_error": 0.215121,
+          "probability_samples": 12,
           "max_drawdown": 0.89
         },
         "90": {
@@ -3163,8 +3163,8 @@
       "settled_events": 28,
       "open_events": 9,
       "canonical_samples": 111,
-      "raw_rows": 887,
-      "duplicate_snapshots_excluded": 776,
+      "raw_rows": 914,
+      "duplicate_snapshots_excluded": 803,
       "probability_samples": 84,
       "market_brier_score": 0.125038,
       "calibration_error": 0.116666,
@@ -3184,7 +3184,7 @@
         "yield_pct": 12.429,
         "brier_score": 0.167805
       },
-      "generated_at": "2026-11-16T23:59:23.796339+00:00"
+      "generated_at": "2026-11-17T15:06:33.369009+00:00"
     }
   },
   "experiments": {
