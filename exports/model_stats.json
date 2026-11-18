@@ -1,13 +1,13 @@
 {
-  "total_bets": 3012,
-  "wins": 1265,
+  "total_bets": 3013,
+  "wins": 1266,
   "losses": 1747,
-  "winrate": 42.0,
-  "yield": 4.89,
-  "profit": 102.5,
-  "stake_sum": 2096.4,
-  "open_bets": 11,
-  "settled_bets": 3012,
+  "winrate": 42.02,
+  "yield": 4.92,
+  "profit": 103.09,
+  "stake_sum": 2096.65,
+  "open_bets": 10,
+  "settled_bets": 3013,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -19,13 +19,13 @@
       "yield": 5.77
     },
     "basketball": {
-      "total": 98,
-      "wins": 41,
+      "total": 99,
+      "wins": 42,
       "losses": 57,
-      "winrate": 41.84,
-      "profit": 4.6,
-      "stake_sum": 55.75,
-      "yield": 8.24
+      "winrate": 42.42,
+      "profit": 5.19,
+      "stake_sum": 56.0,
+      "yield": 9.26
     },
     "football": {
       "total": 979,
@@ -254,6 +254,15 @@
       "stake_sum": 92.47,
       "yield": -2.98
     },
+    "Pinnacle": {
+      "total": 123,
+      "wins": 40,
+      "losses": 83,
+      "winrate": 32.52,
+      "profit": -3.01,
+      "stake_sum": 70.89,
+      "yield": -4.25
+    },
     "Tipico": {
       "total": 86,
       "wins": 21,
@@ -262,15 +271,6 @@
       "profit": -3.41,
       "stake_sum": 21.36,
       "yield": -15.98
-    },
-    "Pinnacle": {
-      "total": 122,
-      "wins": 39,
-      "losses": 83,
-      "winrate": 31.97,
-      "profit": -3.6,
-      "stake_sum": 70.64,
-      "yield": -5.1
     },
     "Nordic Bet": {
       "total": 26,
@@ -338,13 +338,13 @@
       "yield": 32.87
     },
     "basketball_euroleague": {
-      "total": 47,
-      "wins": 23,
+      "total": 48,
+      "wins": 24,
       "losses": 24,
-      "winrate": 48.94,
-      "profit": 3.27,
-      "stake_sum": 31.57,
-      "yield": 10.36
+      "winrate": 50.0,
+      "profit": 3.86,
+      "stake_sum": 31.82,
+      "yield": 12.14
     },
     "americanfootball_nfl": {
       "total": 22,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-18T14:47:44.594808+00:00"
+  "last_update": "2026-11-18T22:50:02.064830+00:00"
 }

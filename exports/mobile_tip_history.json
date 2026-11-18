@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-18T14:47:44.520480+00:00",
+  "generated_at": "2026-11-18T22:50:02.008531+00:00",
   "limit_per_sport": 5,
   "sports": {
     "basketball": [
@@ -17,12 +17,12 @@
         "stake": 0.25,
         "closing_odds": null,
         "clv_pct": null,
-        "settlement_source": "",
-        "result": "OPEN",
-        "final_score": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "WON",
+        "final_score": "83-79",
         "start_time": "2026-11-18T17:00:00Z",
         "created_at": "2026-11-17 15:00:44",
-        "settled_at": null,
+        "settled_at": "2026-11-18T22:44:31.643236+00:00",
         "tracking_mode": "LIVE",
         "observation_only": false
       },
@@ -74,6 +74,28 @@
   },
   "results_sports": {
     "basketball": [
+      {
+        "sport": "basketball",
+        "league": "basketball_euroleague",
+        "match": "Beşiktaş J.K. vs Real Madrid",
+        "pick": "Beşiktaş J.K.",
+        "market": "h2h",
+        "odds": 3.36,
+        "bookmaker": "Pinnacle",
+        "model_probability": 0.32120511745491875,
+        "edge": 0.07924919464852698,
+        "stake": 0.25,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "the_odds_api_scores",
+        "result": "WON",
+        "final_score": "83-79",
+        "start_time": "2026-11-18T17:00:00Z",
+        "created_at": "2026-11-17 15:00:44",
+        "settled_at": "2026-11-18T22:44:31.643236+00:00",
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      },
       {
         "sport": "basketball",
         "league": "basketball_ncaab",
@@ -159,28 +181,6 @@
         "start_time": "2026-11-14T18:02:17Z",
         "created_at": "2026-11-14 20:12:17",
         "settled_at": "2026-11-14T20:49:22.291574+00:00",
-        "tracking_mode": "LIVE",
-        "observation_only": false
-      },
-      {
-        "sport": "basketball",
-        "league": "basketball_euroleague",
-        "match": "ASVEL Lyon Villeurbanne vs Beşiktaş J.K.",
-        "pick": "ASVEL Lyon Villeurbanne",
-        "market": "h2h",
-        "odds": 3.45,
-        "bookmaker": "Marathon Bet",
-        "model_probability": 0.31463105706946765,
-        "edge": 0.08547714688966335,
-        "stake": 0.26,
-        "closing_odds": null,
-        "clv_pct": null,
-        "settlement_source": "the_odds_api_scores",
-        "result": "LOST",
-        "final_score": "91-95",
-        "start_time": "2026-11-13T19:31:00Z",
-        "created_at": "2026-11-13 21:43:05",
-        "settled_at": "2026-11-13T23:43:28.069733+00:00",
         "tracking_mode": "LIVE",
         "observation_only": false
       }
