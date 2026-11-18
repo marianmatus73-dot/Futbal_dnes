@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-18T07:44:13.986652+00:00",
+  "generated_at": "2026-11-18T17:22:59.592536+00:00",
   "sport": "basketball",
-  "open_rows": 5,
+  "open_rows": 3,
   "settlement_keys": [
     "basketball_nba",
     "basketball_euroleague",
@@ -32,13 +32,13 @@
     },
     {
       "sport_key": "basketball_ncaab",
-      "open_rows": 2,
-      "events_received": 174,
-      "completed_events": 112,
+      "open_rows": 0,
+      "events_received": 173,
+      "completed_events": 111,
       "stale_score_recoveries": 0,
-      "usable_score_events": 112,
-      "matched_rows": 2,
-      "settled_rows": 2
+      "usable_score_events": 111,
+      "matched_rows": 0,
+      "settled_rows": 0
     },
     {
       "sport_key": "basketball_wnba",
@@ -51,5 +51,5 @@
       "settled_rows": 0
     }
   ],
-  "settled_rows": 2
+  "settled_rows": 0
 }
