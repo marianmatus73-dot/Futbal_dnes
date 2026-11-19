@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-19T14:52:01.404009+00:00",
+  "generated_at": "2026-11-19T22:53:58.572095+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -476,66 +476,66 @@
     },
     "basketball": {
       "all_time": {
-        "settled": 99,
-        "stake": 56.0,
-        "profit": 5.1853,
-        "yield_pct": 9.259,
+        "settled": 100,
+        "stake": 56.27,
+        "profit": 5.6362,
+        "yield_pct": 10.016,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.217497,
-        "calibration_error": 0.087222,
-        "probability_samples": 99,
+        "brier_score": 0.218952,
+        "calibration_error": 0.092375,
+        "probability_samples": 100,
         "max_drawdown": 6.5341
       },
       "periods": {
         "30": {
-          "settled": 38,
-          "stake": 20.58,
-          "profit": -2.2321,
-          "yield_pct": -10.846,
+          "settled": 39,
+          "stake": 20.85,
+          "profit": -1.7812,
+          "yield_pct": -8.543,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.209408,
-          "calibration_error": 0.172918,
-          "probability_samples": 38,
+          "brier_score": 0.213348,
+          "calibration_error": 0.153035,
+          "probability_samples": 39,
           "max_drawdown": 5.9996
         },
         "90": {
-          "settled": 76,
-          "stake": 44.29,
-          "profit": 3.6799,
-          "yield_pct": 8.309,
+          "settled": 77,
+          "stake": 44.56,
+          "profit": 4.1308,
+          "yield_pct": 9.27,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.219344,
-          "calibration_error": 0.113159,
-          "probability_samples": 76,
+          "brier_score": 0.22121,
+          "calibration_error": 0.119515,
+          "probability_samples": 77,
           "max_drawdown": 6.5341
         },
         "365": {
-          "settled": 99,
-          "stake": 56.0,
-          "profit": 5.1853,
-          "yield_pct": 9.259,
+          "settled": 100,
+          "stake": 56.27,
+          "profit": 5.6362,
+          "yield_pct": 10.016,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.217497,
-          "calibration_error": 0.087222,
-          "probability_samples": 99,
+          "brier_score": 0.218952,
+          "calibration_error": 0.092375,
+          "probability_samples": 100,
           "max_drawdown": 6.5341
         }
       },
       "by_league": {
         "basketball_euroleague": {
-          "settled": 48,
-          "stake": 31.82,
-          "profit": 3.8622,
-          "yield_pct": 12.138,
+          "settled": 49,
+          "stake": 32.09,
+          "profit": 4.3131,
+          "yield_pct": 13.441,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.228616,
-          "calibration_error": 0.089125,
-          "probability_samples": 48,
+          "brier_score": 0.231359,
+          "calibration_error": 0.099603,
+          "probability_samples": 49,
           "max_drawdown": 3.7528
         },
         "basketball_nba": {
@@ -601,15 +601,15 @@
           "max_drawdown": 3.1296
         },
         "2.00-2.99": {
-          "settled": 32,
-          "stake": 15.34,
-          "profit": -3.4298,
-          "yield_pct": -22.359,
+          "settled": 33,
+          "stake": 15.61,
+          "profit": -2.9789,
+          "yield_pct": -19.083,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.222643,
-          "calibration_error": 0.174063,
-          "probability_samples": 32,
+          "brier_score": 0.226898,
+          "calibration_error": 0.155697,
+          "probability_samples": 33,
           "max_drawdown": 4.8715
         },
         "3.00+": {
@@ -639,15 +639,15 @@
       },
       "by_strategy_tier": {
         "EXPERIMENTAL_2.51_PLUS": {
-          "settled": 50,
-          "stake": 15.94,
-          "profit": 4.2204,
-          "yield_pct": 26.477,
+          "settled": 51,
+          "stake": 16.21,
+          "profit": 4.6713,
+          "yield_pct": 28.817,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.220234,
-          "calibration_error": 0.046172,
-          "probability_samples": 50,
+          "brier_score": 0.223034,
+          "calibration_error": 0.057081,
+          "probability_samples": 51,
           "max_drawdown": 3.12
         },
         "SAFE_1.20_1.60": {
@@ -677,29 +677,29 @@
       },
       "by_market": {
         "h2h": {
-          "settled": 99,
-          "stake": 56.0,
-          "profit": 5.1853,
-          "yield_pct": 9.259,
+          "settled": 100,
+          "stake": 56.27,
+          "profit": 5.6362,
+          "yield_pct": 10.016,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.217497,
-          "calibration_error": 0.087222,
-          "probability_samples": 99,
+          "brier_score": 0.218952,
+          "calibration_error": 0.092375,
+          "probability_samples": 100,
           "max_drawdown": 6.5341
         }
       },
       "by_bookmaker": {
         "1xBet": {
-          "settled": 33,
-          "stake": 16.04,
-          "profit": 0.9224,
-          "yield_pct": 5.751,
+          "settled": 34,
+          "stake": 16.31,
+          "profit": 1.3733,
+          "yield_pct": 8.42,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.224981,
-          "calibration_error": 0.111716,
-          "probability_samples": 33,
+          "brier_score": 0.229042,
+          "calibration_error": 0.115932,
+          "probability_samples": 34,
           "max_drawdown": 2.5716
         },
         "888sport": {
@@ -3163,8 +3163,8 @@
       "settled_events": 28,
       "open_events": 9,
       "canonical_samples": 111,
-      "raw_rows": 1022,
-      "duplicate_snapshots_excluded": 911,
+      "raw_rows": 1049,
+      "duplicate_snapshots_excluded": 938,
       "probability_samples": 84,
       "market_brier_score": 0.125038,
       "calibration_error": 0.116666,
@@ -3184,7 +3184,7 @@
         "yield_pct": 12.429,
         "brier_score": 0.167805
       },
-      "generated_at": "2026-11-19T14:52:01.452133+00:00"
+      "generated_at": "2026-11-19T22:53:58.622345+00:00"
     }
   },
   "experiments": {
