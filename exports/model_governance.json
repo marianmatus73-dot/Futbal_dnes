@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-20T14:35:27.784252+00:00",
+  "generated_at": "2026-11-20T22:31:50.137767+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -949,7 +949,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 1742
+      "settlement_samples": 1746
     },
     {
       "sport": "tennis",
@@ -961,10 +961,10 @@
     },
     {
       "sport": "basketball",
-      "score": 100,
+      "score": 85,
       "status": "GOOD",
       "odds_feed": true,
-      "stable_event_ids": true,
+      "stable_event_ids": false,
       "settlement_samples": 101
     },
     {
@@ -989,7 +989,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 28
+      "settlement_samples": 30
     },
     {
       "sport": "nfl",
