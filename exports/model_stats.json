@@ -1,13 +1,13 @@
 {
-  "total_bets": 3016,
+  "total_bets": 3017,
   "wins": 1269,
-  "losses": 1747,
-  "winrate": 42.08,
-  "yield": 5.0,
-  "profit": 104.87,
-  "stake_sum": 2097.62,
+  "losses": 1748,
+  "winrate": 42.06,
+  "yield": 4.98,
+  "profit": 104.54,
+  "stake_sum": 2097.95,
   "open_bets": 6,
-  "settled_bets": 3016,
+  "settled_bets": 3017,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -27,15 +27,6 @@
       "stake_sum": 56.27,
       "yield": 10.02
     },
-    "football": {
-      "total": 979,
-      "wins": 268,
-      "losses": 711,
-      "winrate": 27.37,
-      "profit": 3.72,
-      "stake_sum": 239.02,
-      "yield": 1.56
-    },
     "tennis": {
       "total": 111,
       "wins": 27,
@@ -44,6 +35,15 @@
       "profit": 3.44,
       "stake_sum": 29.76,
       "yield": 11.55
+    },
+    "football": {
+      "total": 980,
+      "wins": 268,
+      "losses": 712,
+      "winrate": 27.35,
+      "profit": 3.39,
+      "stake_sum": 239.35,
+      "yield": 1.42
     },
     "nfl": {
       "total": 22,
@@ -102,13 +102,13 @@
       "yield": 45.88
     },
     "LeoVegas (SE)": {
-      "total": 93,
+      "total": 94,
       "wins": 35,
-      "losses": 58,
-      "winrate": 37.63,
-      "profit": 9.88,
-      "stake_sum": 31.2,
-      "yield": 31.68
+      "losses": 59,
+      "winrate": 37.23,
+      "profit": 9.55,
+      "stake_sum": 31.53,
+      "yield": 30.3
     },
     "Betclic (FR)": {
       "total": 45,
@@ -319,15 +319,6 @@
       "stake_sum": 1642.41,
       "yield": 5.77
     },
-    "MLS": {
-      "total": 148,
-      "wins": 44,
-      "losses": 104,
-      "winrate": 29.73,
-      "profit": 5.16,
-      "stake_sum": 31.28,
-      "yield": 16.51
-    },
     "Allsvenskan": {
       "total": 41,
       "wins": 16,
@@ -336,6 +327,15 @@
       "profit": 4.99,
       "stake_sum": 15.17,
       "yield": 32.87
+    },
+    "MLS": {
+      "total": 149,
+      "wins": 44,
+      "losses": 105,
+      "winrate": 29.53,
+      "profit": 4.83,
+      "stake_sum": 31.61,
+      "yield": 15.29
     },
     "basketball_euroleague": {
       "total": 49,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-19T22:53:58.560564+00:00"
+  "last_update": "2026-11-20T14:35:27.469878+00:00"
 }
