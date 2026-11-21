@@ -59,6 +59,33 @@ class OperationalHealthTests(unittest.TestCase):
             self.assertEqual(football["unresolved_excluded"], 1)
             self.assertFalse(football["settlement_recovery_required"])
 
+    def test_shadow_observations_are_not_reported_as_live_backlog(self) -> None:
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            db = root / "bets.db"
+            with closing(sqlite3.connect(db)) as conn:
+                conn.execute(
+                    "CREATE TABLE sport_bets "
+                    "(sport TEXT, result TEXT, external_event_id TEXT, "
+                    "start_time TEXT, tracking_mode TEXT)"
+                )
+                conn.execute(
+                    "INSERT INTO sport_bets VALUES "
+                    "('football','OPEN','','2020-01-01T12:00:00+00:00','SHADOW')"
+                )
+                conn.execute(
+                    "INSERT INTO sport_bets VALUES "
+                    "('football','OPEN','live-game',NULL,'LIVE')"
+                )
+                conn.commit()
+            payload = build_operational_health(
+                Settings(db_file=str(db)), export_dir=root / "exports"
+            )
+            football = next(row for row in payload["sports"] if row["sport"] == "football")
+            self.assertEqual(football["open_bets"], 1)
+            self.assertEqual(football["overdue_open"], 0)
+            self.assertEqual(football["missing_event_id"], 0)
+
     def test_exports_health_funnel_and_xg_free_modes(self) -> None:
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

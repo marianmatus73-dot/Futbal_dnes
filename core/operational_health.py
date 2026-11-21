@@ -52,29 +52,38 @@ def _sport_health(
     latest_snapshot = None
 
     if {"sport", "result"}.issubset(bet_columns):
+        live_only = (
+            "AND UPPER(TRIM(COALESCE(tracking_mode,'LIVE')))='LIVE' "
+            if "tracking_mode" in bet_columns
+            else ""
+        )
         settled = int(_scalar(
             conn,
             "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-            "AND UPPER(TRIM(COALESCE(result,''))) IN (?,?,?,?,?,?,?,?)",
+            + live_only
+            + "AND UPPER(TRIM(COALESCE(result,''))) IN (?,?,?,?,?,?,?,?)",
             (sport, *SETTLED_RESULTS),
         ) or 0)
         open_bets = int(_scalar(
             conn,
             "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-            "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?)",
+            + live_only
+            + "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?)",
             (sport, *ACTIVE_OPEN_RESULTS),
         ) or 0)
         unresolved_excluded = int(_scalar(
             conn,
             "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-            "AND UPPER(TRIM(COALESCE(result,'')))='UNRESOLVED'",
+            + live_only
+            + "AND UPPER(TRIM(COALESCE(result,'')))='UNRESOLVED'",
             (sport,),
         ) or 0)
         if "external_event_id" in bet_columns:
             missing_identity = int(_scalar(
                 conn,
                 "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?) "
+                + live_only
+                + "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?) "
                 "AND TRIM(COALESCE(external_event_id,''))=''",
                 (sport, *ACTIVE_OPEN_RESULTS),
             ) or 0)
@@ -83,7 +92,8 @@ def _sport_health(
             overdue_open = int(_scalar(
                 conn,
                 "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?) "
+                + live_only
+                + "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?) "
                 "AND TRIM(COALESCE(start_time,''))<>'' "
                 "AND datetime(start_time)<datetime(?)",
                 (sport, *ACTIVE_OPEN_RESULTS, overdue_cutoff),
