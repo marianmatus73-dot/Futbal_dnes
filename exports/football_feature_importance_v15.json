@@ -1,6 +1,6 @@
 {
   "version": "v15",
-  "training_samples": 1044,
+  "training_samples": 1046,
   "features_used": [
     "consensus_safety",
     "raw_edge",
@@ -16,55 +16,55 @@
     {
       "feature": "Consensus safety",
       "column": "consensus_safety",
-      "samples": 1044,
-      "wins": 282,
-      "losses": 762,
-      "winrate": 0.2701,
+      "samples": 1046,
+      "wins": 283,
+      "losses": 763,
+      "winrate": 0.2706,
       "average_value": 0.8414
     },
     {
       "feature": "Raw edge",
       "column": "raw_edge",
-      "samples": 1044,
-      "wins": 282,
-      "losses": 762,
-      "winrate": 0.2701,
+      "samples": 1046,
+      "wins": 283,
+      "losses": 763,
+      "winrate": 0.2706,
       "average_value": 0.1176
     },
     {
       "feature": "ELO separation",
       "column": "elo_difference",
-      "samples": 1044,
-      "wins": 282,
-      "losses": 762,
-      "winrate": 0.2701,
-      "average_value": -13.6541
+      "samples": 1046,
+      "wins": 283,
+      "losses": 763,
+      "winrate": 0.2706,
+      "average_value": -13.538
     },
     {
       "feature": "Form separation",
       "column": "form_difference",
-      "samples": 1044,
-      "wins": 282,
-      "losses": 762,
-      "winrate": 0.2701,
-      "average_value": -0.0358
+      "samples": 1046,
+      "wins": 283,
+      "losses": 763,
+      "winrate": 0.2706,
+      "average_value": -0.0345
     },
     {
       "feature": "Competition importance",
       "column": "competition_importance",
-      "samples": 1044,
-      "wins": 282,
-      "losses": 762,
-      "winrate": 0.2701,
+      "samples": 1046,
+      "wins": 283,
+      "losses": 763,
+      "winrate": 0.2706,
       "average_value": 0.6959
     },
     {
       "feature": "Context reliability",
       "column": "context_reliability",
-      "samples": 1044,
-      "wins": 282,
-      "losses": 762,
-      "winrate": 0.2701,
+      "samples": 1046,
+      "wins": 283,
+      "losses": 763,
+      "winrate": 0.2706,
       "average_value": 0.5221
     }
   ],

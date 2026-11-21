@@ -1,13 +1,13 @@
 {
-  "total_bets": 3020,
-  "wins": 1272,
-  "losses": 1748,
+  "total_bets": 3022,
+  "wins": 1273,
+  "losses": 1749,
   "winrate": 42.12,
-  "yield": 5.08,
-  "profit": 106.98,
-  "stake_sum": 2104.66,
-  "open_bets": 10,
-  "settled_bets": 3020,
+  "yield": 5.12,
+  "profit": 107.76,
+  "stake_sum": 2105.54,
+  "open_bets": 8,
+  "settled_bets": 3022,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -27,6 +27,15 @@
       "stake_sum": 62.98,
       "yield": 12.83
     },
+    "football": {
+      "total": 982,
+      "wins": 269,
+      "losses": 713,
+      "winrate": 27.39,
+      "profit": 4.17,
+      "stake_sum": 240.23,
+      "yield": 1.73
+    },
     "tennis": {
       "total": 111,
       "wins": 27,
@@ -35,15 +44,6 @@
       "profit": 3.44,
       "stake_sum": 29.76,
       "yield": 11.55
-    },
-    "football": {
-      "total": 980,
-      "wins": 268,
-      "losses": 712,
-      "winrate": 27.35,
-      "profit": 3.39,
-      "stake_sum": 239.35,
-      "yield": 1.42
     },
     "nfl": {
       "total": 22,
@@ -155,6 +155,15 @@
       "stake_sum": 146.57,
       "yield": 2.04
     },
+    "Matchbook": {
+      "total": 195,
+      "wins": 77,
+      "losses": 118,
+      "winrate": 39.49,
+      "profit": 2.68,
+      "stake_sum": 114.66,
+      "yield": 2.34
+    },
     "William Hill": {
       "total": 22,
       "wins": 10,
@@ -172,15 +181,6 @@
       "profit": 2.0,
       "stake_sum": 9.98,
       "yield": 19.99
-    },
-    "Matchbook": {
-      "total": 194,
-      "wins": 76,
-      "losses": 118,
-      "winrate": 39.18,
-      "profit": 1.45,
-      "stake_sum": 114.23,
-      "yield": 1.27
     },
     "PMU (FR)": {
       "total": 6,
@@ -236,15 +236,6 @@
       "stake_sum": 77.6,
       "yield": -0.73
     },
-    "Unibet (SE)": {
-      "total": 107,
-      "wins": 32,
-      "losses": 75,
-      "winrate": 29.91,
-      "profit": -0.58,
-      "stake_sum": 37.09,
-      "yield": -1.57
-    },
     "Marathon Bet": {
       "total": 76,
       "wins": 25,
@@ -253,6 +244,15 @@
       "profit": -0.8,
       "stake_sum": 28.37,
       "yield": -2.84
+    },
+    "Unibet (SE)": {
+      "total": 108,
+      "wins": 32,
+      "losses": 76,
+      "winrate": 29.63,
+      "profit": -1.03,
+      "stake_sum": 37.54,
+      "yield": -2.75
     },
     "Unibet (FR)": {
       "total": 104,
@@ -571,6 +571,15 @@
       "stake_sum": 1.36,
       "yield": 19.89
     },
+    "Serie B": {
+      "total": 17,
+      "wins": 4,
+      "losses": 13,
+      "winrate": 23.53,
+      "profit": 0.25,
+      "stake_sum": 4.33,
+      "yield": 5.79
+    },
     "tennis_wta_china_open": {
       "total": 30,
       "wins": 6,
@@ -588,15 +597,6 @@
       "profit": 0.01,
       "stake_sum": 0.98,
       "yield": 0.61
-    },
-    "League Two": {
-      "total": 37,
-      "wins": 12,
-      "losses": 25,
-      "winrate": 32.43,
-      "profit": -0.02,
-      "stake_sum": 9.98,
-      "yield": -0.16
     },
     "tennis_atp_vienna_open": {
       "total": 1,
@@ -633,6 +633,15 @@
       "profit": -0.4,
       "stake_sum": 0.81,
       "yield": -49.07
+    },
+    "League Two": {
+      "total": 38,
+      "wins": 12,
+      "losses": 26,
+      "winrate": 31.58,
+      "profit": -0.47,
+      "stake_sum": 10.43,
+      "yield": -4.47
     },
     "UEFA Champions League": {
       "total": 11,
@@ -678,15 +687,6 @@
       "profit": -0.92,
       "stake_sum": 4.22,
       "yield": -21.72
-    },
-    "Serie B": {
-      "total": 16,
-      "wins": 3,
-      "losses": 13,
-      "winrate": 18.75,
-      "profit": -0.98,
-      "stake_sum": 3.9,
-      "yield": -25.0
     },
     "Argentina Primera Division": {
       "total": 85,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-21T13:54:28.660961+00:00"
+  "last_update": "2026-11-21T21:22:20.231735+00:00"
 }
