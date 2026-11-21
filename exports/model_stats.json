@@ -1,13 +1,13 @@
 {
-  "total_bets": 3017,
-  "wins": 1269,
+  "total_bets": 3020,
+  "wins": 1272,
   "losses": 1748,
-  "winrate": 42.06,
-  "yield": 4.98,
-  "profit": 104.54,
-  "stake_sum": 2097.95,
-  "open_bets": 12,
-  "settled_bets": 3017,
+  "winrate": 42.12,
+  "yield": 5.08,
+  "profit": 106.98,
+  "stake_sum": 2104.66,
+  "open_bets": 9,
+  "settled_bets": 3020,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -19,13 +19,13 @@
       "yield": 5.77
     },
     "basketball": {
-      "total": 100,
-      "wins": 43,
+      "total": 103,
+      "wins": 46,
       "losses": 57,
-      "winrate": 43.0,
-      "profit": 5.64,
-      "stake_sum": 56.27,
-      "yield": 10.02
+      "winrate": 44.66,
+      "profit": 8.08,
+      "stake_sum": 62.98,
+      "yield": 12.83
     },
     "tennis": {
       "total": 111,
@@ -227,6 +227,15 @@
       "stake_sum": 22.26,
       "yield": -2.11
     },
+    "Pinnacle": {
+      "total": 126,
+      "wins": 43,
+      "losses": 83,
+      "winrate": 34.13,
+      "profit": -0.57,
+      "stake_sum": 77.6,
+      "yield": -0.73
+    },
     "Unibet (SE)": {
       "total": 107,
       "wins": 32,
@@ -253,15 +262,6 @@
       "profit": -2.75,
       "stake_sum": 92.47,
       "yield": -2.98
-    },
-    "Pinnacle": {
-      "total": 123,
-      "wins": 40,
-      "losses": 83,
-      "winrate": 32.52,
-      "profit": -3.01,
-      "stake_sum": 70.89,
-      "yield": -4.25
     },
     "Tipico": {
       "total": 86,
@@ -390,6 +390,15 @@
       "profit": 2.53,
       "stake_sum": 10.8,
       "yield": 23.41
+    },
+    "basketball_ncaab": {
+      "total": 9,
+      "wins": 5,
+      "losses": 4,
+      "winrate": 55.56,
+      "profit": 2.51,
+      "stake_sum": 10.4,
+      "yield": 24.1
     },
     "icehockey_nhl": {
       "total": 215,
@@ -561,15 +570,6 @@
       "profit": 0.27,
       "stake_sum": 1.36,
       "yield": 19.89
-    },
-    "basketball_ncaab": {
-      "total": 6,
-      "wins": 2,
-      "losses": 4,
-      "winrate": 33.33,
-      "profit": 0.06,
-      "stake_sum": 3.69,
-      "yield": 1.64
     },
     "tennis_wta_china_open": {
       "total": 30,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-20T22:31:49.879252+00:00"
+  "last_update": "2026-11-21T09:30:44.138847+00:00"
 }
