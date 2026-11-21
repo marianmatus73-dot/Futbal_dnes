@@ -8,10 +8,28 @@ from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 from core.config import Settings
-from sports.handball import HandballModule
+from sports.handball import HandballModule, expand_active_handball_keys
 
 
 class HandballShadowTests(unittest.IsolatedAsyncioTestCase):
+    def test_active_discovery_adds_all_handball_leagues(self) -> None:
+        self.assertEqual(
+            expand_active_handball_keys(
+                ["handball_germany_bundesliga"],
+                {
+                    "handball_germany_bundesliga",
+                    "handball_france_division_1",
+                    "handball_denmark_handbold_ligaen",
+                    "icehockey_nhl",
+                },
+            ),
+            [
+                "handball_germany_bundesliga",
+                "handball_denmark_handbold_ligaen",
+                "handball_france_division_1",
+            ],
+        )
+
     async def test_collects_learning_observations_without_publishing_bets(self) -> None:
         event = {
             "id": "hb-event-1",

@@ -109,6 +109,25 @@ export type ModelTable = {
     publishing_unlocked: boolean;
     benchmark?: { settled: number; wins: number; losses: number; yield_pct: number | null };
   }>;
+  experiments?: {
+    football_low_odds_watch?: LowOddsExperiment;
+    multisport_low_odds_watch?: LowOddsExperiment;
+  };
+};
+
+export type ExperimentMetrics = {
+  settled: number;
+  profit: number;
+  yield_pct: number;
+  average_clv_pct?: number | null;
+  brier_score?: number | null;
+  max_drawdown?: number | null;
+};
+
+export type LowOddsExperiment = {
+  all_time: ExperimentMetrics;
+  by_market?: Record<string, ExperimentMetrics>;
+  status?: string;
 };
 
 export type HistoryTip = {
@@ -208,6 +227,7 @@ export type AppData = {
   tipCard: TipCard;
   modelRows: ModelRow[];
   handballShadow?: NonNullable<ModelTable["shadow_models"]>[string];
+  footballLowOddsExperiment?: NonNullable<ModelTable["experiments"]>["football_low_odds_watch"];
   historyBySport: Record<string, HistoryTip[]>;
   resultsBySport: Record<string, HistoryTip[]>;
   performance: MobilePerformance;

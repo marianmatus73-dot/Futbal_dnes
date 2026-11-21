@@ -362,6 +362,25 @@ function Sports({ data, selected, onSelect }: { data: AppData; selected: Sport; 
           ) : <Text style={styles.historyEmpty}>Zatiaľ nemáme uzavreté ostré tipy v tomto intervale.</Text>}
         </View>
       )}
+      {selected === "football" && data.footballLowOddsExperiment && (
+        <View style={styles.graphCard}>
+          <Text style={styles.graphTitle}>Historický test kurzov 1,20–1,60</Text>
+          <Text style={styles.sectionSubtitle}>Sledovací experiment, nie automatické odporúčanie na stávku. Výsledky sú oddelené podľa trhu.</Text>
+          <View style={styles.summaryGrid}>
+            <Summary label="Uzavreté" value={String(data.footballLowOddsExperiment.all_time.settled)} />
+            <Summary label="Yield" value={`${data.footballLowOddsExperiment.all_time.yield_pct.toFixed(1)} %`} />
+            <Summary label="Zisk" value={formatNumber(data.footballLowOddsExperiment.all_time.profit)} />
+          </View>
+          {Object.entries(data.footballLowOddsExperiment.by_market ?? {}).map(([market, metrics]) => (
+            <StatusRow
+              key={market}
+              label={({ h2h: "H2H", double_chance: "Dvojtip", "totals_2.5": "Over/Under 2,5" } as Record<string, string>)[market] ?? market}
+              value={`${metrics.settled} zápasov · yield ${metrics.yield_pct.toFixed(1)} % · zisk ${metrics.profit.toFixed(2)}`}
+              ok={metrics.yield_pct >= 0}
+            />
+          ))}
+        </View>
+      )}
       {selected !== "handball" ? <LowOddsWatch tips={lowOdds} sport={selected} /> : null}
       {selected === "handball" && (
         <View style={styles.graphCard}>
