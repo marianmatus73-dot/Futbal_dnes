@@ -31,7 +31,6 @@ from core.learning_observation_settlement import (
 from core.odds_api import fetch_odds
 from core.sport_quant import (
     discover_active_sport_keys,
-    filter_active_keys,
     init_sport_db,
 )
 from core.types import SportResult
@@ -39,6 +38,19 @@ from sports.base import SportModule
 
 
 log = logging.getLogger("multisport-main")
+
+
+def expand_active_handball_keys(
+    configured_keys: list[str], active_keys: set[str]
+) -> list[str]:
+    """Keep explicit leagues and add every active handball league from the API."""
+    configured = [key.strip() for key in configured_keys if key.strip()]
+    discovered = sorted(
+        key.strip()
+        for key in active_keys
+        if key.strip().startswith("handball_")
+    )
+    return list(dict.fromkeys([*configured, *discovered]))
 
 
 def _now_utc() -> str:
@@ -371,7 +383,11 @@ class HandballModule(SportModule):
             active = await discover_active_sport_keys(
                 settings.odds_api_key, ["Handball"]
             )
-            configured = filter_active_keys(configured, active)
+            configured = expand_active_handball_keys(configured, active)
+            log.info(
+                "Handball active leagues selected: %s",
+                ", ".join(configured) or "none",
+            )
 
         events_scanned = snapshots_saved = observations_saved = candidates_saved = 0
         api_sports_events: list[dict[str, Any]] = []
