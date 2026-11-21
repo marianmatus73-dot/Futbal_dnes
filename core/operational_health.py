@@ -23,6 +23,7 @@ MINIMUM_SETTLED = {
     "nfl": 50,
 }
 SETTLED_RESULTS = ("WON", "WIN", "LOST", "LOSS", "V", "P", "VOID", "PUSH")
+ACTIVE_OPEN_RESULTS = ("", "OPEN")
 
 
 def _columns(conn: sqlite3.Connection, table: str) -> set[str]:
@@ -47,6 +48,7 @@ def _sport_health(
     bet_columns = _columns(conn, "sport_bets")
     snapshot_columns = _columns(conn, "sport_odds_snapshots")
     settled = open_bets = missing_identity = snapshots_24h = overdue_open = 0
+    unresolved_excluded = 0
     latest_snapshot = None
 
     if {"sport", "result"}.issubset(bet_columns):
@@ -59,26 +61,32 @@ def _sport_health(
         open_bets = int(_scalar(
             conn,
             "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-            "AND UPPER(TRIM(COALESCE(result,'OPEN'))) NOT IN (?,?,?,?,?,?,?,?)",
-            (sport, *SETTLED_RESULTS),
+            "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?)",
+            (sport, *ACTIVE_OPEN_RESULTS),
+        ) or 0)
+        unresolved_excluded = int(_scalar(
+            conn,
+            "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
+            "AND UPPER(TRIM(COALESCE(result,'')))='UNRESOLVED'",
+            (sport,),
         ) or 0)
         if "external_event_id" in bet_columns:
             missing_identity = int(_scalar(
                 conn,
                 "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) NOT IN (?,?,?,?,?,?,?,?) "
+                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?) "
                 "AND TRIM(COALESCE(external_event_id,''))=''",
-                (sport, *SETTLED_RESULTS),
+                (sport, *ACTIVE_OPEN_RESULTS),
             ) or 0)
         if "start_time" in bet_columns:
             overdue_cutoff = (now - timedelta(hours=12)).isoformat()
             overdue_open = int(_scalar(
                 conn,
                 "SELECT COUNT(*) FROM sport_bets WHERE LOWER(sport)=? "
-                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) NOT IN (?,?,?,?,?,?,?,?) "
+                "AND UPPER(TRIM(COALESCE(result,'OPEN'))) IN (?,?) "
                 "AND TRIM(COALESCE(start_time,''))<>'' "
                 "AND datetime(start_time)<datetime(?)",
-                (sport, *SETTLED_RESULTS, overdue_cutoff),
+                (sport, *ACTIVE_OPEN_RESULTS, overdue_cutoff),
             ) or 0)
 
     if {"sport", "captured_at"}.issubset(snapshot_columns):
@@ -161,6 +169,7 @@ def _sport_health(
         "minimum_settled": minimum,
         "missing_event_id": missing_identity,
         "overdue_open": overdue_open,
+        "unresolved_excluded": unresolved_excluded,
         "settlement_recovery_required": overdue_open > 0,
         "snapshot_age_minutes": snapshot_age_minutes,
         "freshness": freshness,
