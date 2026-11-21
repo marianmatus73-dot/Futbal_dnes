@@ -327,8 +327,26 @@ def expire_historical_unresolved(
     ensure_settlement_columns(settings)
     cutoff = (datetime.now(timezone.utc) - timedelta(days=max(3, older_than_days))).isoformat()
     with connect(settings) as conn:
+        columns = {
+            str(row[1])
+            for row in conn.execute("PRAGMA table_info(sport_bets)").fetchall()
+        }
+        # A few legacy imports have no start_time. They previously stayed OPEN
+        # forever even though their creation timestamp was months old.
+        legacy_fallback = (
+            "OR (TRIM(COALESCE(start_time, '')) = '' "
+            "AND TRIM(COALESCE(created_at, '')) <> '' "
+            "AND datetime(created_at) < datetime(?))"
+            if "created_at" in columns
+            else ""
+        )
+        params: tuple[Any, ...] = (
+            (now_utc(), cutoff, cutoff)
+            if legacy_fallback
+            else (now_utc(), cutoff)
+        )
         cursor = conn.execute(
-            """
+            f"""
             UPDATE sport_bets
             SET result='UNRESOLVED',
                 settled_at=?,
@@ -336,10 +354,13 @@ def expire_historical_unresolved(
                 profit_units=0.0,
                 settlement_source='historical_result_unavailable'
             WHERE UPPER(TRIM(COALESCE(result, 'OPEN'))) IN ('', 'OPEN')
-              AND TRIM(COALESCE(start_time, '')) <> ''
-              AND datetime(start_time) < datetime(?)
+              AND (
+                    (TRIM(COALESCE(start_time, '')) <> ''
+                     AND datetime(start_time) < datetime(?))
+                    {legacy_fallback}
+                  )
             """,
-            (now_utc(), cutoff),
+            params,
         )
         return max(cursor.rowcount, 0)
 

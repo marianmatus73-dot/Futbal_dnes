@@ -51,6 +51,28 @@ class UnresolvedCleanupTests(unittest.TestCase):
                 )
             self.assertEqual(expire_historical_unresolved(settings), 1)
 
+    def test_legacy_row_without_start_time_uses_created_at(self):
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as tmp:
+            db = Path(tmp) / "bets.db"
+            settings = Settings(db_file=str(db))
+            init_sport_db(settings)
+            old = (datetime.now(timezone.utc) - timedelta(days=30)).isoformat()
+            with sqlite3.connect(db) as conn:
+                conn.execute(
+                    """INSERT INTO sport_bets
+                    (sport, league, event, market, selection, odds, stake,
+                     start_time, created_at, source_hash, result)
+                    VALUES ('tennis','legacy','old without time','h2h','A',
+                            2.0,1.0,'',?,?,'OPEN')""",
+                    (old, "legacy-no-start"),
+                )
+            self.assertEqual(expire_historical_unresolved(settings), 1)
+            with sqlite3.connect(db) as conn:
+                result = conn.execute(
+                    "SELECT result FROM sport_bets WHERE source_hash='legacy-no-start'"
+                ).fetchone()[0]
+            self.assertEqual(result, "UNRESOLVED")
+
 
 if __name__ == "__main__":
     unittest.main()
