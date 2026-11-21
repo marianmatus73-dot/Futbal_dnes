@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21T09:30:44.153362+00:00",
+  "generated_at": "2026-11-21T13:54:28.677967+00:00",
   "sports": {
     "baseball": {
       "all_time": {
@@ -2638,15 +2638,15 @@
       },
       "periods": {
         "30": {
-          "settled": 10,
-          "stake": 1.92,
-          "profit": 1.3612,
-          "yield_pct": 70.896,
+          "settled": 9,
+          "stake": 1.83,
+          "profit": 0.7312,
+          "yield_pct": 39.956,
           "average_clv_pct": null,
           "clv_samples": 0,
-          "brier_score": 0.168804,
-          "calibration_error": 0.201152,
-          "probability_samples": 10,
+          "brier_score": 0.104573,
+          "calibration_error": 0.268041,
+          "probability_samples": 9,
           "max_drawdown": 0.89
         },
         "90": {
@@ -3163,8 +3163,8 @@
       "settled_events": 30,
       "open_events": 7,
       "canonical_samples": 111,
-      "raw_rows": 1118,
-      "duplicate_snapshots_excluded": 1007,
+      "raw_rows": 1139,
+      "duplicate_snapshots_excluded": 1028,
       "probability_samples": 90,
       "market_brier_score": 0.140687,
       "calibration_error": 0.115096,
@@ -3184,7 +3184,7 @@
         "yield_pct": 4.933,
         "brier_score": 0.18204
       },
-      "generated_at": "2026-11-21T09:30:44.296169+00:00"
+      "generated_at": "2026-11-21T13:54:28.776485+00:00"
     }
   },
   "experiments": {

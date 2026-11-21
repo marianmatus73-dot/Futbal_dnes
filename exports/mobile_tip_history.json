@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-21T09:30:44.023153+00:00",
+  "generated_at": "2026-11-21T13:54:28.583429+00:00",
   "limit_per_sport": 5,
   "sports": {
     "football": [
@@ -134,6 +134,30 @@
         "final_score": null,
         "start_time": "2026-11-21T15:00:00Z",
         "created_at": "2026-11-21 09:25:05",
+        "settled_at": null,
+        "tracking_mode": "LIVE",
+        "observation_only": false
+      }
+    ],
+    "tennis": [
+      {
+        "sport": "tennis",
+        "league": "tennis_atp_finals",
+        "match": "Carlos Alcaraz vs Ben Shelton",
+        "pick": "Ben Shelton",
+        "market": "h2h",
+        "odds": 4.44,
+        "bookmaker": "Pinnacle",
+        "model_probability": 0.2414335737045248,
+        "edge": 0.07196506724809026,
+        "stake": 0.16,
+        "closing_odds": null,
+        "clv_pct": null,
+        "settlement_source": "",
+        "result": "OPEN",
+        "final_score": null,
+        "start_time": "2026-11-21T13:40:00Z",
+        "created_at": "2026-11-21 13:47:58",
         "settled_at": null,
         "tracking_mode": "LIVE",
         "observation_only": false
