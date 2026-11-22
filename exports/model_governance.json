@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-21T21:22:20.457730+00:00",
+  "generated_at": "2026-11-22T13:48:16.237597+00:00",
   "principle": "Odporúčania sa nikdy neaplikujú automaticky.",
   "sport_modes": [
     {
@@ -55,15 +55,15 @@
       "sport": "hockey",
       "mode": "SHADOW",
       "metrics": {
-        "settled": 252,
-        "stake": 92.06,
-        "profit": -3.8343,
-        "yield_pct": -4.165,
+        "settled": 255,
+        "stake": 93.34,
+        "profit": -2.8903,
+        "yield_pct": -3.097,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.221275,
-        "calibration_error": 0.029502,
-        "probability_samples": 252,
+        "brier_score": 0.221772,
+        "calibration_error": 0.026162,
+        "probability_samples": 255,
         "max_drawdown": 17.735
       }
     },
@@ -723,7 +723,7 @@
       "segment": "hockey",
       "status": "READY",
       "auto_apply": false,
-      "samples": 252,
+      "samples": 255,
       "minimum_samples": 100,
       "recommendations": [
         "Sprísniť minimálny edge o 1 percentuálny bod."
@@ -869,22 +869,22 @@
     {
       "sport": "hockey",
       "champion": {
-        "settled": 252,
-        "stake": 92.06,
-        "profit": -3.8343,
-        "yield_pct": -4.165,
+        "settled": 255,
+        "stake": 93.34,
+        "profit": -2.8903,
+        "yield_pct": -3.097,
         "average_clv_pct": null,
         "clv_samples": 0,
-        "brier_score": 0.221275,
-        "calibration_error": 0.029502,
-        "probability_samples": 252,
+        "brier_score": 0.221772,
+        "calibration_error": 0.026162,
+        "probability_samples": 255,
         "max_drawdown": 17.735
       },
       "challenger": {
         "name": "MBE-Lab independent challenger",
         "data_source": "MBE-Lab",
         "mode": "SHADOW",
-        "evaluated_samples": 252,
+        "evaluated_samples": 255,
         "minimum_samples": 75,
         "comparison_rule": "rovnaký zápas, trh a časové okno; iba uzavreté výsledky"
       },
@@ -973,7 +973,7 @@
       "status": "GOOD",
       "odds_feed": true,
       "stable_event_ids": true,
-      "settlement_samples": 252
+      "settlement_samples": 255
     },
     {
       "sport": "baseball",
