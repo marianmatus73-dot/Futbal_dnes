@@ -1,16 +1,17 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-22T13:48:16.172512+00:00",
+  "generated_at": "2026-11-22T21:28:17.172209+00:00",
   "funnel": {
-    "candidates": 81,
+    "candidates": 80,
     "accepted": 1,
-    "rejected": 80,
+    "rejected": 79,
     "rejection_reasons": {
-      "football: high odds evidence below minimum": 44,
-      "football: conservative edge below sport minimum": 32,
+      "football: high odds evidence below minimum": 45,
+      "football: conservative edge below sport minimum": 29,
       "basketball: conservative edge below sport minimum": 1,
-      "hockey: confidence below sport minimum": 2,
-      "nfl: conservative edge below sport minimum": 1
+      "hockey: conservative edge below sport minimum": 2,
+      "hockey: confidence below sport minimum": 1,
+      "nfl: confidence below sport minimum": 1
     }
   },
   "football_without_paid_xg": {
@@ -26,10 +27,10 @@
       "status": "READY",
       "message": "Dáta prichádzajú a model má dostatočnú vzorku",
       "publishing_mode": "LIVE",
-      "snapshots_24h": 1872,
-      "latest_snapshot_at": "2026-11-22T13:42:46.962329+00:00",
+      "snapshots_24h": 1661,
+      "latest_snapshot_at": "2026-11-22T21:23:05.721832+00:00",
       "open_bets": 2,
-      "settled_bets": 994,
+      "settled_bets": 995,
       "minimum_settled": 100,
       "missing_event_id": 0,
       "overdue_open": 0,
@@ -37,7 +38,7 @@
       "settlement_recovery_required": false,
       "snapshot_age_minutes": 5,
       "freshness": "FRESH",
-      "yield_pct": 1.73,
+      "yield_pct": 2.14,
       "top_bookmakers": [
         {
           "bookmaker": "Betfair",
@@ -67,15 +68,15 @@
         },
         {
           "bookmaker": "Tipico",
-          "settled": 83,
-          "stake": 19.13,
-          "profit": -1.184,
-          "yield_pct": -6.189,
+          "settled": 84,
+          "stake": 19.47,
+          "profit": -0.198,
+          "yield_pct": -1.017,
           "average_clv_pct": 3.055,
           "clv_samples": 44,
-          "brier_score": 0.193348,
-          "calibration_error": 0.043311,
-          "probability_samples": 83,
+          "brier_score": 0.197085,
+          "calibration_error": 0.034317,
+          "probability_samples": 84,
           "max_drawdown": 3.407
         },
         {
@@ -214,8 +215,8 @@
       "status": "READY",
       "message": "Dáta prichádzajú a model má dostatočnú vzorku",
       "publishing_mode": "LIVE",
-      "snapshots_24h": 1217,
-      "latest_snapshot_at": "2026-11-22T13:41:59.892574+00:00",
+      "snapshots_24h": 981,
+      "latest_snapshot_at": "2026-11-22T21:22:16.236856+00:00",
       "open_bets": 2,
       "settled_bets": 103,
       "minimum_settled": 75,
@@ -308,16 +309,16 @@
       "status": "ATTENTION",
       "message": "2 zápasov čaká na výsledok dlhšie než 12 hodín",
       "publishing_mode": "LIVE",
-      "snapshots_24h": 712,
-      "latest_snapshot_at": "2026-11-22T13:42:05.610495+00:00",
-      "open_bets": 4,
+      "snapshots_24h": 1009,
+      "latest_snapshot_at": "2026-11-22T21:22:20.686901+00:00",
+      "open_bets": 5,
       "settled_bets": 255,
       "minimum_settled": 75,
       "missing_event_id": 0,
       "overdue_open": 2,
       "unresolved_excluded": 148,
       "settlement_recovery_required": true,
-      "snapshot_age_minutes": 6,
+      "snapshot_age_minutes": 5,
       "freshness": "FRESH",
       "yield_pct": -3.1,
       "top_bookmakers": [
@@ -494,20 +495,20 @@
     {
       "sport": "handball",
       "status": "COLLECTING",
-      "message": "Kalibrácia 33/50 uzavretých tipov",
+      "message": "Kalibrácia 37/50 uzavretých tipov",
       "publishing_mode": "SHADOW",
-      "snapshots_24h": 125,
-      "latest_snapshot_at": "2026-11-22T13:46:41.380987+00:00",
-      "open_bets": 4,
-      "settled_bets": 33,
+      "snapshots_24h": 0,
+      "latest_snapshot_at": null,
+      "open_bets": 0,
+      "settled_bets": 37,
       "minimum_settled": 50,
       "missing_event_id": 0,
       "overdue_open": 0,
       "unresolved_excluded": 0,
       "settlement_recovery_required": false,
-      "snapshot_age_minutes": 1,
-      "freshness": "FRESH",
-      "yield_pct": -4.61,
+      "snapshot_age_minutes": null,
+      "freshness": "STALE",
+      "yield_pct": -2.51,
       "top_bookmakers": [],
       "rules": {
         "min_edge_pct": 7.0,
@@ -522,12 +523,12 @@
     {
       "sport": "nfl",
       "status": "COLLECTING",
-      "message": "Kalibrácia 22/50 uzavretých tipov",
+      "message": "Kalibrácia 23/50 uzavretých tipov",
       "publishing_mode": "LIVE",
-      "snapshots_24h": 844,
-      "latest_snapshot_at": "2026-11-22T13:41:53.763683+00:00",
+      "snapshots_24h": 268,
+      "latest_snapshot_at": "2026-11-22T21:22:09.244983+00:00",
       "open_bets": 1,
-      "settled_bets": 22,
+      "settled_bets": 23,
       "minimum_settled": 50,
       "missing_event_id": 0,
       "overdue_open": 0,
@@ -535,7 +536,7 @@
       "settlement_recovery_required": false,
       "snapshot_age_minutes": 6,
       "freshness": "FRESH",
-      "yield_pct": 9.91,
+      "yield_pct": 11.65,
       "top_bookmakers": [
         {
           "bookmaker": "Betfair",
@@ -577,6 +578,19 @@
           "max_drawdown": 1.61
         },
         {
+          "bookmaker": "Marathon Bet",
+          "settled": 2,
+          "stake": 1.44,
+          "profit": 0.3341,
+          "yield_pct": 23.201,
+          "average_clv_pct": null,
+          "clv_samples": 0,
+          "brier_score": 0.122034,
+          "calibration_error": 0.347187,
+          "probability_samples": 2,
+          "max_drawdown": 0.31
+        },
+        {
           "bookmaker": "Matchbook",
           "settled": 2,
           "stake": 1.16,
@@ -588,19 +602,6 @@
           "calibration_error": 0.572635,
           "probability_samples": 2,
           "max_drawdown": 0.72
-        },
-        {
-          "bookmaker": "888sport",
-          "settled": 1,
-          "stake": 0.33,
-          "profit": -0.33,
-          "yield_pct": -100.0,
-          "average_clv_pct": null,
-          "clv_samples": 0,
-          "brier_score": 0.139369,
-          "calibration_error": 0.373321,
-          "probability_samples": 1,
-          "max_drawdown": 0.33
         }
       ],
       "rules": {
@@ -617,7 +618,7 @@
   "bankroll_safety": {
     "drawdown_paused": false,
     "daily_loss_paused": false,
-    "daily_exposure": 0.44,
+    "daily_exposure": 0.32,
     "max_daily_loss_pct": 3.0,
     "max_league_exposure_pct": 3.0,
     "correlated_event_limit": 1
