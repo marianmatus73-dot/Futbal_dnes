@@ -1,33 +1,5 @@
 id,bet_id,source_hash,sport_key,event,selection,home_goals,away_goals,result,external_event_id,settled_at,created_at
-1,71022,5934ce16161c32619986fbea,soccer_uefa_champs_league,Real Madrid vs PSV Eindhoven,Real Madrid,5,1,WON,3fb5e4a792cf34a0459efcb79a11a785,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-2,71028,ba3e70d0905540cc35350c3a,soccer_uefa_champs_league,Manchester City vs Napoli,Manchester City,2,2,LOST,b9f00a4d399ec661e733857c9d5fb2dc,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-3,71041,b0ee321d67f30b7eea74bdcd,soccer_uefa_champs_league,ŠK Slovan Bratislava vs Real Betis,Real Betis,0,2,WON,8e93849b4c1ccbf1c207836d5c470150,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-4,71049,797079bc3df9921ff91f88d7,soccer_uefa_champs_league,Como vs AEK Athens,Como,1,0,WON,ba719e378ac366262013bdb51a06aa6f,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-5,71071,98986637dcae29fd409c8103,soccer_uefa_champs_league,Arsenal vs Borussia Dortmund,Arsenal,1,1,LOST,aee4e3c225603397ab52de3d066b566b,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-6,71072,ceaa7e02ce19e3e3bbb991d4,soccer_uefa_champs_league,RB Leipzig vs RC Lens,RB Leipzig,3,1,WON,aea973c122c91837c15e066c757c747f,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-7,71101,bec31d13af6bd39df49d3408,soccer_uefa_champs_league,Bodø/Glimt vs LASK,Bodø/Glimt,1,0,WON,50b80f3ebd38bf63663b11ae0afc575b,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-8,71840,1abdc4e6240e334e254499a4,soccer_uefa_champs_league,Galatasaray vs Aston Villa,Over 2.5 gólu,1,0,LOST,e422af92d1fc06c0a330838c1c2f2e08,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-9,71841,308a95156cd3e313098d7aef,soccer_uefa_champs_league,Como vs AEK Athens,Over 2.5 gólu,1,0,LOST,ba719e378ac366262013bdb51a06aa6f,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-10,71842,35f69b2e199b205ca969199d,soccer_uefa_champs_league,Manchester City vs Napoli,Over 2.5 gólu,2,2,WON,b9f00a4d399ec661e733857c9d5fb2dc,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-11,71843,0c34f13cd42110dca4b1f49e,soccer_uefa_champs_league,ŠK Slovan Bratislava vs Real Betis,Over 2.5 gólu,0,2,LOST,8e93849b4c1ccbf1c207836d5c470150,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-12,71847,b2960d3546659f46497399d4,soccer_uefa_champs_league,RB Leipzig vs RC Lens,Over 2.5 gólu,3,1,WON,aea973c122c91837c15e066c757c747f,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-13,71848,3867b97a1dc95878c46b5ebe,soccer_uefa_champs_league,Bodø/Glimt vs LASK,Over 2.5 gólu,1,0,LOST,50b80f3ebd38bf63663b11ae0afc575b,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-14,71866,4f550d57cef9e6b66c55d0d3,soccer_spl,Rangers vs Aberdeen,Rangers,3,2,WON,6096027801dd71f0e41795f1e5380261,2026-11-25T02:38:19Z,2026-11-25T02:38:37+00:00
-15,72171,ea2520fde6e9d12ff0c52199,soccer_uefa_champs_league,Real Madrid vs PSV Eindhoven,Over 2.5 gólu,5,1,WON,3fb5e4a792cf34a0459efcb79a11a785,2026-11-25T02:38:25Z,2026-11-25T02:38:37+00:00
-16,74407,98bc8e64bf88f2be3a446779,soccer_brazil_campeonato,Chapecoense vs Palmeiras,Palmeiras,3,0,LOST,0c21d6b1fcc860152966888ac7ac9d9a,2026-11-25T02:38:28Z,2026-11-25T02:38:37+00:00
-17,74778,c2463029e2f16b3ea0b66d27,soccer_efl_champ,Wolverhampton Wanderers vs Derby County,Wolverhampton Wanderers,3,0,WON,018856cb75135463eb1972d978339023,2026-11-25T02:38:27Z,2026-11-25T02:38:37+00:00
-18,74828,6d59ef28aa97b2d1cf394b5d,soccer_efl_champ,Cardiff City vs Preston North End,Cardiff City,0,4,LOST,ae887a08eef3ff58053488dbddde28a3,2026-11-25T02:38:27Z,2026-11-25T02:38:37+00:00
-19,74829,689e327dea5e6922d8b8ad1d,soccer_efl_champ,Middlesbrough vs Swansea City,Middlesbrough,2,1,WON,e239a6d57b2cf15091f673c2448fbf4f,2026-11-25T02:38:27Z,2026-11-25T02:38:37+00:00
-20,74892,9eaebe3f7c1ba272d6313a9c,soccer_efl_champ,Wolverhampton Wanderers vs Derby County,Over 2.5 gólu,3,0,WON,018856cb75135463eb1972d978339023,2026-11-25T02:38:27Z,2026-11-25T02:38:37+00:00
-21,74895,5c573f8d8537a79360780baf,soccer_efl_champ,Middlesbrough vs Swansea City,Over 2.5 gólu,2,1,WON,e239a6d57b2cf15091f673c2448fbf4f,2026-11-25T02:38:27Z,2026-11-25T02:38:37+00:00
-22,75045,d609dcca0c5d884a53d5d972,soccer_spl,Hibernian vs Dundee FC,Hibernian,2,1,WON,c09beaa3cf7fd1f0ad0717cc2446a008,2026-11-25T02:38:19Z,2026-11-25T02:38:37+00:00
-23,75452,a21279404f1f1a7e247c1164,soccer_italy_serie_b,Palermo vs Südtirol,Palermo,4,1,WON,83a913029df6521a5822f1a77e619b78,2026-11-25T00:14:20Z,2026-11-25T02:38:37+00:00
-24,75566,a226bf989d81620601ff1ddc,soccer_england_league1,Bradford City vs Barnsley,Over 2.5 gólu,3,0,WON,2a6af7917f12fd0d77b65b69901b976d,2026-11-25T02:38:20Z,2026-11-25T02:38:37+00:00
-25,75584,829132221253b6292e14c451,soccer_spl,Hibernian vs Dundee FC,Over 2.5 gólu,2,1,WON,c09beaa3cf7fd1f0ad0717cc2446a008,2026-11-25T02:38:19Z,2026-11-25T02:38:37+00:00
-26,75592,39a113e108e23bbb6320a1e1,soccer_italy_serie_b,Virtus Entella vs Hellas Verona,Under 2.5 gólu,2,1,LOST,1126881ccd5628bc2a3e896fd7e05fed,2026-11-25T00:14:20Z,2026-11-25T02:38:37+00:00
-27,77292,76e5ddafbf5da2a09e0f420f,soccer_italy_serie_b,Benevento vs Empoli,Benevento,5,0,WON,8a83b64c5a2da01e0be02f81c52c24c1,2026-11-25T00:14:20Z,2026-11-25T02:38:37+00:00
-28,77357,49f78805d1b4738389f16ec6,soccer_efl_champ,Cardiff City vs Preston North End,Over 2.5 gólu,0,4,WON,ae887a08eef3ff58053488dbddde28a3,2026-11-25T02:38:27Z,2026-11-25T02:38:37+00:00
-29,77375,48d3babb2ed8e5732a511b0f,soccer_england_league2,Crawley Town vs Barnet,Over 2.5 gólu,0,0,LOST,17fe7f97afa7602f6ee038dbdc5b7c19,2026-11-25T02:38:20Z,2026-11-25T02:38:37+00:00
-30,78182,d672f405d8025917f883da69,soccer_england_league1,Blackpool vs Leicester City,Over 2.5 gólu,1,1,LOST,58d85828fe483e5c7f813b2c068b05ac,2026-11-25T02:38:20Z,2026-11-25T02:38:37+00:00
-31,78203,45f706d58c6e798b053f2fc1,soccer_spl,Rangers vs Aberdeen,Over 2.5 gólu,3,2,WON,6096027801dd71f0e41795f1e5380261,2026-11-25T02:38:19Z,2026-11-25T02:38:37+00:00
-32,78211,29dd519c1ea27ec3429cab5e,soccer_england_league2,Port Vale vs Northampton Town,Under 2.5 gólu,1,1,WON,eaa911656924937cdfe0801f4dafe1e0,2026-11-25T02:38:20Z,2026-11-25T02:38:37+00:00
+1,76736,981b0b4e88abbaa389379e1b,soccer_japan_j_league,Urawa Red Diamonds vs Cerezo Osaka,Over 2.5 gólu,2,2,WON,c6b1486b9f3863fd4debf1f3727d0a1c,2026-11-25T14:39:51Z,2026-11-25T14:39:59+00:00
+2,76737,5e0f823ec2a78115062ed92c,soccer_japan_j_league,FC Tokyo vs Hiroshima Sanfrecce FC,Over 2.5 gólu,2,2,WON,e82083c75de6b9266b27142b9e045087,2026-11-25T14:39:51Z,2026-11-25T14:39:59+00:00
+3,76738,6d395601addbeb8f4a3d83cd,soccer_japan_j_league,V-Varen Nagasaki vs Kawasaki Frontale,Over 2.5 gólu,1,2,WON,4d82f7110972d4f230cdfd5ca9a0d0dd,2026-11-25T14:39:51Z,2026-11-25T14:39:59+00:00
+4,76758,de72c2cd58d5ad0e44a19dc3,soccer_japan_j_league,Mito HollyHock vs Tokyo Verdy,Under 2.5 gólu,1,0,WON,2dfc5bec2d2449a9ee62d85ae92c8a2e,2026-11-25T14:39:51Z,2026-11-25T14:39:59+00:00
