@@ -54,22 +54,22 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 103,
+    "samples": 104,
     "train_samples": 72,
-    "test_samples": 31,
+    "test_samples": 32,
     "split": "chronological_70_30",
-    "raw_brier": 0.206733,
-    "calibrated_brier": 0.206216,
+    "raw_brier": 0.20889,
+    "calibrated_brier": 0.208591,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 103,
+    "samples": 104,
     "train_samples": 72,
-    "test_samples": 31,
+    "test_samples": 32,
     "split": "chronological_70_30",
-    "raw_brier": 0.206733,
-    "calibrated_brier": 0.206216,
+    "raw_brier": 0.20889,
+    "calibrated_brier": 0.208591,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
@@ -88,12 +88,12 @@
     "status": "BUILDING"
   },
   "basketball/tier=VALUE_1.61_2.50": {
-    "samples": 40,
+    "samples": 41,
     "train_samples": 28,
-    "test_samples": 12,
+    "test_samples": 13,
     "split": "chronological_70_30",
-    "raw_brier": 0.221467,
-    "calibrated_brier": 0.200277,
+    "raw_brier": 0.225643,
+    "calibrated_brier": 0.204102,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
