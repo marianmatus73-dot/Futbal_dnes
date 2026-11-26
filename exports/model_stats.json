@@ -1,13 +1,13 @@
 {
-  "total_bets": 3032,
-  "wins": 1279,
+  "total_bets": 3033,
+  "wins": 1280,
   "losses": 1753,
-  "winrate": 42.18,
-  "yield": 5.25,
-  "profit": 110.82,
-  "stake_sum": 2111.13,
-  "open_bets": 7,
-  "settled_bets": 3032,
+  "winrate": 42.2,
+  "yield": 5.28,
+  "profit": 111.43,
+  "stake_sum": 2111.78,
+  "open_bets": 9,
+  "settled_bets": 3033,
   "by_sport": {
     "baseball": {
       "total": 1532,
@@ -19,13 +19,13 @@
       "yield": 5.77
     },
     "basketball": {
-      "total": 104,
-      "wins": 46,
+      "total": 105,
+      "wins": 47,
       "losses": 58,
-      "winrate": 44.23,
-      "profit": 7.5,
-      "stake_sum": 63.56,
-      "yield": 11.8
+      "winrate": 44.76,
+      "profit": 8.11,
+      "stake_sum": 64.21,
+      "yield": 12.62
     },
     "football": {
       "total": 983,
@@ -209,6 +209,15 @@
       "stake_sum": 38.48,
       "yield": 0.7
     },
+    "Pinnacle": {
+      "total": 127,
+      "wins": 44,
+      "losses": 83,
+      "winrate": 34.65,
+      "profit": 0.04,
+      "stake_sum": 78.25,
+      "yield": 0.05
+    },
     "Everygame": {
       "total": 23,
       "wins": 10,
@@ -244,15 +253,6 @@
       "profit": -0.47,
       "stake_sum": 22.26,
       "yield": -2.11
-    },
-    "Pinnacle": {
-      "total": 126,
-      "wins": 43,
-      "losses": 83,
-      "winrate": 34.13,
-      "profit": -0.57,
-      "stake_sum": 77.6,
-      "yield": -0.73
     },
     "Tipico": {
       "total": 87,
@@ -355,6 +355,15 @@
       "stake_sum": 32.67,
       "yield": 11.43
     },
+    "basketball_ncaab": {
+      "total": 10,
+      "wins": 6,
+      "losses": 4,
+      "winrate": 60.0,
+      "profit": 3.11,
+      "stake_sum": 11.05,
+      "yield": 28.15
+    },
     "icehockey_nhl": {
       "total": 221,
       "wins": 84,
@@ -399,15 +408,6 @@
       "profit": 2.53,
       "stake_sum": 10.8,
       "yield": 23.41
-    },
-    "basketball_ncaab": {
-      "total": 9,
-      "wins": 5,
-      "losses": 4,
-      "winrate": 55.56,
-      "profit": 2.51,
-      "stake_sum": 10.4,
-      "yield": 24.1
     },
     "Segunda Division": {
       "total": 25,
@@ -815,5 +815,5 @@
       "yield": -81.89
     }
   },
-  "last_update": "2026-11-25T16:24:25.751719+00:00"
+  "last_update": "2026-11-26T16:01:26.217407+00:00"
 }
