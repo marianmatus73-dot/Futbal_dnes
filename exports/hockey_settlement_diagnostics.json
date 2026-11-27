@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-27T14:02:30.366905+00:00",
+  "generated_at": "2026-11-27T22:48:31.230566+00:00",
   "sport": "hockey",
-  "open_rows": 3,
+  "open_rows": 5,
   "settlement_keys": [
     "icehockey_nhl",
     "icehockey_ahl",
@@ -14,18 +14,18 @@
   "keys": [
     {
       "sport_key": "icehockey_nhl",
-      "open_rows": 1,
-      "events_received": 30,
-      "completed_events": 15,
+      "open_rows": 3,
+      "events_received": 43,
+      "completed_events": 22,
       "stale_score_recoveries": 0,
-      "usable_score_events": 15,
-      "matched_rows": 0,
-      "settled_rows": 0
+      "usable_score_events": 22,
+      "matched_rows": 1,
+      "settled_rows": 1
     },
     {
       "sport_key": "icehockey_ahl",
       "open_rows": 0,
-      "events_received": 20,
+      "events_received": 22,
       "completed_events": 0,
       "stale_score_recoveries": 0,
       "usable_score_events": 0,
@@ -35,27 +35,27 @@
     {
       "sport_key": "icehockey_sweden_hockey_league",
       "open_rows": 0,
-      "events_received": 15,
-      "completed_events": 8,
+      "events_received": 13,
+      "completed_events": 6,
       "stale_score_recoveries": 0,
-      "usable_score_events": 8,
+      "usable_score_events": 6,
       "matched_rows": 0,
       "settled_rows": 0
     },
     {
       "sport_key": "icehockey_sweden_allsvenskan",
       "open_rows": 0,
-      "events_received": 12,
-      "completed_events": 5,
+      "events_received": 13,
+      "completed_events": 12,
       "stale_score_recoveries": 0,
-      "usable_score_events": 5,
+      "usable_score_events": 12,
       "matched_rows": 0,
       "settled_rows": 0
     },
     {
       "sport_key": "icehockey_liiga",
       "open_rows": 1,
-      "events_received": 6,
+      "events_received": 7,
       "completed_events": 0,
       "stale_score_recoveries": 0,
       "usable_score_events": 0,
@@ -65,7 +65,7 @@
     {
       "sport_key": "icehockey_mestis",
       "open_rows": 1,
-      "events_received": 4,
+      "events_received": 3,
       "completed_events": 0,
       "stale_score_recoveries": 0,
       "usable_score_events": 0,
@@ -73,5 +73,5 @@
       "settled_rows": 0
     }
   ],
-  "settled_rows": 0
+  "settled_rows": 1
 }
