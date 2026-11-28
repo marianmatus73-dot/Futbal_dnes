@@ -54,23 +54,23 @@
     "status": "READY"
   },
   "basketball": {
-    "samples": 105,
-    "train_samples": 73,
+    "samples": 106,
+    "train_samples": 74,
     "test_samples": 32,
     "split": "chronological_70_30",
-    "raw_brier": 0.209035,
-    "calibrated_brier": 0.210373,
-    "calibration_decision": "REJECT",
+    "raw_brier": 0.214437,
+    "calibrated_brier": 0.214298,
+    "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "basketball/market=h2h": {
-    "samples": 105,
-    "train_samples": 73,
+    "samples": 106,
+    "train_samples": 74,
     "test_samples": 32,
     "split": "chronological_70_30",
-    "raw_brier": 0.209035,
-    "calibrated_brier": 0.210373,
-    "calibration_decision": "REJECT",
+    "raw_brier": 0.214437,
+    "calibrated_brier": 0.214298,
+    "calibration_decision": "ACCEPT",
     "status": "READY"
   },
   "basketball/tier=EXPERIMENTAL_2.51_PLUS": {
@@ -88,12 +88,12 @@
     "status": "BUILDING"
   },
   "basketball/tier=VALUE_1.61_2.50": {
-    "samples": 42,
-    "train_samples": 29,
+    "samples": 43,
+    "train_samples": 30,
     "test_samples": 13,
     "split": "chronological_70_30",
-    "raw_brier": 0.207996,
-    "calibrated_brier": 0.194742,
+    "raw_brier": 0.214669,
+    "calibrated_brier": 0.192714,
     "calibration_decision": "ACCEPT",
     "status": "READY"
   },
@@ -136,32 +136,32 @@
     "status": "BUILDING"
   },
   "hockey": {
-    "samples": 259,
-    "train_samples": 181,
-    "test_samples": 78,
+    "samples": 262,
+    "train_samples": 183,
+    "test_samples": 79,
     "split": "chronological_70_30",
-    "raw_brier": 0.243624,
-    "calibrated_brier": 0.259675,
+    "raw_brier": 0.247696,
+    "calibrated_brier": 0.264577,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/market=h2h": {
-    "samples": 259,
-    "train_samples": 181,
-    "test_samples": 78,
+    "samples": 262,
+    "train_samples": 183,
+    "test_samples": 79,
     "split": "chronological_70_30",
-    "raw_brier": 0.243624,
-    "calibrated_brier": 0.259675,
+    "raw_brier": 0.247696,
+    "calibrated_brier": 0.264577,
     "calibration_decision": "REJECT",
     "status": "READY"
   },
   "hockey/tier=EXPERIMENTAL_2.51_PLUS": {
-    "samples": 193,
-    "train_samples": 135,
-    "test_samples": 58,
+    "samples": 196,
+    "train_samples": 137,
+    "test_samples": 59,
     "split": "chronological_70_30",
-    "raw_brier": 0.214835,
-    "calibrated_brier": 0.227915,
+    "raw_brier": 0.226433,
+    "calibrated_brier": 0.238726,
     "calibration_decision": "REJECT",
     "status": "READY"
   },

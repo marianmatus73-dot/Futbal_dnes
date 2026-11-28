@@ -1,12 +1,14 @@
 FOOTBALL SETTLEMENT DIAGNOSTICS
 ============================================================
 
-Open bets: 2
+Open bets: 4
 Score events: 4
 
 === OPEN BETS ===
 soccer_mexico_ligamx | 2026-11-25T00:00:00Z | Toluca vs Atlas | pick=Toluca
 soccer_mexico_ligamx | 2026-11-25T00:00:00Z | Monterrey vs América | pick=Over 2.5 gólu
+soccer_mexico_ligamx | 2026-11-28T00:00:00Z | América vs Monterrey | pick=Over 2.5 gólu
+soccer_mexico_ligamx | 2026-11-28T00:00:00Z | Atlas vs Toluca | pick=Over 2.5 gólu
 
 === SCORE EVENTS ===
 soccer_mexico_ligamx | 2026-11-26T01:00:00Z | Toluca vs Atlas | 2-0
@@ -17,3 +19,5 @@ soccer_mexico_ligamx | 2026-11-27T03:11:00Z | León vs Cruz Azul | 0-4
 === CLOSEST CANDIDATES ===
 soccer_mexico_ligamx | Toluca vs Atlas -> Toluca vs Atlas | combined=1.000 min=1.000 | bet_time=2026-11-25T00:00:00Z score_time=2026-11-26T01:00:00Z
 soccer_mexico_ligamx | Monterrey vs América -> Monterrey vs América | combined=1.000 min=1.000 | bet_time=2026-11-25T00:00:00Z score_time=2026-11-26T03:12:00Z
+soccer_mexico_ligamx | América vs Monterrey -> Monterrey vs América | combined=0.375 min=0.375 | bet_time=2026-11-28T00:00:00Z score_time=2026-11-26T03:12:00Z
+soccer_mexico_ligamx | Atlas vs Toluca -> Toluca vs Atlas | combined=0.364 min=0.182 | bet_time=2026-11-28T00:00:00Z score_time=2026-11-26T01:00:00Z
